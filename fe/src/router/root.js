@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react'
 import userRouter from './userRouter'
 import loginRouter from './loginRouter'
+import facilities from './facilities/facilitiesRouter'
 
 const { createBrowserRouter } = require("react-router-dom")
 
@@ -24,6 +25,7 @@ const root = createBrowserRouter([
         element: <Suspense fallback={Loading}><Login /></Suspense>,
         children: loginRouter()
     },
+    ...facilities
 ])
 
 export default root;

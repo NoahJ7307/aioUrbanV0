@@ -34,7 +34,7 @@ const MenuComponent = () => {
             <ul className='flex justify-center'>
                 <li className='p-2'><Link to={'/'}>Home</Link></li>
                 <li className='p-2'><Link to={'/user'}>User</Link></li>
-
+                <li className='p-2'><Link to={'/facilities'}>facilities</Link></li>
                 <li className='p-2'><Link to={'/'}>Community</Link></li>
                 <li className='p-2'><Link to={'/'}>Parking</Link></li>
                 {loginState.phone ?

@@ -48,6 +48,7 @@ public class UrbanSecurityConfig {
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/user/login").permitAll()  // 인증 없이 접근 허용
                         .requestMatchers("/api/user/**").hasRole("ADMIN") // 접근 권한 설정
+                       // .requestMatchers("/api/facilities/golf/list/**").hasRole("ADMIN") // 접근 권한 설정
                         .anyRequest().authenticated()  // 그 외의 요청은 인증 필요
                 )
                 .addFilterAt(customAuthenticationFilter(),
