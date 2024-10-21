@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,25 +23,42 @@ public class UserController {
         return service.getList(pageRequestDTO);
     }
 
+    @GetMapping("/approval")
+    public boolean getApprovalStatus(Long uno){
+        System.out.println("ApprovalStatus : "+uno);
+        return service.approvalStatus(uno);
+    }
+
+    @PostMapping("/approval")
+    public void PostApproval(@RequestBody Map<String, Long> request){
+        Long uno = request.get("uno");
+        System.out.println("Approval : "+uno);
+        service.addRoleUser(uno);
+    }
+
     @PostMapping("/")
     public Long register(@RequestBody UserDTO userDTO){
-        System.out.println("register......"+userDTO);
-        Long uno = service.register(userDTO);
-        return uno;
+        System.out.println("register : "+userDTO);
+        return service.register(userDTO);
     }
 
     @GetMapping("/{uno}")
     public UserDTO read(@PathVariable(name = "uno") Long uno){
+        System.out.println("read : "+uno);
         return service.getOne(uno);
     }
 
     @PutMapping("/{uno}")
-    public void modify(@PathVariable(name = "uno") Long uno, UserDTO userDTO){
+    public void modify(@PathVariable(name = "uno") Long uno, @RequestBody UserDTO userDTO){
+        System.out.println("modify : "+userDTO);
         service.modify(userDTO);
     }
 
     @PostMapping("/delete")
     public void deleteChecked(@RequestBody List<Long> checkedUno){
-        checkedUno.forEach(service::remove);
+        checkedUno.forEach(uno ->{
+            service.clearRole(uno);
+            service.remove(uno);
+        });
     }
 }

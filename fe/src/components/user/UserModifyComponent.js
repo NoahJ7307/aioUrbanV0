@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useCustom from '../hook/useCustom'
-import { getOne, postAdd, putOne } from '../api/userApi'
+import { getOne, putOne } from '../api/userApi'
 import { useOutletContext } from 'react-router-dom'
 
 const initState = {
@@ -39,10 +39,9 @@ const UserModifyComponent = (unoList) => {
     // 수정 data 전송
     const handleClick = () => {
         console.log("modify uno : " + checkedUno[0])
-        putOne(checkedUno[0], userData).then(data => {
-            console.log("success : " + data)
-            moveToList()
-        })
+        putOne(checkedUno[0], userData)
+        console.log("modify success")
+        moveToList()
     }
     return (
         <div className='flex p-2'>
@@ -71,6 +70,7 @@ const UserModifyComponent = (unoList) => {
                         <input className='border'
                             name='userName'
                             value={userData.userName}
+                            placeholder={userData.userName}
                             onChange={handleChange} />
                     </div>
                     <div>
@@ -81,8 +81,9 @@ const UserModifyComponent = (unoList) => {
                     </div>
                     <div>
                         <input className='border'
+                            type='password'
                             name='pw'
-                            value={userData.pw}
+                            placeholder='Insert your password'
                             onChange={handleChange} />
                     </div>
                     <div>

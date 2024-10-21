@@ -5,6 +5,8 @@ import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.UserDTO;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
 public interface UserService {
     Long register(UserDTO userDTO);
@@ -12,4 +14,7 @@ public interface UserService {
     UserDTO getOne(Long uno);
     void modify(UserDTO userDTO);
     void remove(Long uno);
+    boolean approvalStatus(Long uno);
+    void addRoleUser(Long uno);
+    void clearRole(Long uno);
 }

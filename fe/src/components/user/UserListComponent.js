@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { getList } from '../api/userApi'
 import useCustom from '../hook/useCustom'
-import PageComponent from '../common/PageComponent'
 import { useOutletContext } from 'react-router-dom'
-import useCustomLogin from '../hook/useCustomLogin'
+import PageComponent from '../common/PageComponent'
 
 const initState = {
     dtoList: [],
@@ -52,11 +51,6 @@ const UserListComponent = () => {
         })
     }, [page, size])
 
-    // 렌더링 된 이후 list를 console에 출력 (확인용)
-    // useEffect(() => {
-    //     console.log("Updated serverData:", serverData);
-    // }, [serverData])
-
     return (
         <div>
             <div className="grid grid-cols-6">
@@ -65,7 +59,6 @@ const UserListComponent = () => {
                 <div>호</div>
                 <div>이름</div>
                 <div>전화번호</div>
-                <div>가입승인</div>
             </div>
 
             {/* 유저 데이터를 map으로 렌더링 */}
@@ -82,10 +75,6 @@ const UserListComponent = () => {
                     <div>{user.ho}</div>
                     <div>{user.userName}</div>
                     <div>{user.phone}</div>
-                    <div>
-                        <button className='bg-green-500'>승인</button>
-                        <button className='bg-red-500'>거부</button>
-                    </div>
                 </div>
             ))}
             <PageComponent serverData={serverData} movePage={moveToList} />

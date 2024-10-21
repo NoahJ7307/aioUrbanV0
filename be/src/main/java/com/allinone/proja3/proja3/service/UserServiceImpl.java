@@ -4,12 +4,14 @@ import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.UserDTO;
 import com.allinone.proja3.proja3.model.User;
+import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,9 +22,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Long register(UserDTO userDTO) {
+        System.out.println("register service : "+userDTO);
+        String encodedPassword = passwordEncoder.encode(userDTO.getPw());
+        userDTO.setPw(encodedPassword);
         User user = dtoToEntity(userDTO);
         User result = userRepository.save(user);
         return result.getUno();
@@ -30,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageResponseDTO<UserDTO> getList(PageRequestDTO pageRequestDTO) {
-        System.out.println("getList.....");
+        System.out.println("getList service");
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
@@ -50,8 +56,10 @@ public class UserServiceImpl implements UserService {
                 .totalCount(totalCount)
                 .build();
     }
+
     @Override
     public UserDTO getOne(Long uno) {
+        System.out.println("getOne service : "+uno);
         Optional<User> result = userRepository.findById(uno);
         User user = result.orElseThrow();
         return entityToDto(user);
@@ -59,17 +67,46 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void modify(UserDTO userDTO) {
+        System.out.println("modify service : "+userDTO);
+        String encodedPassword = passwordEncoder.encode(userDTO.getPw());
+        userDTO.setPw(encodedPassword);
         User user = dtoToEntity(userDTO);
         userRepository.save(user);
     }
 
     @Override
     public void remove(Long uno) {
+        System.out.println("remove service : "+uno);
         userRepository.updateToDelete(uno, true);
     }
 
+    @Override
+    public boolean approvalStatus(Long uno) {
+        System.out.println("approvalStatus service : "+uno);
+        Optional<User> result = userRepository.findById(uno);
+        User user = result.orElseThrow();
+        return user.getUserRoleList().contains(UserRole.PENDING);
+    }
 
-    private User dtoToEntity(UserDTO userDTO){
+    @Override
+    public void addRoleUser(Long uno) {
+        System.out.println("addRoleUser service : "+uno);
+        Optional<User> result = userRepository.findById(uno);
+        User user = result.orElseThrow();
+        user.clearRole();
+        user.addRole(UserRole.USER);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void clearRole(Long uno) {
+        System.out.println("clearRole service : "+uno);
+        Optional<User> result = userRepository.findById(uno);
+        User user = result.orElseThrow();
+        user.clearRole();
+    }
+
+    private User dtoToEntity(UserDTO userDTO) {
         return User.builder()
                 .uno(userDTO.getUno())
                 .dong(userDTO.getDong())
@@ -81,7 +118,7 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    private UserDTO entityToDto(User user){
+    private UserDTO entityToDto(User user) {
         return UserDTO.builder()
                 .uno(user.getUno())
                 .dong(user.getDong())

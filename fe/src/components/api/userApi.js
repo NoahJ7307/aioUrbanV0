@@ -31,6 +31,7 @@ export const postAdd = async (userData) => {
 }
 
 export const putOne = async (uno, userData) => {
+    console.log(userData)
     const token = localStorage.getItem("token")
     const config = {
         headers: {
@@ -38,7 +39,7 @@ export const putOne = async (uno, userData) => {
             "Content-Type": "application/json",
         },
     }
-    const res = await axios.put(`${host}/${uno}`, userData, config)
+    const res = await axios.put(`${host}/${uno}`, JSON.stringify(userData), config)
     return res.data
 }
 
@@ -79,4 +80,30 @@ export const loginPost = async (loginParam) => {
         console.error('Login error:', error);
         throw error;
     }
-};
+}
+
+export const approvalStatus = async (uno) => {
+    const token = localStorage.getItem("token")
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        params: { uno },
+    }
+    const res = await axios.get(`${host}/approval`, config)
+    return res.data
+}
+
+export const addUserRole = async (uno) => {
+    const token = localStorage.getItem("token")
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    }
+    const body = { uno }
+    const res = await axios.post(`${host}/approval`, body, config)
+    return res.data
+}

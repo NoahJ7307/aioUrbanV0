@@ -33,7 +33,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("JWT Check Filter...");
+        System.out.println("JWT Check Filter");
         String authHeaderStr = request.getHeader("Authorization");
 
         try {
@@ -60,11 +60,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
                             authUserDTO, null, authUserDTO.getAuthorities());
             // SecurityContext 인증 객체에 저장
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            System.out.println("......................SecurityContextHolder :" + authenticationToken);
+            System.out.println("SecurityContextHolder :" + authenticationToken);
 
             filterChain.doFilter(request, response);
         } catch(Exception e) {
-            System.out.println("JWT Check Error... : "+e.getMessage());
+            System.out.println("JWT Check Error : "+e.getMessage());
             Gson gson = new Gson();
             String msg = gson.toJson(Map.of("error", "ERROR_ACCESS_TOKEN"));
             response.setContentType("application/json");

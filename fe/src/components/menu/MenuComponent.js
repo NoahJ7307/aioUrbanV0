@@ -5,12 +5,12 @@ import useCustomLogin from '../hook/useCustomLogin'
 
 const MenuComponent = () => {
     const loginState = useSelector(state => state.loginSlice)
-    const { doLogout, moveToPath } = useCustomLogin()
+    const { doLogout, moveToPath, isLogin } = useCustomLogin()
 
     const handleClickLogout = () => {
         doLogout()
         alert("Logout Complete")
-        moveToPath()
+        moveToPath('/')
     }
 
     return (
@@ -20,18 +20,21 @@ const MenuComponent = () => {
                     <Link to={'/'}>Logo</Link>
                 </div>
                 <div className='flex justify-end'>
-                    <div className='flex justify-end mr-2'>
-                        <Link to={'/login'}>Login</Link>
-                    </div>
-                    <div className='flex justify-end mr-2'>
-                        {/* isLogin ? 로그인페이지 이동 : 로그아웃*/}
-                        <button onClick={handleClickLogout}>Logout</button>
-                    </div>
+
+                    {!isLogin ?
+                        <div className='flex justify-end mr-2'>
+                            <Link to={'/login'}>Login</Link>
+                        </div>
+                        : <div className='flex justify-end mr-2'>
+                            <button onClick={handleClickLogout}>Logout</button>
+                        </div>
+                    }
                 </div>
             </div>
             <ul className='flex justify-center'>
                 <li className='p-2'><Link to={'/'}>Home</Link></li>
                 <li className='p-2'><Link to={'/user'}>User</Link></li>
+
                 <li className='p-2'><Link to={'/'}>Community</Link></li>
                 <li className='p-2'><Link to={'/'}>Parking</Link></li>
                 {loginState.phone ?

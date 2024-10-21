@@ -16,7 +16,6 @@ public class PageResponseDTO<E> {
     private PageRequestDTO pageRequestDTO;
     private boolean prev, next;
     // 현재 페이지를 기준으로 이전, 이후 페이지가 있는지 여부 저장
-
     private int totalCount, prevPage, nextPage, totalPage, current;
 
     @Builder(builderMethodName = "withAll")

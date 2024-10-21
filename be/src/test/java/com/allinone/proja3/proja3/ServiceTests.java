@@ -41,4 +41,15 @@ public class ServiceTests {
         PageResponseDTO<UserDTO> list = userService.getList(pageRequestDTO);
         list.getDtoList().forEach(System.out::println);
     }
+
+    @Test
+    public void addRoleUserTest(){
+        userService.addRoleUser(22L);
+    }
+
+    @Test
+    public void approvalStatusTest(){
+        boolean result = userService.approvalStatus(21L);
+        System.out.println("--------------------"+result+"--------------------");
+    }
 }

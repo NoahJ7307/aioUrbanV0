@@ -28,6 +28,6 @@ public class User {
     @Builder.Default
     private List<UserRole> userRoleList = new ArrayList<>();
     public void addRole(UserRole userRole){ userRoleList.add(userRole);}
-    public void clearRole(UserRole userRole){ userRoleList.clear();}
+    public void clearRole(){ userRoleList.clear();}
 
 }

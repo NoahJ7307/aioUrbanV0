@@ -32,7 +32,7 @@ public class UrbanSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        System.out.println("Security Config...");
+        System.out.println("Security Config");
 
         http.cors(httpSecurityCorsConfigurer -> {
             httpSecurityCorsConfigurer.configurationSource(configurationSource());
@@ -110,55 +110,3 @@ public class UrbanSecurityConfig {
         return new BCryptPasswordEncoder(); // 암호 알고리즘
     }
 }
-
-//------------------------------------------------------------------------------------------
-//public class UrbanSecurityConfig {
-//    // @Configuration 아래 @Bean 을 만들면 스프링에서 객체를 관리함
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        // p302
-//        http.cors(httpSecurityCorsConfigurer -> {
-//            httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
-//        });
-//        http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//        http.csrf(i->i.disable());
-//
-//        // p312 post 방식으로 parameter 를 통해 로그인 처리
-//        http.formLogin(config -> {
-//            config.loginPage("/api/member/login");
-//            config.successHandler(new APILoginSuccessHandler());
-//            config.failureHandler(new APILoginFailHandler());
-//        });
-//
-//        // p329 Filter
-//        http.addFilterBefore(new JWTCheckFilter(),
-//                UsernamePasswordAuthenticationFilter.class);// JWT Check
-//
-//        // p340
-//        http.exceptionHandling(i -> {
-//            i.accessDeniedHandler(new UrbanAccessDeniedHandler());
-//        });
-//
-//        return http.build();
-//    }
-//
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowCredentials(true);
-//        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-//        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","HEAD","OPTIONS"));
-//        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
-//
-//    // p303
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder(); // 암호 알고리즘 (중요함!!)
-//    }
-//}
-//

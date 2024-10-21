@@ -15,7 +15,7 @@ const LoginComponent = () => {
     }
     const handleClick = () => {
         doLogin(loginParam)
-        console.log(loadLoginData().uno)
+        setLoginParam(initState)
     }
     return (
         <div className='border'>
@@ -39,7 +39,7 @@ const LoginComponent = () => {
             </div>
             <div className='flex'>
                 <button className='bg-gray-300'
-                    onClick={handleClick}>로그인</button>
+                    onClick={handleClick}>Login</button>
             </div>
         </div>
     )

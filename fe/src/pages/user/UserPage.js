@@ -2,12 +2,18 @@ import React, { useCallback, useEffect, useState } from 'react'
 import BasicLayout from '../../layout/BasicLayout'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { deleteChecked } from '../../components/api/userApi'
+import useCustomLogin from '../../components/hook/useCustomLogin'
 
 const UserPage = () => {
     const navigate = useNavigate()
     const [checkedUno, setCheckedUno] = useState([null])
+    const { loadLoginData } = useCustomLogin()
 
     useEffect(() => {
+        if (!(loadLoginData().role == 'ADMIN')) {
+            alert('권한이 없습니다')
+            navigate({ pathname: '../login' })
+        }
         return () => {
             setCheckedUno([]) // 페이지가 사라질 때 체크된 항목 초기화
         }
@@ -32,6 +38,7 @@ const UserPage = () => {
             alert("선택된 항목이 없습니다")
         }
     }
+    const handleClickApprovalList = useCallback(() => { navigate({ pathname: 'approval' }) })
 
     return (
         <BasicLayout>
@@ -57,8 +64,8 @@ const UserPage = () => {
                     </button>
                 </li>
                 <li>
-                    <button className='bg-gray-300 p-2 mr' onClick={handleClickList}>
-                        일괄승인
+                    <button className='bg-gray-300 p-2 mr' onClick={handleClickApprovalList}>
+                        Approval
                     </button>
                 </li>
             </ul>

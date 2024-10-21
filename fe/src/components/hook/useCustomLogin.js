@@ -23,8 +23,13 @@ const useCustomLogin = () => {
             localStorage.setItem("token", accessToken)
             localStorage.setItem("uno", uno)
             localStorage.setItem("role", roleNames)
+            alert("Login Complete")
+            moveToPath('/')
+        } else {
+            alert('Check your PhoneNumber or Password')
+            moveToPath('/login')
         }
-
+        
         return action.payload
     }
     const doLogout = async () => {
