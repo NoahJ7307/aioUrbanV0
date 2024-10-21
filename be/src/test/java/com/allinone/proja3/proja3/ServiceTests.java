@@ -1,0 +1,44 @@
+package com.allinone.proja3.proja3;
+
+import com.allinone.proja3.proja3.dto.PageRequestDTO;
+import com.allinone.proja3.proja3.dto.PageResponseDTO;
+import com.allinone.proja3.proja3.dto.UserDTO;
+import com.allinone.proja3.proja3.service.UserService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
+@SpringBootTest
+public class ServiceTests {
+    @Autowired
+    private UserService userService;
+
+    @Test
+    public void insertTest() {
+        for (int i = 0; i < 130; i++) {
+            int randIdx = (int) (Math.random() * 100) + 1;
+            int randho = (int) (Math.random() * 10) + 1;
+            UserDTO userDTO = UserDTO.builder()
+                    .dong(101+randIdx)
+                    .ho(101+randho)
+                    .userName("User"+randIdx)
+                    .phone("0101234"+(1000+randIdx))
+                    .pw("1111")
+                    .delFlag(false)
+                    .build();
+            userService.register(userDTO);
+        }
+    }
+
+    @Test
+    public void getTest(){
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .build();
+        PageResponseDTO<UserDTO> list = userService.getList(pageRequestDTO);
+        list.getDtoList().forEach(System.out::println);
+    }
+}
