@@ -1,0 +1,17 @@
+.button {
+    display: inline-block; /* 블록 요소처럼 보이게 */
+    width: 150px; /* 버튼의 너비 */
+    height: 150px; /* 버튼의 높이 */
+    border-radius: 15px; /* 둥글게 */
+    background-color: #86be81; /* 배경색 */
+    color: rgb(255, 255, 255); /* 글자색 */
+    text-align: center; /* 텍스트 정렬 */
+    line-height: 150px; /* 텍스트 수직 중앙 정렬 */
+    text-decoration: none; /* 링크 기본 스타일 제거 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 입체 효과 */
+    transition: transform 0.2s; /* 애니메이션 효과 */
+}
+
+.button:hover {
+    transform: scale(1.05); /* 호버 시 크기 증가 */
+}
