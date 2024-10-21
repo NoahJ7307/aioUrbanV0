@@ -25,8 +25,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         System.out.println("URI : " + path);
         // login 경로 허용
         if (path.startsWith("/api/user/login")) return true;
-//        // user 경로 허용
-//        if (path.startsWith("/api/user/**")) return true;
+        if (path.startsWith("/api/main/join")) return true;
 
         return false;
     }

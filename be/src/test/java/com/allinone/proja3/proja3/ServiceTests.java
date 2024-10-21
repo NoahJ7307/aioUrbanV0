@@ -3,6 +3,7 @@ package com.allinone.proja3.proja3;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.UserDTO;
+import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class ServiceTests {
 
     @Test
     public void addRoleUserTest(){
-        userService.addRoleUser(22L);
+        userService.addRole(22L, UserRole.USER);
     }
 
     @Test

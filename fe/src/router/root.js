@@ -8,6 +8,7 @@ const Loading = <div>....</div>
 const Main = lazy(() => import("../pages/MainPage"))
 const User = lazy(() => import("../pages/user/UserPage"))
 const Login = lazy(() => import("../pages/login/LoginPage"))
+const Join = lazy(() => import("../pages/JoinPage"))
 
 const root = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ const root = createBrowserRouter([
         path: "login",
         element: <Suspense fallback={Loading}><Login /></Suspense>,
         children: loginRouter()
+    },
+    {
+        path: "join",
+        element: <Suspense fallback={Loading}><Join /></Suspense>,
     },
 ])
 

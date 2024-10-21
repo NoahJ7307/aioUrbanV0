@@ -3,6 +3,7 @@ package com.allinone.proja3.proja3.controller;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.UserDTO;
+import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,12 @@ public class UserController {
         return service.getList(pageRequestDTO);
     }
 
+    @GetMapping("/approval_list")
+    public PageResponseDTO<UserDTO> getApprovalList(PageRequestDTO pageRequestDTO){
+        System.out.println("get list : "+ pageRequestDTO);
+        return service.getApprovalList(pageRequestDTO);
+    }
+
     @GetMapping("/approval")
     public boolean getApprovalStatus(Long uno){
         System.out.println("ApprovalStatus : "+uno);
@@ -33,13 +40,14 @@ public class UserController {
     public void PostApproval(@RequestBody Map<String, Long> request){
         Long uno = request.get("uno");
         System.out.println("Approval : "+uno);
-        service.addRoleUser(uno);
+        service.addRole(uno, UserRole.USER);
     }
 
     @PostMapping("/")
-    public Long register(@RequestBody UserDTO userDTO){
+    public void register(@RequestBody UserDTO userDTO){
         System.out.println("register : "+userDTO);
-        return service.register(userDTO);
+        Long uno = service.register(userDTO);
+        service.addRole(uno, UserRole.PENDING);
     }
 
     @GetMapping("/{uno}")

@@ -10,7 +10,7 @@ const UserPage = () => {
     const { loadLoginData } = useCustomLogin()
 
     useEffect(() => {
-        if (!(loadLoginData().role == 'ADMIN')) {
+        if (loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT') {
             alert('권한이 없습니다')
             navigate({ pathname: '../login' })
         }
@@ -28,6 +28,7 @@ const UserPage = () => {
             alert("하나만 선택해주세요") // 여러개 체크 시
         } else {
             alert("선택된 항목이 없습니다") // 미체크 시
+            navigate({ pathname: '/user' })
         }
     })
     const handleClickDelete = async () => {
@@ -36,6 +37,7 @@ const UserPage = () => {
             navigate({ pathname: '/user' }) // 삭제 후 새로고침 기능 수행
         } else {
             alert("선택된 항목이 없습니다")
+            navigate({ pathname: '/user' })
         }
     }
     const handleClickApprovalList = useCallback(() => { navigate({ pathname: 'approval' }) })

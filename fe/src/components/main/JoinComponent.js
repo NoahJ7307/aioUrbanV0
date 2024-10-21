@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import useCustom from '../hook/useCustom'
-import { getOne, putOne } from '../api/userApi'
-import { useOutletContext } from 'react-router-dom'
+import React, { useState } from 'react'
 import useCustomLogin from '../hook/useCustomLogin'
+import { register } from '../api/mainApi'
 
 const initState = {
     dong: 0,
@@ -12,26 +10,9 @@ const initState = {
     pw: "",
 }
 
-const UserModifyComponent = (unoList) => {
-    const { moveToList } = useCustom()
+const JoinComponent = () => {
+    const { moveToPath } = useCustomLogin()
     const [userData, setUserData] = useState({ ...initState })
-    const { checkedUno } = useOutletContext()
-    const { loadLoginData } = useCustomLogin()
-
-    // data 수신
-    useEffect(() => {
-        getOne(checkedUno[0]).then(data => {
-            setUserData({
-                // null || undefined 일 경우 "" || 0 로 대체 (controlled input 에러)
-                ...data,
-                userName: data.userName || "",
-                phone: data.phone || "",
-                pw: data.pw || "",
-                dong: data.dong ?? 0,
-                ho: data.ho ?? 0,
-            })
-        })
-    }, [checkedUno[0]])
 
     const handleChange = (e) => {
         userData[e.target.name] = e.target.value
@@ -40,10 +21,9 @@ const UserModifyComponent = (unoList) => {
 
     // 수정 data 전송
     const handleClick = () => {
-        console.log("modify uno : " + checkedUno[0])
-        putOne(checkedUno[0], userData)
-        console.log("modify success")
-        moveToList()
+        register(userData)
+        alert("join success")
+        moveToPath('/')
     }
     return (
         <div className='flex p-2'>
@@ -71,14 +51,13 @@ const UserModifyComponent = (unoList) => {
                     <div>
                         <input className='border'
                             name='userName'
-                            value={userData.userName}
-                            placeholder={userData.userName}
+                            placeholder='Insert your Name'
                             onChange={handleChange} />
                     </div>
                     <div>
                         <input className='border'
                             name='phone'
-                            value={userData.phone}
+                            placeholder='Insert your phone Number'
                             onChange={handleChange} />
                     </div>
                     <div>
@@ -91,25 +70,25 @@ const UserModifyComponent = (unoList) => {
                     <div>
                         <input className='border'
                             name='dong'
-                            value={userData.dong}
+                            placeholder='Insert your dong'
                             onChange={handleChange} />
                     </div>
                     <div>
                         <input className='border'
                             name='ho'
-                            value={userData.ho}
+                            placeholder='Insert your ho'
                             onChange={handleChange} />
                     </div>
                 </div>
                 <div>
                     <button type='button' className='bg-blue-400 p-2'
-                        onClick={handleClick}>추가</button>
+                        onClick={handleClick}>회원가입</button>
                     <button type='button' className='bg-red-400 p-2'
-                        onClick={moveToList}>취소</button>
+                        onClick={() => moveToPath('/')}>취소</button>
                 </div>
             </div>
         </div>
     )
 }
 
-export default UserModifyComponent
+export default JoinComponent

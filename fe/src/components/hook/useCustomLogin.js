@@ -6,7 +6,6 @@ const useCustomLogin = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const loginState = useSelector(state => state.loginSlice)
-    const isLogin = loginState.phone ? true : false
 
     const loadLoginData = () => {
         const token = localStorage.getItem("token")
@@ -14,6 +13,9 @@ const useCustomLogin = () => {
         const role = localStorage.getItem("role")
         return { token, uno, role }
     }
+
+    const isLogin = loadLoginData().token != null
+
     const doLogin = async (loginParam) => {
         const action = await dispatch(loginPostAsync(loginParam))
 
@@ -29,7 +31,7 @@ const useCustomLogin = () => {
             alert('Check your PhoneNumber or Password')
             moveToPath('/login')
         }
-        
+
         return action.payload
     }
     const doLogout = async () => {

@@ -42,7 +42,30 @@ public class UserServiceImpl implements UserService {
                 pageRequestDTO.getSize(),
                 Sort.by("uno").descending());
 
-        Page<User> result = userRepository.selectList(pageable);
+        Page<User> result = userRepository.notPendingList(UserRole.PENDING, pageable);// PENDING 이 아닌 유저만 필터링
+
+        // entityToDto를 사용하여 엔티티 -> DTO 변환
+        List<UserDTO> dtoList = result.get()
+                .map(this::entityToDto)  // entityToDto 메서드를 사용하여 변환
+                .collect(Collectors.toList());
+
+        long totalCount = result.getTotalElements();
+        return PageResponseDTO.<UserDTO>withAll()
+                .dtoList(dtoList)
+                .pageRequestDTO(pageRequestDTO)
+                .totalCount(totalCount)
+                .build();
+    }
+
+    @Override
+    public PageResponseDTO<UserDTO> getApprovalList(PageRequestDTO pageRequestDTO) {
+        System.out.println("getList service");
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("uno").descending());
+
+        Page<User> result = userRepository.pendingList(UserRole.PENDING, pageable); // PENDING 유저만 필터링
 
         // entityToDto를 사용하여 엔티티 -> DTO 변환
         List<UserDTO> dtoList = result.get()
@@ -89,12 +112,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addRoleUser(Long uno) {
+    public void addRole(Long uno, UserRole role) {
         System.out.println("addRoleUser service : "+uno);
         Optional<User> result = userRepository.findById(uno);
         User user = result.orElseThrow();
         user.clearRole();
-        user.addRole(UserRole.USER);
+        user.addRole(role);
         userRepository.save(user);
     }
 

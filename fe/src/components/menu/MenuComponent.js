@@ -22,9 +22,14 @@ const MenuComponent = () => {
                 <div className='flex justify-end'>
 
                     {!isLogin ?
-                        <div className='flex justify-end mr-2'>
-                            <Link to={'/login'}>Login</Link>
-                        </div>
+                        <>
+                            <div className='flex justify-end mr-2'>
+                                <Link to={'/login'}>Login</Link>
+                            </div>
+                            <div className='flex justify-end mr-2'>
+                                <Link to={'/join'}>Join</Link>
+                            </div>
+                        </>
                         : <div className='flex justify-end mr-2'>
                             <button onClick={handleClickLogout}>Logout</button>
                         </div>
