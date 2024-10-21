@@ -24,9 +24,7 @@ public interface CommunityService {
                 .build();
         return dto;
     }
-
-
-
+    boolean deletePost(Long pno, Long uno);
     Community createPost(Community community, User user);
     PageResponseDTO<CommunityDTO> findAllPosts(PageRequestDTO pageRequestDTO);
 

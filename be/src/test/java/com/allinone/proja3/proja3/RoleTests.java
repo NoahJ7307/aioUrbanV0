@@ -33,7 +33,7 @@ public class RoleTests {
     public void insertRolesAdmin() {
         User userAdmin = User.builder()
                 .userName("admin")
-                .phone("admin")
+                .phone("1231")
                 .pw(passwordEncoder.encode("1"))
                 .build();
         userAdmin.addRole(UserRole.ADMIN);

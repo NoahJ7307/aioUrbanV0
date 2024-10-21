@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -93,5 +94,24 @@ public class CommunityServiceImpl implements CommunityService {
                 .pageRequestDTO(pageRequestDTO)
                 .totalCount(totalCount)
                 .build();
+    }
+
+
+    @Override
+    public boolean deletePost(Long pno, Long uno) {
+        // 게시글을 찾고, 해당 게시글이 로그인한 사용자(uno)의 것인지 확인
+        Optional<Community> communityOpt = communityRepository.findById(pno);
+
+        if (communityOpt.isPresent()) {
+            Community community = communityOpt.get();
+            // 삭제 권한 체크: 게시글 작성자와 현재 로그인한 사용자의 uno가 일치하는지 확인
+            if (community.getUser().getUno().equals(uno)) {
+                communityRepository.delete(community);
+                return true; // 삭제 성공
+            } else {
+                return false; // 삭제 권한 없음
+            }
+        }
+        throw new IllegalArgumentException("게시글을 찾을 수 없습니다.");
     }
 }

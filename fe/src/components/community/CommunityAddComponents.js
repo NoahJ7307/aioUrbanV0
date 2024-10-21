@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { post } from '../api/communityApi';
 
 const CommunityAddComponents = () => {
@@ -18,6 +18,16 @@ const CommunityAddComponents = () => {
       console.error('게시물 등록 실패:', err);
     }
   };
+
+  useEffect(() => {
+    const getUno = localStorage.getItem('uno');
+    if (getUno) {
+      setUno(Number(getUno));
+    } else {
+      console.log("로그인 정보가 없습니다.")
+    }
+  })
+    
 
   return (
     <div className="w-full md:w-1/2 bg-gray-200 p-6 rounded-lg">

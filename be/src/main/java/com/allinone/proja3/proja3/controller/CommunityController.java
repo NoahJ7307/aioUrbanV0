@@ -50,4 +50,12 @@ public class CommunityController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("delete/{pno}")
+    public ResponseEntity<String> deletePost(@PathVariable("pno") Long pno, @RequestParam("uno") Long uno) {
+         service.deletePost(pno, uno);
+
+
+            return new ResponseEntity<>("게시글이 삭제되었습니다.", HttpStatus.OK);
+
+    }
 }

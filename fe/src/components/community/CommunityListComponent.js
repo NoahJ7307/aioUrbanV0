@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { get } from '../api/communityApi';
+import { deleteChecked, get } from '../api/communityApi';
 import { useNavigate } from 'react-router-dom';
 import PageComponent from '../common/PageComponent';
 import CommunityCustom from '../hook/CommunityCustom'
@@ -27,7 +27,14 @@ const CommunityListComponent = () => {
     const { page, size, moveToList } = CommunityCustom();
     const navigate = useNavigate(); // 페이지 이동 훅
 
-
+    useEffect(() => {
+        const getUno = localStorage.getItem('uno');
+        if (getUno) {
+            setUno(Number(getUno));
+        } else {
+            console.log("로그인 정보가 없습니다.")
+        }
+    })
     useEffect(() => {
         get({ page, size })
             .then(data => {
@@ -41,6 +48,24 @@ const CommunityListComponent = () => {
                 setLoading(false); // 로딩 상태 업데이트
             });
     }, [page, size]);
+    const handleDelete = async (pno) => {
+        try {
+            const result = await deleteChecked(pno, uno);
+            if (result) {
+                const updatedList = serverData.dtoList.filter(item => item.pno !== pno);
+                setServerData(prevData => ({
+                    ...prevData,
+                    dtoList: updatedList
+                }));
+                console.log("삭제 성공");
+
+            }
+
+        } catch {
+            console.error("삭제에러", error);
+        }
+    }
+  
     return (
         <div className="flex flex-col md:flex-row max-w-6xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
             <div className="w-full md:w-1/2 mb-6 md:mb-0 p-4">
@@ -73,7 +98,7 @@ const CommunityListComponent = () => {
                                             {uno !== item.userId ? '본인확인' : '수정'}
                                         </button>
                                         <button
-                                            onClick={() => { console.log("클릭했다") }}
+                                            onClick={() => {handleDelete(item.pno)}}
                                             disabled={uno !== item.userId}
                                             className={`mb-4 mt-4 mr-3 ml-3 py-1 px-4 ${uno !== item.userId ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500'} text-white rounded-lg`}
                                         >
