@@ -35,7 +35,8 @@ const MenuComponent = () => {
                 <li className='p-2'><Link to={'/'}>Home</Link></li>
                 <li className='p-2'><Link to={'/user'}>User</Link></li>
 
-                <li className='p-2'><Link to={'/'}>Community</Link></li>
+                <li className='p-2'><Link to={'/community'}>Community</Link></li>
+                {/* 커뮤니티 추가 */}
                 <li className='p-2'><Link to={'/'}>Parking</Link></li>
                 {loginState.phone ?
                     <li className='p-2'><Link to={'/'}>LoginTest</Link></li>
