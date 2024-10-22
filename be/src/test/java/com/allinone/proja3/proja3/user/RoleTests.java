@@ -1,4 +1,4 @@
-package com.allinone.proja3.proja3;
+package com.allinone.proja3.proja3.user;
 
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.UserRole;
