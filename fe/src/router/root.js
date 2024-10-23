@@ -27,16 +27,13 @@ const root = createBrowserRouter([
         element: <Suspense fallback={Loading}><Login /></Suspense>,
         children: loginRouter()
     },
-<<<<<<< HEAD
-    ...facilities
-=======
     {
         path: "community",
         element: <Suspense fallback={Loading}><Community /></Suspense>,
         children: communityRouter()
         // 커뮤니티 추가
     },
->>>>>>> JJY
+    ...facilities,
 ])
 
 export default root;
