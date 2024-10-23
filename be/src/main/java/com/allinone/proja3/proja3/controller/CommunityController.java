@@ -33,7 +33,7 @@ public class CommunityController {
         System.out.println("Retrieved communities for uno: " + uno);
         return service.findDataByUno(uno);
     }
-    @GetMapping("/{uno}")
+    @GetMapping("/{pno}")
     public List<CommunityDTO> readModify(@PathVariable(name = "pno") Long pno) {
         User user = userRepository.findById(pno)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
