@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { reserveGolf } from '../../api/facilities/golfApi';
 import loadLoginData from '../../hook/useCustomLogin'
 
@@ -7,7 +7,16 @@ const GolfReserve = () => {
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [teeBox, setTeeBox] = useState('');
-    const { uno } = loadLoginData();
+    const [uno, setUno] = useState()
+
+    useEffect(() => {
+        const getUno = localStorage.getItem('uno');
+        if (getUno) {
+            setUno(Number(getUno));
+        } else {
+            console.log("로그인 정보가 없습니다.");
+        }
+    }, []);
 
     const handleReserve = async () => {
         const reservationData = {

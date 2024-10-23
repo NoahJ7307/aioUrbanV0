@@ -29,7 +29,16 @@ const GolfList = () => {
     // const outletContext = useOutletContext();
     // const { setCheckedReservationId } = useOutletContext();
     const role = localStorage.getItem("role")
-    const uno = 3;
+    const 
+
+    useEffect(() => {
+        const getUno = localStorage.getItem('uno');
+        if (getUno) {
+            setUno(Number(getUno));
+        } else {
+            console.log("로그인 정보가 없습니다.");
+        }
+    }, []);
 
     const handleCheckChange = (reservationId) => {
         setChecked((prevChecked) => {
@@ -131,7 +140,7 @@ const GolfList = () => {
                     <div>{golf.startTime}</div>
                     <div>{golf.endTime}</div>
                     <div>{golf.teeBox}</div>
-                    <div>{golf.uno}</div> {/* 안전한 null 처리 */}
+                    <div>{setUno}</div> {/* 안전한 null 처리 */}
 
                 </div>
 
