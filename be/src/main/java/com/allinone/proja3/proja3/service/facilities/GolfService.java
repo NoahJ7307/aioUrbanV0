@@ -1,5 +1,6 @@
 package com.allinone.proja3.proja3.service.facilities;
 
+import com.allinone.proja3.proja3.dto.CommunityDTO;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
@@ -18,8 +19,13 @@ public interface GolfService {
     PageResponseDTO<GolfDTO> getList(PageRequestDTO pageRequestDTO);
     boolean isTimeAvailable(LocalDate date, LocalTime startTime, LocalTime endTime, int teeBox);
     PageResponseDTO<GolfDTO> getUserReservations(Long uno, PageRequestDTO pageRequestDTO);
-    void modify(GolfDTO golfDTO);
+//    void modify(GolfDTO golfDTO);
     void remove(Long reservationId);
     void findGolfBydelFlag(Long reservationId);
     public PageResponseDTO<GolfDTO> getNonDeletedReservations(PageRequestDTO pageRequestDTO);
+
+    //==========사용자의 uno, 이름, phone 불러오기================
+    public List<GolfDTO> findDataByUserName(String userName);
+    public List<GolfDTO> findDataByUno(Long uno);
+    public List<GolfDTO> findDataByPhone(String phone);
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { reserveGolf } from '../../api/facilities/golfApi';
 import loadLoginData from '../../hook/useCustomLogin'
+import { useNavigate } from 'react-router-dom';
 
 const GolfReserve = () => {
     const [reservationDate, setReservationDate] = useState('');
@@ -8,11 +9,14 @@ const GolfReserve = () => {
     const [endTime, setEndTime] = useState('');
     const [teeBox, setTeeBox] = useState('');
     const [uno, setUno] = useState()
+    const navigate = useNavigate()
 
     useEffect(() => {
         const getUno = localStorage.getItem('uno');
         if (getUno) {
             setUno(Number(getUno));
+            console.log("불렸다 UNO : " + getUno)
+
         } else {
             console.log("로그인 정보가 없습니다.");
         }
@@ -41,6 +45,8 @@ const GolfReserve = () => {
         try {
             await reserveGolf(reservationData);
             alert('예약에 성공하셨습니다 😃');
+            navigate('/facilities/golf/list')
+            
         
 
         } catch (error) {

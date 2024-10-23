@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u where u.delFlag = false")
     Page<User> selectList(Pageable pageable);
@@ -29,4 +31,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = {"userRoleList"})
     @Query("select u from User u where u.phone = :phone")
     User getWithRoles(@Param("phone") String phone);
+
+
+    //==========사용자의 uno, 이름, phone 불러오기================
+    Optional<User> findByUserName(String userName);
+    Optional<User> findByPhone(String phone);
 }

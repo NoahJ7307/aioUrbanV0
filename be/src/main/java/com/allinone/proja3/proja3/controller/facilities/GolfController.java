@@ -1,9 +1,12 @@
 package com.allinone.proja3.proja3.controller.facilities;
 
+import com.allinone.proja3.proja3.dto.CommunityDTO;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
+import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Golf;
+import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.repository.facilities.GolfRepository;
 import com.allinone.proja3.proja3.service.facilities.GolfService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +25,8 @@ import java.util.List;
 @RequestMapping("/api/facilities/golf")
 public class GolfController {
     private final GolfService service;
-    private GolfRepository repository;
+    private final GolfRepository repository;
+    private final UserRepository userRepository;
 
 //    @PutMapping("/modify")
 //    public void modify (@PathVariable (name = "reservationId") Long reservationId, GolfDTO golfDTO) {
@@ -52,10 +56,10 @@ public class GolfController {
 //    }
 
     //관리자를 위한 예약 수정
-    @PostMapping("/{reservationId}")
-    public void modify(@PathVariable(name = "reservationId") Long reservationId, GolfDTO golfDTO) {
-        service.modify(golfDTO);
-    }
+//    @PostMapping("/{reservationId}")
+//    public void modify(@PathVariable(name = "reservationId") Long reservationId, GolfDTO golfDTO) {
+//        service.modify(golfDTO);
+//    }
 
 
     //특정 uno 조회 페이지를 위한 로직
@@ -74,7 +78,7 @@ public class GolfController {
     //예약 등록을 위한 로직
     @PostMapping("/reserve")
     public Long register(@RequestBody GolfDTO golfDTO) {
-        System.out.println("golf register...."+golfDTO);
+        System.out.println("golf register...."+golfDTO+"끝@@@@");
 
         //날짜 ,시간,좌석번호로 예약 목록 중복 조회 메서드
         if(!service.isTimeAvailable(golfDTO.getDate(), golfDTO.getStartTime(), golfDTO.getEndTime(), golfDTO.getTeeBox())){
@@ -95,6 +99,30 @@ public class GolfController {
         return service.isTimeAvailable(date, startTime,endTime,teeBox);
     }
 
+
+
+    //==========사용자의 uno, 이름, phone 불러오기================
+    @GetMapping("/{uno}")
+    public List<GolfDTO> readUno(@PathVariable(name = "uno") Long uno) {
+        User user = userRepository.findById(uno)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        System.out.println("Retrieved golf for uno: " + uno);
+        return service.findDataByUno(uno);
+    }
+    @GetMapping("/{userName}")
+    public List<GolfDTO> readUserName (@PathVariable(name = "userName") String userName) {
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        System.out.println("Retrieved golf for userName: " + userName);
+        return service.findDataByUserName(userName);
+    }
+    @GetMapping("/{phone}")
+    public List<GolfDTO> readPhone (@PathVariable(name = "phone") String phone) {
+        User user = userRepository.findByPhone(phone)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        System.out.println("Retrieved golf for phone: " + phone);
+        return service.findDataByPhone(phone);
+    }
 
 
 

@@ -3,8 +3,6 @@ import { cancelGolf, listGolf } from '../../api/facilities/golfApi';
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import loadLoginData from '../../hook/useCustomLogin';
-
 const initState = {
     dtoList: [],
     pageNumList: [],
@@ -21,24 +19,47 @@ const initState = {
 
 
 const GolfList = () => {
+    const [uno, setUno] = useState(); // 로그인한 사용자 uno
+    const [userName, setUserName] = useState(); // 로그인한 사용자 name
+    const [phone, setPhone] = useState(); // 로그인한 사용자 phone
     const navigate = useNavigate()
     const [checkedReservationId, setCheckedReservationId] = useState([])
     const [serverData, setServerData] = useState(initState)
     const { page, size, moveToList } = useCustom()
     const [checked, setChecked] = useState([])
-    // const outletContext = useOutletContext();
-    // const { setCheckedReservationId } = useOutletContext();
-    const role = localStorage.getItem("role")
-    const 
 
+    const role = localStorage.getItem("role")
+    //user uno 불러오기
     useEffect(() => {
         const getUno = localStorage.getItem('uno');
         if (getUno) {
             setUno(Number(getUno));
+            console.log(serverData.dtoList)
         } else {
             console.log("로그인 정보가 없습니다.");
         }
     }, []);
+    //user name 불러오기 
+    useEffect(() => {
+        const getUserName = localStorage.getItem('userName');
+        if (getUserName) {
+            setUserName(getUserName);
+            console.log(serverData.dtoList)
+        } else {
+            console.log("로그인 정보가 없습니다.");
+        }
+    }, []);
+    //user phone 불러오기 
+    useEffect(() => {
+        const getPhone = localStorage.getItem('userPhone');
+        if (getPhone) {
+            setPhone(getPhone);
+            console.log(serverData.dtoList)
+        } else {
+            console.log("로그인 정보가 없습니다.");
+        }
+    }, []);
+    
 
     const handleCheckChange = (reservationId) => {
         setChecked((prevChecked) => {
@@ -51,23 +72,36 @@ const GolfList = () => {
 
         });
     };
+    // const fetchGolfReservations = async () => {
+    //     try {
+    //         const data = await listGolf({ page, size });
+    //         console.log("Fetched data:", data); // 데이터 구조를 확인
+    //         setServerData(data);
+    //     } catch (err) {
+    //         console.error("데이터를 가져오는데 오류가 발생했습니다 => ", err);
+    //     }
+    // };
     const fetchGolfReservations = async () => {
         try {
             const data = await listGolf({ page, size });
-            console.log(data)
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            console.log("Fetched data:", data);
             setServerData(data);
         } catch (err) {
-            console.error("데이터를 가져오는데 오류가 발생했습니다 => ", err)
+            console.error("데이터를 가져오는데 오류가 발생했습니다 => ", err);
+            alert("예약 정보를 가져오는 데 오류가 발생했습니다. 다시 시도해 주세요.");
         }
-
     };
-
+    
+    
     useEffect(() => {
-        
+
         fetchGolfReservations();
 
     }, [page, size]);
-    
+
     //수정로직구현하기
     const handleModify = (reservationId) => {
         // axios.post(`/api/`)
@@ -122,30 +156,33 @@ const GolfList = () => {
 
 
             </div>
-            {/* {serverData && serverData.dtoList.map((golf, index) => ( */}
-            {serverData.dtoList.map((golf) => (
-                <div key={golf.reservationId} className="grid grid-cols-8">
-
-                    <div>
-                        {role === 'ADMIN' && (
-                            <input
-                                type='checkbox'
-                                checked={checked.includes(golf.reservationId)}
-                                onChange={() => handleCheckChange(golf.reservationId)}
-                            />
-                        )}
+            {serverData.dtoList && serverData.dtoList.length > 0 ? (
+                serverData.dtoList.map((golf) => (
+                    <div key={golf.reservationId} className="grid grid-cols-8">
+                        <div>
+                            {role === 'ADMIN' && (
+                                <input
+                                    type='checkbox'
+                                    checked={checked.includes(golf.reservationId)}
+                                    onChange={() => handleCheckChange(golf.reservationId)}
+                                />
+                            )}
+                        </div>
+                        <div>{golf.reservationId}</div>
+                        <div>{golf.date}</div>
+                        <div>{golf.startTime}</div>
+                        <div>{golf.endTime}</div>
+                        <div>{golf.teeBox}</div>
+                        <div>{golf.phone}</div> {/* uno 값을 확인 */}
                     </div>
-                    <div>{golf.reservationId}</div>
-                    <div>{golf.date}</div>
-                    <div>{golf.startTime}</div>
-                    <div>{golf.endTime}</div>
-                    <div>{golf.teeBox}</div>
-                    <div>{setUno}</div> {/* 안전한 null 처리 */}
-
-                </div>
-
-            ))}
-            {serverData && <PageComponent serverData={serverData} movePage={(pageParam) => moveToList(pageParam, '/facilities/golf/list')} />}
+                ))
+            ) : (
+                <div>정보없음</div>
+            )}
+            {serverData && serverData.dtoList && serverData.dtoList.length > 0 && (
+    <PageComponent
+        serverData={serverData}
+        movePage={(pageParam) => moveToList(pageParam, '/facilities/golf/list')} />)}
         </div>
 
     );

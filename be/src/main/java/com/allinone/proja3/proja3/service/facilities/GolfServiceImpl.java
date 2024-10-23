@@ -1,9 +1,11 @@
 package com.allinone.proja3.proja3.service.facilities;
 
+import com.allinone.proja3.proja3.dto.CommunityDTO;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
 import com.allinone.proja3.proja3.dto.facilities.StudyDTO;
+import com.allinone.proja3.proja3.model.Community;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Golf;
 import com.allinone.proja3.proja3.model.facilities.Study;
@@ -30,7 +32,7 @@ import java.util.stream.Collectors;
 public class GolfServiceImpl implements GolfService {
 
     private final GolfRepository golfRepository;
-
+    private final UserRepository userRepository;
 
     @Override
     public Long register(GolfDTO golfDTO) {
@@ -75,16 +77,27 @@ public class GolfServiceImpl implements GolfService {
     @Override
     public PageResponseDTO<GolfDTO> getUserReservations(Long uno, PageRequestDTO pageRequestDTO) {
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage(), pageRequestDTO.getSize());
-        List<GolfDTO> reservations = golfRepository.findByUserUno(uno, pageable);
+
+        // 엔티티를 조회
+        List<Golf> reservations = golfRepository.findByUserUno(uno, pageable);
+
+        // 엔티티를 DTO로 변환
+        List<GolfDTO> dtoList = reservations.stream()
+                .map(this::entityToDto)  // 엔티티 -> DTO 변환
+                .collect(Collectors.toList());
+
+        // 총 예약 수
         long totalCount = golfRepository.countByUserUno(uno);
-        return new PageResponseDTO<>(reservations,  pageRequestDTO ,totalCount);
+
+        // DTO 리스트와 PageRequestDTO를 사용해 PageResponseDTO를 생성하여 반환
+        return new PageResponseDTO<>(dtoList,  pageRequestDTO ,totalCount);
     }
 
-    @Override
-    public void modify(GolfDTO golfDTO) {
-        Golf golf = dtoToEntity(golfDTO);
-        golfRepository.save(golf);
-    }
+//    @Override
+//    public void modify(GolfDTO golfDTO) {
+//        Golf golf = dtoToEntity(golfDTO);
+//        golfRepository.save(golf);
+//    }
 
     @Override
     public void remove(Long reservationId) {
@@ -114,15 +127,55 @@ public class GolfServiceImpl implements GolfService {
                 .build();
     }
 
+
+
+    //==========사용자의 uno, 이름, phone 불러오기================
+
+
+    @Override
+    public List<GolfDTO> findDataByUno(Long uno) {
+        User user = userRepository.findById(uno)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        List<Golf> golf = golfRepository.findByUser(user); // User 객체로 검색
+        return golf.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<GolfDTO> findDataByUserName(String userName) {
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        List<Golf> golf = golfRepository.findByUser(user); // User 객체로 검색
+        return golf.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<GolfDTO> findDataByPhone(String phone) {
+        User user = userRepository.findByPhone(phone)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        List<Golf> golf = golfRepository.findByUser(user); // User 객체로 검색
+        return golf.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+    }
+
     //레시피 → 요리 (dtoToEntity)
     // 클라이언트로부터 받은 정보를 바탕으로 실제 데이터베이스에 저장할 수 있는 형식으로 변환합니다.
     private Golf dtoToEntity(GolfDTO golfDTO) {
+        //dtoList에 user 데이터 연동
+        User user = userRepository.findById(golfDTO.getUno())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
         return Golf.builder()
                 .reservationId(golfDTO.getReservationId())
                 .date(golfDTO.getDate())
                 .startTime(golfDTO.getStartTime())
                 .endTime(golfDTO.getEndTime())
                 .teeBox(golfDTO.getTeeBox())
+                //dtoList에 user 데이터 연동
+                .user(user)
                 .build();
     }
 
@@ -135,6 +188,10 @@ public class GolfServiceImpl implements GolfService {
                 .teeBox(golf.getTeeBox())
                 .startTime(golf.getStartTime())
                 .endTime(golf.getEndTime())
+                //dtoList에 user 데이터 연동
+                .uno(golf.getUser() != null ? golf.getUser().getUno() : null) // 사용자 ID
+                .userName(golf.getUser() != null ? golf.getUser().getUserName() : null) // 사용자 이름
+                .phone(golf.getUser() != null ? golf.getUser().getPhone() : null) // 사용자 전화번호
                 .build();
     }
 
