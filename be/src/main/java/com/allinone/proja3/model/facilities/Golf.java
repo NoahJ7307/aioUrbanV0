@@ -20,7 +20,7 @@ public class Golf {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reservationId;
-    private String userName;
+//    private String userName;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;

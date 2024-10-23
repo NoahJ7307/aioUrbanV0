@@ -5,10 +5,12 @@ import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
 import com.allinone.proja3.proja3.dto.facilities.StudyDTO;
 import com.allinone.proja3.proja3.model.facilities.Golf;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Transactional
 public interface GolfService {
@@ -17,5 +19,7 @@ public interface GolfService {
     boolean isTimeAvailable(LocalDate date, LocalTime startTime, LocalTime endTime, int teeBox);
     PageResponseDTO<GolfDTO> getUserReservations(Long uno, PageRequestDTO pageRequestDTO);
     void modify(GolfDTO golfDTO);
-    void remove(Long uno);
+    void remove(Long reservationId);
+    void findGolfBydelFlag(Long reservationId);
+    public PageResponseDTO<GolfDTO> getNonDeletedReservations(PageRequestDTO pageRequestDTO);
 }

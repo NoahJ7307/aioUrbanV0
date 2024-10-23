@@ -12,12 +12,12 @@ import java.time.LocalTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GolfDTO {
+public class StudyDTO {
     private Long reservationId;
-    private String userName;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
     private boolean delFlag;
-    private int teeBox; //골프장 시설 특성
+    private int seatNum; // 독서실 시설 특성
+
 }

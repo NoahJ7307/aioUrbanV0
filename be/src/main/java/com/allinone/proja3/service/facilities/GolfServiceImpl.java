@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -87,16 +88,37 @@ public class GolfServiceImpl implements GolfService {
 
     @Override
     public void remove(Long reservationId) {
+        System.out.println("remove service: " + reservationId);
         golfRepository.updateToDelete(reservationId, true);
     }
 
+    @Override
+    public void findGolfBydelFlag(Long reservationId) {
+        Golf reservation = golfRepository.findById(reservationId).orElseThrow(() -> new ResourceAccessException("예약된 내용이 없어요"));
+        reservation.setDelFlag(true);
+        golfRepository.save(reservation);
+    }
+    @Override
+    public PageResponseDTO<GolfDTO> getNonDeletedReservations(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
+        Page<Golf> result = golfRepository.findNonDeletedReservations(pageable);
+
+        List<GolfDTO> dtoList = result.getContent().stream()
+                .map(e->entityToDto(e))
+                .collect(Collectors.toList());
+
+        return PageResponseDTO.<GolfDTO>withAll()
+                .dtoList(dtoList)
+                .pageRequestDTO(pageRequestDTO)
+                .totalCount(result.getTotalElements())
+                .build();
+    }
 
     //레시피 → 요리 (dtoToEntity)
     // 클라이언트로부터 받은 정보를 바탕으로 실제 데이터베이스에 저장할 수 있는 형식으로 변환합니다.
     private Golf dtoToEntity(GolfDTO golfDTO) {
         return Golf.builder()
                 .reservationId(golfDTO.getReservationId())
-                .userName(golfDTO.getUserName())
                 .date(golfDTO.getDate())
                 .startTime(golfDTO.getStartTime())
                 .endTime(golfDTO.getEndTime())
@@ -110,7 +132,6 @@ public class GolfServiceImpl implements GolfService {
         return GolfDTO.builder()
                 .reservationId(golf.getReservationId())
                 .date(golf.getDate())
-                .userName(golf.getUserName())
                 .teeBox(golf.getTeeBox())
                 .startTime(golf.getStartTime())
                 .endTime(golf.getEndTime())

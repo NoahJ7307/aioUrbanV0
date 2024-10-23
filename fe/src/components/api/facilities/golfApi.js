@@ -41,10 +41,17 @@ export const modifyGolf = (reservationId, reservationData) => {
     return axios.put(`${host}/modify/${reservationId}`, reservationData, config);
 };
 
-export const cancelGolf = (reservationId) => {
-    const config = getConfig();
-    return axios.delete(`${host}/cancel/${reservationId}`, config);
-};
+
+export const cancelGolf = async (checkedReservationId) => {
+    const config = getConfig(); 
+    return axios.post(`${host}/delete`, checkedReservationId, config);
+}
+
+// export const cancelGolf = (checkedReservationId) => {
+//     console.log("전송되라")
+//     const config = getConfig();
+//     return axios.delete(`${host}/delete`,{data: checkedReservationId }, config);
+// };
 
 // export const processPayment = (paymentDetails) => {
 //     return axios.post(`${API_URL}/payment`, paymentDetails);

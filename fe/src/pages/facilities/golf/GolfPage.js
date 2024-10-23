@@ -18,9 +18,9 @@ const GolfPage = () => {
     const handleClickModify = useCallback(() => {
         navigate('/facilities/golf/modify');
     }, [navigate]);
-    const handleClickCancel = useCallback(() => {
-        navigate('/facilities/golf/cancel');
-    }, [navigate]);
+    // const handleClickCancel = useCallback(() => {
+    //     navigate('/facilities/golf/cancel');
+    // }, [navigate]);
 
 
     return (
@@ -40,9 +40,9 @@ const GolfPage = () => {
                 <li>
                     <button className="button" onClick={handleClickModify}>예약 변경</button>
                 </li>
-                <li>
+                {/* <li>
                     <button className="button" onClick={handleClickCancel}>예약 취소</button>
-                </li>
+                </li> */}
             </ul>
             <h1>Golf Facilities</h1>
             <Outlet/>

@@ -21,7 +21,7 @@ public interface GolfRepository extends JpaRepository<Golf, Long> {
                                  @Param("endTime") LocalTime endTime,
                                  @Param("teeBox") int teeBox);
 
-    @Query("select new com.allinone.proja3.proja3.dto.facilities.GolfDTO(g.reservationId, g.userName, g.date, g.startTime, g.endTime, g.delFlag, g.teeBox) " +
+    @Query("select new com.allinone.proja3.proja3.dto.facilities.GolfDTO(g.reservationId, g.date, g.startTime, g.endTime, g.delFlag, g.teeBox) " +
              "FROM Golf g WHERE g.user.uno = :uno")
     List<GolfDTO> findByUserUno(@Param("uno")Long uno, Pageable pageable);
 
@@ -46,5 +46,9 @@ public interface GolfRepository extends JpaRepository<Golf, Long> {
     void updateToDelete(@Param("reservationId") Long reservationId, @Param("flag") boolean flag);
 
     // 예약 등록 메서드는 JpaRepository에 의해 자동으로 제공되므로 별도로 작성할 필요 없음
+    List<Golf> findGolfBydelFlag(Boolean del_flag);
+
+    @Query("SELECT g FROM Golf g WHERE g.delFlag = false ORDER BY g.reservationId DESC")
+    Page<Golf> findNonDeletedReservations(Pageable pageable);
 
 }

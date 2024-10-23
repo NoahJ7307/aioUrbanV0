@@ -1,4 +1,4 @@
-package com.allinone.proja3.proja3;
+package com.allinone.proja3;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -3,9 +3,12 @@ package com.allinone.proja3.proja3.controller.facilities;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
+import com.allinone.proja3.proja3.model.facilities.Golf;
+import com.allinone.proja3.proja3.repository.facilities.GolfRepository;
 import com.allinone.proja3.proja3.service.facilities.GolfService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -15,9 +18,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/api/facilities/golf")
 public class GolfController {
     private final GolfService service;
+    private GolfRepository repository;
 
 //    @PutMapping("/modify")
 //    public void modify (@PathVariable (name = "reservationId") Long reservationId, GolfDTO golfDTO) {
@@ -28,13 +33,23 @@ public class GolfController {
     @GetMapping("/list")
     public PageResponseDTO<GolfDTO> getList(PageRequestDTO pageRequestDTO){
         System.out.println("get list 가져온다 : " + pageRequestDTO);
-
-        return service.getList(pageRequestDTO);
+        return service.getNonDeletedReservations(pageRequestDTO);
     }
 
     //관리자를 위한 예약 삭제
     @PostMapping("/delete")
-    public void deleteChecked(@RequestBody List<Long> checkedUno) {checkedUno.forEach(service::remove);}
+    public void deleteChecked(@RequestBody List<Long> checkedReservationId){
+        System.out.println("checkedReservationId:"+checkedReservationId);
+        checkedReservationId.forEach(reservationId -> {
+            service.remove(reservationId);
+        });
+
+    }
+//    @DeleteMapping("/delete")
+//    public void deleteChecked(@RequestBody List<Long> checkedReservationId) {
+//        System.out.println("삭제 id : " + checkedReservationId);
+//        checkedReservationId.forEach(service::remove);
+//    }
 
     //관리자를 위한 예약 수정
     @PostMapping("/{reservationId}")

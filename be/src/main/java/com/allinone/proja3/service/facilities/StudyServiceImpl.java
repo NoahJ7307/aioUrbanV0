@@ -68,7 +68,6 @@ public class StudyServiceImpl implements StudyService {
     private Study dtoToEntity(StudyDTO studyDTO) {
         return Study.builder()
                 .reservationId(studyDTO.getReservationId())
-                .userName(studyDTO.getUserName())
                 .date(studyDTO.getDate())
                 .startTime(studyDTO.getStartTime())
                 .endTime(studyDTO.getEndTime())
@@ -80,7 +79,6 @@ public class StudyServiceImpl implements StudyService {
         return StudyDTO.builder()
                 .reservationId(study.getReservationId())
                 .date(study.getDate())
-                .userName(study.getUserName())
                 .seatNum(study.getSeatNum())
                 .startTime(study.getStartTime())
                 .endTime(study.getEndTime())

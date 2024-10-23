@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class GymDTO {
     private Long reservationId;
-    private String userName;
     private LocalDate date;
     private String membershipType;
     private boolean delFlag;
