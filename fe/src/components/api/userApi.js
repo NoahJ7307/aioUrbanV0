@@ -17,6 +17,20 @@ export const getList = async (pageParam) => {
     return res.data
 }
 
+export const getApprovalList = async (pageParam) => {
+    const { page, size } = pageParam
+    const token = localStorage.getItem("token")
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        params: { page, size },
+    }
+    const res = await axios.get(`${host}/approval_list`, config)
+    return res.data
+}
+
 export const postAdd = async (userData) => {
     console.log(userData)
     const token = localStorage.getItem("token")

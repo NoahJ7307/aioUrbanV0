@@ -22,9 +22,14 @@ const MenuComponent = () => {
                 <div className='flex justify-end'>
 
                     {!isLogin ?
-                        <div className='flex justify-end mr-2'>
-                            <Link to={'/login'}>Login</Link>
-                        </div>
+                        <>
+                            <div className='flex justify-end mr-2'>
+                                <Link to={'/login'}>Login</Link>
+                            </div>
+                            <div className='flex justify-end mr-2'>
+                                <Link to={'/join'}>Join</Link>
+                            </div>
+                        </>
                         : <div className='flex justify-end mr-2'>
                             <button onClick={handleClickLogout}>Logout</button>
                         </div>
@@ -36,7 +41,7 @@ const MenuComponent = () => {
                 <li className='p-2'><Link to={'/user'}>User</Link></li>
                 <li className='p-2'><Link to={'/facilities'}>facilities</Link></li>
                 <li className='p-2'><Link to={'/community'}>Community</Link></li>
-                <li className='p-2'><Link to={'/'}>Parking</Link></li>
+                <li className='p-2'><Link to={'/parking'}>Parking</Link></li>
                 {loginState.phone ?
                     <li className='p-2'><Link to={'/'}>LoginTest</Link></li>
                     : <></>

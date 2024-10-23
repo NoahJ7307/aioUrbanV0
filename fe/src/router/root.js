@@ -3,6 +3,7 @@ import userRouter from './userRouter'
 import communityRouter from './community/communityRouter'
 import loginRouter from './loginRouter'
 import facilities from './facilities/facilitiesRouter'
+import parkingRouter from './parkingRouter'
 
 const { createBrowserRouter } = require("react-router-dom")
 
@@ -11,11 +12,17 @@ const Main = lazy(() => import("../pages/MainPage"))
 const User = lazy(() => import("../pages/user/UserPage"))
 const Login = lazy(() => import("../pages/login/LoginPage"))
 const Community = lazy(() => import("../pages/community/CommunityPage"))
+const Join = lazy(() => import("../pages/JoinPage"))
+const Parking = lazy(() => import("../pages/parking/ParkingPage"))
 
 const root = createBrowserRouter([
     {
         path: "",
         element: <Suspense fallback={Loading}><Main /></Suspense>
+    },
+    {
+        path: "join",
+        element: <Suspense fallback={Loading}><Join /></Suspense>,
     },
     {
         path: "user",
@@ -32,6 +39,11 @@ const root = createBrowserRouter([
         element: <Suspense fallback={Loading}><Community /></Suspense>,
         children: communityRouter()
         // 커뮤니티 추가
+    },
+    {
+        path: "parking",
+        element: <Suspense fallback={Loading}><Parking /></Suspense>,
+        children: parkingRouter()
     },
     ...facilities,
 ])

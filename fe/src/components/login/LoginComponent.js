@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useCustomLogin from '../hook/useCustomLogin'
 
 const initState = {
@@ -7,7 +7,7 @@ const initState = {
 }
 const LoginComponent = () => {
     const [loginParam, setLoginParam] = useState(initState)
-    const { doLogin, loadLoginData } = useCustomLogin()
+    const { doLogin } = useCustomLogin()
 
     const handleChange = (e) => {
         loginParam[e.target.name] = e.target.value
@@ -17,6 +17,7 @@ const LoginComponent = () => {
         doLogin(loginParam)
         setLoginParam(initState)
     }
+
     return (
         <div className='border'>
             <div className='flex'>

@@ -1,14 +1,13 @@
-package com.allinone.proja3.proja3;
+package com.allinone.proja3.proja3.user;
 
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.UserDTO;
+import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 @SpringBootTest
 public class ServiceTests {
@@ -44,7 +43,7 @@ public class ServiceTests {
 
     @Test
     public void addRoleUserTest(){
-        userService.addRoleUser(22L);
+        userService.addRole(22L, UserRole.USER);
     }
 
     @Test

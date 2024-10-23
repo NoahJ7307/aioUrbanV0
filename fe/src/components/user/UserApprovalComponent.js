@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { addUserRole, approvalStatus, deleteChecked, getList } from '../api/userApi'
+import { addUserRole, approvalStatus, deleteChecked, getApprovalList, getList } from '../api/userApi'
 import PageComponent from '../common/PageComponent'
 import useCustomApproval from '../hook/useCustomApproval'
 
@@ -23,37 +23,45 @@ const UserApprovalComponent = () => {
     const handleClickAccess = (e) => {
         const uno = e.target.value
         addUserRole(uno)
-        fetchData()
+        // fetchData()
     }
 
     const handleClickDenial = (e) => {
         const uno = [e.target.value]
         deleteChecked(uno)
-        fetchData()
+        // fetchData()
     }
 
-    // 승인여부(PENDING 포함여부)가 true인 사용자만 필터링
-    const fetchData = async () => {
-        try {
-            const listData = await getList({ page, size })
-            const approvalPromises = listData.dtoList.map(async (user) => {
-                const status = await approvalStatus(user.uno) // approvalStatus api 병렬처리
-                return { ...user, approvalStatus: status } // dtoList 에 status(승인여부) 추가
-            });
-
-            const filteredData = (await Promise.all(approvalPromises)) // true 필터링 병렬처리
-                .filter(user => user.approvalStatus)
-
-            // dtoList 만 필터링된 데이터로 업데이트
-            setServerData({ ...listData, dtoList: filteredData })
-        } catch (err) {
-            console.error('Error fetching approval status or list:', err)
-        }
-    }
 
     useEffect(() => {
-        fetchData()
+        getApprovalList({ page, size }).then(data => {
+            setServerData(data)
+        }).catch(err => {
+            console.error("Axios error", err)
+        })
     }, [page, size])
+    // // 승인여부(PENDING 포함여부)가 true인 사용자만 필터링
+    // const fetchData = async () => {
+    //     try {
+    //         const listData = await getList({ page, size })
+    //         const approvalPromises = listData.dtoList.map(async (user) => {
+    //             const status = await approvalStatus(user.uno) // approvalStatus api 병렬처리
+    //             return { ...user, approvalStatus: status } // dtoList 에 status(승인여부) 추가
+    //         });
+
+    //         const filteredData = (await Promise.all(approvalPromises)) // true 필터링 병렬처리
+    //             .filter(user => user.approvalStatus)
+
+    //         // dtoList 만 필터링된 데이터로 업데이트
+    //         setServerData({ ...listData, dtoList: filteredData })
+    //     } catch (err) {
+    //         console.error('Error fetching approval status or list:', err)
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     fetchData()
+    // }, [page, size])
 
     return (
         <div>
