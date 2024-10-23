@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useCustom from '../hook/useCustom'
 import { getOne, putOne } from '../api/userApi'
 import { useOutletContext } from 'react-router-dom'
+import useCustomLogin from '../hook/useCustomLogin'
 
 const initState = {
     dong: 0,
@@ -15,6 +16,7 @@ const UserModifyComponent = (unoList) => {
     const { moveToList } = useCustom()
     const [userData, setUserData] = useState({ ...initState })
     const { checkedUno } = useOutletContext()
+    const { loadLoginData } = useCustomLogin()
 
     // data 수신
     useEffect(() => {
@@ -29,7 +31,7 @@ const UserModifyComponent = (unoList) => {
                 ho: data.ho ?? 0,
             })
         })
-    }, [checkedUno[0]])
+    }, [checkedUno])
 
     const handleChange = (e) => {
         userData[e.target.name] = e.target.value
