@@ -1,4 +1,4 @@
-package com.allinone.proja3.proja3;
+package com.allinone.proja3;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
