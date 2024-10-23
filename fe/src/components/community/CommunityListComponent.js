@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { deleteChecked, get } from '../api/communityApi';
 import { useNavigate } from 'react-router-dom';
 import PageComponent from '../common/PageComponent';
-import CommunityCustom from '../hook/CommunityCustom'
+import CommunityCustom from '../hook/CommunityCustom';
+
 // 초기 상태 설정
 const initState = {
     dtoList: [],
@@ -21,10 +22,10 @@ const CommunityListComponent = () => {
     const [loading, setLoading] = useState(true); // 로딩 상태
     const [error, setError] = useState(null); // 에러 상태
     const [uno, setUno] = useState(); // 로그인한 사용자 uno
-    const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-    const [postsPerPage] = useState(9); // 한 페이지당 게시물 수
-    const [serverData, setServerData] = useState(initState); // 페이지네이션 데이터
-    const { page, size, moveToList } = CommunityCustom();
+    const [serverData, setServerData] = useState(initState); // 서버 데이터 상태
+    const [showModal, setShowModal] = useState(false); // 모달 상태
+    const [currentPost, setCurrentPost] = useState(null); // 현재 모달에 표시할 게시물
+    const { page, size, moveToList } = CommunityCustom(); // 페이지 이동 훅
     const navigate = useNavigate(); // 페이지 이동 훅
 
     useEffect(() => {
@@ -32,9 +33,10 @@ const CommunityListComponent = () => {
         if (getUno) {
             setUno(Number(getUno));
         } else {
-            console.log("로그인 정보가 없습니다.")
+            console.log("로그인 정보가 없습니다.");
         }
-    })
+    }, []);
+
     useEffect(() => {
         get({ page, size })
             .then(data => {
@@ -48,6 +50,7 @@ const CommunityListComponent = () => {
                 setLoading(false); // 로딩 상태 업데이트
             });
     }, [page, size]);
+
     const handleDelete = async (pno) => {
         try {
             const result = await deleteChecked(pno, uno);
@@ -58,60 +61,147 @@ const CommunityListComponent = () => {
                     dtoList: updatedList
                 }));
                 console.log("삭제 성공");
-
             }
-
         } catch {
-            console.error("삭제에러", error);
+            console.error("삭제 에러", error);
         }
-    }
-  
-    return (
-        <div className="flex flex-col md:flex-row max-w-6xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
-            <div className="w-full md:w-1/2 mb-6 md:mb-0 p-4">
-                <header className="text-center mb-6">
-                    <h1 className="text-3xl font-bold text-gray-800">커뮤니티 게시판</h1>
-                    <p className="text-gray-600">Avan APT 소통창구</p>
-                </header>
+    };
 
-                <div className="mb-4">
-                    <h2 className="text-2xl font-semibold mb-2">최근 게시물</h2>
+    const openModal = (post) => {
+        setCurrentPost(post);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setCurrentPost(null);
+    };
+
+    return (
+        <div className="max-w-7xl mx-auto mt-8 p-4">
+            <header className="text-center mb-8">
+                <h1 className="text-3xl font-bold">자유게시판</h1>
+                <p className="text-gray-600">Avan APT 소통창구</p>
+            </header>
+
+            <table className="min-w-full table-auto text-sm text-gray-600 bg-white shadow-lg rounded-lg overflow-hidden">
+                <thead>
+                    <tr className="bg-gray-200 text-gray-800">
+                        <th className="w-12 py-3 border">번호</th>
+                        <th className="w-auto py-3 border">제목</th>
+                        <th className="w-20 py-3 border">글쓴이</th>
+                        <th className="w-36 py-3 border">작성시간</th>
+                        <th className="w-32 py-3 border">수정</th>
+                        <th className="w-32 py-3 border">삭제</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {loading ? (
-                        <p className="text-gray-700">로딩 중...</p>
+                        <tr>
+                            <td colSpan="6" className="text-center py-4">로딩 중...</td>
+                        </tr>
                     ) : error ? (
-                        <p className="text-red-600">{error}</p>
+                        <tr>
+                            <td colSpan="6" className="text-center text-red-600 py-4">{error}</td>
+                        </tr>
                     ) : (
                         serverData.dtoList.map((item, index) => (
-                            <div key={index} className="bg-white p-4 rounded-lg shadow mb-4">
-                                <h3 className="text-xl font-bold">{item.title}</h3>
-                                <p className="text-gray-700">{item.content}</p>
-                                <span className="text-gray-500 text-sm">
-                                    작성자: {item.userName} 작성일: {new Date(item.createdAt).toLocaleDateString()}
-                                </span>
-                                <ul>
-                                    <li>
-                                        <button
-                                            onClick={() => { navigate('/community/add') }}
-                                            disabled={uno !== item.userId}
-                                            className={`mb-4 mt-4 mr-3 ml-3 py-1 px-4 ${uno !== item.userId ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500'} text-white rounded-lg`}
-                                        >
-                                            {uno !== item.userId ? '본인확인' : '수정'}
-                                        </button>
-                                        <button
-                                            onClick={() => {handleDelete(item.pno)}}
-                                            disabled={uno !== item.userId}
-                                            className={`mb-4 mt-4 mr-3 ml-3 py-1 px-4 ${uno !== item.userId ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500'} text-white rounded-lg`}
-                                        >
-                                            {uno !== item.userId ? '본인확인' : '삭제'}
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
+                            <tr key={index} className="hover:bg-gray-100">
+                                <td className="py-3 px-4 border text-center">{item.pno}</td>
+                                <td className="py-3 px-4 border">
+                                    <button
+                                        onClick={() => openModal(item)}
+                                        className="text-blue-600 hover:underline"
+                                    >
+                                        {item.title}
+                                    </button>
+                                </td>
+                                <td className="py-3 px-4 border text-center">{item.userName}</td>
+                                <td className="py-3 px-4 border text-center">
+                                    {new Date(item.createdAt).toLocaleDateString()}
+                                </td>
+
+                                {/* 수정 버튼 */}
+                                <td className="py-3 px-4 border text-center">
+                                    <button
+                                        onClick={() => { navigate(`/community/modify/${item.pno}`); }}
+                                        disabled={uno !== item.userId}
+                                        className={`py-1 px-3 rounded-lg ${uno !== item.userId ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 text-white'}`}
+                                    >
+                                        {uno !== item.userId ? '본인확인' : '수정'}
+                                    </button>
+                                </td>
+
+                                {/* 삭제 버튼 */}
+                                <td className="py-3 px-4 border text-center">
+                                    <button
+                                        onClick={() => { handleDelete(item.pno); }}
+                                        disabled={uno !== item.userId}
+                                        className={`py-1 px-3 rounded-lg ${uno !== item.userId ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 text-white'}`}
+                                    >
+                                        {uno !== item.userId ? '본인확인' : '삭제'}
+                                    </button>
+                                </td>
+                            </tr>
                         ))
                     )}
-                </div>
+                </tbody>
+            </table>
+
+            <div className="flex justify-between items-center mt-4">
+                <button
+                    onClick={() => { navigate('/community/add'); }}
+                    className="bg-blue-500 text-white py-1 px-4 rounded-lg"
+                >
+                    글쓰기
+                </button>
+
                 <PageComponent serverData={serverData} movePage={moveToList} />
             </div>
+
+            {/* 모달 */}
+            {showModal && currentPost && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="w-full md:w-1/2 bg-gray-200 p-6 rounded-lg shadow-lg">
+                        <h2 className="text-2xl font-semibold mb-4">게시물 상세</h2>
+                        <table className="min-w-full text-sm text-gray-600 bg-white shadow-md rounded-lg mb-4">
+                            <tbody>
+                                <tr>
+                                    <td className="py-3 px-4 border">번호</td>
+                                    <td className="py-3 px-4 border text-center">{currentPost.pno}</td>
+                                </tr>
+                                <tr>
+                                    <td className="py-3 px-4 border">제목</td>
+                                    <td className="py-3 px-4 border text-center">{currentPost.title}</td>
+                                </tr>
+                                <tr>
+                                    <td className="py-3 px-4 border">글쓴이</td>
+                                    <td className="py-3 px-4 border text-center">{currentPost.userName}</td>
+                                </tr>
+                                <tr>
+                                    <td className="py-3 px-4 border">작성일</td>
+                                    <td className="py-3 px-4 border text-center">
+                                        {new Date(currentPost.createdAt).toLocaleDateString()}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div className="border p-4 bg-gray-100 text-gray-700">
+                            <h3 className="font-semibold">내용</h3>
+                            <p>{currentPost.content}</p>
+                        </div>
+                        <div className="text-right mt-4">
+                            <button
+                                onClick={closeModal}
+                                className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
+                            >
+                                닫기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };

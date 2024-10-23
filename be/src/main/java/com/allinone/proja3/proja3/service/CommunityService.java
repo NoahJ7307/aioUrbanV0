@@ -3,6 +3,7 @@ package com.allinone.proja3.proja3.service;
 import com.allinone.proja3.proja3.dto.CommunityDTO;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
+import com.allinone.proja3.proja3.dto.UserDTO;
 import com.allinone.proja3.proja3.model.Community;
 import com.allinone.proja3.proja3.model.User;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 public interface CommunityService {
     public List<CommunityDTO> findDataByUno(Long uno);
-
+ 
 
     default CommunityDTO entityToDto(Community community) {
         CommunityDTO dto = CommunityDTO.builder()
@@ -27,5 +28,7 @@ public interface CommunityService {
     boolean deletePost(Long pno, Long uno);
     Community createPost(Community community, User user);
     PageResponseDTO<CommunityDTO> findAllPosts(PageRequestDTO pageRequestDTO);
+    boolean modify(CommunityDTO communityDTO);
+
 
 }

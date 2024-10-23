@@ -3,6 +3,7 @@ package com.allinone.proja3.proja3.service;
 import com.allinone.proja3.proja3.dto.CommunityDTO;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
+import com.allinone.proja3.proja3.dto.UserDTO;
 import com.allinone.proja3.proja3.model.Community;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.repository.CommunityRepository;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,6 +44,7 @@ public class CommunityServiceImpl implements CommunityService {
                 .collect(Collectors.toList());
     }
 
+
     @Autowired
     private CommunityRepository repository;
 
@@ -58,7 +61,6 @@ public class CommunityServiceImpl implements CommunityService {
                 .totalCount(result.getTotalElements())
                 .build();
     }
-
 
 
     public CommunityDTO entityToDto(Community community) {
@@ -84,7 +86,7 @@ public class CommunityServiceImpl implements CommunityService {
         Page<Community> result = communityRepository.findAll(pageable);  // CommunityRepository 사용
 
         List<CommunityDTO> dtoList = result.get()
-                .map(this::entityToDto)  // entityToCommunityDto 메서드 사용
+                .map(this::entityToDto)  // entityToDto 메서드 사용
                 .collect(Collectors.toList());
 
         long totalCount = result.getTotalElements();
@@ -113,5 +115,21 @@ public class CommunityServiceImpl implements CommunityService {
             }
         }
         throw new IllegalArgumentException("게시글을 찾을 수 없습니다.");
+    }
+
+    @Override
+    public boolean modify(CommunityDTO communityDTO) {
+        Optional<Community> optionalPost = communityRepository.findById(communityDTO.getPno());
+
+        if (optionalPost.isPresent()) {
+            Community post = optionalPost.get();
+            post.setTitle(communityDTO.getTitle());
+            post.setContent(communityDTO.getContent());
+
+            communityRepository.save(post); // 수정된 게시글 저장
+            return true; // 성공 시 true 반환
+        } else {
+            return false; // 게시글이 없을 경우 false 반환
+        }
     }
 }

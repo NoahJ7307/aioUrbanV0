@@ -1,10 +1,31 @@
 import React, { useEffect, useState } from 'react'
-import { post } from '../api/communityApi';
+import { post, update } from '../api/communityApi';
+import { useNavigate } from 'react-router-dom';
+import CommunityCustom from '../hook/CommunityCustom';
 
 const CommunityAddComponents = () => {
+
+  const initState = {
+    dtoList: [],
+    pageNumList: [],
+    pageRequestDTO: null,
+    prev: false,
+    next: false,
+    totalCount: 0,
+    prevPage: 0,
+    nextPage: 0,
+    totalPage: 0,
+    current: 1
+  };
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [uno, setUno] = useState(); // 로그인한 사용자 uno
+  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [error, setError] = useState(null); // 에러 상태
+  const [serverData, setServerData] = useState(initState); // 페이지네이션 데이터
+  const { page, size, moveToList } = CommunityCustom();
+  const navigate = useNavigate(); // 페이지 이동 훅
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,6 +35,8 @@ const CommunityAddComponents = () => {
       setTitle('');
       setContent('');
       // 추가: 새 데이터 가져오기 로직 추가 필요할 수 있음
+      window.alert("성공!")
+      navigate("/community/list"); // 업데이트 후 목록 페이지로 이동
     } catch (err) {
       console.error('게시물 등록 실패:', err);
     }
@@ -27,7 +50,9 @@ const CommunityAddComponents = () => {
       console.log("로그인 정보가 없습니다.")
     }
   })
-    
+
+
+
 
   return (
     <div className="w-full md:w-1/2 bg-gray-200 p-6 rounded-lg">
