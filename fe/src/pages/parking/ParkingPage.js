@@ -6,10 +6,11 @@ import useCustomLogin from '../../components/hook/useCustomLogin'
 
 const ParkingPage = () => {
     const navigate = useNavigate()
+    const [checkedUno, setCheckedUno] = useState([])
 
-    const handleClickRegularList = useCallback(() => { navigate({ pathname: '/' }) })
-    const handleClickVisitList = useCallback(() => { navigate({ pathname: '/' }) })
-    const handleClickEEList = useCallback(() => { navigate({ pathname: '/' }) })
+    const handleClickRegularList = useCallback(() => { navigate({ pathname: 'regular' }) })
+    const handleClickVisitList = useCallback(() => { navigate({ pathname: 'visit' }) })
+    const handleClickEEList = useCallback(() => { navigate({ pathname: 'entry' }) })
 
     return (
         <BasicLayout>
@@ -30,8 +31,7 @@ const ParkingPage = () => {
                     </button>
                 </li>
             </ul>
-            {/* 자식요소로 uno 설정 함수 전달 */}
-            <Outlet/>
+            <Outlet context={{ checkedUno, setCheckedUno }} />
         </BasicLayout>
     )
 }

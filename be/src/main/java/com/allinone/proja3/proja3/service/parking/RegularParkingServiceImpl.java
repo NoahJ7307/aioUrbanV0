@@ -3,9 +3,12 @@ package com.allinone.proja3.proja3.service.parking;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.UserDTO;
+import com.allinone.proja3.proja3.dto.parking.HouseholdDTO;
 import com.allinone.proja3.proja3.dto.parking.RegularParkingDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.UserRole;
+import com.allinone.proja3.proja3.model.parking.Household;
+import com.allinone.proja3.proja3.model.parking.HouseholdPK;
 import com.allinone.proja3.proja3.model.parking.RegularParking;
 import com.allinone.proja3.proja3.repository.parking.RegularParkingRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RegularParkingServiceImpl implements RegularParkingService{
     private final RegularParkingRepository regularParkingRepository;
+    private final HouseholdService householdService;
 
     @Override
     public Long register(RegularParkingDTO regularParkingDTO) {
@@ -40,6 +44,30 @@ public class RegularParkingServiceImpl implements RegularParkingService{
                 Sort.by("regDate").descending());
 
         Page<RegularParking> result = regularParkingRepository.findAll(pageable);
+
+        List<RegularParkingDTO> dtoList = result.get()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+
+        long totalCount = result.getTotalElements();
+        return PageResponseDTO.<RegularParkingDTO>withAll()
+                .dtoList(dtoList)
+                .pageRequestDTO(pageRequestDTO)
+                .totalCount(totalCount)
+                .build();
+    }
+
+    @Override
+    public PageResponseDTO<RegularParkingDTO> getUserList(PageRequestDTO pageRequestDTO, HouseholdDTO householdDTO) {
+        System.out.println("RegularParking getUserList service");
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("regDate").descending());
+
+
+        Household household = householdService.getHousehold(householdDTO);
+        Page<RegularParking> result = regularParkingRepository.findAllByHousehold(household, pageable);
 
         List<RegularParkingDTO> dtoList = result.get()
                 .map(this::entityToDto)

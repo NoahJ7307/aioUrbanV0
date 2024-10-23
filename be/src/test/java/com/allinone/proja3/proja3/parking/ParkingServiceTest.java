@@ -49,4 +49,18 @@ public class ParkingServiceTest {
         PageResponseDTO<RegularParkingDTO> list = regularParkingService.getList(pageRequestDTO);
         list.getDtoList().forEach(System.out::println);
     }
+
+    @Test
+    public void getUserListTest(){
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .build();
+        HouseholdDTO householdDTO = HouseholdDTO.builder()
+                .dong(101)
+                .ho(101)
+                .build();
+        PageResponseDTO<RegularParkingDTO> list = regularParkingService.getUserList(pageRequestDTO, householdDTO);
+        list.getDtoList().forEach(System.out::println);
+    }
 }

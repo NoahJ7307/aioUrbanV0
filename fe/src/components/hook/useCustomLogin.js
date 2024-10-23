@@ -11,7 +11,9 @@ const useCustomLogin = () => {
         const token = localStorage.getItem("token")
         const uno = localStorage.getItem("uno")
         const role = localStorage.getItem("role")
-        return { token, uno, role }
+        const dong = localStorage.getItem("dong")
+        const ho = localStorage.getItem("ho")
+        return { token, uno, role, dong, ho }
     }
 
     const isLogin = loadLoginData().token != null
@@ -20,11 +22,13 @@ const useCustomLogin = () => {
         const action = await dispatch(loginPostAsync(loginParam))
 
         if (action.type === 'loginPostAsync/fulfilled') {
-            const { accessToken, uno, roleNames } = action.payload
+            const { accessToken, uno, roleNames, dong, ho } = action.payload
             console.log(action.payload)
             localStorage.setItem("token", accessToken)
             localStorage.setItem("uno", uno)
             localStorage.setItem("role", roleNames)
+            localStorage.setItem("dong", dong)
+            localStorage.setItem("ho", ho)
             alert("Login Complete")
             moveToPath('/')
         } else {

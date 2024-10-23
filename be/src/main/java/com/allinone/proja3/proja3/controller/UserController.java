@@ -16,57 +16,57 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
-    private final UserService service;
+    private final UserService userService;
 
     @GetMapping("/list")
     public PageResponseDTO<UserDTO> getList(PageRequestDTO pageRequestDTO){
         System.out.println("get list : "+ pageRequestDTO);
-        return service.getList(pageRequestDTO);
+        return userService.getList(pageRequestDTO);
     }
 
     @GetMapping("/approval_list")
     public PageResponseDTO<UserDTO> getApprovalList(PageRequestDTO pageRequestDTO){
         System.out.println("get list : "+ pageRequestDTO);
-        return service.getApprovalList(pageRequestDTO);
+        return userService.getApprovalList(pageRequestDTO);
     }
 
     @GetMapping("/approval")
     public boolean getApprovalStatus(Long uno){
         System.out.println("ApprovalStatus : "+uno);
-        return service.approvalStatus(uno);
+        return userService.approvalStatus(uno);
     }
 
     @PostMapping("/approval")
     public void PostApproval(@RequestBody Map<String, Long> request){
         Long uno = request.get("uno");
         System.out.println("Approval : "+uno);
-        service.addRole(uno, UserRole.USER);
+        userService.addRole(uno, UserRole.USER);
     }
 
     @PostMapping("/")
     public void register(@RequestBody UserDTO userDTO){
         System.out.println("register : "+userDTO);
-        Long uno = service.register(userDTO);
-        service.addRole(uno, UserRole.PENDING);
+        Long uno = userService.register(userDTO);
+        userService.addRole(uno, UserRole.PENDING);
     }
 
     @GetMapping("/{uno}")
     public UserDTO read(@PathVariable(name = "uno") Long uno){
         System.out.println("read : "+uno);
-        return service.getOne(uno);
+        return userService.getOne(uno);
     }
 
     @PutMapping("/{uno}")
     public void modify(@PathVariable(name = "uno") Long uno, @RequestBody UserDTO userDTO){
         System.out.println("modify : "+userDTO);
-        service.modify(userDTO);
+        userService.modify(userDTO);
     }
 
     @PostMapping("/delete")
     public void deleteChecked(@RequestBody List<Long> checkedUno){
         checkedUno.forEach(uno ->{
-            service.clearRole(uno);
-            service.remove(uno);
+            userService.clearRole(uno);
+            userService.remove(uno);
         });
     }
 }

@@ -4,16 +4,31 @@ import { Navigate } from "react-router-dom"
 const parkingRouter = () => {
 
     const Loading = <div>....</div>
-    const ParkingPage = lazy(() => import("../pages/parking/ParkingPage"))
+    const Parking = lazy(() => import("../pages/parking/ParkingPage"))
+    const Regular = lazy(() => import("../pages/parking/RegularPage"))
+    const Visit = lazy(() => import("../pages/parking/VisitPage"))
+    const Entry = lazy(() => import("../pages/parking/EntryPage"))
 
     return [
         {
             path: "",
-            element: <Suspense fallback={Loading}><ParkingPage /></Suspense>
+            element: <Navigate replace to="/parking" />
         },
         {
             path: "",
-            element: <Navigate replace to="/" />
+            element: <Suspense fallback={Loading}><Parking /></Suspense>
+        },
+        {
+            path: "regular",
+            element: <Suspense fallback={Loading}><Regular /></Suspense>
+        },
+        {
+            path: "visit",
+            element: <Suspense fallback={Loading}><Visit /></Suspense>
+        },
+        {
+            path: "entry",
+            element: <Suspense fallback={Loading}><Entry /></Suspense>
         },
     ]
 }
