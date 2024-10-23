@@ -23,7 +23,7 @@ const userRouter = () => {
             element: <Suspense fallback={Loading}><UserAdd /></Suspense>
         },
         {
-            path: "modify/:uno",
+            path: "list/modify/:uno",
             element: <Suspense fallback={Loading}><UserModify /></Suspense>
         },
         {

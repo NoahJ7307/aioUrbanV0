@@ -37,7 +37,7 @@ public class RegularParkingServiceImpl implements RegularParkingService{
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
-                Sort.by("uno").descending());
+                Sort.by("regDate").descending());
 
         Page<RegularParking> result = regularParkingRepository.findAll(pageable);
 

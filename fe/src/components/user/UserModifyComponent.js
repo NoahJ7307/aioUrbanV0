@@ -31,7 +31,7 @@ const UserModifyComponent = (unoList) => {
                 ho: data.ho ?? 0,
             })
         })
-    }, [checkedUno[0]])
+    }, [checkedUno])
 
     const handleChange = (e) => {
         userData[e.target.name] = e.target.value

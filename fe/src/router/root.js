@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react'
 import userRouter from './userRouter'
 import loginRouter from './loginRouter'
+import parkingRouter from './parkingRouter'
 
 const { createBrowserRouter } = require("react-router-dom")
 
@@ -9,11 +10,16 @@ const Main = lazy(() => import("../pages/MainPage"))
 const User = lazy(() => import("../pages/user/UserPage"))
 const Login = lazy(() => import("../pages/login/LoginPage"))
 const Join = lazy(() => import("../pages/JoinPage"))
+const Parking = lazy(() => import("../pages/parking/ParkingPage"))
 
 const root = createBrowserRouter([
     {
         path: "",
         element: <Suspense fallback={Loading}><Main /></Suspense>
+    },
+    {
+        path: "join",
+        element: <Suspense fallback={Loading}><Join /></Suspense>,
     },
     {
         path: "user",
@@ -26,8 +32,9 @@ const root = createBrowserRouter([
         children: loginRouter()
     },
     {
-        path: "join",
-        element: <Suspense fallback={Loading}><Join /></Suspense>,
+        path: "parking",
+        element: <Suspense fallback={Loading}><Parking /></Suspense>,
+        children: parkingRouter()
     },
 ])
 
