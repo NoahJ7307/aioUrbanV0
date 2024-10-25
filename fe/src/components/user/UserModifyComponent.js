@@ -12,11 +12,10 @@ const initState = {
     pw: "",
 }
 
-const UserModifyComponent = (unoList) => {
+const UserModifyComponent = () => {
     const { moveToList } = useCustom()
     const [userData, setUserData] = useState({ ...initState })
     const { checkedUno } = useOutletContext()
-    const { loadLoginData } = useCustomLogin()
 
     // data 수신
     useEffect(() => {

@@ -6,10 +6,9 @@ import com.allinone.proja3.proja3.dto.parking.HouseholdDTO;
 import com.allinone.proja3.proja3.dto.parking.RegularParkingDTO;
 import com.allinone.proja3.proja3.service.parking.RegularParkingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,5 +25,11 @@ public class RegularController {
     public PageResponseDTO<RegularParkingDTO> getUserList(PageRequestDTO pageRequestDTO, @RequestBody HouseholdDTO householdDTO){
         System.out.println("RegularParking getList controller : " + pageRequestDTO);
         return regularParkingService.getList(pageRequestDTO);
+    }
+
+    @PostMapping("/delete")
+    public void deleteChecked(@RequestBody List<Long> checkedRpno){
+        System.out.println("RegularParking getList controller : " + checkedRpno);
+        checkedRpno.forEach(regularParkingService::remove);
     }
 }

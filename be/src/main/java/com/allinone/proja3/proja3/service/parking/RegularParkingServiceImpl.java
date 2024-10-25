@@ -81,8 +81,15 @@ public class RegularParkingServiceImpl implements RegularParkingService{
                 .build();
     }
 
+    @Override
+    public void remove(Long rpno) {
+        System.out.println("remove service : "+rpno);
+        regularParkingRepository.deleteById(rpno);
+    }
+
     private RegularParking dtoToEntity(RegularParkingDTO regularParkingDTO) {
         return RegularParking.builder()
+                .rpno(regularParkingDTO.getRpno())
                 .household(regularParkingDTO.getHousehold())
                 .carNum(regularParkingDTO.getCarNum())
                 .name(regularParkingDTO.getName())
@@ -93,6 +100,7 @@ public class RegularParkingServiceImpl implements RegularParkingService{
 
     private RegularParkingDTO entityToDto(RegularParking regularParking) {
         return RegularParkingDTO.builder()
+                .rpno(regularParking.getRpno())
                 .household(regularParking.getHousehold())
                 .carNum(regularParking.getCarNum())
                 .name(regularParking.getName())

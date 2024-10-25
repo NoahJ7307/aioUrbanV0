@@ -6,7 +6,7 @@ import useCustomLogin from '../../components/hook/useCustomLogin'
 
 const ParkingPage = () => {
     const navigate = useNavigate()
-    const [checkedUno, setCheckedUno] = useState([])
+  const [checkedRpno, setCheckedRpno] = useState([])
 
     const handleClickRegularList = useCallback(() => { navigate({ pathname: 'regular' }) })
     const handleClickVisitList = useCallback(() => { navigate({ pathname: 'visit' }) })
@@ -31,7 +31,7 @@ const ParkingPage = () => {
                     </button>
                 </li>
             </ul>
-            <Outlet context={{ checkedUno, setCheckedUno }} />
+            <Outlet context={{ checkedRpno, setCheckedRpno }} />
         </BasicLayout>
     )
 }

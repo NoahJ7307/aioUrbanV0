@@ -3,7 +3,7 @@ import { lazy, Suspense } from "react"
 const loginRouter = () => {
 
     const Loading = <div>....</div>
-    const LoginPage = lazy(() => import("../pages/login/LoginPage"))
+    const LoginPage = lazy(() => import("../../pages/login/LoginPage"))
 
     return [
         {

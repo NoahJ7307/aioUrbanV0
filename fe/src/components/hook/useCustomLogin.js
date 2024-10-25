@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { createSearchParams, useNavigate } from 'react-router-dom'
 import { loginPostAsync, logout } from '../../slice/loginSlice'
 
 const useCustomLogin = () => {
@@ -49,8 +49,31 @@ const useCustomLogin = () => {
         navigate({ pathname: path }, { replace: true }) // replace:true >> 페이지 이동기록 덮어쓰기(뒤로가기 불가)
     }
 
+    const exceptionHandler = (ex) => {
+        const msg = ex.error
+        console.log("exceptionHandler msg : ",msg)
+        const str = createSearchParams({ error: msg }).toString()
 
-    return { navigate, dispatch, loginState, isLogin, doLogin, doLogout, moveToPath, loadLoginData }
+        if (msg === "REQUIRE_LOGIN") {
+            alert("You Must Login")
+            navigate({ pathname: '/login', search: str })
+            return
+        }
+
+        if (msg === "ERROR_ACCESS_DENIED") {
+            alert("No permission")
+            navigate({ pathname: '/login', search: str })
+            return
+        }
+
+        if (msg === "ERROR_ACCESS_TOKEN") {
+            alert("Expired Token")
+            navigate({ pathname: '/login', search: str })
+            return
+        }
+    }
+
+    return { navigate, dispatch, loginState, isLogin, doLogin, doLogout, moveToPath, loadLoginData, exceptionHandler }
 }
 
 export default useCustomLogin

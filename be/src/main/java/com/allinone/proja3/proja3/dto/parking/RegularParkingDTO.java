@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegularParkingDTO {
+    private Long rpno;
     private Household household;
     private String carNum;
     private String name;

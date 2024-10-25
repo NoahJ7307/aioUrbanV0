@@ -12,4 +12,5 @@ public interface RegularParkingService {
     Long register(RegularParkingDTO regularParkingDTO);
     PageResponseDTO<RegularParkingDTO> getList(PageRequestDTO pageRequestDTO);
     PageResponseDTO<RegularParkingDTO> getUserList(PageRequestDTO pageRequestDTO, HouseholdDTO householdDTO);
+    void remove(Long rpno);
 }

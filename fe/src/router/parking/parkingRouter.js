@@ -1,13 +1,14 @@
 import { lazy, Suspense } from "react"
 import { Navigate } from "react-router-dom"
+import RegularRouter from "./regular/RegularRouter"
 
 const parkingRouter = () => {
 
     const Loading = <div>....</div>
-    const Parking = lazy(() => import("../pages/parking/ParkingPage"))
-    const Regular = lazy(() => import("../pages/parking/RegularPage"))
-    const Visit = lazy(() => import("../pages/parking/VisitPage"))
-    const Entry = lazy(() => import("../pages/parking/EntryPage"))
+    const Parking = lazy(() => import("../../pages/parking/ParkingPage"))
+    const Regular = lazy(() => import("../../pages/parking/RegularPage"))
+    const Visit = lazy(() => import("../../pages/parking/VisitPage"))
+    const Entry = lazy(() => import("../../pages/parking/EntryPage"))
 
     return [
         {
@@ -20,7 +21,8 @@ const parkingRouter = () => {
         },
         {
             path: "regular",
-            element: <Suspense fallback={Loading}><Regular /></Suspense>
+            element: <Suspense fallback={Loading}><Regular /></Suspense>,
+            children: RegularRouter()
         },
         {
             path: "visit",

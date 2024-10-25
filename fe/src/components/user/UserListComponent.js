@@ -3,6 +3,7 @@ import { getList } from '../api/userApi'
 import useCustom from '../hook/useCustom'
 import { useOutletContext } from 'react-router-dom'
 import PageComponent from '../common/PageComponent'
+import useCustomLogin from '../hook/useCustomLogin'
 
 const initState = {
     dtoList: [],
@@ -22,6 +23,7 @@ const UserListComponent = () => {
     const { page, size, moveToList } = useCustom()
     const [checked, setChecked] = useState([])
     const { setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
+    const { exceptionHandler } = useCustomLogin()
 
     const handleCheckChange = (uno) => {
         setChecked(checkedItem => {
@@ -45,15 +47,17 @@ const UserListComponent = () => {
 
     useEffect(() => {
         getList({ page, size }).then(data => {
-            setServerData(data)
-        }).catch(err => {
-            console.error("Axios error", err)
+            if (data.error) {
+                exceptionHandler(data)
+            } else {
+                setServerData(data);
+            }
         })
     }, [page, size])
 
     return (
         <div>
-            <div className="grid grid-cols-6">
+            <div className="grid grid-cols-5">
                 <div>No</div>
                 <div>동</div>
                 <div>호</div>
@@ -63,7 +67,7 @@ const UserListComponent = () => {
 
             {/* 유저 데이터를 map으로 렌더링 */}
             {serverData.dtoList.map((user, index) => (
-                <div key={index} className="grid grid-cols-6">
+                <div key={index} className="grid grid-cols-5">
                     <div>
                         <input
                             type='checkbox'

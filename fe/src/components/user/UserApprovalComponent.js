@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { addUserRole, approvalStatus, deleteChecked, getApprovalList, getList } from '../api/userApi'
 import PageComponent from '../common/PageComponent'
 import useCustomApproval from '../hook/useCustomApproval'
+import { useNavigate } from 'react-router-dom'
 
 const initState = {
     dtoList: [],
@@ -17,55 +18,37 @@ const initState = {
 }
 
 const UserApprovalComponent = () => {
+    const navigate = useNavigate()
     const [serverData, setServerData] = useState(initState)
     const { page, size, moveToList } = useCustomApproval()
 
     const handleClickAccess = (e) => {
         const uno = e.target.value
         addUserRole(uno)
-        // fetchData()
+        getList()
     }
 
     const handleClickDenial = (e) => {
         const uno = [e.target.value]
         deleteChecked(uno)
-        // fetchData()
+        getList()
     }
 
-
-    useEffect(() => {
+    // 승인, 거부 후 새로고침 기능 수행을 위해 함수로 정의
+    const getList = () =>
         getApprovalList({ page, size }).then(data => {
             setServerData(data)
         }).catch(err => {
             console.error("Axios error", err)
         })
+
+    useEffect(() => {
+        getList()
     }, [page, size])
-    // // 승인여부(PENDING 포함여부)가 true인 사용자만 필터링
-    // const fetchData = async () => {
-    //     try {
-    //         const listData = await getList({ page, size })
-    //         const approvalPromises = listData.dtoList.map(async (user) => {
-    //             const status = await approvalStatus(user.uno) // approvalStatus api 병렬처리
-    //             return { ...user, approvalStatus: status } // dtoList 에 status(승인여부) 추가
-    //         });
-
-    //         const filteredData = (await Promise.all(approvalPromises)) // true 필터링 병렬처리
-    //             .filter(user => user.approvalStatus)
-
-    //         // dtoList 만 필터링된 데이터로 업데이트
-    //         setServerData({ ...listData, dtoList: filteredData })
-    //     } catch (err) {
-    //         console.error('Error fetching approval status or list:', err)
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     fetchData()
-    // }, [page, size])
 
     return (
         <div>
-            <div className="grid grid-cols-6">
+            <div className="grid grid-cols-5">
                 <div>동</div>
                 <div>호</div>
                 <div>이름</div>
@@ -75,7 +58,7 @@ const UserApprovalComponent = () => {
 
             {/* 유저 데이터를 map으로 렌더링 */}
             {serverData.dtoList.map((user, index) => (
-                <div key={index} className="grid grid-cols-6">
+                <div key={index} className="grid grid-cols-5">
                     <div>{user.dong}</div>
                     <div>{user.ho}</div>
                     <div>{user.userName}</div>

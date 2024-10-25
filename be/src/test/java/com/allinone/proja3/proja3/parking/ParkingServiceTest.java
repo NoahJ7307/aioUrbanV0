@@ -25,19 +25,23 @@ public class ParkingServiceTest {
 
     @Test
     public void insertRP(){
-        HouseholdDTO householdDTO = HouseholdDTO.builder()
-                .dong(11)
-                .ho(11)
-                .build();
-        householdService.register(householdDTO);
-        RegularParkingDTO regularParkingDTO = RegularParkingDTO.builder()
-                .household(householdService.getHousehold(householdDTO))
-                .carNum("99RP9999")
-                .name("serviceTest")
-                .phone("serviceTest")
-                .regDate(LocalDate.now())
-                .build();
-        regularParkingService.register(regularParkingDTO);
+        for (int i = 1; i < 6; i++) {
+            for (int j = 1; j < 7; j++) {
+                HouseholdDTO householdDTO = HouseholdDTO.builder()
+                        .dong(100+i)
+                        .ho(100+j)
+                        .build();
+                householdService.register(householdDTO);
+                RegularParkingDTO regularParkingDTO = RegularParkingDTO.builder()
+                        .household(householdService.getHousehold(householdDTO))
+                        .carNum((i*10)+"가"+(1000*j))
+                        .name("Test"+i+".."+j)
+                        .phone("Test"+i+".."+j)
+                        .regDate(LocalDate.now())
+                        .build();
+                regularParkingService.register(regularParkingDTO);
+            }
+        }
     }
 
     @Test
