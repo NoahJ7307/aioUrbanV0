@@ -27,6 +27,7 @@ public class HouseholdServiceImpl implements HouseholdService {
         return Household.builder()
                 .householdPK(HouseholdPK.builder()
                         .dong(householdDTO.getDong())
+
                         .ho(householdDTO.getHo())
                         .build())
                 .build();

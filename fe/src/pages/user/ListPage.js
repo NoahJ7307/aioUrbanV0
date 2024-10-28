@@ -7,14 +7,6 @@ import { deleteChecked } from '../../components/api/userApi'
 const ListPage = () => {
     const navigate = useNavigate()
     const { checkedUno, setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
-    const { loadLoginData } = useCustomLogin()
-
-    useEffect(() => {
-        if (loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT') {
-            alert('권한이 없습니다')
-            navigate({ pathname: '/login' })
-        }
-    }, [loadLoginData, navigate])
 
     const handleClickModify = useCallback(() => {
         if (checkedUno.length == 1) {

@@ -23,7 +23,27 @@ const UserListComponent = () => {
     const { page, size, moveToList } = useCustom()
     const [checked, setChecked] = useState([])
     const { setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
-    const { exceptionHandler } = useCustomLogin()
+    const { exceptionHandler, loadLoginData, navigate } = useCustomLogin()
+
+    useEffect(() => {
+        try {
+            if (loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT') {
+                throw new Error('Access Error')
+            } else {
+                getList({ page, size }).then(data => {
+                    if (data.error) {
+                        exceptionHandler(data)
+                    } else {
+                        setServerData(data);
+                    }
+                })
+            }
+        } catch (error) {
+            console.error(error);
+            alert('권한이 없습니다');
+            navigate({ pathname: '/login' });
+        }
+    }, [loadLoginData, navigate, page, size])
 
     const handleCheckChange = (uno) => {
         setChecked(checkedItem => {
@@ -44,16 +64,6 @@ const UserListComponent = () => {
             setCheckedUno([]);
         }
     }, [checked, setCheckedUno]);
-
-    useEffect(() => {
-        getList({ page, size }).then(data => {
-            if (data.error) {
-                exceptionHandler(data)
-            } else {
-                setServerData(data);
-            }
-        })
-    }, [page, size])
 
     return (
         <div>

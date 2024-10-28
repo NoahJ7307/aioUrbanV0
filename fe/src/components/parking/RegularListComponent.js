@@ -48,6 +48,10 @@ const RegularListComponent = () => {
     }, [checked, setCheckedRpno]);
 
     useEffect(() => {
+        const loginUser = {
+            dong: loadLoginData().dong,
+            ho: loadLoginData().ho,
+        }
         if (loadLoginData().role == 'ADMIN' || loadLoginData().role == 'ROOT') {
             getList({ page, size }).then(data => {
                 if (data.error) {
@@ -57,7 +61,7 @@ const RegularListComponent = () => {
                 }
             })
         } else {
-            getUserList({ page, size }).then(data => {
+            getUserList({ page, size }, loginUser).then(data => {
                 if (data.error) {
                     exceptionHandler(data)
                 } else {
@@ -91,8 +95,8 @@ const RegularListComponent = () => {
                     </div>
                     <div>{regular.carNum}</div>
                     <div>{regular.name}</div>
-                    <div>{regular.household.householdPK.dong}</div>
-                    <div>{regular.household.householdPK.ho}</div>
+                    <div>{regular.household ? regular.household.householdPK.dong : 'Null'}</div>
+                    <div>{regular.household ? regular.household.householdPK.ho : 'Null'}</div>
                     <div>{regular.phone}</div>
                     <div>{regular.regDate}</div>
                 </div>

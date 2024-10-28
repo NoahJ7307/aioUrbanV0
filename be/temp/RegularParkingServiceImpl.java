@@ -5,7 +5,6 @@ import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.parking.HouseholdDTO;
 import com.allinone.proja3.proja3.dto.parking.RegularParkingDTO;
 import com.allinone.proja3.proja3.model.parking.Household;
-import com.allinone.proja3.proja3.model.parking.HouseholdPK;
 import com.allinone.proja3.proja3.model.parking.RegularParking;
 import com.allinone.proja3.proja3.repository.parking.HouseholdRepository;
 import com.allinone.proja3.proja3.repository.parking.RegularParkingRepository;
@@ -30,8 +29,8 @@ public class RegularParkingServiceImpl implements RegularParkingService{
     @Override
     public Long register(RegularParkingDTO regularParkingDTO) {
         System.out.println("RegularParking register service" + regularParkingDTO);
-        householdService.register(regularParkingDTO.getHouseholdDTO());
         regularParkingDTO.setRegDate(LocalDate.now());
+        householdService.register(regularParkingDTO.getHouseholdDTO());
         RegularParking regularParking = dtoToEntity(regularParkingDTO);
         RegularParking result = regularParkingRepository.save(regularParking);
         return result.getRpno();
@@ -43,7 +42,7 @@ public class RegularParkingServiceImpl implements RegularParkingService{
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
-                Sort.by("rpno").descending());
+                Sort.by("regDate").descending());
 
         Page<RegularParking> result = regularParkingRepository.findAll(pageable);
 
@@ -71,7 +70,7 @@ public class RegularParkingServiceImpl implements RegularParkingService{
 
         Household household = householdService.getHousehold(householdDTO);
         Page<RegularParking> result = regularParkingRepository.findAllByHousehold(household, pageable);
-        System.out.println(result);
+
         List<RegularParkingDTO> dtoList = result.get()
                 .map(this::entityToDto)
                 .collect(Collectors.toList());
@@ -91,9 +90,10 @@ public class RegularParkingServiceImpl implements RegularParkingService{
     }
 
     private RegularParking dtoToEntity(RegularParkingDTO regularParkingDTO) {
+        Household household = householdService.getHousehold(regularParkingDTO.getHouseholdDTO());
         return RegularParking.builder()
                 .rpno(regularParkingDTO.getRpno())
-                .household(regularParkingDTO.getHousehold())
+                .household(household)
                 .carNum(regularParkingDTO.getCarNum())
                 .name(regularParkingDTO.getName())
                 .phone(regularParkingDTO.getPhone())
@@ -102,9 +102,10 @@ public class RegularParkingServiceImpl implements RegularParkingService{
     }
 
     private RegularParkingDTO entityToDto(RegularParking regularParking) {
+        HouseholdDTO householdDTO = householdService.getHouseholdDTO(regularParking.getHousehold());
         return RegularParkingDTO.builder()
                 .rpno(regularParking.getRpno())
-                .household(regularParking.getHousehold())
+                .householdDTO(householdDTO)
                 .carNum(regularParking.getCarNum())
                 .name(regularParking.getName())
                 .phone(regularParking.getPhone())

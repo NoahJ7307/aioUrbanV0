@@ -10,13 +10,6 @@ const RegularPage = () => {
   const { checkedRpno, setCheckedRpno } = useOutletContext() // 부모에게서 전달된 함수
   const { loadLoginData } = useCustomLogin()
 
-  useEffect(() => {
-    if (loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT') {
-      alert('권한이 없습니다')
-      navigate({ pathname: '/login' })
-    }
-  }, [loadLoginData, navigate])
-
   const handleClickAdd = useCallback(() => { navigate({ pathname: 'add' }) })
 
   const handleClickModify = useCallback(() => {

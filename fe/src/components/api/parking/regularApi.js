@@ -17,7 +17,9 @@ export const getList = async (pageParam) => {
     return res.data
 }
 
-export const getUserList = async (pageParam) => {
+export const getUserList = async (pageParam, loginUser) => {
+    console.log("getUserList loginUser : ", pageParam)
+    console.log("getUserList loginUser : ", loginUser)
     const { page, size } = pageParam
     const token = localStorage.getItem("token")
     const config = {
@@ -25,13 +27,13 @@ export const getUserList = async (pageParam) => {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
         },
-        params: { page, size },
-        body: {
-            dong: 0,
-            ho: 0
-        }
     }
-    const res = await axios.get(`${host}/user_list`, config)
+
+    const body = {
+        pageRequestDTO: pageParam,
+        householdDTO: loginUser,
+    }
+    const res = await axios.post(`${host}/user_list`, body, config)
     return res.data
 }
 
