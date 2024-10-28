@@ -32,6 +32,11 @@ public class HouseholdServiceImpl implements HouseholdService {
                 .build();
     }
 
+    @Override
+    public HouseholdDTO getHouseholdDTO(Household household) {
+        return entityToDto(household);
+    }
+
     private Household dtoToEntity(HouseholdDTO householdDTO) {
         return Household.builder()
                 .householdPK(HouseholdPK.builder()

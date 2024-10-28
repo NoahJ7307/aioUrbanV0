@@ -17,17 +17,17 @@ const ParkingPage = () => {
             <ul className='flex justify-center'>
                 <li>
                     <button className='bg-gray-300 p-2' onClick={handleClickRegularList}>
-                        Regular List
+                        정기권 차량
                     </button>
                 </li>
                 <li>
                     <button className='bg-gray-300 p-2 mr' onClick={handleClickVisitList}>
-                        Visit List
+                        방문 예약 차량
                     </button>
                 </li>
                 <li>
                     <button className='bg-gray-300 p-2' onClick={handleClickEEList}>
-                        Entry/Exit List
+                        입출차 기록
                     </button>
                 </li>
             </ul>

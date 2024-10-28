@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class RegularParkingDTO {
     private Long rpno;
-    private Household household;
+    private HouseholdDTO householdDTO;
     private String carNum;
     private String name;
     private String phone;

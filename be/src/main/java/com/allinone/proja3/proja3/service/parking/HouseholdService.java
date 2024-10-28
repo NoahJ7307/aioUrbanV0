@@ -7,4 +7,5 @@ import com.allinone.proja3.proja3.model.parking.HouseholdPK;
 public interface HouseholdService {
     HouseholdPK register(HouseholdDTO householdDTO);
     Household getHousehold(HouseholdDTO householdDTO);
+    HouseholdDTO getHouseholdDTO(Household household);
 }

@@ -2,8 +2,10 @@ package com.allinone.proja3.proja3.controller.parking;
 
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
+import com.allinone.proja3.proja3.dto.UserDTO;
 import com.allinone.proja3.proja3.dto.parking.HouseholdDTO;
 import com.allinone.proja3.proja3.dto.parking.RegularParkingDTO;
+import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.service.parking.RegularParkingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -31,5 +33,11 @@ public class RegularController {
     public void deleteChecked(@RequestBody List<Long> checkedRpno){
         System.out.println("RegularParking getList controller : " + checkedRpno);
         checkedRpno.forEach(regularParkingService::remove);
+    }
+
+    @PostMapping("/")
+    public void register(@RequestBody RegularParkingDTO regularParkingDTO){
+        System.out.println("register : "+regularParkingDTO);
+        regularParkingService.register(regularParkingDTO);
     }
 }

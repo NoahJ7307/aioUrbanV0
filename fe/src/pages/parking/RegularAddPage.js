@@ -1,8 +1,9 @@
 import React from 'react'
+import RegularAddComponent from '../../components/parking/RegularAddComponent'
 
 const RegularAddPage = () => {
     return (
-        <div>RegularAdd</div>
+        <RegularAddComponent />
     )
 }
 

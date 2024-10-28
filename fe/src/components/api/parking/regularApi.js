@@ -46,3 +46,25 @@ export const RegularParkingDeleteChecked = async (checkedRpno) => {
     const res = await axios.post(`${host}/delete`, checkedRpno, config)
     return res.data
 }
+
+export const RegularPostAdd = async (userData) => {
+    const token = localStorage.getItem("token")
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    }
+    const updateUserData = {
+        carNum: userData.carNum,
+        name: userData.name,
+        phone: userData.phone,
+        householdDTO: {
+            dong: userData.dong,
+            ho: userData.ho,
+        }
+    }
+    console.log(updateUserData)
+    const res = await axios.post(`${host}/`, updateUserData, config)
+    return res.data
+}
