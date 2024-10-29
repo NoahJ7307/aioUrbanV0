@@ -21,7 +21,7 @@ const LoginComponent = () => {
     return (
         <div className='border'>
             <div className='flex'>
-                <div className='mr-3'>Phone</div>
+                <div className='mr-3'>전화번호</div>
                 <input className='border border-solid'
                     name='phone'
                     type='text'
@@ -30,7 +30,7 @@ const LoginComponent = () => {
                 />
             </div>
             <div className='flex'>
-                <div className='mr-3'>Password</div>
+                <div className='mr-3'>비밀번호</div>
                 <input className='border border-solid'
                     name='pw'
                     type='password'
@@ -40,7 +40,7 @@ const LoginComponent = () => {
             </div>
             <div className='flex'>
                 <button className='bg-gray-300'
-                    onClick={handleClick}>Login</button>
+                    onClick={handleClick}>로그인</button>
             </div>
         </div>
     )

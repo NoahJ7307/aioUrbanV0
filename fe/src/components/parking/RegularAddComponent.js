@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import useCustom from '../hook/useCustom'
 import { RegularPostAdd } from '../api/parking/regularApi'
+import { useNavigate } from 'react-router-dom'
 
 const initState = {
   carNum: "",
@@ -10,17 +11,17 @@ const initState = {
   ho: 0,
 }
 const RegularAddComponent = () => {
-  const { moveToList } = useCustom()
-  const [userData, setUserData] = useState({ ...initState })
+  const { page, size, moveToPath } = useCustom()
+  const [serverData, setServerData] = useState({ ...initState })
 
   const handleChange = (e) => {
-    userData[e.target.name] = e.target.value
-    setUserData({ ...userData })
+    serverData[e.target.name] = e.target.value
+    setServerData({ ...serverData })
   }
   const handleClick = () => {
-    RegularPostAdd(userData).then(data => {
+    RegularPostAdd(serverData).then(data => {
       console.log("success : " + data)
-      // moveToList()
+      moveToPath('/parking/regular', { page, size })
     })
   }
   return (
@@ -28,7 +29,7 @@ const RegularAddComponent = () => {
       <div className='p-2'>
         <div>
           <div>
-            차번호
+            차량번호
           </div>
           <div>
             이름
@@ -76,7 +77,7 @@ const RegularAddComponent = () => {
           <button type='button' className='bg-blue-400 p-2'
             onClick={handleClick}>추가</button>
           <button type='button' className='bg-red-400 p-2'
-            onClick={moveToList}>취소</button>
+            onClick={(pageParam) => moveToPath('/parking/regular', pageParam)}>취소</button>
         </div>
       </div>
     </div>

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
         userDTO.setPw(encodedPassword);
         User user = dtoToEntity(userDTO);
         User result = userRepository.save(user);
+        System.out.println("register service : "+user);
         return result.getUno();
     }
 
@@ -85,6 +87,7 @@ public class UserServiceImpl implements UserService {
         System.out.println("getOne service : "+uno);
         Optional<User> result = userRepository.findById(uno);
         User user = result.orElseThrow();
+        System.out.println("getOne service : "+user);
         return entityToDto(user);
     }
 
@@ -138,6 +141,7 @@ public class UserServiceImpl implements UserService {
                 .phone(userDTO.getPhone())
                 .pw(userDTO.getPw())
                 .delFlag(userDTO.isDelFlag())
+                .userRoleList(userDTO.getUserRoleList())
                 .build();
     }
 
@@ -150,6 +154,7 @@ public class UserServiceImpl implements UserService {
                 .phone(user.getPhone())
                 .pw(user.getPw())
                 .delFlag(user.isDelFlag())
+                .userRoleList(user.getUserRoleList())
                 .build();
     }
 }

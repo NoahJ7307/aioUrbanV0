@@ -46,8 +46,7 @@ public class UserController {
     @PostMapping("/")
     public void register(@RequestBody UserDTO userDTO){
         System.out.println("register : "+userDTO);
-        Long uno = userService.register(userDTO);
-        userService.addRole(uno, UserRole.PENDING);
+        userService.register(userDTO);
     }
 
     @GetMapping("/{uno}")

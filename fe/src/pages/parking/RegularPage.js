@@ -33,23 +33,26 @@ const RegularPage = () => {
   }
   return (
     <div>
+      {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ? 
+      <></>:
       <ul className='flex justify-center'>
-        <li>
-          <button className='bg-gray-300 p-2 mr' onClick={handleClickAdd}>
-            Add
-          </button>
-        </li>
-        <li>
-          <button className='bg-gray-300 p-2 mr' onClick={handleClickModify}>
-            Modify
-          </button>
-        </li>
-        <li>
-          <button className='bg-gray-300 p-2 mr' onClick={handleClickDelete}>
-            Delete
-          </button>
-        </li>
-      </ul>
+      <li>
+        <button className='bg-gray-300 p-2 mr' onClick={handleClickAdd}>
+          등록
+        </button>
+      </li>
+      <li>
+        <button className='bg-gray-300 p-2 mr' onClick={handleClickModify}>
+          수정
+        </button>
+      </li>
+      <li>
+        <button className='bg-gray-300 p-2 mr' onClick={handleClickDelete}>
+          삭제
+        </button>
+      </li>
+    </ul>
+    }
       <RegularListComponent />
       <Outlet context={{ checkedRpno, setCheckedRpno }} />
     </div>

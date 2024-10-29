@@ -8,6 +8,7 @@ const initState = {
   userName: "",
   phone: "",
   pw: "",
+  userRoleList: [],
 }
 const UserAddComponent = () => {
   const { moveToList } = useCustom()
@@ -18,8 +19,9 @@ const UserAddComponent = () => {
     setUserData({ ...userData })
   }
   const handleClick = () => {
-    postAdd(userData).then(data =>{
-      console.log("success : "+data)
+    const updateData = { ...userData, userRoleList: ['USER'] }
+    postAdd(updateData).then(data => {
+      console.log("success : " + data)
       moveToList()
     })
   }
@@ -59,6 +61,7 @@ const UserAddComponent = () => {
           <div>
             <input className='border'
               name='pw'
+              type='password'
               onChange={handleChange} />
           </div>
           <div>

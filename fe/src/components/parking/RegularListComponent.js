@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { getList, getUserList } from '../api/parking/regularApi'
 import useCustom from '../hook/useCustom'
 import { useOutletContext } from 'react-router-dom'
 import PageComponent from '../common/PageComponent'
 import useCustomLogin from '../hook/useCustomLogin'
+import { getList, getUserList } from '../api/parking/regularApi'
 
 const initState = {
     dtoList: [],
@@ -38,7 +38,6 @@ const RegularListComponent = () => {
 
     // 체크된 항목이 변경 시 부모에 [uno] 전달 / 부모(UserPage) 업데이트
     useEffect(() => {
-        console.log(checked)
         if (checked.length > 0) {
             setCheckedRpno(checked);
             console.log("checked:" + checked)
@@ -53,19 +52,21 @@ const RegularListComponent = () => {
             ho: loadLoginData().ho,
         }
         if (loadLoginData().role == 'ADMIN' || loadLoginData().role == 'ROOT') {
+            console.log(loadLoginData().role)
             getList({ page, size }).then(data => {
                 if (data.error) {
                     exceptionHandler(data)
                 } else {
-                    setServerData(data);
+                    setServerData(data)
                 }
             })
         } else {
+            console.log(loadLoginData().role)
             getUserList({ page, size }, loginUser).then(data => {
                 if (data.error) {
                     exceptionHandler(data)
                 } else {
-                    setServerData(data);
+                    setServerData(data)
                 }
             })
         }
@@ -75,12 +76,12 @@ const RegularListComponent = () => {
         <div>
             <div className="grid grid-cols-7">
                 <div>No</div>
-                <div>CarNumber</div>
-                <div>name</div>
-                <div>dong</div>
-                <div>ho</div>
-                <div>phoneNumber</div>
-                <div>regDate</div>
+                <div>차량번호</div>
+                <div>이름</div>
+                <div>동</div>
+                <div>호</div>
+                <div>전화번호</div>
+                <div>등록 일자</div>
             </div>
 
             {/* 유저 데이터를 map으로 렌더링 */}

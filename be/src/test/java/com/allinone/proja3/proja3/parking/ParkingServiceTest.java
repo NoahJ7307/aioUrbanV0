@@ -67,4 +67,10 @@ public class ParkingServiceTest {
         PageResponseDTO<RegularParkingDTO> list = regularParkingService.getUserList(pageRequestDTO, householdDTO);
         list.getDtoList().forEach(System.out::println);
     }
+
+    @Test
+    public void getOneTest(){
+        RegularParkingDTO list = regularParkingService.getOne(72L);
+        System.out.println(list);
+    }
 }

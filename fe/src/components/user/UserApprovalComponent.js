@@ -53,7 +53,7 @@ const UserApprovalComponent = () => {
                 <div>호</div>
                 <div>이름</div>
                 <div>전화번호</div>
-                <div>가입승인</div>
+                <div>가입 승인</div>
             </div>
 
             {/* 유저 데이터를 map으로 렌더링 */}

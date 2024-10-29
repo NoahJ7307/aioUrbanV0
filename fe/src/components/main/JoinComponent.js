@@ -8,6 +8,7 @@ const initState = {
     userName: "",
     phone: "",
     pw: "",
+    userRoleList: [],
 }
 
 const JoinComponent = () => {
@@ -19,10 +20,10 @@ const JoinComponent = () => {
         setUserData({ ...userData })
     }
 
-    // 수정 data 전송
     const handleClick = () => {
-        register(userData)
-        alert("join success")
+        const updateData = { ...userData, userRoleList: ['PENDING'] }
+        register(updateData)
+        alert("가입 신청이 완료되었습니다.")
         moveToPath('/')
     }
     return (

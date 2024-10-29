@@ -66,6 +66,7 @@ export const getOne = async (uno) => {
         },
     }
     const res = await axios.get(`${host}/${uno}`, config)
+    console.log('user api getOne : ', res.data)
     return res.data
 }
 

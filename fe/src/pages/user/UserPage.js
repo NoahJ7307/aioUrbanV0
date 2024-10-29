@@ -17,17 +17,17 @@ const UserPage = () => {
             <ul className='flex justify-center'>
                 <li>
                     <button className='bg-gray-300 p-2' onClick={handleClickList}>
-                        List
+                        입주민 목록
                     </button>
                 </li>
                 <li>
                     <button className='bg-gray-300 p-2 mr' onClick={handleClickApprovalList}>
-                        Approval
+                        가입 승인
                     </button>
                 </li>
                 <li>
                     <button className='bg-gray-300 p-2' onClick={handleClickAdd}>
-                        Add
+                        입주민 등록
                     </button>
                 </li>
             </ul>

@@ -2,15 +2,14 @@ package com.allinone.proja3.proja3.controller.parking;
 
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
-import com.allinone.proja3.proja3.dto.UserDTO;
 import com.allinone.proja3.proja3.dto.parking.HouseholdDTO;
 import com.allinone.proja3.proja3.dto.parking.RegularParkingDTO;
-import com.allinone.proja3.proja3.dto.parking.RegularUserListReqDTO;
-import com.allinone.proja3.proja3.model.UserRole;
+import com.allinone.proja3.proja3.dto.parking.RegularReqDTO;
 import com.allinone.proja3.proja3.model.parking.Household;
 import com.allinone.proja3.proja3.model.parking.HouseholdPK;
 import com.allinone.proja3.proja3.service.parking.RegularParkingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,9 +27,9 @@ public class RegularController {
     }
 
     @PostMapping("/user_list")
-    public PageResponseDTO<RegularParkingDTO> getUserList(@RequestBody RegularUserListReqDTO regularUserListReqDTO) {
-        PageRequestDTO pageRequestDTO = regularUserListReqDTO.getPageRequestDTO();
-        HouseholdDTO householdDTO = regularUserListReqDTO.getHouseholdDTO();
+    public PageResponseDTO<RegularParkingDTO> getUserList(@RequestBody RegularReqDTO regularReqDTO) {
+        PageRequestDTO pageRequestDTO = regularReqDTO.getPageRequestDTO();
+        HouseholdDTO householdDTO = regularReqDTO.getHouseholdDTO();
         System.out.println("RegularParking getList controller P : " + pageRequestDTO);
         System.out.println("RegularParking getList controller H : " + householdDTO);
         return regularParkingService.getUserList(pageRequestDTO, householdDTO);
@@ -44,7 +43,7 @@ public class RegularController {
 
     @PostMapping("/")
     public void register(@RequestBody RegularParkingDTO regularParkingDTO) {
-        System.out.println("register : " + regularParkingDTO);
+        System.out.println("RegularParking register : " + regularParkingDTO);
         regularParkingDTO.setHousehold(Household.builder()
                 .householdPK(HouseholdPK.builder()
                         .dong(regularParkingDTO.getHouseholdDTO().getDong())
@@ -52,5 +51,17 @@ public class RegularController {
                         .build())
                 .build());
         regularParkingService.register(regularParkingDTO);
+    }
+
+    @GetMapping("/{rpno}")
+    public RegularParkingDTO getOne(@PathVariable(name = "rpno") Long rpno){
+        System.out.println("RegularParking read rpno : "+rpno);
+        return regularParkingService.getOne(rpno);
+    }
+
+    @PutMapping("/{rpno}")
+    public void putOne(@PathVariable(name = "rpno") Long rpno, @RequestBody RegularReqDTO regularReqDTO){
+        System.out.println("modify : "+regularReqDTO);
+        regularParkingService.putOne(regularReqDTO, rpno);
     }
 }

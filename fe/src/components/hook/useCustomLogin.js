@@ -29,10 +29,10 @@ const useCustomLogin = () => {
             localStorage.setItem("role", roleNames)
             localStorage.setItem("dong", dong)
             localStorage.setItem("ho", ho)
-            alert("Login Complete")
+            alert("로그인 되었습니다.")
             moveToPath('/')
         } else {
-            alert('Check your PhoneNumber or Password')
+            alert('전화번호 혹은 비밀번호를 확인해 주십시오.')
             moveToPath('/login')
         }
 
@@ -51,23 +51,23 @@ const useCustomLogin = () => {
 
     const exceptionHandler = (ex) => {
         const msg = ex.error
-        console.log("exceptionHandler msg : ",msg)
+        console.log("exceptionHandler msg : ", msg)
         const str = createSearchParams({ error: msg }).toString()
 
         if (msg === "REQUIRE_LOGIN") {
-            alert("You Must Login")
+            alert("로그인이 필요합니다.")
             navigate({ pathname: '/login', search: str })
             return
         }
 
         if (msg === "ERROR_ACCESS_DENIED") {
-            alert("No permission")
+            alert("권한이 없습니다.")
             navigate({ pathname: '/login', search: str })
             return
         }
 
         if (msg === "ERROR_ACCESS_TOKEN") {
-            alert("Expired Token")
+            alert("로그인 시간이 만료되었습니다.")
             navigate({ pathname: '/login', search: str })
             return
         }

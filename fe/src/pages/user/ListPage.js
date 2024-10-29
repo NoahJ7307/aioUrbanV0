@@ -32,12 +32,12 @@ const ListPage = () => {
             <ul className='flex justify-center'>
                 <li>
                     <button className='bg-gray-300 p-2 mr' onClick={handleClickModify}>
-                        Modify
+                        수정
                     </button>
                 </li>
                 <li>
                     <button className='bg-gray-300 p-2 mr' onClick={handleClickDelete}>
-                        Delete
+                        삭제
                     </button>
                 </li>
             </ul>

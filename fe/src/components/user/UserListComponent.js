@@ -20,7 +20,7 @@ const initState = {
 
 const UserListComponent = () => {
     const [serverData, setServerData] = useState(initState)
-    const { page, size, moveToList } = useCustom()
+    const { page, size, moveToList, refresh } = useCustom()
     const [checked, setChecked] = useState([])
     const { setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
     const { exceptionHandler, loadLoginData, navigate } = useCustomLogin()
@@ -43,7 +43,7 @@ const UserListComponent = () => {
             alert('권한이 없습니다');
             navigate({ pathname: '/login' });
         }
-    }, [loadLoginData, navigate, page, size])
+    }, [page, size, refresh])
 
     const handleCheckChange = (uno) => {
         setChecked(checkedItem => {

@@ -9,7 +9,7 @@ const MenuComponent = () => {
 
     const handleClickLogout = () => {
         doLogout()
-        alert("Logout Complete")
+        alert("로그아웃 되었습니다.")
         moveToPath('/')
     }
 
@@ -24,24 +24,24 @@ const MenuComponent = () => {
                     {!isLogin ?
                         <>
                             <div className='flex justify-end mr-2'>
-                                <Link to={'/login'}>Login</Link>
+                                <Link to={'/login'}>로그인</Link>
                             </div>
                             <div className='flex justify-end mr-2'>
-                                <Link to={'/join'}>Join</Link>
+                                <Link to={'/join'}>회원가입</Link>
                             </div>
                         </>
                         : <div className='flex justify-end mr-2'>
-                            <button onClick={handleClickLogout}>Logout</button>
+                            <button onClick={handleClickLogout}>로그아웃</button>
                         </div>
                     }
                 </div>
             </div>
             <ul className='flex justify-center'>
-                <li className='p-2'><Link to={'/'}>Home</Link></li>
-                <li className='p-2'><Link to={'/user'}>User</Link></li>
+                <li className='p-2'><Link to={'/'}>홈</Link></li>
+                <li className='p-2'><Link to={'/user'}>입주민관리</Link></li>
                 <li className='p-2'><Link to={'/facilities'}>facilities</Link></li>
                 <li className='p-2'><Link to={'/community'}>Community</Link></li>
-                <li className='p-2'><Link to={'/parking'}>Parking</Link></li>
+                <li className='p-2'><Link to={'/parking'}>주차관리</Link></li>
                 {loginState.phone ?
                     <li className='p-2'><Link to={'/'}>LoginTest</Link></li>
                     : <></>

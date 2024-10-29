@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useCustom from '../hook/useCustom'
 import { getOne, putOne } from '../api/userApi'
-import { useOutletContext } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import useCustomLogin from '../hook/useCustomLogin'
 
 const initState = {
@@ -10,6 +10,7 @@ const initState = {
     userName: "",
     phone: "",
     pw: "",
+    userRoleList: [],
 }
 
 const UserModifyComponent = () => {
@@ -20,6 +21,7 @@ const UserModifyComponent = () => {
     // data 수신
     useEffect(() => {
         getOne(checkedUno[0]).then(data => {
+            console.log(data)
             setUserData({
                 // null || undefined 일 경우 "" || 0 로 대체 (controlled input 에러)
                 ...data,
@@ -28,6 +30,7 @@ const UserModifyComponent = () => {
                 pw: data.pw || "",
                 dong: data.dong ?? 0,
                 ho: data.ho ?? 0,
+                userRoleList: data.userRoleList ?? [],
             })
         })
     }, [checkedUno])
