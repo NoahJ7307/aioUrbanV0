@@ -52,9 +52,9 @@ public interface GolfRepository extends JpaRepository<Golf, Long> {
     void updateToDelete(@Param("reservationId") Long reservationId, @Param("flag") boolean flag);
 
     // 예약 등록 메서드는 JpaRepository에 의해 자동으로 제공되므로 별도로 작성할 필요 없음
-    List<Golf> findGolfBydelFlag(Boolean delflag);
+//    List<Golf> findGolfBydelFlag(Boolean delflag);
 
-    @Query("SELECT g FROM Golf g WHERE g.delFlag = false ORDER BY g.reservationId DESC")
+    @Query("SELECT g FROM Golf g WHERE g.delFlag = false ORDER BY g.date DESC")
     Page<Golf> findNonDeletedReservations(Pageable pageable);
 
     List<Golf> findByUser(User user);

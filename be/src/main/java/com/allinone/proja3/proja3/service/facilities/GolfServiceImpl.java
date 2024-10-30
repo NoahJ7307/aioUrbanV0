@@ -93,12 +93,8 @@ public class GolfServiceImpl implements GolfService {
         return new PageResponseDTO<>(dtoList,  pageRequestDTO ,totalCount);
     }
 
-//    @Override
-//    public void modify(GolfDTO golfDTO) {
-//        Golf golf = dtoToEntity(golfDTO);
-//        golfRepository.save(golf);
-//    }
 
+    //===========삭제메서드==========
     @Override
     public void remove(Long reservationId) {
         System.out.println("remove service: " + reservationId);
@@ -127,20 +123,39 @@ public class GolfServiceImpl implements GolfService {
                 .build();
     }
 
+    //=========수정메서드==========
+    @Override
+    public void modify(GolfDTO golfDTO) {
+        Optional<Golf> result = golfRepository.findById(golfDTO.getReservationId());
+        Golf golf = result.orElseThrow();
+        golf.changeDate(golfDTO.getDate());
+        golf.changeStartTime(golfDTO.getStartTime());
+        golf.changeEndTime(golfDTO.getEndTime());
+        golf.changeTeeBox(golfDTO.getTeeBox());
+        golf.changeState(golfDTO.isDelFlag());
+        golfRepository.save(golf);
+    }
 
 
     //==========사용자의 uno, 이름, phone 불러오기================
 
 
     @Override
-    public List<GolfDTO> findDataByUno(Long uno) {
-        User user = userRepository.findById(uno)
+    public Golf findDataByUno(Long uno) {
+        System.out.println("golf service : " + uno );
+        Golf golf = golfRepository.findById(uno)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        List<Golf> golf = golfRepository.findByUser(user); // User 객체로 검색
-        return golf.stream()
-                .map(this::entityToDto)
-                .collect(Collectors.toList());
+        return golf;
     }
+//    @Override
+//    public Golf findDataByUno(Long uno) {
+//        User user = userRepository.findById(uno)
+//                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+//        List<Golf> golf = golfRepository.findByUser(user); // User 객체로 검색
+//        return golf.stream()
+//                .map(this::entityToDto)
+//                .collect(Collectors.toList());
+//    }
 
 
     @Override

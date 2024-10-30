@@ -13,8 +13,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GolfDTO {
-    private Long reservationId;
-//    private String userName;
+    private long reservationId;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;

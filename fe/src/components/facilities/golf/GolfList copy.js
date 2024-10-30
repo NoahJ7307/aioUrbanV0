@@ -3,7 +3,7 @@ import { cancelGolf, listGolf } from '../../api/facilities/golfApi';
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
-import GolfCancel, { handleCheckedCancel } from './GolfCancel';
+import GolfCancel from './GolfCancel';
 import GolfDetailModifyModal from './GolfDetailModifyModal';
 const initState = {
     dtoList: [],
@@ -82,6 +82,7 @@ const GolfList = ({ page, size }) => {
     useEffect(() => {
         console.log(page, size)
         fetchGolfReservations();
+
     }, [page, size]);
 
     //수정로직구현하기
@@ -89,11 +90,8 @@ const GolfList = ({ page, size }) => {
         console.log("수정 버튼이 눌렸어요", reservationId)
         setSelectedReservationId(reservationId);
         setIsModalOpen(true);
-
+    
     };
-    const handleDelete = async () => {
-        await handleCheckedCancel(checkedReservationId, fetchGolfReservations);
-    }
 
 
 
@@ -103,7 +101,13 @@ const GolfList = ({ page, size }) => {
             <div className='flex justify-between mb-4'>
                 {role === 'ADMIN' && (
                     <div>
-                        <button onClick={handleDelete}> 선택 삭제 </button>
+
+                        <GolfCancel
+                            checkedReservationId={checkedReservationId}
+                            fetchGolfReservations={fetchGolfReservations}
+                        />
+
+
                     </div>
                 )}
             </div>

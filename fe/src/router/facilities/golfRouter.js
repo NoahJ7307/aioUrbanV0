@@ -1,11 +1,10 @@
 import GolfPage from '../../pages/facilities/golf/GolfPage';
-import GolfListPage from '../../pages/facilities/golf/GolfListPage';
 import GolfReservePage from '../../pages/facilities/golf/GolfReservePage';
 import GolfModifyPage from '../../pages/facilities/golf/GolfModifyPage';
-// import GolfCancelPage from '../../pages/facilities/golf/GolfCancelPage';
-import GolfUserListPage from '../../pages/facilities/golf/GolfUserListPage';
+import { Suspense, lazy } from 'react';
 
-
+const Loading = <div>....</div>
+const GolfList = lazy(() => import("../../pages/facilities/golf/GolfListPage"))
 
 const golfRouter = [
     {
@@ -14,20 +13,20 @@ const golfRouter = [
         children: [
             {
                 path: "list",
-                element: <GolfListPage/>
+                element: <Suspense fallback={Loading}><GolfList /></Suspense>
             },
             {
                 path: "reserve",
-                element: <GolfReservePage/>
+                element: <GolfReservePage />
             },
             {
-                path: "userlist/:uno",
-                element: <GolfUserListPage/>
+                path: "detail/:uno",
+                element: <Suspense fallback={Loading}><GolfModifyPage /></Suspense>
             },
-            {
-                path: "modify",
-                element: <GolfModifyPage/>
-            },
+            // {
+            //     path: "modify/:uno/:page/:size",
+            //     element: <GolfModifyPage />
+            // },
             // {
             //     path: "cancel",
             //     element: <GolfCancelPage/>
