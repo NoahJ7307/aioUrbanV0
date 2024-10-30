@@ -55,7 +55,7 @@ public class RegularController {
 
     @GetMapping("/{rpno}")
     public RegularParkingDTO getOne(@PathVariable(name = "rpno") Long rpno){
-        System.out.println("RegularParking read rpno : "+rpno);
+        System.out.println("RegularParking getOne rpno : "+rpno);
         return regularParkingService.getOne(rpno);
     }
 

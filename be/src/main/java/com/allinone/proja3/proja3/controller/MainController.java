@@ -1,6 +1,6 @@
 package com.allinone.proja3.proja3.controller;
 
-import com.allinone.proja3.proja3.dto.UserDTO;
+import com.allinone.proja3.proja3.dto.user.UserDTO;
 import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.service.UserService;
 import lombok.RequiredArgsConstructor;

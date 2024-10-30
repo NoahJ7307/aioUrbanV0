@@ -2,11 +2,8 @@ package com.allinone.proja3.proja3.parking;
 
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
-import com.allinone.proja3.proja3.dto.UserDTO;
 import com.allinone.proja3.proja3.dto.parking.HouseholdDTO;
 import com.allinone.proja3.proja3.dto.parking.RegularParkingDTO;
-import com.allinone.proja3.proja3.model.parking.Household;
-import com.allinone.proja3.proja3.model.parking.HouseholdPK;
 import com.allinone.proja3.proja3.service.parking.HouseholdService;
 import com.allinone.proja3.proja3.service.parking.RegularParkingService;
 import org.junit.jupiter.api.Test;

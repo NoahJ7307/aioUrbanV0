@@ -17,8 +17,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uno;
-    private int dong;
-    private int ho;
+    private String dong;
+    private String ho;
     private String userName;
     private String phone;
     private String pw;

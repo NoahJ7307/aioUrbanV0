@@ -3,7 +3,6 @@ package com.allinone.proja3.proja3.service;
 import com.allinone.proja3.proja3.dto.CommunityDTO;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
-import com.allinone.proja3.proja3.dto.UserDTO;
 import com.allinone.proja3.proja3.model.Community;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.repository.CommunityRepository;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

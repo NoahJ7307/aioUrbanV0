@@ -1,9 +1,8 @@
-package com.allinone.proja3.proja3.dto;
+package com.allinone.proja3.proja3.dto.user;
 
 import com.allinone.proja3.proja3.model.UserRole;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -12,8 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 public class UserDTO {
     private Long uno;
-    private int dong;
-    private int ho;
+    private String dong;
+    private String ho;
     private String userName;
     private String phone;
     private String pw;

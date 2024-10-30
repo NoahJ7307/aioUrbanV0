@@ -17,6 +17,22 @@ export const getList = async (pageParam) => {
     return res.data
 }
 
+export const getSearchList = async (pageParam, searchData) => {
+    const token = localStorage.getItem("token")
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    }
+    const body = {
+        pageRequestDTO: pageParam,
+        userSearchDataDTO: searchData,
+    }
+    const res = await axios.post(`${host}/search`, body, config)
+    return res.data
+}
+
 export const getApprovalList = async (pageParam) => {
     const { page, size } = pageParam
     const token = localStorage.getItem("token")

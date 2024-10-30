@@ -29,4 +29,24 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = {"userRoleList"})
     @Query("select u from User u where u.phone = :phone")
     User getWithRoles(@Param("phone") String phone);
+
+    @EntityGraph(attributePaths = {"userRoleList"})
+    @Query("select u from User u where u.dong like %:dong% and u.ho like %:ho% and u.delFlag = false")
+    Page<User> findByDongHo(@Param("dong") String dong, @Param("ho") String ho, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"userRoleList"})
+    @Query("select u from User u where u.dong like %:value% and u.delFlag = false")
+    Page<User> findByDong(@Param("value") String value, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"userRoleList"})
+    @Query("select u from User u where u.ho like %:value% and u.delFlag = false")
+    Page<User> findByHo(@Param("value") String value, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"userRoleList"})
+    @Query("select u from User u where u.userName like %:value% and u.delFlag = false")
+    Page<User> findByName(@Param("value") String value, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"userRoleList"})
+    @Query("select u from User u where u.phone like %:value% and u.delFlag = false")
+    Page<User> findByPhone(@Param("value") String value, Pageable pageable);
 }

@@ -42,8 +42,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
             // claims Transfer
             Long uno = ((Integer) claims.get("uno")).longValue();
-            int dong = (int) claims.get("dong");
-            int ho = (int) claims.get("ho");
+            String dong = (String) claims.get("dong");
+            String ho = (String) claims.get("ho");
             String userName = (String) claims.get("userName");
             String phone = (String) claims.get("phone");
             String pw = (String) claims.get("pw");

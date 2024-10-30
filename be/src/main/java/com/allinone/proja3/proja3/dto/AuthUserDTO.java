@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 public class AuthUserDTO extends User {
     private Long uno;
-    private int dong;
-    private int ho;
+    private String dong;
+    private String ho;
     private String userName;
     private String phone;
     private String pw;
@@ -21,8 +21,8 @@ public class AuthUserDTO extends User {
 
     public AuthUserDTO(
             Long uno,
-            int dong,
-            int ho,
+            String dong,
+            String ho,
             String userName,
             String phone,
             String pw,

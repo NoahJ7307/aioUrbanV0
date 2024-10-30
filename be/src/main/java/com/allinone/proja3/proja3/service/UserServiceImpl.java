@@ -2,7 +2,8 @@ package com.allinone.proja3.proja3.service;
 
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
-import com.allinone.proja3.proja3.dto.UserDTO;
+import com.allinone.proja3.proja3.dto.user.UserDTO;
+import com.allinone.proja3.proja3.dto.user.UserSearchDataDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.repository.UserRepository;
@@ -14,8 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,43 @@ public class UserServiceImpl implements UserService {
                 Sort.by("uno").descending());
 
         Page<User> result = userRepository.notPendingList(UserRole.PENDING, pageable);// PENDING 이 아닌 유저만 필터링
+
+        // entityToDto를 사용하여 엔티티 -> DTO 변환
+        List<UserDTO> dtoList = result.get()
+                .map(this::entityToDto)  // entityToDto 메서드를 사용하여 변환
+                .collect(Collectors.toList());
+
+        long totalCount = result.getTotalElements();
+        return PageResponseDTO.<UserDTO>withAll()
+                .dtoList(dtoList)
+                .pageRequestDTO(pageRequestDTO)
+                .totalCount(totalCount)
+                .build();
+    }
+
+    @Override
+    public PageResponseDTO<UserDTO> getSearchList(PageRequestDTO pageRequestDTO, UserSearchDataDTO userSearchDataDTO) {
+        System.out.println("getSearchList service");
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("uno").descending());
+
+        // 검색 필터
+        Page<User> result;
+        switch (userSearchDataDTO.getSearchCategory()){
+            case "dong-ho": {
+                String[] value = userSearchDataDTO.getSearchValue().split("-");
+                String dong = value[0];
+                String ho = value[1];
+                result = userRepository.findByDongHo(dong, ho, pageable);
+            } break;
+            case "dong": result = userRepository.findByDong(userSearchDataDTO.getSearchValue(), pageable); break;
+            case "ho": result = userRepository.findByHo(userSearchDataDTO.getSearchValue(), pageable); break;
+            case "name": result = userRepository.findByName(userSearchDataDTO.getSearchValue(), pageable); break;
+            case "phone": result = userRepository.findByPhone(userSearchDataDTO.getSearchValue(), pageable); break;
+            default: result = Page.empty(pageable);
+        }
 
         // entityToDto를 사용하여 엔티티 -> DTO 변환
         List<UserDTO> dtoList = result.get()
@@ -92,8 +130,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void modify(UserDTO userDTO) {
-        System.out.println("modify service : "+userDTO);
+    public void putOne(UserDTO userDTO) {
+        System.out.println("putOne service : "+userDTO);
         String encodedPassword = passwordEncoder.encode(userDTO.getPw());
         userDTO.setPw(encodedPassword);
         User user = dtoToEntity(userDTO);

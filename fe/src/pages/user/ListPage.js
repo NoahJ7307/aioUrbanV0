@@ -2,11 +2,33 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import UserListComponent from '../../components/user/UserListComponent'
 import useCustomLogin from '../../components/hook/useCustomLogin'
 import { Outlet, useNavigate, useOutletContext } from 'react-router-dom'
-import { deleteChecked } from '../../components/api/userApi'
+import { deleteChecked, getSearchList } from '../../components/api/userApi'
+import useCustom from '../../components/hook/useCustom'
+
+const initStateSearchData = {
+    searchCategory: '',
+    searchValue: '',
+}
+
+const initStateServerData = {
+    dtoList: [],
+    pageNumList: [],
+    pageRequestDTO: null,
+    prev: false,
+    next: false,
+    totalCount: 0,
+    prevPage: 0,
+    nextPage: 0,
+    totalPage: 0,
+    current: 0
+}
 
 const ListPage = () => {
     const navigate = useNavigate()
     const { checkedUno, setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
+    const [searchData, setSearchData] = useState(initStateSearchData)
+    const { page, size } = useCustom()
+    const [pageServerData, setPageServerData] = useState(initStateServerData)
 
     const handleClickModify = useCallback(() => {
         if (checkedUno.length == 1) {
@@ -27,9 +49,19 @@ const ListPage = () => {
         }
     }
 
-    const handleClickSearch = () => {
-
+    const handleChangeSearchValue = (e) => {
+        setSearchData(prevData => ({ ...prevData, searchValue: e.target.value }))
     }
+    const handleChangeSearchCategory = (e) => {
+        setSearchData(prevData => ({ ...prevData, searchCategory: e.target.value }))
+    }
+    const handleClickSearch = () => {
+        const pageParam = { page, size }
+        getSearchList(pageParam, searchData).then(data => {
+            setPageServerData(data)
+        })
+    }
+
     return (
         <div>
             <ul className='flex justify-center'>
@@ -44,8 +76,8 @@ const ListPage = () => {
                     </button>
                 </li>
                 <li>
-                    <select>
-                        <option value="">검색 필터</option>
+                    <select name='searchCategory' onChange={handleChangeSearchCategory}>
+                        <option value=''>검색 필터</option>
                         <option value="dong-ho">동-호</option>
                         <option value="dong">동</option>
                         <option value="ho">호</option>
@@ -54,7 +86,10 @@ const ListPage = () => {
                     </select>
                 </li>
                 <li>
-                    <input />
+                    <input className=''
+                        name='searchValue'
+                        onChange={handleChangeSearchValue}
+                    />
                 </li>
                 <li>
                     <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>
@@ -62,7 +97,7 @@ const ListPage = () => {
                     </button>
                 </li>
             </ul>
-            <UserListComponent />
+            <UserListComponent pageServerData={pageServerData} />
 
             {/* 자식요소로 uno 설정 함수 전달 */}
             <Outlet context={{ checkedUno, setCheckedUno }} />

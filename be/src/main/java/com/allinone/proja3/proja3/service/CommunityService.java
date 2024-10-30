@@ -3,7 +3,6 @@ package com.allinone.proja3.proja3.service;
 import com.allinone.proja3.proja3.dto.CommunityDTO;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
-import com.allinone.proja3.proja3.dto.UserDTO;
 import com.allinone.proja3.proja3.model.Community;
 import com.allinone.proja3.proja3.model.User;
 

@@ -18,7 +18,7 @@ const initState = {
     current: 0
 }
 
-const UserListComponent = () => {
+const UserListComponent = ({pageServerData}) => {
     const [serverData, setServerData] = useState(initState)
     const { page, size, moveToList } = useCustom()
     const [checked, setChecked] = useState([])
@@ -26,6 +26,13 @@ const UserListComponent = () => {
     const { exceptionHandler, loadLoginData, navigate } = useCustomLogin()
 
     useEffect(() => {
+        if (!pageServerData.dtoList || pageServerData.dtoList.length === 0) {
+            console.log("NO", pageServerData)
+            console.log("검색 없음")
+        } else {
+            console.log("OK", pageServerData)
+            console.log("검색 있음")
+        }
         try {
             if (loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT') {
                 throw new Error('Access Error')
@@ -34,25 +41,25 @@ const UserListComponent = () => {
                     if (data.error) {
                         exceptionHandler(data)
                     } else {
-                        setServerData(data);
+                        setServerData(data)
                         console.log(data)
                     }
                 })
             }
         } catch (error) {
             console.error(error);
-            alert('권한이 없습니다');
-            navigate({ pathname: '/login' });
+            alert('권한이 없습니다')
+            navigate({ pathname: '/login' })
         }
 
-    }, [page, size])
+    }, [page, size, pageServerData])
 
     const handleCheckChange = (uno) => {
         setChecked(checkedItem => {
             if (checkedItem.includes(uno)) {
                 return checkedItem.filter(item => item !== uno)
             } else {
-                return [...checkedItem, uno];
+                return [...checkedItem, uno]
             }
         })
     }
@@ -60,12 +67,12 @@ const UserListComponent = () => {
     // 체크된 항목이 변경 시 부모에 [uno] 전달 / 부모(UserPage) 업데이트
     useEffect(() => {
         if (checked.length > 0) {
-            setCheckedUno(checked);
+            setCheckedUno(checked)
             console.log("checked:" + checked)
         } else {
-            setCheckedUno([]);
+            setCheckedUno([])
         }
-    }, [checked, setCheckedUno]);
+    }, [checked, setCheckedUno])
 
     return (
         <div>
