@@ -21,7 +21,7 @@ public interface GolfService {
     PageResponseDTO<GolfDTO> getUserReservations(Long uno, PageRequestDTO pageRequestDTO);
     void modify(GolfDTO golfDTO);
     void remove(Long reservationId);
-    void findGolfBydelFlag(Long reservationId);
+//    void findGolfBydelFlag(Long reservationId);
     public PageResponseDTO<GolfDTO> getNonDeletedReservations(PageRequestDTO pageRequestDTO);
 
     //==========사용자의 uno, 이름, phone 불러오기================

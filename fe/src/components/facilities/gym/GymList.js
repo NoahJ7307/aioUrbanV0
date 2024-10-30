@@ -31,6 +31,7 @@ const GymList = ({ page, size }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); //모달 열림상태
   const [selectedProgramId, setSelectedProgramId] = useState(null); //선택된 예약 id
 
+  
   const handleCheckChange = (programId) => {
     setChecked((prevChecked) => {
       const isChecked = prevChecked.includes(programId);

@@ -30,8 +30,8 @@ const gymRouter = [
                 element: <Suspense fallback={Loading}><GymProgramDetail /></Suspense>
             },
             {
-                path: "modify",
-                element: <GymModify />
+                path: "detail/modify/:programId",
+                element:  <Suspense fallback={Loading}><GymModify /></Suspense>
             },
             {
                 path: "cancel",

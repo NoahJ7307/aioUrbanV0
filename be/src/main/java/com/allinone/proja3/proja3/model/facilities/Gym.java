@@ -26,11 +26,12 @@ public class Gym {
     private LocalTime programEndTime;//프로그램 종료 시간
     private LocalDateTime applicationEndDate; //접수기간 종료일
     private LocalDateTime applicationStartDate; //접수기간 시작일
+    private int participantLimit; //모집정원
     private String title;
     private String target;
     private String content;
     private boolean delFlag;
-    private String membershipType;
+    private ProgramState programState;//프로그램등록 상태 접수마감(:대기)/접수중/접수전/프로그램종료
 
 //    @ManyToOne(fetch = FetchType.LAZY) // User와의 관계
 //    @JoinColumn(name = "uno", referencedColumnName = "uno") // Community 테이블의 uno 외래 키 설정
@@ -44,8 +45,9 @@ public class Gym {
     public void changeTitle (String title) { this.title = title;}
     public void changeTarget (String target) { this.target = target;}
     public void changeContent (String content) {this.content = content; }
-    public void changeState(boolean delFlag) { this.delFlag = delFlag; }
-    public void changeMembershipType (String membershipType) {this.membershipType = membershipType; }
     public void changeApplicationStartDate (LocalDateTime applicationStartDate) {this.applicationStartDate = applicationStartDate; }
     public void changeApplicationEndDate (LocalDateTime applicationEndDate) {this.applicationEndDate = applicationEndDate; }
+    public void changeParticipantLimit (int participantLimit) {this.participantLimit = participantLimit; }
+    public void changeProgramState (ProgramState programState) {this.programState = programState; }
+
 }

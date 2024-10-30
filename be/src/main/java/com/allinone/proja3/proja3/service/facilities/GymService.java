@@ -15,8 +15,10 @@ public interface GymService {
     GymDTO getProgramPost(Long programId);
     public PageResponseDTO<GymDTO> getNonDeletedPrograms(PageRequestDTO pageRequestDTO);
 //    public PageResponseDTO<GymDTO> getProgramPost(Long programId, PageRequestDTO pageRequestDTO);
-//    void remove(Long programId);
-//    public List<GymDTO> findDataByUno(Long uno);
+    void remove(Long programId);
+    void modify(GymDTO gymDTO);
+//    void findGymBydelFlag(Long programId);
+    public Gym findDataByProgramId(Long programId);
 //    boolean modifyProgramPost(GymDTO gymDTO);
 //    PageResponseDTO<GymDTO> findAllProgramPosts(PageRequestDTO pageRequestDTO);
     GymDTO entityToDto(Gym gym);

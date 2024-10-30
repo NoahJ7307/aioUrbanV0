@@ -44,7 +44,7 @@ public class GolfRepositoryTestg {
 
     @Test
     public void testModify() {
-        Long reservationId = 33L;
+        Long reservationId = 130L;
         Optional<Golf> result = repository.findById(reservationId);
         Golf golf = result.orElseThrow();
         golf.changeDate(LocalDate.of(2025,10,22));

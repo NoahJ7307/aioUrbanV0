@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react'
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams } from 'react-router-dom';
 import { deletePost, getGymListByProgramId } from '../../api/facilities/gymApi';
 
-const GymProgramDetail = ({ state }) => {
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const page = searchParams.get('page') || 1;// page가 없을 경우 기본값 1 설정
-    const size = searchParams.get('size') || 6; // size가 없을 경우 기본값 6 설정
+const GymProgramDetail = ({ gym, page, size}) => {
 
+    const [searchParams] = useSearchParams();
+    const page = searchParams.get('page');// page가 없을 경우 기본값 1 설정
+    const size = searchParams.get('size'); // size가 없을 경우 기본값 6 설정
 
     const location = useLocation();
     const { gym } = location.state || {}; // 전달된 객체가 없으면 undefined로 설정
@@ -24,14 +23,8 @@ const GymProgramDetail = ({ state }) => {
                 });
         }
     }, [gym.programId]);
-    // const handleProgramClick = (gym) => {
-    //     navigate(`/facilities/gym/detail/${gym.programId}`, { state: { gym } })
-    
-    //   };
-    const handleModify = () => {
-        console.log( "수정버튼 눌림")
-        navigate(`/facilities/gym/detail/modify/${gym.programId}`);
-    }
+
+
     const handleDelete = async ({ state }) => {
         const { gym } = location.state || {};
         console.log("전송될 프로그램 ID: ", gym.programId);
@@ -59,7 +52,6 @@ const GymProgramDetail = ({ state }) => {
             <p>금액 : {gym.price}</p>
 
             </div>
-            <button type = "button" onClick={handleModify}> 수정 </button>
             <button type = "button" onClick={handleDelete}> 삭제 </button>
         
         

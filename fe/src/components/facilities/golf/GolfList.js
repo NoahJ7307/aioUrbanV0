@@ -5,6 +5,7 @@ import PageComponent from '../../common/PageComponent';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import GolfCancel, { handleCheckedCancel } from './GolfCancel';
 import GolfDetailModifyModal from './GolfDetailModifyModal';
+
 const initState = {
     dtoList: [],
     pageNumList: [],
@@ -25,8 +26,8 @@ const GolfList = ({ page, size }) => {
     const [uno, setUno] = useState(); // 로그인한 사용자 uno
     const [userName, setUserName] = useState(); // 로그인한 사용자 name
     const [phone, setPhone] = useState(); // 로그인한 사용자 phone
-    const navigate = useNavigate()
-    const [checkedReservationId, setCheckedReservationId] = useState([])
+    const navigate = useNavigate();
+    const [checkedReservationId, setCheckedReservationId] = useState([]);
     const [serverData, setServerData] = useState(initState)
     const { moveToList } = useCustom()
     const [checked, setChecked] = useState([])

@@ -1,5 +1,6 @@
 package com.allinone.proja3.proja3.dto.facilities;
 
+import com.allinone.proja3.proja3.model.facilities.ProgramState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,11 +22,12 @@ public class GymDTO {
     private LocalTime programEndTime;//프로그램 종료 시간
     private LocalDateTime applicationEndDate; //접수기간 종료일
     private LocalDateTime applicationStartDate; //접수기간 시작일
+    private int participantLimit; //모집정원
     private String title;
     private String target;
     private String content;
     private boolean delFlag;
-    private String membershipType;
+    private ProgramState programState;
 //    private int point;
 
     //user에서 가져올데이터

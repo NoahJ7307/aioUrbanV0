@@ -60,6 +60,48 @@ public class GymServiceImpl implements GymService {
                 .build();
 
     }
+    @Transactional  //프로그램 조회와 프로그램상세내용이 묶여있으므로 transactional을 넣어야만 두개가 세트로 묶여 삭제가 정상처리됨
+    @Override
+    public void remove(Long programId) {
+        System.out.println("remove service: " + programId);
+        gymRepository.updateToDelete(programId, true);
+    }
+
+    @Override
+    public void modify(GymDTO gymDTO) {
+        System.out.println("gym modify !!!!");
+        Optional<Gym> result = gymRepository.findById(gymDTO.getProgramId());
+        Gym gym = result.orElseThrow();
+        gym.changeTitle(gymDTO.getTitle());
+        gym.changeContent(gymDTO.getContent());
+        gym.changeTarget(gymDTO.getTarget());
+        gym.changeProgramStartDate(gymDTO.getProgramStartDate());
+        gym.changeProgramEndDate(gymDTO.getProgramEndDate());
+        gym.changeApplicationStartDate(gymDTO.getApplicationStartDate());
+        gym.changeApplicationEndDate(gymDTO.getApplicationEndDate());
+        gym.changeProgramStartTime(gymDTO.getProgramStartTime());
+        gym.changeProgramEndTime(gymDTO.getProgramEndTime());
+        gym.changeParticipantLimit(gymDTO.getParticipantLimit());
+        gym.changeProgramState(gymDTO.getProgramState());
+        gymRepository.save(gym);
+
+    }
+
+    @Override
+    public Gym findDataByProgramId(Long programId) {
+        System.out.println("gym service" + programId);
+        Gym gym = gymRepository.findById(programId)
+                .orElseThrow(()-> new IllegalArgumentException("User not found"));
+        return gym;
+    }
+//    @Transactional
+//    @Override
+//    public void findGymBydelFlag(Long programId) {
+//        System.out.println("flag" + programId);
+//        Gym programPost = gymRepository.findById(programId).orElseThrow(() -> new ResourceAccessException("프로그램이 없어요"));
+//        programPost.setDelFlag(true);
+//        gymRepository.save(programPost);
+//    }
 //    // 특정 사용자의 게시물을 페이징 처리하여 조회하는 메서드
 //    @Override
 //    public PageResponseDTO<GymDTO> getProgramPost(Long programId, PageRequestDTO pageRequestDTO) {
@@ -243,7 +285,7 @@ public class GymServiceImpl implements GymService {
                 .programEndTime(gymDTO.getProgramEndTime())
                 .applicationStartDate(gymDTO.getApplicationStartDate())
                 .applicationEndDate(gymDTO.getApplicationEndDate())
-                .membershipType(gymDTO.getMembershipType())
+               // .membershipType(gymDTO.getMembershipType())
                 .build();
     }
 
@@ -261,7 +303,7 @@ public class GymServiceImpl implements GymService {
                 .programEndTime(gym.getProgramEndTime())
                 .applicationStartDate(gym.getApplicationStartDate())
                 .applicationEndDate(gym.getApplicationEndDate())
-                .membershipType(gym.getMembershipType())
+                //.membershipType(gym.getMembershipType())
 //                .uno(gym.getUser() !=null? gym.getUser().getUno():null)
 //                .phone(gym.getUser() !=null? gym.getUser().getPhone() : null)
 //                .userName(gym.getUser() !=null? gym.getUser().getUserName() : null)

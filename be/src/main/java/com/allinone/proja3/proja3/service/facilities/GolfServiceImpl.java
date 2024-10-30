@@ -101,12 +101,13 @@ public class GolfServiceImpl implements GolfService {
         golfRepository.updateToDelete(reservationId, true);
     }
 
-    @Override
-    public void findGolfBydelFlag(Long reservationId) {
-        Golf reservation = golfRepository.findById(reservationId).orElseThrow(() -> new ResourceAccessException("예약된 내용이 없어요"));
-        reservation.setDelFlag(true);
-        golfRepository.save(reservation);
-    }
+//    @Override
+//    public void findGolfBydelFlag(Long reservationId) {
+//        System.out.println("check findGolfBydelFlag");
+//        Golf reservation = golfRepository.findById(reservationId).orElseThrow(() -> new ResourceAccessException("예약된 내용이 없어요"));
+//        reservation.setDelFlag(true);
+//        golfRepository.save(reservation);
+//    }
     @Override
     public PageResponseDTO<GolfDTO> getNonDeletedReservations(PageRequestDTO pageRequestDTO) {
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
@@ -126,6 +127,7 @@ public class GolfServiceImpl implements GolfService {
     //=========수정메서드==========
     @Override
     public void modify(GolfDTO golfDTO) {
+        System.out.println("golf modify !!!!");
         Optional<Golf> result = golfRepository.findById(golfDTO.getReservationId());
         Golf golf = result.orElseThrow();
         golf.changeDate(golfDTO.getDate());

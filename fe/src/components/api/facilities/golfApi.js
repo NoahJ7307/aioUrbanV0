@@ -8,7 +8,7 @@ const host = `${API_SERVER_HOST}/api/facilities/golf`
 //공통 config설정 : 권한관련/ 변수로 설정하여 코드의 중복을 줄인다.
 const getConfig = () => {
     const token = localStorage.getItem("token");// JWT 토큰을 저장한 위치
-    console.log("token", token)
+    // console.log("token", token)
     if (!token) {
         console.error("토큰이 없습니다.");
         return {};

@@ -7,6 +7,7 @@ import com.allinone.proja3.proja3.dto.facilities.StudyDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Golf;
 import com.allinone.proja3.proja3.model.facilities.Gym;
+import com.allinone.proja3.proja3.model.facilities.ProgramState;
 import com.allinone.proja3.proja3.repository.facilities.GymRepository;
 import com.allinone.proja3.proja3.service.UserService;
 import com.allinone.proja3.proja3.service.facilities.GolfService;
@@ -68,8 +69,9 @@ public class ServiceTestsyurim {
                     .programEndTime(LocalTime.of(12,30))
                     .applicationStartDate(LocalDateTime.of(2024, 10, 16, 10, 30))
                     .applicationEndDate(LocalDateTime.of(2024, 11, 10, 18, 30))
-                    .membershipType("Basic")
+                    //.membershipType("Basic")
                     .delFlag(false) // delFlag 값을 설정
+                    .programState(ProgramState.Pending)
                     .build();
             Gym gym = gymService.dtoToEntity(gymDTO);
             gymService.newProgramPost(gym);

@@ -52,6 +52,29 @@ public class GymController {
         System.out.println("gym detail controller : " +programId);
         return service.getProgramPost(programId);
     }
+    @PutMapping("/detail/modify/{programId}")
+    public Map<String, String> modify(
+            @PathVariable(name="programId") Long programId,
+            @RequestBody GymDTO gymDTO){
+        gymDTO.setProgramId(programId);
+        System.out.println("Modify : " + gymDTO);
+
+        service.modify(gymDTO);
+        return Map.of("RESULT", "SUCCESS");
+    }
+    @GetMapping({"/detail/modify/{programId}"})
+    public Gym readBeforePost(@PathVariable(name = "programId") Long programId) {
+        System.out.println("데이터 조회" + programId);
+        return service.findDataByProgramId(programId);
+    }
+
+
+    //삭제
+    @PostMapping("/delete")
+    public void deletePost(@RequestBody Long programId) {
+        System.out.println("programId" + programId);
+            service.remove(programId);
+    }
 //    @GetMapping("/list/{programId}")
 //    public PageResponseDTO<GymDTO> getProgramPost (@PathVariable Long programId, PageRequestDTO pageRequestDTO){
 //        return service.getProgramPost(programId, pageRequestDTO);
