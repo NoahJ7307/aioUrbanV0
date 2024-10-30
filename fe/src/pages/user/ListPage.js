@@ -26,9 +26,12 @@ const ListPage = () => {
             navigate({ pathname: '/user' })
         }
     }
+
+    const handleClickSearch = () => {
+
+    }
     return (
         <div>
-
             <ul className='flex justify-center'>
                 <li>
                     <button className='bg-gray-300 p-2 mr' onClick={handleClickModify}>
@@ -38,6 +41,24 @@ const ListPage = () => {
                 <li>
                     <button className='bg-gray-300 p-2 mr' onClick={handleClickDelete}>
                         삭제
+                    </button>
+                </li>
+                <li>
+                    <select>
+                        <option value="">검색 필터</option>
+                        <option value="dong-ho">동-호</option>
+                        <option value="dong">동</option>
+                        <option value="ho">호</option>
+                        <option value="name">이름</option>
+                        <option value="phone">전화번호</option>
+                    </select>
+                </li>
+                <li>
+                    <input />
+                </li>
+                <li>
+                    <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>
+                        검색
                     </button>
                 </li>
             </ul>

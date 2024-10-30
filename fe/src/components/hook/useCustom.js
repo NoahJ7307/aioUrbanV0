@@ -10,7 +10,6 @@ const getNum = (param, defaultValue) => {
 }
 const useCustom = () => {
     const navigate = useNavigate()
-    const [refresh, setRefresh] = useState(false)
     const [queryParam] = useSearchParams()
     const page = getNum(queryParam.get('page'), 1)
     const size = getNum(queryParam.get('size'), 10)
@@ -24,8 +23,6 @@ const useCustom = () => {
             queryStr = createSearchParams({ page: pageNum, size: sizeNum }).toString()
         } else queryStr = queryDefault
         navigate({ pathname: '../list', search: queryStr })
-        setRefresh(!refresh)
-        console.log(refresh)
     }
 
     const moveToPath = (path, pageParam = {}) => {
@@ -36,11 +33,10 @@ const useCustom = () => {
             queryStr = createSearchParams({ page: pageNum, size: sizeNum }).toString()
         } else queryStr = queryDefault
         navigate({ pathname: path, search: queryStr })
-        setRefresh(!refresh)
     }
 
 
-    return { page, size, moveToList, moveToPath, refresh }
+    return { page, size, moveToList, moveToPath }
 }
 
 export default useCustom

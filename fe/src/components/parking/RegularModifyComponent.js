@@ -40,8 +40,9 @@ const RegularModifyComponent = () => {
     }
 
     const handleClick = () => {
-        putOne(checkedRpno[0], serverData)
-        moveToPath('/parking/regular', { page, size })
+        putOne(checkedRpno[0], serverData).then(() => {
+            moveToPath('/parking/regular', { page, size })
+        })
     }
     return (
         <div className='flex p-2'>

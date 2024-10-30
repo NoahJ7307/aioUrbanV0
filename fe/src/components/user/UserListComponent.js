@@ -20,7 +20,7 @@ const initState = {
 
 const UserListComponent = () => {
     const [serverData, setServerData] = useState(initState)
-    const { page, size, moveToList, refresh } = useCustom()
+    const { page, size, moveToList } = useCustom()
     const [checked, setChecked] = useState([])
     const { setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
     const { exceptionHandler, loadLoginData, navigate } = useCustomLogin()
@@ -35,6 +35,7 @@ const UserListComponent = () => {
                         exceptionHandler(data)
                     } else {
                         setServerData(data);
+                        console.log(data)
                     }
                 })
             }
@@ -43,7 +44,8 @@ const UserListComponent = () => {
             alert('권한이 없습니다');
             navigate({ pathname: '/login' });
         }
-    }, [page, size, refresh])
+
+    }, [page, size])
 
     const handleCheckChange = (uno) => {
         setChecked(checkedItem => {
@@ -67,17 +69,18 @@ const UserListComponent = () => {
 
     return (
         <div>
-            <div className="grid grid-cols-5">
+            <div className="grid grid-cols-6">
                 <div>No</div>
                 <div>동</div>
                 <div>호</div>
                 <div>이름</div>
                 <div>전화번호</div>
+                <div>권한</div>
             </div>
 
             {/* 유저 데이터를 map으로 렌더링 */}
             {serverData.dtoList.map((user, index) => (
-                <div key={index} className="grid grid-cols-5">
+                <div key={index} className="grid grid-cols-6">
                     <div>
                         <input
                             type='checkbox'
@@ -89,6 +92,7 @@ const UserListComponent = () => {
                     <div>{user.ho}</div>
                     <div>{user.userName}</div>
                     <div>{user.phone}</div>
+                    <div>{user.userRoleList}</div>
                 </div>
             ))}
             <PageComponent serverData={serverData} movePage={moveToList} />

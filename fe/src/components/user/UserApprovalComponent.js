@@ -18,7 +18,6 @@ const initState = {
 }
 
 const UserApprovalComponent = () => {
-    const navigate = useNavigate()
     const [serverData, setServerData] = useState(initState)
     const { page, size, moveToList } = useCustomApproval()
 

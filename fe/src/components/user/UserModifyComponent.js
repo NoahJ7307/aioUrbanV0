@@ -3,6 +3,7 @@ import useCustom from '../hook/useCustom'
 import { getOne, putOne } from '../api/userApi'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import useCustomLogin from '../hook/useCustomLogin'
+import axios from 'axios'
 
 const initState = {
     dong: 0,
@@ -43,9 +44,10 @@ const UserModifyComponent = () => {
     // 수정 data 전송
     const handleClick = () => {
         console.log("modify uno : " + checkedUno[0])
-        putOne(checkedUno[0], userData)
-        console.log("modify success")
-        moveToList()
+        putOne(checkedUno[0], userData).then(() => {
+            console.log("modify success")
+            moveToList()
+        })
     }
     return (
         <div className='flex p-2'>
