@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from 'react'
 import userRouter from './user/userRouter'
 import facilities from './facilities/facilitiesRouter'
 import parkingRouter from './parking/parkingRouter'
-import loginRouter from './loginRouter'
+import loginRouter from './login/loginRouter'
 import communities from './communities/communityRouter'
 
 const { createBrowserRouter } = require("react-router-dom")

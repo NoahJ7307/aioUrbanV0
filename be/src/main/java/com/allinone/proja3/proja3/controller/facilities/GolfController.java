@@ -1,6 +1,5 @@
 package com.allinone.proja3.proja3.controller.facilities;
 
-
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
@@ -106,23 +105,4 @@ public class GolfController {
 //        System.out.println("Retrieved golf for uno: " + user);
 //        return service.findDataByUno(uno);
 //    }
-    @GetMapping("/{userName}")
-    public List<GolfDTO> readUserName (@PathVariable(name = "userName") String userName) {
-        User user = userRepository.findByUserName(userName)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        System.out.println("Retrieved golf for userName: " + userName);
-        return service.findDataByUserName(userName);
-    }
-
-    @GetMapping("/{phone}")
-    public List<GolfDTO> readPhone (@PathVariable(name = "phone") String phone) {
-        User user = userRepository.findByPhone(phone)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        System.out.println("Retrieved golf for phone: " + phone);
-        return service.findDataByPhone(phone);
-    }
-
-
-
-
 }
