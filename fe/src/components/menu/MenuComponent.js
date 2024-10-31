@@ -39,8 +39,8 @@ const MenuComponent = () => {
             <ul className='flex justify-center'>
                 <li className='p-2'><Link to={'/'}>홈</Link></li>
                 <li className='p-2'><Link to={'/user'}>입주민관리</Link></li>
-                <li className='p-2'><Link to={'/facilities'}>facilities</Link></li>
-                <li className='p-2'><Link to={'/community'}>Community</Link></li>
+                <li className='p-2'><Link to={'/facilities'}>시설예약</Link></li>
+                <li className='p-2'><Link to={'/community'}>소통</Link></li>
                 <li className='p-2'><Link to={'/parking'}>주차관리</Link></li>
                 {loginState.phone ?
                     <li className='p-2'><Link to={'/'}>LoginTest</Link></li>
