@@ -61,6 +61,9 @@ const ListPage = () => {
             setPageServerData(data)
         })
     }
+    const handleClickClear = () => {
+        setPageServerData(initStateServerData)
+    }
 
     return (
         <div>
@@ -94,6 +97,11 @@ const ListPage = () => {
                 <li>
                     <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>
                         검색
+                    </button>
+                </li>
+                <li>
+                    <button className='bg-gray-300 p-2 mr' onClick={handleClickClear}>
+                        검색 초기화
                     </button>
                 </li>
             </ul>

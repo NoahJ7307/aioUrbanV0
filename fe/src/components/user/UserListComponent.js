@@ -18,7 +18,7 @@ const initState = {
     current: 0
 }
 
-const UserListComponent = ({pageServerData}) => {
+const UserListComponent = ({ pageServerData }) => {
     const [serverData, setServerData] = useState(initState)
     const { page, size, moveToList } = useCustom()
     const [checked, setChecked] = useState([])
@@ -27,29 +27,26 @@ const UserListComponent = ({pageServerData}) => {
 
     useEffect(() => {
         if (!pageServerData.dtoList || pageServerData.dtoList.length === 0) {
-            console.log("NO", pageServerData)
-            console.log("검색 없음")
-        } else {
-            console.log("OK", pageServerData)
-            console.log("검색 있음")
-        }
-        try {
-            if (loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT') {
-                throw new Error('Access Error')
-            } else {
-                getList({ page, size }).then(data => {
-                    if (data.error) {
-                        exceptionHandler(data)
-                    } else {
-                        setServerData(data)
-                        console.log(data)
-                    }
-                })
+            try {
+                if (loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT') {
+                    throw new Error('Access Error')
+                } else {
+                    getList({ page, size }).then(data => {
+                        if (data.error) {
+                            exceptionHandler(data)
+                        } else {
+                            setServerData(data)
+                            console.log(data)
+                        }
+                    })
+                }
+            } catch (error) {
+                console.error(error);
+                alert('권한이 없습니다')
+                navigate({ pathname: '/login' })
             }
-        } catch (error) {
-            console.error(error);
-            alert('권한이 없습니다')
-            navigate({ pathname: '/login' })
+        } else {
+            setServerData(pageServerData)
         }
 
     }, [page, size, pageServerData])
