@@ -1,7 +1,7 @@
 // import GymList from '../../components/facilities/gym/GymList';
 import GymProgramAdd from '../../components/facilities/gym/GymProgramAdd';
 import GymModify from '../../components/facilities/gym/GymModify';
-import GymCancel from '../../components/facilities/gym/GymCancel';
+// import GymCancel from '../../components/facilities/gym/GymCancel';
 import GymPage from '../../pages/facilities/gym/GymPage';
 import { Suspense, lazy } from 'react';
 // import GymDetailListPage from '../../pages/facilities/gym/GymDetailListPage';
@@ -33,10 +33,10 @@ const gymRouter = [
                 path: "detail/modify/:programId",
                 element:  <Suspense fallback={Loading}><GymModify /></Suspense>
             },
-            {
-                path: "cancel",
-                element: <GymCancel />
-            },
+            // {
+            //     path: "cancel",
+            //     element: <GymCancel />
+            // },
         ]
     },
 ];

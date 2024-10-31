@@ -36,6 +36,23 @@ export const getUserList = async (pageParam, loginUser) => {
     return res.data
 }
 
+export const getRegularSearchList = async (pageParam, searchData) => {
+    // const token = localStorage.getItem("token")
+    // const config = {
+    //     headers: {
+    //         "Authorization": `Bearer ${token}`,
+    //         "Content-Type": "application/json",
+    //     },
+    // }
+    // const body = {
+    //     pageRequestDTO: pageParam,
+    //     userSearchDataDTO: searchData,
+    // }
+    // const res = await axios.post(`${host}/search`, body, config)
+    const res = { data: searchData }
+    return res.data
+}
+
 export const RegularParkingDeleteChecked = async (checkedRpno) => {
     const token = localStorage.getItem("token")
     const config = {
@@ -82,9 +99,7 @@ export const getOne = async (rpno) => {
     const res = await axios.get(`${host}/${rpno}`, config)
     return res.data
 }
-// put이 RequestBody로 받을 수 있나? post로 보내야되나? params?
-// putOne에서는 household를 줘야되는데 userData로 받아서 보내면 dong,ho를 못받으니까 api에서 가공해서 householdDTO로 보내줘야지
-// 근데 외래키 수정하려면 어떻게 해야되지? householdService로 수정해서 setHousehold로 새로 넣어야되나?
+
 export const putOne = async (rpno, serverData) => {
     console.log(serverData)
     const token = localStorage.getItem("token")

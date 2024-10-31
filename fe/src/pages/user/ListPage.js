@@ -49,6 +49,7 @@ const ListPage = () => {
         }
     }
 
+    // ------- 검색 -------
     const handleChangeSearchValue = (e) => {
         setSearchData(prevData => ({ ...prevData, searchValue: e.target.value }))
     }
@@ -64,6 +65,7 @@ const ListPage = () => {
     const handleClickClear = () => {
         setPageServerData(initStateServerData)
     }
+    // --------------------
 
     return (
         <div>
@@ -78,8 +80,11 @@ const ListPage = () => {
                         삭제
                     </button>
                 </li>
+                {/* // ------- 검색 ------- */}
                 <li>
-                    <select name='searchCategory' onChange={handleChangeSearchCategory}>
+                    <select className=''
+                        name='searchCategory'
+                        onChange={handleChangeSearchCategory}>
                         <option value=''>검색 필터</option>
                         <option value="dong-ho">동-호</option>
                         <option value="dong">동</option>
@@ -104,6 +109,7 @@ const ListPage = () => {
                         검색 초기화
                     </button>
                 </li>
+                {/* // -------------------- */}
             </ul>
             <UserListComponent pageServerData={pageServerData} />
 

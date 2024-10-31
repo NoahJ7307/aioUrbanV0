@@ -1,4 +1,3 @@
-import GymCancel from '../../components/facilities/gym/GymCancel';
 import AnnounceListPage from '../../pages/community/announce/AnnounceListPage';
 import AnnouncePage from '../../pages/community/announce/AnnouncePage';
 import AnnounceAddPage from '../../pages/community/announce/AnnounceAddPage';
@@ -22,10 +21,6 @@ const announceRouter = [
             {
                 path: "modify/:pno",
                 element: <AnnounceModifyPage />
-            },
-            {
-                path: "cancel",
-                element: <GymCancel />
             },
         ]
     },
