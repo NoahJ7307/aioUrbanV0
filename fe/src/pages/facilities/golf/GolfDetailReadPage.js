@@ -8,7 +8,7 @@ const GolfDetailReadPage = () => {
     const [searchParams] = useSearchParams();// useSearchParams 훅 사용
     const page = searchParams.get('page'); // URL 쿼리에서 page 가져오기
     const size = searchParams.get('size'); // URL 쿼리에서 size 가져오기
-    console.log(page, size); // 확인용
+    console.log("눌렸다",page, size); // 확인용
     return (
         <>
             <GolfDetailReadModal setCheckedReservationId={setCheckedReservationId} page={page} size={size} />

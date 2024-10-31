@@ -10,7 +10,7 @@ const GymListPage = () => {
     console.log(page, size)
     return (
         <>
-            <GymList setCheckedProgramId={setCheckedProgramId} page={page} size={size} />
+            <GymList  page={page} size={size} />
             <Outlet context={{setCheckedProgramId}}/>
         </>
     )

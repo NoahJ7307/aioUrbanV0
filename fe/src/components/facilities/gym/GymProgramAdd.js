@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { postAdd } from '../../api/facilities/gymApi';
 import FetchingModal from '../common/FetchingModal';
+import { useNavigate } from 'react-router-dom';
 
 
 const initState = {
@@ -17,6 +18,7 @@ const initState = {
 };
 
 const GymProgramAdd = () => {
+  const navigate = useNavigate();
   const [program, setProgram] = useState(initState)
   const uploadRef = useRef()
   const [fetching, setFetching] = useState(false);
@@ -42,6 +44,8 @@ const GymProgramAdd = () => {
     } catch (error) {
       console.error('Error adding program: ', error)
     }
+  
+    navigate(`/facilities/gym/list`);
   };
 
 
@@ -144,7 +148,7 @@ const GymProgramAdd = () => {
       </div>
       <div>
         <div>
-          가격
+        금액(마일리지,포인트중에 결정하고 마저 구현할것): 
         </div>
         <input
           name='price'
@@ -164,7 +168,7 @@ const GymProgramAdd = () => {
       <div>
         <button type='button'
           onClick={handleClickAdd}>
-          ADD
+          등록하기
         </button>
       </div>
     </>

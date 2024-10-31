@@ -279,6 +279,7 @@ public class GymServiceImpl implements GymService {
                 .content(gymDTO.getContent())
                 .title(gymDTO.getTitle())
                 .target(gymDTO.getTarget())
+
                 .programStartDate(gymDTO.getProgramStartDate())
                 .programEndDate(gymDTO.getProgramEndDate())
                 .programStartTime(gymDTO.getProgramStartTime())

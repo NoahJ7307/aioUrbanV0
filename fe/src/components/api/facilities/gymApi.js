@@ -41,15 +41,9 @@ export const getGymListByProgramId = async ({ programId,page,size}) => {
     console.log("Fetching program gym by programId : ", programId,page,size)
     const config = getConfig();
     console.log("config: ", config)
-    const res = await axios.get(`${host}/detail/${programId}`, config);
+    const res = await axios.get(`${host}/detail/modify/${programId}`, config);
     console.log(res)
     return res.data
-}
-
-export const deletePost = async (programId) => {
-    console.log("전달확인 프로그램아이디: " , programId)
-    const config = getConfig();
-    return axios.post(`${host}/delete`, programId, config);
 }
 
 export const modifyPost= async (programId, programData) => {
@@ -57,6 +51,12 @@ export const modifyPost= async (programId, programData) => {
     const response = await axios.put(`${host}/detail/modify/${programId}`, JSON.stringify(programData), config);
     return response;
 }
+export const deletePost = async (programId) => {
+    console.log("전달확인 프로그램아이디: " , programId)
+    const config = getConfig();
+    return axios.post(`${host}/delete`, programId, config);
+}
+
 
 // export const getProgramPosts = async (pageParam) => {
 //     const { page, size } = pageParam

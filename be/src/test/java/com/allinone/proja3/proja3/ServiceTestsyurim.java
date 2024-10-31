@@ -109,7 +109,7 @@ public class ServiceTestsyurim {
 
     @Test
     public void insertTest3() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 50; i++) {
             int randIdx = (int) (Math.random() * 100) + 1;
             int randId = (int) (Math.random() * 10) + 1;
 //            StudyDTO studyDTO = StudyDTO.builder()
