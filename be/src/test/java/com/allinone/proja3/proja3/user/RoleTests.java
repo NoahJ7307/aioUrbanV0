@@ -32,17 +32,13 @@ public class RoleTests {
     @Test
     public void insertRolesAdmin() {
         User userAdmin = User.builder()
-<<<<<<< HEAD
-                .userName("admin7")
-                .phone("admin7")
-                .pw(passwordEncoder.encode("1111"))
-=======
-                .userName("admin")
-                .phone("1231")
+
+                .userName("ROOT1")
+                .phone("ROOT1")
                 .pw(passwordEncoder.encode("1"))
->>>>>>> JJY
+
                 .build();
-        userAdmin.addRole(UserRole.ADMIN);
+        userAdmin.addRole(UserRole.ROOT);
         repository.save(userAdmin);
     }
 
