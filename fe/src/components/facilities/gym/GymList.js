@@ -22,16 +22,16 @@ const initState = {
 const GymList = ({ page, size }) => {
   const navigate = useNavigate();
   const [serverData, setServerData] = useState(initState)
-  const { moveToList } = useCustom()
+  const { moveToList, moveToPath } = useCustom()
   const [checked, setChecked] = useState([])
   const [checkedProgramId, setCheckedProgramId] = useState([])
   //로그인에 따라 다르게 보여주는 속성으로 인한 권한 변수선언
   const role = localStorage.getItem("role")
   //모달 상태 및 선택된 예약 id관리
   const [isModalOpen, setIsModalOpen] = useState(false); //모달 열림상태
-  const [selectedProgramId, setSelectedProgramId] = useState(null); //선택된 예약 id
+  // const [selectedProgramId, setSelectedProgramId] = useState(null); //선택된 예약 id
 
-  
+
   const handleCheckChange = (programId) => {
     setChecked((prevChecked) => {
       const isChecked = prevChecked.includes(programId);
@@ -66,17 +66,14 @@ const GymList = ({ page, size }) => {
     navigate('/facilities/gym/add');
 
   }, [navigate]);
-  //   const handleDelete = async () => {
-  //     await handleCheckedCancel(checkedReservationId, fetchGolfReservations);
-  // }
-  const handleProgramClick = (gym) => {
-    navigate(`/facilities/gym/detail/${gym.programId}`, { state: { gym } })
+  const handleProgramClick = (gym, page, size) => {
+    console.log("handlePraclick :", page, size, gym)
+    // 예시: 수정 페이지로 이동 시 쿼리 파라미터 포함
+    navigate(`/facilities/gym/detail/${gym.programId}?page=${page}&size=${size}`, { state: { gym } });
+
+
 
   };
-  // const handleProgramClick = async (programId) => {
-  //   setSelectedProgramId(programId);
-  //   navigate(`/facilities/gym/list/${programId}`);
-  // };
   return (
 
     <div>
@@ -90,10 +87,10 @@ const GymList = ({ page, size }) => {
       </div>
       <div>
         {serverData.dtoList.map((gym) => (
-          <div key={gym.programId} onClick={() => handleProgramClick(gym)} >
+          <div key={gym.programId} onClick={() => handleProgramClick(gym, page, size)} >
             <h1>{gym.title}</h1>
             <p>{gym.content}</p>
-            <button onClick={() => handleProgramClick(gym)} style={{ marginLeft: '10px' }}>신청하기 </button>
+            <button onClick={() => handleProgramClick(gym, page, size)} style={{ marginLeft: '10px' }}>신청하기 </button>
 
             <hr />
           </div>

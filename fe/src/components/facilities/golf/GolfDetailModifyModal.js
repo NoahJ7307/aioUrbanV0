@@ -26,7 +26,7 @@ const GolfDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
     //URL 쿼리에서 page와 size가져오기
     const [searchParams] = useSearchParams();
     const page = searchParams.get('page') || 1;// page가 없을 경우 기본값 1 설정
-    const size = searchParams.get('size') || 6; // size가 없을 경우 기본값 6 설정
+    const size = searchParams.get('size') || 10; // size가 없을 경우 기본값 10 설정
 
 
 

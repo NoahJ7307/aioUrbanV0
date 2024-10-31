@@ -16,16 +16,23 @@ const useCustom = () => {
     const queryDefault = createSearchParams({ page, size }).toString()
 
     const moveToList = (pageParam = {}) => {
+        // console.log("moveToList: ", pageParam)
         let queryStr = ""
         if (pageParam) {
             const pageNum = getNum(pageParam.page, 1)
             const sizeNum = getNum(pageParam.size, 10)
             queryStr = createSearchParams({ page: pageNum, size: sizeNum }).toString()
+            console.log("moveToList querYsTRY : ", queryStr)
         } else queryStr = queryDefault
         navigate({ pathname: '../list', search: queryStr })
     }
 
     const moveToPath = (path, pageParam = {}) => {
+        // console.log("movteopaht interannl : ", pageParam)
+        // const { state } = pageParam;
+        // const { pageNum, sizeNum } = state
+
+        // console.log("movteopaht interannl 200) : ", pageNum, sizeNum)
         let queryStr = ""
         if (pageParam) {
             const pageNum = getNum(pageParam.page, 1)
@@ -34,6 +41,8 @@ const useCustom = () => {
         } else queryStr = queryDefault
         navigate({ pathname: path, search: queryStr })
     }
+
+
 
 
     return { page, size, moveToList, moveToPath }

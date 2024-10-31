@@ -1,16 +1,20 @@
 import React, { useEffect } from 'react'
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { deletePost, getGymListByProgramId } from '../../api/facilities/gymApi';
+import useCustom from '../../hook/useCustom';
 
 const GymProgramDetail = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const page = searchParams.get('page') || 1;// page가 없을 경우 기본값 1 설정
-    const size = searchParams.get('size') || 10; // size가 없을 경우 기본값 6 설정
-
+    // const page = searchParams.get('page') || 1;// page가 없을 경우 기본값 1 설정
+    // const size = searchParams.get('size') || 10; // size가 없을 경우 기본값 6 설정
+    console.log("searchParams", searchParams)
+    const { moveToList, page, size } = useCustom()
+    console.log('예약 수정asfda: ', page, size);
 
     const location = useLocation();
     const { gym } = location.state || {}; // 전달된 객체가 없으면 undefined로 설정
+    console.log("detail gym", gym)
     //console.log("programId", obj.programId)
     useEffect(() => {
         if (gym.programId) {
@@ -30,7 +34,9 @@ const GymProgramDetail = () => {
     //   };
     const handleModify = () => {
         console.log("수정버튼 눌림")
-        navigate(`/facilities/gym/detail/modify/${gym.programId}`,  { state: { gym } });
+        navigate(`/facilities/gym/detail/modify/${gym.programId}?page=${page}&size=${size}`, { state: { gym } });
+
+        // navigate(`/facilities/gym/detail/${gym.programId}?page=${page}&size=${size}`, { state: { gym } });
     }
     const handleDelete = async () => {
         // const { gym } = location.state || {};
@@ -39,7 +45,10 @@ const GymProgramDetail = () => {
             try {
                 await deletePost(gym.programId);
                 alert(`삭제되었습니다.`)
-                navigate(`/facilities/gym/list?page=${page}&size=${size}`);
+                navigate(`/facilities/gym/list?page=${page}&size=${size}`, { state: { gym } });
+                // navigate(`/facilities/gym/list?page=${page}&size=${size}`);
+                // moveToList({ page, size})
+
             } catch (error) {
                 console.log("삭제 요청 중 오류 발생 : ", error)
             }
@@ -48,7 +57,7 @@ const GymProgramDetail = () => {
     };
 
     const handleBackToList = () => {
-        window.history.back();
+        navigate(`/facilities/gym/list?page=${page}&size=${size}`, { state: { gym } });
     };
     return (
         <>

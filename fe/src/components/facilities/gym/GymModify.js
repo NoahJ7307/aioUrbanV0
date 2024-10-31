@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { getGymListByProgramId, modifyPost } from '../../api/facilities/gymApi';
+import useCustom from '../../hook/useCustom';
 
 const GymModify = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const GymModify = () => {
   });
   const { programId } = useParams();
   const navigate = useNavigate();
+  const { page, size } = useCustom()
   //URL 쿼리에서 page와 size가져오기
 
 
@@ -61,7 +63,9 @@ const GymModify = () => {
     try {
       await modifyPost(programId, formData);
       alert('프로그램이 수정되었습니다.');
-      navigate(`/facilities/gym/detail/${programId}`, { state: { gym: { programId, ...formData } } })
+      // navigate(`/facilities/gym/detail/${programId}`, { state: { gym: { programId, ...formData } } })
+      // navigate(`/facilities/gym/detail?page=${page}&size=${size}`, { state: { gym: { programId, ...formData } } });
+      navigate(`/facilities/gym/detail/${programId}?page=${page}&size=${size}`, { state: { gym: { programId, ...formData } } });
       // navigate(`/gym/detail/${programId}`);
       // navigate(`/facilities/gym/detail/${programId}?page=${page}&size=${size}`); // 여기에서 page와 size를 전달
     } catch (error) {
