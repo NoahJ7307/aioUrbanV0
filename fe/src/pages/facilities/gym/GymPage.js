@@ -11,9 +11,9 @@ const GymPage = () => {
     const handleClickReserve = useCallback(() => {
         navigate('/facilities/gym/reserve');
     }, [navigate]);
-    const handleClickModify = useCallback(() => {
-        navigate('/facilities/gym/modify');
-    }, [navigate]);
+    // const handleClickModify = useCallback(() => {
+    //     navigate('/facilities/gym/modify');
+    // }, [navigate]);
     const handleClickCancel = useCallback(() => {
         navigate('/facilities/gym/cancel');
     }, [navigate]);
@@ -33,9 +33,9 @@ const GymPage = () => {
                 <li>
                     <button className="button" onClick={handleClickReserve}>이용권 등록 </button>
                 </li>
-                <li>
+                {/* <li>
                     <button className="button" onClick={handleClickModify}>이용권 변경</button>
-                </li>
+                </li> */}
                 <li>
                     <button className="button" onClick={handleClickCancel}>이용권 취소</button>
                 </li>

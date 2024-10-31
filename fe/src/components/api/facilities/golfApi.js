@@ -1,3 +1,5 @@
+import { retry } from '@reduxjs/toolkit/query';
+import { computeHeadingLevel } from '@testing-library/react';
 import axios from 'axios';
 
 export const API_SERVER_HOST = "http://localhost:8080"
@@ -5,10 +7,15 @@ const host = `${API_SERVER_HOST}/api/facilities/golf`
 
 //공통 config설정 : 권한관련/ 변수로 설정하여 코드의 중복을 줄인다.
 const getConfig = () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");// JWT 토큰을 저장한 위치
+    // console.log("token", token)
+    if (!token) {
+        console.error("토큰이 없습니다.");
+        return {};
+    }
     return {
         headers: {
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${token}`,  // Bearer 형식으로 JWT 토큰 설정
             "Content-Type": "application/json",
         },
     };
@@ -31,28 +38,57 @@ export const listGolf = async (pageParam) => {
     const res = await axios.get(`${host}/list`, config)
     return res.data
 }
-export const listUserGolf = async ({ uno, page, size }) => {
-    const res = await axios.get(`${host}/userlist/${uno}`, { params: { page, size } })
-    return res.data
-}
-
-export const modifyGolf = (reservationId, reservationData) => {
-    const config = getConfig();
-    return axios.put(`${host}/modify/${reservationId}`, reservationData, config);
-};
-
-
+//cancel 정상동작 확인완료
 export const cancelGolf = async (checkedReservationId) => {
-    const config = getConfig(); 
+    const config = getConfig();
     return axios.post(`${host}/delete`, checkedReservationId, config);
 }
 
-// export const cancelGolf = (checkedReservationId) => {
-//     console.log("전송되라")
-//     const config = getConfig();
-//     return axios.delete(`${host}/delete`,{data: checkedReservationId }, config);
+
+
+
+
+// export const getUserGolfById = async ({ uno, page, size }) => {
+//     console.log("Fetching user golf by ID:dsfsadfasdfsafsaf", uno, page, size);
+//     const token = localStorage.getItem("token")
+//     const config = {
+//         headers: {
+//             "Authorization": `Bearer ${token}`,
+//             "Content-Type": "application/json",
+//         },
+//     }
+//     console.log("config:", config)
+//     const res = await axios.get(`${host}/detail/${uno}`, config);
+//     console.log(res)
+//     return res.data;
 // };
 
-// export const processPayment = (paymentDetails) => {
-//     return axios.post(`${API_URL}/payment`, paymentDetails);
-// };
+export const getUserGolfById = async ({ uno, page, size }) => {
+    console.log("Fetching user golf by ID:dsfsadfasdfsafsaf ", uno, page, size)
+    const config = getConfig();
+    console.log("config: ", config)
+    const res = await axios.get(`${host}/detail/${uno}`, config);
+    console.log(res)
+    return res.data
+}
+
+
+
+// export const modifyGolf = async (reservationId, reservationData) => {
+//     console.log("골프 수정 : " + reservationId, reservationData);
+//     const token = localStorage.getItem("token")
+//     const config = {
+//         headers: {
+//             "Authorization": `Bearer ${token}`,
+//             "Content-Type": "application/json",
+//         },
+//     }
+//     const response = await axios.put(`${host}/detail/${reservationId}`, JSON.stringify(reservationData), config); // 쿼리 파라미터로 uno 추가
+//     return response;
+// }
+export const modifyGolf = async (reservationId, reservationData) => {
+    const config = getConfig();
+    const response = await axios.put(`${host}/detail/${reservationId}`, JSON.stringify(reservationData), config);
+    return response;
+}
+

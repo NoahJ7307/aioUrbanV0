@@ -13,11 +13,15 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GolfDTO {
-    private Long reservationId;
-//    private String userName;
+    private long reservationId;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
     private boolean delFlag;
     private int teeBox; //골프장 시설 특성
+
+    //user에서 가져올데이터
+    private Long uno; // 사용자 ID
+    private String userName; // 사용자 이름 추가
+    private String phone;
 }

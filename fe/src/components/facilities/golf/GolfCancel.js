@@ -1,26 +1,39 @@
-// import React, { useState } from 'react'
-// import { cancelGolf } from '../../api/facilities/golfApi';
+import React from 'react'
+import { cancelGolf } from '../../api/facilities/golfApi';
 
-// const GolfCancel = () => {
-//     const [reservationId, setReservationId] = useState('');
+//체크된 예약 삭제 로직
+export const handleCheckedCancel = async (checkedReservationId, fetchGolfReservations, setCheckedReservationId) => {
+    console.log("전송될 예약 ID: ", checkedReservationId);
+    
+    if (checkedReservationId.length > 0) {
+        try {
+            await cancelGolf(checkedReservationId)
+            alert(`삭제된 예약 아이디 : ${checkedReservationId.join(",")}`)
+            // await fetchGolfReservations(); 
+            window.location.reload();
+            // fetchGolfReservations();
 
-//     const handleCancel = async () => {
-//         try {
-//             await cancelGolf(reservationId);
-//             alert('Reservation cancelled successfully!');
+        } catch (error) {
+            console.log("삭제 요청 중 오류 발생 : ", error);
+        }
+    } else {
+        alert("선택된 항목이 없습니다.")
+    }
 
-//         } catch (error) {
-//             alert('Failed to cancel reservation.');
-//         }
-//     };
-//     return (
-//         <div>
-//             <h2>Cancel Golf Reservation</h2>
-//             <input type="text" placeholder='Reservation ID' 
-//                 value={reservationId} onChange={(e) => setReservationId(e.target.value)} />
-//             <button onClick = {handleCancel} >Cancel Reservation</button>
-//         </div>
-//     )
-// }
+};
+//항목 단일 삭제 로직
+export const handleSingleCancel = async (reservationId, fetchGolfReservations) => {
+    console.log("전송될 예약 ID: ", reservationId);
+    if (reservationId) {
+        try {
+            await cancelGolf([reservationId]);
+            alert(`삭제되었습니다.`)
+            fetchGolfReservations();
+        } catch (error) {
+            console.log("삭제 요청 중 오류 발생 : ", error)
+        }
+    } else {
+        alert("예약 ID를 입력하세요.");
+    }
+};
 
-// export default GolfCancel

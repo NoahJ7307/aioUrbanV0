@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { cancelGolf, listGolf } from '../../api/facilities/golfApi';
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
-import { useOutletContext } from 'react-router-dom';
-import loadLoginData from '../../hook/useCustomLogin';
-
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import GolfCancel from './GolfCancel';
+import GolfDetailModifyModal from './GolfDetailModifyModal';
 const initState = {
     dtoList: [],
     pageNumList: [],
@@ -20,73 +20,80 @@ const initState = {
 
 
 
-const GolfList = ({ setCheckedReservationId }) => {
+const GolfList = ({ page, size }) => {
+    // console.log(page, size)
+    const [uno, setUno] = useState(); // 로그인한 사용자 uno
+    const [userName, setUserName] = useState(); // 로그인한 사용자 name
+    const [phone, setPhone] = useState(); // 로그인한 사용자 phone
+    const navigate = useNavigate()
+    const [checkedReservationId, setCheckedReservationId] = useState([])
     const [serverData, setServerData] = useState(initState)
-    const { page, size, moveToList } = useCustom()
+    const { moveToList } = useCustom()
     const [checked, setChecked] = useState([])
-    // const outletContext = useOutletContext();
-    // const { setCheckedReservationId } = outletContext || {};
+
+    //로그인에 따라 다르게 보여주는 속성으로 인한 권한 변수선언
     const role = localStorage.getItem("role")
 
+    //모달 상태 및 선택된 예약 id관리
+    const [isModalOpen, setIsModalOpen] = useState(false); //모달 열림상태
+    const [selectedReservationId, setSelectedReservationId] = useState(null); //선택된 예약 id
+
+
+
+    useEffect(() => {
+        const getUno = localStorage.getItem('uno');
+        const getUserName = localStorage.getItem('userName');
+        const getPhone = localStorage.getItem('userPhone');
+
+        if (getUno) setUno(Number(getUno));
+        if (getUserName) setUserName(getUserName);
+        if (getPhone) setPhone(getPhone);
+        if (!getUno && !getUserName && !getPhone) console.log("로그인 정보가 없습니다.");
+
+    }, [])
+
     const handleCheckChange = (reservationId) => {
-        setChecked(checkedItem => {
-            if (checkedItem.includes(reservationId)) {
-                return checkedItem.filter(item => item !== reservationId)
+        setChecked((prevChecked) => {
+            const isChecked = prevChecked.includes(reservationId);
+            const updatedChecked = isChecked
+                ? prevChecked.filter(item => item !== reservationId)
+                : [...prevChecked, reservationId];
+            setCheckedReservationId(updatedChecked);
+            return updatedChecked;
 
-            } else {
-                return [...checkedItem, reservationId];
+        });
+    };
+
+    const fetchGolfReservations = async () => {
+        try {
+            const data = await listGolf({ page, size });
+            if (data.error) {
+                throw new Error(data.error);
             }
-        })
-    }
-
-
-
-    useEffect(() => {
-        if (checked.length > 0) {
-            setCheckedReservationId(checked);
-            console.log("checked: " + checked)
-        } else {
-            setCheckedReservationId([]);
+            console.log("Fetched data:", data);
+            setServerData(data);
+        } catch (err) {
+            console.error("데이터를 가져오는데 오류가 발생했습니다 => ", err);
+            alert("예약 정보를 가져오는 데 오류가 발생했습니다. 다시 시도해 주세요.");
         }
-    }, [checked, setCheckedReservationId])
+    };
+
 
     useEffect(() => {
-        const fetchGolfReservations = async () => {
-            try {
-                const data = await listGolf({ page, size });
-                console.log(data)
-                setServerData(data);
-            } catch (err) {
-                console.error("데이터를 가져오는데 오류가 발생했습니다 => ", err)
-            }
-
-        };
+        console.log(page, size)
         fetchGolfReservations();
 
-    }, [page, size])
+    }, [page, size]);
+
     //수정로직구현하기
     const handleModify = (reservationId) => {
-        // axios.post(`/api/`)
-        console.log(`수정 예약아이디 :  ${reservationId}`);
+        console.log("수정 버튼이 눌렸어요", reservationId)
+        setSelectedReservationId(reservationId);
+        setIsModalOpen(true);
+    
+    };
 
-    }
-    //취소 로직구현하기
-    const handleCancel = async () => {
-        if (checked.length === 0) {
-            alert("삭제할 항목을 선택해주세요.");
-            return;
-        }
-        try {
-            for (const reservationId of checked) {
-                await cancelGolf(reservationId);
 
-            }
-            console.log(`취소 예약아이디 :  ${reservationId} 번 예약 삭제`)
-        } catch (error) {
-            console.error("예약삭제중 오류발생 : ", error);
-        }
-    }
-    //체크까지는 완료 수정,삭제문제 해결할것
 
     return (
         <div>
@@ -95,49 +102,74 @@ const GolfList = ({ setCheckedReservationId }) => {
                 {role === 'ADMIN' && (
                     <div>
 
-                        <button className='bg-green-500' onClick={handleModify} >수정</button>
-                        <button className='bg-red-500' onClick={handleCancel} >삭제</button>
+                        <GolfCancel
+                            checkedReservationId={checkedReservationId}
+                            fetchGolfReservations={fetchGolfReservations}
+                        />
+
+
                     </div>
                 )}
             </div>
 
-            <div className='grid grid-cols-7'>
-                <div>  {role === 'ADMIN' && <div>선택</div>}</div>
+            <div className='grid grid-cols-9'>
+
                 <div>예약번호</div>
                 <div>날짜</div>
                 <div>사용시작</div>
                 <div>사용종료</div>
                 <div>예약구역</div>
                 <div>예약자</div>
-
-
+                <div>연락처</div>
+                {role === 'ADMIN' && <div>예약 변경</div>}
+                {role === 'ADMIN' && <div>선택</div>}
             </div>
-            {serverData && serverData.dtoList.map((golf, index) => (
-                <div key={index} className="grid grid-cols-7">
+            {serverData.dtoList && serverData.dtoList.length > 0 ? (
+                serverData.dtoList.map((golf) => (
+                    <div key={golf.reservationId} className="grid grid-cols-9">
 
-                    <div>
-                        {role === 'ADMIN' && (
-                            <input
-                                type='checkbox'
-                                checked={checked.includes(golf.reservationId)}
-                                onChange={() => handleCheckChange(golf.reservationId)}
-                            />
-                        )}
+                        <div>{golf.reservationId}</div>
+                        <div>{golf.date}</div>
+                        <div>{golf.startTime}</div>
+                        <div>{golf.endTime}</div>
+                        <div>{golf.teeBox}</div>
+                        <div>{golf.userName}</div> {/* userName 값을 확인 */}
+                        <div>{golf.phone}</div> {/* phone 값을 확인 */}
+                        <div>
+                            {role === 'ADMIN' && (
+                                <div>
+                                    <button onClick={() => handleModify(golf.reservationId)}>수정</button>
+                                </div>
+                            )}
+                        </div>
+                        <div>
+                            {role === 'ADMIN' && (
+                                <input
+                                    type='checkbox'
+                                    checked={checked.includes(golf.reservationId)}
+                                    onChange={() => handleCheckChange(golf.reservationId)}
+                                />
+                            )}
+                        </div>
                     </div>
-                    <div>{golf.reservationId}</div>
-                    <div>{golf.date}</div>
-                    <div>{golf.startTime}</div>
-                    <div>{golf.endTime}</div>
-                    <div>{golf.teeBox}</div>
-                    <div>{golf.userName}</div>
+                ))
+            ) : (
+                <div>정보없음</div>
+            )}
+            {serverData && serverData.dtoList && serverData.dtoList.length > 0 && (
+                <PageComponent
+                    serverData={serverData}
+                    movePage={(pageParam) => moveToList(pageParam, '/facilities/golf/list')} />
+            )}
+            {/* 모달 렌더링 */}
+            {isModalOpen && (
+                <GolfDetailModifyModal
+                    reservationId={selectedReservationId}
+                    closeModal={() => setIsModalOpen(false)}
+                    refreshList={fetchGolfReservations}
+                />
+            )}
 
-
-
-                </div>
-
-
-            ))}
-            {serverData && <PageComponent serverData={serverData} movePage={(pageParam) => moveToList(pageParam, '/facilities/golf/list')} />}
         </div>
 
     );

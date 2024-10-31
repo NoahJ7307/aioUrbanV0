@@ -31,4 +31,23 @@ public class Golf {
     @JoinColumn(name = "uno", referencedColumnName = "uno") // Community 테이블의 uno 외래 키 설정
     private User user; // 작성자 (User 엔티티의 uno)
 
+
+    //데이터 수정에 대한 메서드
+    public void changeDate(LocalDate date) {
+        this.date = date;
+    }
+    public void changeStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+    public void changeEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+    public void changeTeeBox(int teeBox) {
+        this.teeBox = teeBox;
+    }
+    public void changeState(boolean delFlag) {
+        this.delFlag = delFlag;
+    }
+
+
 }

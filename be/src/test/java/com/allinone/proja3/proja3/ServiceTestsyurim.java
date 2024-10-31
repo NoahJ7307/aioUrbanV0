@@ -1,20 +1,29 @@
 package com.allinone.proja3.proja3;
 
+import com.allinone.proja3.proja3.dto.UserDTO;
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
+import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.facilities.StudyDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Golf;
+import com.allinone.proja3.proja3.model.facilities.Gym;
+import com.allinone.proja3.proja3.model.facilities.ProgramState;
+import com.allinone.proja3.proja3.repository.facilities.GymRepository;
 import com.allinone.proja3.proja3.service.UserService;
 import com.allinone.proja3.proja3.service.facilities.GolfService;
+import com.allinone.proja3.proja3.service.facilities.GymService;
 import com.allinone.proja3.proja3.service.facilities.StudyService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class ServiceTestsyurim {
@@ -24,6 +33,10 @@ public class ServiceTestsyurim {
     private GolfService golfService;
     @Autowired
     private StudyService studyService;
+    @Autowired
+    private GymService gymService;
+    @Autowired
+    private GymRepository gymRepository;
 
 //    @Test
 //    public void insertTest() {
@@ -41,6 +54,29 @@ public class ServiceTestsyurim {
 //            userService.register(userDTO);
 //        }
 //    }
+
+    @Test
+    public  void insertGymTest() {
+        for(int i = 0; i <100; i++) {
+            GymDTO gymDTO = GymDTO.builder()
+//                    .programId(1L)
+                    .title("제목입니다"+i)
+                    .content("내용입니다" +i)
+                    .target("타겟"+i)
+                    .programStartDate(LocalDate.of(2024, 11, 16))
+                    .programEndDate(LocalDate.of(2024, 12, 16))
+                    .programStartTime(LocalTime.of(10,30))
+                    .programEndTime(LocalTime.of(12,30))
+                    .applicationStartDate(LocalDateTime.of(2024, 10, 16, 10, 30))
+                    .applicationEndDate(LocalDateTime.of(2024, 11, 10, 18, 30))
+                    //.membershipType("Basic")
+                    .delFlag(false) // delFlag 값을 설정
+                    .programState(ProgramState.Pending)
+                    .build();
+            Gym gym = gymService.dtoToEntity(gymDTO);
+            gymService.newProgramPost(gym);
+        }
+    }
 //    @Test
 //    public void oneinsert() {
 //
@@ -73,7 +109,7 @@ public class ServiceTestsyurim {
 
     @Test
     public void insertTest3() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 50; i++) {
             int randIdx = (int) (Math.random() * 100) + 1;
             int randId = (int) (Math.random() * 10) + 1;
 //            StudyDTO studyDTO = StudyDTO.builder()
@@ -110,6 +146,7 @@ public class ServiceTestsyurim {
 //        PageResponseDTO<UserDTO> list = userService.getList(pageRequestDTO);
 //        list.getDtoList().forEach(System.out::println);
 //    }
+
 
 
 }

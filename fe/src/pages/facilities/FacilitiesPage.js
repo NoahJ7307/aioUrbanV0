@@ -29,6 +29,9 @@ const FacilitiesPage = () => {
                 <li>
                     <button className='bg-blue-400 p-2' onClick={handleClickStudy}>Study</button>
                 </li>
+                {/* <li>
+                    <button className='bg-blue-400 p-2' onClick={handleClickStudy}>My Reservation Page</button>
+                </li> */}
             </ul>
             <Outlet />
         </BasicLayout>
