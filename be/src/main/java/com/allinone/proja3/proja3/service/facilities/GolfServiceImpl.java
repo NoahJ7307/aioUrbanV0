@@ -1,11 +1,9 @@
 package com.allinone.proja3.proja3.service.facilities;
 
-import com.allinone.proja3.proja3.dto.CommunityDTO;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
 import com.allinone.proja3.proja3.dto.facilities.StudyDTO;
-import com.allinone.proja3.proja3.model.Community;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Golf;
 import com.allinone.proja3.proja3.model.facilities.Study;
@@ -158,26 +156,6 @@ public class GolfServiceImpl implements GolfService {
 //                .map(this::entityToDto)
 //                .collect(Collectors.toList());
 //    }
-
-
-    @Override
-    public List<GolfDTO> findDataByUserName(String userName) {
-        User user = userRepository.findByUserName(userName)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        List<Golf> golf = golfRepository.findByUser(user); // User 객체로 검색
-        return golf.stream()
-                .map(this::entityToDto)
-                .collect(Collectors.toList());
-    }
-    @Override
-    public List<GolfDTO> findDataByPhone(String phone) {
-        User user = userRepository.findByPhone(phone)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        List<Golf> golf = golfRepository.findByUser(user); // User 객체로 검색
-        return golf.stream()
-                .map(this::entityToDto)
-                .collect(Collectors.toList());
-    }
 
     //레시피 → 요리 (dtoToEntity)
     // 클라이언트로부터 받은 정보를 바탕으로 실제 데이터베이스에 저장할 수 있는 형식으로 변환합니다.
