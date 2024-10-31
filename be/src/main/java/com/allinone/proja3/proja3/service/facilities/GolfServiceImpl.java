@@ -1,25 +1,23 @@
 package com.allinone.proja3.proja3.service.facilities;
 
-import com.allinone.proja3.proja3.dto.CommunityDTO;
+
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
-import com.allinone.proja3.proja3.dto.facilities.StudyDTO;
-import com.allinone.proja3.proja3.model.Community;
+
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Golf;
-import com.allinone.proja3.proja3.model.facilities.Study;
+
 import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.repository.facilities.GolfRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
+
 
 import java.time.LocalDate;
 import java.time.LocalTime;

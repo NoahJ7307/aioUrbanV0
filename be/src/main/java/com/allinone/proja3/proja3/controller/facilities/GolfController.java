@@ -1,6 +1,6 @@
 package com.allinone.proja3.proja3.controller.facilities;
 
-import com.allinone.proja3.proja3.dto.CommunityDTO;
+
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;

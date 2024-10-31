@@ -1,8 +1,6 @@
 package com.allinone.proja3.proja3.repository.facilities;
 
-import com.allinone.proja3.proja3.dto.CommunityDTO;
-import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
-import com.allinone.proja3.proja3.model.Community;
+
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Golf;
 import org.springframework.data.domain.Page;
