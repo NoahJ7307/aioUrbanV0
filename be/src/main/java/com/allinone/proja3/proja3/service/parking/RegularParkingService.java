@@ -5,6 +5,9 @@ import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.parking.HouseholdDTO;
 import com.allinone.proja3.proja3.dto.parking.RegularParkingDTO;
 import com.allinone.proja3.proja3.dto.parking.RegularReqDTO;
+import com.allinone.proja3.proja3.dto.parking.RegularSearchDataDTO;
+import com.allinone.proja3.proja3.dto.user.UserDTO;
+import com.allinone.proja3.proja3.dto.user.UserSearchDataDTO;
 import com.allinone.proja3.proja3.model.parking.RegularParking;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,4 +19,5 @@ public interface RegularParkingService {
     void remove(Long rpno);
     RegularParkingDTO getOne(Long rpno);
     void putOne(RegularReqDTO regularReqDTO, Long rpno);
+    PageResponseDTO<RegularParkingDTO> getSearchList(PageRequestDTO pageRequestDTO, RegularSearchDataDTO regularSearchDataDTO);
 }

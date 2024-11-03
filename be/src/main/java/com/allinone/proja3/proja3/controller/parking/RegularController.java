@@ -2,14 +2,11 @@ package com.allinone.proja3.proja3.controller.parking;
 
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
-import com.allinone.proja3.proja3.dto.parking.HouseholdDTO;
-import com.allinone.proja3.proja3.dto.parking.RegularParkingDTO;
-import com.allinone.proja3.proja3.dto.parking.RegularReqDTO;
+import com.allinone.proja3.proja3.dto.parking.*;
 import com.allinone.proja3.proja3.model.parking.Household;
 import com.allinone.proja3.proja3.model.parking.HouseholdPK;
 import com.allinone.proja3.proja3.service.parking.RegularParkingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +30,16 @@ public class RegularController {
         System.out.println("RegularParking getList controller P : " + pageRequestDTO);
         System.out.println("RegularParking getList controller H : " + householdDTO);
         return regularParkingService.getUserList(pageRequestDTO, householdDTO);
+    }
+
+    @PostMapping("/search")
+    public PageResponseDTO<RegularParkingDTO> getSearchList(@RequestBody RegularSearchReqDTO regularSearchReqDTO){
+        PageRequestDTO pageRequestDTO = regularSearchReqDTO.getPageRequestDTO();
+        RegularSearchDataDTO regularSearchDataDTO = regularSearchReqDTO.getRegularSearchDataDTO();
+        System.out.println("Regular getSearchList controller P : "+pageRequestDTO);
+        System.out.println("Regular getSearchList controller U : "+regularSearchDataDTO);
+        System.out.println("----"+regularSearchReqDTO);
+        return regularParkingService.getSearchList(pageRequestDTO,regularSearchDataDTO);
     }
 
     @PostMapping("/delete")

@@ -8,6 +8,9 @@ grant all privileges on projadb.* to `projauser`@`%`;
 -- -------------------------------------------------------------
 show tables;
 drop table tbl_user;
+drop table tbl_regular_parking;
+drop table tbl_visit_parking;
+drop table tbl_household;
 -- -------------------------------------------------------------
 select * from tbl_user order by uno desc;
 select * from user_user_role_list order by user_uno desc;
@@ -22,6 +25,9 @@ WHERE u.user_role_list = 0 ORDER BY u.user_uno DESC;
 select count(*) as count from user_user_role_list where user_role_list = 0;
 -- soft delete user 검색
 select * from tbl_user where del_flag= 1;
+show tables;
+
 -- 
 -- delete from tbl_user where user_name = 'user';
 -- delete from user_user_role_list where user_uno = 64;
+drop table tbl_gym;

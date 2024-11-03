@@ -29,8 +29,8 @@ public class ParkingRepositoryTests {
     @Test
     public void insertHouseholdAndRegularParking(){
         HouseholdPK householdPK = HouseholdPK.builder()
-                .dong(101)
-                .ho(101)
+                .dong("101")
+                .ho("101")
                 .build();
         Household household = Household.builder()
                 .householdPK(householdPK)
@@ -49,8 +49,8 @@ public class ParkingRepositoryTests {
     @Test
     public void getHouseholdAndInsertVisit(){
         HouseholdPK householdPK = HouseholdPK.builder()
-                .dong(101)
-                .ho(101)
+                .dong("101")
+                .ho("101")
                 .build();
         Optional<Household> visitHousehold = householdRepository.findById(householdPK);
         if (visitHousehold.isPresent()){

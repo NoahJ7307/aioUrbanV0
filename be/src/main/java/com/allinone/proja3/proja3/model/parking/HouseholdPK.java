@@ -13,8 +13,8 @@ import java.util.Objects;
 @NoArgsConstructor
 @Embeddable
 public class HouseholdPK implements Serializable {
-    private int dong;
-    private int ho;
+    private String dong;
+    private String ho;
 
     // .equals 로 Household 를 PK로 사용하는 다른 자식 테이블에서 비교시 true 가 나옴
     @Override

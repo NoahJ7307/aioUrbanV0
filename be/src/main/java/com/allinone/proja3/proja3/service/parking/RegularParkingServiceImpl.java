@@ -5,6 +5,8 @@ import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.parking.HouseholdDTO;
 import com.allinone.proja3.proja3.dto.parking.RegularParkingDTO;
 import com.allinone.proja3.proja3.dto.parking.RegularReqDTO;
+import com.allinone.proja3.proja3.dto.parking.RegularSearchDataDTO;
+import com.allinone.proja3.proja3.dto.user.UserDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.parking.Household;
 import com.allinone.proja3.proja3.model.parking.HouseholdPK;
@@ -33,6 +35,7 @@ public class RegularParkingServiceImpl implements RegularParkingService{
     public Long register(RegularParkingDTO regularParkingDTO) {
         System.out.println("RegularParking register service" + regularParkingDTO);
         householdService.register(regularParkingDTO.getHouseholdDTO());
+//        regularParkingDTO.setRegDate(LocalDate.parse("2024-01-01")); // 등록 날짜 Test 용도
         regularParkingDTO.setRegDate(LocalDate.now());
         RegularParking regularParking = dtoToEntity(regularParkingDTO);
         RegularParking result = regularParkingRepository.save(regularParking);
@@ -67,7 +70,7 @@ public class RegularParkingServiceImpl implements RegularParkingService{
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
-                Sort.by("regDate").descending());
+                Sort.by("rpno").descending());
 
 
         Household household = householdService.getHousehold(householdDTO);
@@ -75,6 +78,48 @@ public class RegularParkingServiceImpl implements RegularParkingService{
         System.out.println(result);
         List<RegularParkingDTO> dtoList = result.get()
                 .map(this::entityToDto)
+                .collect(Collectors.toList());
+
+        long totalCount = result.getTotalElements();
+        return PageResponseDTO.<RegularParkingDTO>withAll()
+                .dtoList(dtoList)
+                .pageRequestDTO(pageRequestDTO)
+                .totalCount(totalCount)
+                .build();
+    }
+
+    @Override
+    public PageResponseDTO<RegularParkingDTO> getSearchList(PageRequestDTO pageRequestDTO, RegularSearchDataDTO regularSearchDataDTO) {
+        System.out.println("getSearchList service");
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("rpno").descending());
+
+        // 검색 필터
+        Page<RegularParking> result;
+        switch (regularSearchDataDTO.getSearchCategory()){
+            case "dong-ho": {
+                String[] value = regularSearchDataDTO.getSearchValue().split("-");
+                String dong = value[0];
+                String ho = value[1];
+                result = regularParkingRepository.findByDongHo(dong, ho, pageable);
+            } break;
+            case "dong": result = regularParkingRepository.findByDong(regularSearchDataDTO.getSearchValue(), pageable); break;
+            case "ho": result = regularParkingRepository.findByHo(regularSearchDataDTO.getSearchValue(), pageable); break;
+            case "name": result = regularParkingRepository.findByName(regularSearchDataDTO.getSearchValue(), pageable); break;
+            case "phone": result = regularParkingRepository.findByPhone(regularSearchDataDTO.getSearchValue(), pageable); break;
+            case "regDate" : {
+                LocalDate start = regularSearchDataDTO.getRegDateStart();
+                LocalDate end = regularSearchDataDTO.getRegDateEnd();
+                result = regularParkingRepository.findByRegDate(start, end, pageable);
+            } break;
+            default: result = Page.empty(pageable);
+        }
+
+        // entityToDto를 사용하여 엔티티 -> DTO 변환
+        List<RegularParkingDTO> dtoList = result.get()
+                .map(this::entityToDto)  // entityToDto 메서드를 사용하여 변환
                 .collect(Collectors.toList());
 
         long totalCount = result.getTotalElements();

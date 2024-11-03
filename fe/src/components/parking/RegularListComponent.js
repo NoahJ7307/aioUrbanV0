@@ -18,7 +18,7 @@ const initState = {
     current: 0
 }
 
-const RegularListComponent = () => {
+const RegularListComponent = ({ pageServerData }) => {
     const [serverData, setServerData] = useState(initState)
     const { page, size, moveToPath } = useCustom()
     const [checked, setChecked] = useState([])
@@ -51,26 +51,30 @@ const RegularListComponent = () => {
             dong: loadLoginData().dong,
             ho: loadLoginData().ho,
         }
-        if (loadLoginData().role == 'ADMIN' || loadLoginData().role == 'ROOT') {
-            console.log(loadLoginData().role)
-            getList({ page, size }).then(data => {
-                if (data.error) {
-                    exceptionHandler(data)
-                } else {
-                    setServerData(data)
-                }
-            })
+        if (!pageServerData.dtoList || pageServerData.dtoList.length === 0) { // 검색 결과 유무 분기
+            if (loadLoginData().role == 'ADMIN' || loadLoginData().role == 'ROOT') { // 권한 분기
+                console.log(loadLoginData().role)
+                getList({ page, size }).then(data => {
+                    if (data.error) {
+                        exceptionHandler(data)
+                    } else {
+                        setServerData(data)
+                    }
+                })
+            } else {
+                console.log(loadLoginData().role)
+                getUserList({ page, size }, loginUser).then(data => {
+                    if (data.error) {
+                        exceptionHandler(data)
+                    } else {
+                        setServerData(data)
+                    }
+                })
+            }
         } else {
-            console.log(loadLoginData().role)
-            getUserList({ page, size }, loginUser).then(data => {
-                if (data.error) {
-                    exceptionHandler(data)
-                } else {
-                    setServerData(data)
-                }
-            })
+            setServerData(pageServerData)
         }
-    }, [page, size])
+    }, [page, size, pageServerData])
 
     return (
         <div>

@@ -4,6 +4,9 @@ import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.parking.HouseholdDTO;
 import com.allinone.proja3.proja3.dto.parking.RegularParkingDTO;
+import com.allinone.proja3.proja3.dto.parking.RegularSearchDataDTO;
+import com.allinone.proja3.proja3.model.parking.Household;
+import com.allinone.proja3.proja3.model.parking.HouseholdPK;
 import com.allinone.proja3.proja3.service.parking.HouseholdService;
 import com.allinone.proja3.proja3.service.parking.RegularParkingService;
 import org.junit.jupiter.api.Test;
@@ -22,20 +25,27 @@ public class ParkingServiceTest {
 
     @Test
     public void insertRP(){
-        for (int i = 1; i < 6; i++) {
-            for (int j = 1; j < 7; j++) {
+        for (int i = 1; i < 3; i++) {
+            for (int j = 1; j < 3; j++) {
                 HouseholdDTO householdDTO = HouseholdDTO.builder()
-                        .dong(100+i)
-                        .ho(100+j)
+                        .dong(""+(200+i))
+                        .ho(""+(100+j))
                         .build();
-                householdService.register(householdDTO);
+
                 RegularParkingDTO regularParkingDTO = RegularParkingDTO.builder()
-                        .household(householdService.getHousehold(householdDTO))
+                        .householdDTO(householdDTO)
                         .carNum((i*10)+"가"+(1000*j))
                         .name("Test"+i+".."+j)
-                        .phone("Test"+i+".."+j)
-                        .regDate(LocalDate.now())
+                        .phone("Test"+i+".."+j) // 등록 날짜 test 는 serviceImpl 에서 변경
                         .build();
+
+                regularParkingDTO.setHousehold(Household.builder()
+                        .householdPK(HouseholdPK.builder()
+                                .dong(regularParkingDTO.getHouseholdDTO().getDong())
+                                .ho(regularParkingDTO.getHouseholdDTO().getHo())
+                                .build())
+                        .build());
+
                 regularParkingService.register(regularParkingDTO);
             }
         }
@@ -58,8 +68,8 @@ public class ParkingServiceTest {
                 .size(10)
                 .build();
         HouseholdDTO householdDTO = HouseholdDTO.builder()
-                .dong(101)
-                .ho(101)
+                .dong("101")
+                .ho("101")
                 .build();
         PageResponseDTO<RegularParkingDTO> list = regularParkingService.getUserList(pageRequestDTO, householdDTO);
         list.getDtoList().forEach(System.out::println);
@@ -69,5 +79,20 @@ public class ParkingServiceTest {
     public void getOneTest(){
         RegularParkingDTO list = regularParkingService.getOne(72L);
         System.out.println(list);
+    }
+
+    @Test
+    public void getSearchListTest(){
+        RegularSearchDataDTO regularSearchDataDTO = RegularSearchDataDTO.builder()
+                .searchCategory("regDate")
+                .regDateStart(LocalDate.parse("2024-01-01"))
+                .regDateEnd(LocalDate.parse("2024-01-02"))
+                .build();
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .build();
+        PageResponseDTO<RegularParkingDTO> list = regularParkingService.getSearchList(pageRequestDTO, regularSearchDataDTO);
+        list.getDtoList().forEach(System.out::println);
     }
 }

@@ -9,12 +9,10 @@ import useCustom from '../../components/hook/useCustom'
 const initStateSearchData = {
   searchCategory: '',
   searchValue: '',
-}
-
-const initStateSearchDateData = {
   regDateStart: '1800-1-1',
   regDateEnd: '2200-12-31',
 }
+
 
 const initStateServerData = {
   dtoList: [],
@@ -34,7 +32,6 @@ const RegularPage = () => {
   const { checkedRpno, setCheckedRpno } = useOutletContext() // 부모에게서 전달된 함수
   const { loadLoginData } = useCustomLogin()
   const [searchData, setSearchData] = useState(initStateSearchData)
-  const [searchDateData, setSearchDateData] = useState(initStateSearchDateData)
   const { page, size } = useCustom()
   const [pageServerData, setPageServerData] = useState(initStateServerData)
 
@@ -61,22 +58,35 @@ const RegularPage = () => {
   }
 
   // ------- 검색 -------
-  const handleChangeSearchDateStartValue = (e) => {
-    setSearchDateData(prevData => ({ ...prevData, regDateStart: e.target.value }))
-    setSearchData(prevData => ({ ...prevData, searchValue: { ...searchData.searchValue, searchDateData } }))
-    console.log(searchData)
-  }
-  const handleChangeSearchDateEndValue = (e) => {
-    setSearchDateData(prevData => ({ ...prevData, regDateEnd: e.target.value }))
-    setSearchData(prevData => ({ ...prevData, searchValue: { ...searchData.searchValue, searchDateData } }))
-    console.log(searchData)
-  }
-  const handleChangeSearchValue = (e) => {
-    setSearchData(prevData => ({ ...prevData, searchValue: e.target.value }))
-  }
+  // Category 변경 시 value 값 초기화
   const handleChangeSearchCategory = (e) => {
-    setSearchData(prevData => ({ ...prevData, searchCategory: e.target.value }))
+    setSearchData(prevData => ({
+      ...prevData,
+      searchCategory: e.target.value,
+      searchValue: '',
+      regDateStart: '',
+      regDateEnd: '',
+    }))
   }
+
+  const handleChangeSearchValue = (e) => {
+    setSearchData((prev) => ({
+      ...prev,
+      searchValue: e.target.value,
+    }))
+  }
+
+  // handleChangeSearchDate 를 사용하는 start/end 각각의 name을 SearchData의 key값에 주입 
+  // category 변경 시 value값이 초기화 되므로 prevData는 초기화 되어있으므로
+  // Date 값 설정 시 regDateStart/End 값만 들어가게 됨
+  const handleChangeSearchDate = (e) => {
+    const { name, value } = e.target
+    setSearchData(prevData => ({
+      ...prevData,
+      [name]: value
+    }))
+  }
+
   const handleClickSearch = () => {
     const pageParam = { page, size }
     getRegularSearchList(pageParam, searchData).then(data => {
@@ -127,13 +137,13 @@ const RegularPage = () => {
               <input className=''
                 type='date'
                 name='regDateStart'
-                onChange={handleChangeSearchDateStartValue}
+                onChange={handleChangeSearchDate}
               />
               ~
               <input className=''
                 type='date'
                 name='regDateEnd'
-                onChange={handleChangeSearchDateEndValue}
+                onChange={handleChangeSearchDate}
               />
             </li>
             :
@@ -157,7 +167,7 @@ const RegularPage = () => {
           {/* // -------------------- */}
         </ul>
       }
-      <RegularListComponent />
+      <RegularListComponent pageServerData={pageServerData} />
       <Outlet context={{ checkedRpno, setCheckedRpno }} />
     </div>
   )

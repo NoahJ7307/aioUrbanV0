@@ -49,5 +49,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = {"userRoleList"})
     @Query("select u from User u where u.phone like %:value% and u.delFlag = false")
     Page<User> findByPhone(@Param("value") String value, Pageable pageable);
-
 }

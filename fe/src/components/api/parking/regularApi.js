@@ -37,19 +37,19 @@ export const getUserList = async (pageParam, loginUser) => {
 }
 
 export const getRegularSearchList = async (pageParam, searchData) => {
-    // const token = localStorage.getItem("token")
-    // const config = {
-    //     headers: {
-    //         "Authorization": `Bearer ${token}`,
-    //         "Content-Type": "application/json",
-    //     },
-    // }
-    // const body = {
-    //     pageRequestDTO: pageParam,
-    //     userSearchDataDTO: searchData,
-    // }
-    // const res = await axios.post(`${host}/search`, body, config)
-    const res = { data: searchData }
+    const token = localStorage.getItem("token")
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    }
+    const body = {
+        pageRequestDTO: pageParam,
+        regularSearchDataDTO: searchData,
+    }
+    const res = await axios.post(`${host}/search`, body, config)
+    console.log("regular api : ",res.data)
     return res.data
 }
 

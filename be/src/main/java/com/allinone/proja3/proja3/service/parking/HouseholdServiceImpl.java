@@ -16,9 +16,11 @@ public class HouseholdServiceImpl implements HouseholdService {
 
     @Override
     public HouseholdPK register(HouseholdDTO householdDTO) {
-        System.out.println("Household register service");
+        System.out.println("Household register service : "+householdDTO);
         Household household = dtoToEntity(householdDTO);
         Household result = householdRepository.save(household);
+        System.out.println("Household register service result : "+result.getHouseholdPK().getDong());
+        System.out.println("Household register service result : "+result.getHouseholdPK().getHo());
         return result.getHouseholdPK();
     }
 
@@ -27,7 +29,6 @@ public class HouseholdServiceImpl implements HouseholdService {
         return Household.builder()
                 .householdPK(HouseholdPK.builder()
                         .dong(householdDTO.getDong())
-
                         .ho(householdDTO.getHo())
                         .build())
                 .build();
