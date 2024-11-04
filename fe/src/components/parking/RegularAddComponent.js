@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import useCustom from '../hook/useCustom'
-import { RegularPostAdd } from '../api/parking/regularApi'
+import { regularPostAdd } from '../api/parking/regularApi'
 import { useNavigate } from 'react-router-dom'
 
 const initState = {
@@ -19,7 +19,7 @@ const RegularAddComponent = () => {
     setServerData({ ...serverData })
   }
   const handleClick = () => {
-    RegularPostAdd(serverData).then(data => {
+    regularPostAdd(serverData).then(data => {
       console.log("success : " + data)
       moveToPath('/parking/regular', { page, size })
     })

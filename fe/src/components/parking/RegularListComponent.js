@@ -3,7 +3,7 @@ import useCustom from '../hook/useCustom'
 import { useOutletContext } from 'react-router-dom'
 import PageComponent from '../common/PageComponent'
 import useCustomLogin from '../hook/useCustomLogin'
-import { getList, getUserList } from '../api/parking/regularApi'
+import { regularGetList, regularGetUserList } from '../api/parking/regularApi'
 
 const initState = {
     dtoList: [],
@@ -54,7 +54,7 @@ const RegularListComponent = ({ pageServerData }) => {
         if (!pageServerData.dtoList || pageServerData.dtoList.length === 0) { // 검색 결과 유무 분기
             if (loadLoginData().role == 'ADMIN' || loadLoginData().role == 'ROOT') { // 권한 분기
                 console.log(loadLoginData().role)
-                getList({ page, size }).then(data => {
+                regularGetList({ page, size }).then(data => {
                     if (data.error) {
                         exceptionHandler(data)
                     } else {
@@ -63,7 +63,7 @@ const RegularListComponent = ({ pageServerData }) => {
                 })
             } else {
                 console.log(loadLoginData().role)
-                getUserList({ page, size }, loginUser).then(data => {
+                regularGetUserList({ page, size }, loginUser).then(data => {
                     if (data.error) {
                         exceptionHandler(data)
                     } else {

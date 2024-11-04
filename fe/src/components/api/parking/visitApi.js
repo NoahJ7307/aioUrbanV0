@@ -1,9 +1,9 @@
 import axios from "axios"
 
 export const API_SERVER_HOST = "http://localhost:8080"
-const host = `${API_SERVER_HOST}/api/parking/regular`
+const host = `${API_SERVER_HOST}/api/parking/visit`
 
-export const regularGetList = async (pageParam) => {
+export const getList = async (pageParam) => {
     const { page, size } = pageParam
     const token = localStorage.getItem("token")
     const config = {
@@ -17,7 +17,7 @@ export const regularGetList = async (pageParam) => {
     return res.data
 }
 
-export const regularGetUserList = async (pageParam, loginUser) => {
+export const getUserList = async (pageParam, loginUser) => {
     console.log("getUserList loginUser : ", pageParam)
     console.log("getUserList loginUser : ", loginUser)
     const token = localStorage.getItem("token")
@@ -36,7 +36,7 @@ export const regularGetUserList = async (pageParam, loginUser) => {
     return res.data
 }
 
-export const regularGetSearchList = async (pageParam, searchData) => {
+export const getVisitSearchList = async (pageParam, searchData) => {
     const token = localStorage.getItem("token")
     const config = {
         headers: {
@@ -53,7 +53,7 @@ export const regularGetSearchList = async (pageParam, searchData) => {
     return res.data
 }
 
-export const regularParkingDeleteChecked = async (checkedRpno) => {
+export const visitParkingDeleteChecked = async (checkedRpno) => {
     const token = localStorage.getItem("token")
     const config = {
         headers: {
@@ -65,7 +65,7 @@ export const regularParkingDeleteChecked = async (checkedRpno) => {
     return res.data
 }
 
-export const regularPostAdd = async (userData) => {
+export const visitPostAdd = async (userData) => {
     const token = localStorage.getItem("token")
     const config = {
         headers: {
@@ -87,7 +87,7 @@ export const regularPostAdd = async (userData) => {
     return res.data
 }
 
-export const regularGetOne = async (rpno) => {
+export const getOne = async (rpno) => {
     console.log("api", rpno)
     const token = localStorage.getItem("token")
     const config = {
@@ -100,7 +100,7 @@ export const regularGetOne = async (rpno) => {
     return res.data
 }
 
-export const regularPutOne = async (rpno, serverData) => {
+export const putOne = async (rpno, serverData) => {
     console.log(serverData)
     const token = localStorage.getItem("token")
     const config = {

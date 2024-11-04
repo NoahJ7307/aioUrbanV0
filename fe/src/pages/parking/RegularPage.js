@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Outlet, useNavigate, useOutletContext } from 'react-router-dom'
 import useCustomLogin from '../../components/hook/useCustomLogin'
 import RegularListComponent from '../../components/parking/RegularListComponent'
-import { deleteChecked } from '../../components/api/userApi'
-import { getRegularSearchList, RegularParkingDeleteChecked } from '../../components/api/parking/regularApi'
+import { regularGetSearchList, regularParkingDeleteChecked } from '../../components/api/parking/regularApi'
 import useCustom from '../../components/hook/useCustom'
 
 const initStateSearchData = {
@@ -34,6 +33,7 @@ const RegularPage = () => {
   const [searchData, setSearchData] = useState(initStateSearchData)
   const { page, size } = useCustom()
   const [pageServerData, setPageServerData] = useState(initStateServerData)
+  const [inputTitle, setInputTitle] = useState('')
 
   const handleClickAdd = useCallback(() => { navigate({ pathname: 'add' }) })
 
@@ -49,7 +49,7 @@ const RegularPage = () => {
 
   const handleClickDelete = async () => {
     if (checkedRpno.length > 0) {
-      await RegularParkingDeleteChecked(checkedRpno)
+      await regularParkingDeleteChecked(checkedRpno)
       navigate({ pathname: '/parking/regular' }) // 삭제 후 새로고침 기능 수행
     } else {
       alert("선택된 항목이 없습니다")
@@ -60,6 +60,8 @@ const RegularPage = () => {
   // ------- 검색 -------
   // Category 변경 시 value 값 초기화
   const handleChangeSearchCategory = (e) => {
+    // select option(category) title 가져와서 input(value) placeholder 에 설정
+    setInputTitle(e.target.options[e.target.selectedIndex].getAttribute('title'))
     setSearchData(prevData => ({
       ...prevData,
       searchCategory: e.target.value,
@@ -69,6 +71,7 @@ const RegularPage = () => {
     }))
   }
 
+  // normal value onChange 설정
   const handleChangeSearchValue = (e) => {
     setSearchData((prev) => ({
       ...prev,
@@ -76,9 +79,7 @@ const RegularPage = () => {
     }))
   }
 
-  // handleChangeSearchDate 를 사용하는 start/end 각각의 name을 SearchData의 key값에 주입 
-  // category 변경 시 value값이 초기화 되므로 prevData는 초기화 되어있으므로
-  // Date 값 설정 시 regDateStart/End 값만 들어가게 됨
+  // regDateStart/End onChange 설정
   const handleChangeSearchDate = (e) => {
     const { name, value } = e.target
 
@@ -101,8 +102,9 @@ const RegularPage = () => {
       }
     }
     const pageParam = { page, size }
-    getRegularSearchList(pageParam, searchData).then(data => {
+    regularGetSearchList(pageParam, searchData).then(data => {
       setPageServerData(data)
+      // 결과 예외 처리
       if (!data.dtoList || data.dtoList.length === 0) {
         alert("검색 결과가 없습니다")
       }
@@ -139,12 +141,12 @@ const RegularPage = () => {
               name='searchCategory'
               onChange={handleChangeSearchCategory}>
               <option value=''>검색 필터</option>
-              <option value="dong-ho">동-호</option>
-              <option value="dong">동</option>
-              <option value="ho">호</option>
-              <option value="name">이름</option>
-              <option value="carNum">차량번호</option>
-              <option value="phone">전화번호</option>
+              <option value="dong-ho" title='예시) 101-101'>동-호</option>
+              <option value="dong" title='예시) 101'>동</option>
+              <option value="ho" title='예시) 101'>호</option>
+              <option value="name" title='예시) 김어반'>이름</option>
+              <option value="carNum" title='예시) 00반0000'>차량번호</option>
+              <option value="phone" title='예시) 01012345678'>전화번호</option>
               <option value="regDate">등록일자</option>
             </select>
           </li>
@@ -169,6 +171,7 @@ const RegularPage = () => {
               <input className=''
                 name='searchValue'
                 value={searchData.searchValue}
+                placeholder={inputTitle}
                 onChange={handleChangeSearchValue}
               />
             </li>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useCustom from '../hook/useCustom'
-import { getOne, putOne } from '../api/parking/regularApi'
+import { regularGetOne, regularPutOne } from '../api/parking/regularApi'
 import { useOutletContext } from 'react-router-dom'
 import useCustomLogin from '../hook/useCustomLogin'
 
@@ -20,7 +20,7 @@ const RegularModifyComponent = () => {
 
     // data 수신
     useEffect(() => {
-        getOne(checkedRpno[0]).then(data => {
+        regularGetOne(checkedRpno[0]).then(data => {
             console.log(data)
             setServerData({
                 // null || undefined 일 경우 "" || 0 로 대체 (controlled input 에러)
@@ -40,7 +40,7 @@ const RegularModifyComponent = () => {
     }
 
     const handleClick = () => {
-        putOne(checkedRpno[0], serverData).then(() => {
+        regularPutOne(checkedRpno[0], serverData).then(() => {
             moveToPath('/parking/regular', { page, size })
         })
     }
