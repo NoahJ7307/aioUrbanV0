@@ -9,8 +9,8 @@ import useCustom from '../../components/hook/useCustom'
 const initStateSearchData = {
   searchCategory: '',
   searchValue: '',
-  regDateStart: '1800-1-1',
-  regDateEnd: '2200-12-31',
+  regDateStart: '',
+  regDateEnd: '',
 }
 
 
@@ -81,6 +81,7 @@ const RegularPage = () => {
   // Date 값 설정 시 regDateStart/End 값만 들어가게 됨
   const handleChangeSearchDate = (e) => {
     const { name, value } = e.target
+
     setSearchData(prevData => ({
       ...prevData,
       [name]: value
@@ -88,11 +89,26 @@ const RegularPage = () => {
   }
 
   const handleClickSearch = () => {
+    // 검색 범위 예외처리
+    if (searchData.searchCategory == 'regDate') {
+      if (searchData.regDateStart == "" || searchData.regDateEnd == "") {
+        alert("검색 범위가 잘못되었습니다")
+        return
+      }
+      if (searchData.regDateStart > searchData.regDateEnd) {
+        alert("검색 범위가 잘못되었습니다")
+        return
+      }
+    }
     const pageParam = { page, size }
     getRegularSearchList(pageParam, searchData).then(data => {
       setPageServerData(data)
+      if (!data.dtoList || data.dtoList.length === 0) {
+        alert("검색 결과가 없습니다")
+      }
     })
   }
+
   const handleClickClear = () => {
     setPageServerData(initStateServerData)
   }
@@ -137,12 +153,14 @@ const RegularPage = () => {
               <input className=''
                 type='date'
                 name='regDateStart'
+                value={searchData.regDateStart}
                 onChange={handleChangeSearchDate}
               />
               ~
               <input className=''
                 type='date'
                 name='regDateEnd'
+                value={searchData.regDateEnd}
                 onChange={handleChangeSearchDate}
               />
             </li>
@@ -150,6 +168,7 @@ const RegularPage = () => {
             <li>
               <input className=''
                 name='searchValue'
+                value={searchData.searchValue}
                 onChange={handleChangeSearchValue}
               />
             </li>
