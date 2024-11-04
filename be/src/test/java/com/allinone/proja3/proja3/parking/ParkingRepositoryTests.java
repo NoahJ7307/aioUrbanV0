@@ -60,7 +60,7 @@ public class ParkingRepositoryTests {
                     .carNum("88방8888")
                     .name("TestVisitName")
                     .phone("TestVisitPhone")
-                    .visitDate(LocalDate.now())
+                    .expectedDate(LocalDate.parse("2024-11-01"))
                     .build();
             visitParkingRepository.save(visitParking);
         }

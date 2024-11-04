@@ -28,5 +28,5 @@ public class VisitParking {
     private String carNum;
     private String name;
     private String phone;
-    private LocalDate visitDate;
+    private LocalDate expectedDate;
 }

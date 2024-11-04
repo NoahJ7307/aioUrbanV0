@@ -1,18 +1,16 @@
 import VisitListComponent from '../../components/parking/VisitListComponent'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Outlet, useNavigate, useOutletContext } from 'react-router-dom'
 import useCustomLogin from '../../components/hook/useCustomLogin'
-import { getRegularSearchList, RegularParkingDeleteChecked } from '../../components/api/parking/regularApi'
 import useCustom from '../../components/hook/useCustom'
-import { getVisitSearchList, visitParkingDeleteChecked } from '../../components/api/parking/visitApi'
+import { visitGetSearchList, visitParkingDeleteChecked } from '../../components/api/parking/visitApi'
 
 const initStateSearchData = {
   searchCategory: '',
   searchValue: '',
-  regDateStart: '',
-  regDateEnd: '',
+  expectedDateStart: '',
+  expectedDateEnd: '',
 }
-
 
 const initStateServerData = {
   dtoList: [],
@@ -29,43 +27,46 @@ const initStateServerData = {
 
 const VisitPage = () => {
   const navigate = useNavigate()
-  const { checkedRpno, setCheckedRpno } = useOutletContext() // 부모에게서 전달된 함수
+  const { checkedVpno, setCheckedVpno } = useOutletContext() // 부모에게서 전달된 함수
   const { loadLoginData } = useCustomLogin()
   const [searchData, setSearchData] = useState(initStateSearchData)
   const { page, size } = useCustom()
   const [pageServerData, setPageServerData] = useState(initStateServerData)
+  const [inputTitle, setInputTitle] = useState('')
 
   const handleClickAdd = useCallback(() => { navigate({ pathname: 'add' }) })
 
   const handleClickModify = useCallback(() => {
-    if (checkedRpno.length == 1) {
-      navigate({ pathname: `modify/${checkedRpno[0]}` })  // 1개 체크 시
-    } else if (checkedRpno.length > 1) {
-      alert("하나만 선택해주세요") // 여러개 체크 시
+    if (checkedVpno.length === 1) {
+      navigate({ pathname: `modify/${checkedVpno[0]}` })  // 1개 체크 시
+    } else if (checkedVpno.length > 1) {
+      alert('하나만 선택해주세요') // 여러개 체크 시
     } else {
-      alert("선택된 항목이 없습니다") // 미체크 시
+      alert('선택된 항목이 없습니다') // 미체크 시
     }
-  }, [checkedRpno, navigate])
+  }, [checkedVpno, navigate])
 
   const handleClickDelete = async () => {
-    if (checkedRpno.length > 0) {
-      await visitParkingDeleteChecked(checkedRpno)
-      navigate({ pathname: '/parking/regular' }) // 삭제 후 새로고침 기능 수행
+    if (checkedVpno.length > 0) {
+      await visitParkingDeleteChecked(checkedVpno)
+      navigate({ pathname: '/parking/visit' }) // 삭제 후 새로고침 기능 수행
     } else {
-      alert("선택된 항목이 없습니다")
-      navigate({ pathname: '/parking/regular' })
+      alert('선택된 항목이 없습니다')
+      navigate({ pathname: '/parking/visit' })
     }
   }
 
   // ------- 검색 -------
   // Category 변경 시 value 값 초기화
   const handleChangeSearchCategory = (e) => {
+    // select option(category) title 가져와서 input(value) placeholder 에 설정
+    setInputTitle(e.target.options[e.target.selectedIndex].getAttribute('title'))
     setSearchData(prevData => ({
       ...prevData,
       searchCategory: e.target.value,
       searchValue: '',
-      regDateStart: '',
-      regDateEnd: '',
+      expectedDateStart: '',
+      expectedDateEnd: '',
     }))
   }
 
@@ -89,22 +90,22 @@ const VisitPage = () => {
 
   const handleClickSearch = () => {
     // 검색 범위 예외처리
-    if (searchData.searchCategory == 'regDate') {
-      if (searchData.regDateStart == "" || searchData.regDateEnd == "") {
-        alert("검색 범위가 잘못되었습니다")
+    if (searchData.searchCategory === 'expectedDate') {
+      if (searchData.expectedDateStart === '' || searchData.expectedDateEnd === '') {
+        alert('검색 범위가 잘못되었습니다')
         return
       }
-      if (searchData.regDateStart > searchData.regDateEnd) {
-        alert("검색 범위가 잘못되었습니다")
+      if (searchData.expectedDateStart > searchData.expectedDateEnd) {
+        alert('검색 범위가 잘못되었습니다')
         return
       }
     }
     const pageParam = { page, size }
-    getVisitSearchList(pageParam, searchData).then(data => {
+    visitGetSearchList(pageParam, searchData).then(data => {
       setPageServerData(data)
       // 결과 예외 처리
       if (!data.dtoList || data.dtoList.length === 0) {
-        alert("검색 결과가 없습니다")
+        alert('검색 결과가 없습니다')
       }
     })
   }
@@ -139,28 +140,28 @@ const VisitPage = () => {
               name='searchCategory'
               onChange={handleChangeSearchCategory}>
               <option value=''>검색 필터</option>
-              <option value="dong-ho">동-호</option>
-              <option value="dong">동</option>
-              <option value="ho">호</option>
-              <option value="name">이름</option>
-              <option value="carNum">차량번호</option>
-              <option value="phone">전화번호</option>
-              <option value="regDate">등록일자</option>
+              <option value='dong-ho' title='예시) 101-101'>동-호</option>
+              <option value='dong' title='예시) 101'>동</option>
+              <option value='ho' title='예시) 101'>호</option>
+              <option value='name' title='예시) 김어반'>이름</option>
+              <option value='carNum' title='예시) 00반0000'>차량번호</option>
+              <option value='phone' title='예시) 01012345678'>전화번호</option>
+              <option value='expectedDate'>입차 예정 날짜</option>
             </select>
           </li>
-          {searchData.searchCategory === 'regDate' ?
+          {searchData.searchCategory === 'exitDate' ?
             <li>
               <input className=''
                 type='date'
-                name='regDateStart'
-                value={searchData.regDateStart}
+                name='expectedDateStart'
+                value={searchData.expectedDateStart}
                 onChange={handleChangeSearchDate}
               />
               ~
               <input className=''
                 type='date'
-                name='regDateEnd'
-                value={searchData.regDateEnd}
+                name='expectedDateEnd'
+                value={searchData.expectedDateEnd}
                 onChange={handleChangeSearchDate}
               />
             </li>
@@ -169,6 +170,7 @@ const VisitPage = () => {
               <input className=''
                 name='searchValue'
                 value={searchData.searchValue}
+                placeholder={inputTitle}
                 onChange={handleChangeSearchValue}
               />
             </li>
@@ -187,7 +189,7 @@ const VisitPage = () => {
         </ul>
       }
       <VisitListComponent pageServerData={pageServerData} />
-      <Outlet context={{ checkedRpno, setCheckedRpno }} />
+      <Outlet context={{ checkedVpno, setCheckedVpno }} />
     </div>
   )
 }

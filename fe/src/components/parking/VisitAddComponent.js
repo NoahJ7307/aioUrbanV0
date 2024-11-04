@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import useCustom from '../hook/useCustom'
-import { regularPostAdd } from '../api/parking/regularApi'
+import { visitPostAdd } from '../api/parking/visitApi'
+import useCustomLogin from '../hook/useCustomLogin'
 
 const initState = {
   carNum: '',
@@ -8,19 +9,22 @@ const initState = {
   phone: '',
   dong: 0,
   ho: 0,
+  expectedDate: '',
 }
-const RegularAddComponent = () => {
+
+const VisitAddComponent = () => {
   const { page, size, moveToPath } = useCustom()
   const [serverData, setServerData] = useState({ ...initState })
+  const { loadLoginData } = useCustomLogin()
 
   const handleChange = (e) => {
     serverData[e.target.name] = e.target.value
     setServerData({ ...serverData })
   }
   const handleClick = () => {
-    regularPostAdd(serverData).then(data => {
+    visitPostAdd(serverData).then(data => {
       console.log('success : ' + data)
-      moveToPath('/parking/regular', { page, size })
+      moveToPath('/parking/visit', { page, size })
     })
   }
   return (
@@ -42,6 +46,9 @@ const RegularAddComponent = () => {
           <div>
             호
           </div>
+          <div>
+            입차 예상 날짜
+          </div>
         </div>
       </div>
       <div>
@@ -61,14 +68,43 @@ const RegularAddComponent = () => {
               name='phone'
               onChange={handleChange} />
           </div>
+          {/* 권한 별 분기 - 동/호 선택 여부 */}
+          {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
+            <>
+              <div>
+                <input className='border'
+                  name='dong'
+                  value={loadLoginData().dong}
+                  readOnly
+                  onChange={handleChange} />
+              </div>
+              <div>
+                <input className='border'
+                  name='ho'
+                  value={loadLoginData().ho}
+                  readOnly
+                  onChange={handleChange} />
+              </div>
+            </>
+            :
+            <>
+              <div>
+                <input className='border'
+                  name='dong'
+                  onChange={handleChange} />
+              </div>
+              <div>
+                <input className='border'
+                  name='ho'
+                  onChange={handleChange} />
+              </div>
+            </>
+          }
+          {/* --------------- */}
           <div>
             <input className='border'
-              name='dong'
-              onChange={handleChange} />
-          </div>
-          <div>
-            <input className='border'
-              name='ho'
+              type='date'
+              name='expectedDate'
               onChange={handleChange} />
           </div>
         </div>
@@ -76,11 +112,11 @@ const RegularAddComponent = () => {
           <button type='button' className='bg-blue-400 p-2'
             onClick={handleClick}>추가</button>
           <button type='button' className='bg-red-400 p-2'
-            onClick={(pageParam) => moveToPath('/parking/regular', pageParam)}>취소</button>
+            onClick={(pageParam) => moveToPath('/parking/visit', pageParam)}>취소</button>
         </div>
       </div>
     </div>
   )
 }
 
-export default RegularAddComponent
+export default VisitAddComponent

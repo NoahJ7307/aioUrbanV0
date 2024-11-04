@@ -1,15 +1,15 @@
-import axios from "axios"
+import axios from 'axios'
 
-export const API_SERVER_HOST = "http://localhost:8080"
+export const API_SERVER_HOST = 'http://localhost:8080'
 const host = `${API_SERVER_HOST}/api/parking/regular`
 
 export const regularGetList = async (pageParam) => {
     const { page, size } = pageParam
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
         params: { page, size },
     }
@@ -18,13 +18,13 @@ export const regularGetList = async (pageParam) => {
 }
 
 export const regularGetUserList = async (pageParam, loginUser) => {
-    console.log("getUserList loginUser : ", pageParam)
-    console.log("getUserList loginUser : ", loginUser)
-    const token = localStorage.getItem("token")
+    console.log('getUserList loginUser : ', pageParam)
+    console.log('getUserList loginUser : ', loginUser)
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
     }
 
@@ -37,11 +37,11 @@ export const regularGetUserList = async (pageParam, loginUser) => {
 }
 
 export const regularGetSearchList = async (pageParam, searchData) => {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
     }
     const body = {
@@ -49,16 +49,16 @@ export const regularGetSearchList = async (pageParam, searchData) => {
         regularSearchDataDTO: searchData,
     }
     const res = await axios.post(`${host}/search`, body, config)
-    console.log("regular api : ", res.data)
+    console.log('regular api : ', res.data)
     return res.data
 }
 
 export const regularParkingDeleteChecked = async (checkedRpno) => {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
     }
     const res = await axios.post(`${host}/delete`, checkedRpno, config)
@@ -66,11 +66,11 @@ export const regularParkingDeleteChecked = async (checkedRpno) => {
 }
 
 export const regularPostAdd = async (userData) => {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
     }
     const updateUserData = {
@@ -88,12 +88,12 @@ export const regularPostAdd = async (userData) => {
 }
 
 export const regularGetOne = async (rpno) => {
-    console.log("api", rpno)
-    const token = localStorage.getItem("token")
+    console.log('api', rpno)
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         }
     }
     const res = await axios.get(`${host}/${rpno}`, config)
@@ -102,11 +102,11 @@ export const regularGetOne = async (rpno) => {
 
 export const regularPutOne = async (rpno, serverData) => {
     console.log(serverData)
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
     }
     const { carNum, name, phone, dong, ho } = serverData
@@ -122,6 +122,6 @@ export const regularPutOne = async (rpno, serverData) => {
         }
     }
     const res = await axios.put(`${host}/${rpno}`, body, config)
-    console.log("api", res.data)
+    console.log('api', res.data)
     return res.data
 }

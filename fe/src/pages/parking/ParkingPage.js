@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import BasicLayout from '../../layout/BasicLayout'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { deleteChecked } from '../../components/api/userApi'
-import useCustomLogin from '../../components/hook/useCustomLogin'
 
 const ParkingPage = () => {
     const navigate = useNavigate()
-  const [checkedRpno, setCheckedRpno] = useState([])
+    const [checkedRpno, setCheckedRpno] = useState([])
+    const [checkedVpno, setCheckedVpno] = useState([])
 
     const handleClickRegularList = useCallback(() => { navigate({ pathname: 'regular' }) })
     const handleClickVisitList = useCallback(() => { navigate({ pathname: 'visit' }) })
@@ -31,7 +30,7 @@ const ParkingPage = () => {
                     </button>
                 </li>
             </ul>
-            <Outlet context={{ checkedRpno, setCheckedRpno }} />
+            <Outlet context={{ checkedRpno, setCheckedRpno, checkedVpno, setCheckedVpno }} />
         </BasicLayout>
     )
 }

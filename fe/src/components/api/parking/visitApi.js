@@ -1,15 +1,15 @@
-import axios from "axios"
+import axios from 'axios'
 
-export const API_SERVER_HOST = "http://localhost:8080"
+export const API_SERVER_HOST = 'http://localhost:8080'
 const host = `${API_SERVER_HOST}/api/parking/visit`
 
-export const getList = async (pageParam) => {
+export const visitGetList = async (pageParam) => {
     const { page, size } = pageParam
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
         params: { page, size },
     }
@@ -17,14 +17,14 @@ export const getList = async (pageParam) => {
     return res.data
 }
 
-export const getUserList = async (pageParam, loginUser) => {
-    console.log("getUserList loginUser : ", pageParam)
-    console.log("getUserList loginUser : ", loginUser)
-    const token = localStorage.getItem("token")
+export const visitGetUserList = async (pageParam, loginUser) => {
+    console.log('getUserList loginUser : ', pageParam)
+    console.log('getUserList loginUser : ', loginUser)
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
     }
 
@@ -36,41 +36,41 @@ export const getUserList = async (pageParam, loginUser) => {
     return res.data
 }
 
-export const getVisitSearchList = async (pageParam, searchData) => {
-    const token = localStorage.getItem("token")
+export const visitGetSearchList = async (pageParam, searchData) => {
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
     }
     const body = {
         pageRequestDTO: pageParam,
-        regularSearchDataDTO: searchData,
+        visitSearchDataDTO: searchData,
     }
     const res = await axios.post(`${host}/search`, body, config)
-    console.log("regular api : ", res.data)
+    console.log('regular api : ', res.data)
     return res.data
 }
 
-export const visitParkingDeleteChecked = async (checkedRpno) => {
-    const token = localStorage.getItem("token")
+export const visitParkingDeleteChecked = async (checkedVpno) => {
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
     }
-    const res = await axios.post(`${host}/delete`, checkedRpno, config)
+    const res = await axios.post(`${host}/delete`, checkedVpno, config)
     return res.data
 }
 
 export const visitPostAdd = async (userData) => {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
     }
     const updateUserData = {
@@ -87,26 +87,26 @@ export const visitPostAdd = async (userData) => {
     return res.data
 }
 
-export const getOne = async (rpno) => {
-    console.log("api", rpno)
-    const token = localStorage.getItem("token")
+export const visitGetOne = async (vpno) => {
+    console.log('api', vpno)
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         }
     }
-    const res = await axios.get(`${host}/${rpno}`, config)
+    const res = await axios.get(`${host}/${vpno}`, config)
     return res.data
 }
 
-export const putOne = async (rpno, serverData) => {
+export const visitPutOne = async (vpno, serverData) => {
     console.log(serverData)
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem('token')
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
     }
     const { carNum, name, phone, dong, ho } = serverData
@@ -121,7 +121,7 @@ export const putOne = async (rpno, serverData) => {
             ho: ho,
         }
     }
-    const res = await axios.put(`${host}/${rpno}`, body, config)
-    console.log("api", res.data)
+    const res = await axios.put(`${host}/${vpno}`, body, config)
+    console.log('api', res.data)
     return res.data
 }

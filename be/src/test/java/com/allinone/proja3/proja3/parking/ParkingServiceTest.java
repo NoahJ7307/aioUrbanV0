@@ -5,10 +5,12 @@ import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.parking.HouseholdDTO;
 import com.allinone.proja3.proja3.dto.parking.RegularParkingDTO;
 import com.allinone.proja3.proja3.dto.parking.RegularSearchDataDTO;
+import com.allinone.proja3.proja3.dto.parking.VisitParkingDTO;
 import com.allinone.proja3.proja3.model.parking.Household;
 import com.allinone.proja3.proja3.model.parking.HouseholdPK;
 import com.allinone.proja3.proja3.service.parking.HouseholdService;
 import com.allinone.proja3.proja3.service.parking.RegularParkingService;
+import com.allinone.proja3.proja3.service.parking.VisitParkingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +21,9 @@ import java.time.LocalDate;
 public class ParkingServiceTest {
     @Autowired
     private RegularParkingService regularParkingService;
+
+    @Autowired
+    private VisitParkingService visitParkingService;
 
     @Autowired
     private HouseholdService householdService;
@@ -47,6 +52,35 @@ public class ParkingServiceTest {
                         .build());
 
                 regularParkingService.register(regularParkingDTO);
+            }
+        }
+    }
+
+    @Test
+    public void insertVP(){
+        for (int i = 1; i < 5; i++) {
+            for (int j = 1; j < 5; j++) {
+                HouseholdDTO householdDTO = HouseholdDTO.builder()
+                        .dong(""+(200+i))
+                        .ho(""+(100+j))
+                        .build();
+
+                VisitParkingDTO visitParkingDTO = VisitParkingDTO.builder()
+                        .householdDTO(householdDTO)
+                        .carNum((i*10)+"가"+(1000*j))
+                        .name("Test"+i+".."+j)
+                        .phone("Test"+i+".."+j)
+                        .expectedDate(LocalDate.parse("2024-0"+i+"-0"+j))
+                        .build();
+
+                visitParkingDTO.setHousehold(Household.builder()
+                        .householdPK(HouseholdPK.builder()
+                                .dong(visitParkingDTO.getHouseholdDTO().getDong())
+                                .ho(visitParkingDTO.getHouseholdDTO().getHo())
+                                .build())
+                        .build());
+
+                visitParkingService.register(visitParkingDTO);
             }
         }
     }

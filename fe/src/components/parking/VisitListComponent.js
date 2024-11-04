@@ -1,9 +1,114 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import useCustom from '../hook/useCustom'
+import { useOutletContext } from 'react-router-dom'
+import PageComponent from '../common/PageComponent'
+import useCustomLogin from '../hook/useCustomLogin'
+import { visitGetList, visitGetUserList } from '../api/parking/visitApi'
 
-const VisitListComponent = () => {
+const initState = {
+  dtoList: [],
+  pageNumList: [],
+  pageRequestDTO: null,
+  prev: false,
+  next: false,
+  totalCount: 0,
+  prevPage: 0,
+  nextPage: 0,
+  totalPage: 0,
+  current: 0
+}
+
+const VisitListComponent = ({ pageServerData }) => {
+  const [serverData, setServerData] = useState(initState)
+  const { page, size, moveToPath } = useCustom()
+  const [checked, setChecked] = useState([])
+  const { setCheckedVpno } = useOutletContext() // 부모에게서 전달된 함수
+  const { exceptionHandler, loadLoginData } = useCustomLogin()
+
+  const handleCheckChange = (vpno) => {
+    console.log(serverData)
+    setChecked(checkedItem => {
+      if (checkedItem.includes(vpno)) {
+        return checkedItem.filter(item => item !== vpno)
+      } else {
+        return [...checkedItem, vpno];
+      }
+    })
+  }
+
+  // 체크된 항목이 변경 시 부모에 [vpno] 전달 / 부모 업데이트
+  useEffect(() => {
+    if (checked.length > 0) {
+      setCheckedVpno(checked);
+      console.log('checked:' + checked)
+    } else {
+      setCheckedVpno([]);
+    }
+  }, [checked, setCheckedVpno]);
+
+  useEffect(() => {
+    const loginUser = {
+      dong: loadLoginData().dong,
+      ho: loadLoginData().ho,
+    }
+    if (!pageServerData.dtoList || pageServerData.dtoList.length === 0) { // 검색 결과 유무 분기
+      if (loadLoginData().role === 'ADMIN' || loadLoginData().role === 'ROOT') { // 권한 분기
+        console.log(loadLoginData().role)
+        visitGetList({ page, size }).then(data => {
+          if (data.error) {
+            exceptionHandler(data)
+          } else {
+            setServerData(data)
+          }
+        })
+      } else {
+        console.log(loadLoginData().role)
+        visitGetUserList({ page, size }, loginUser).then(data => {
+          if (data.error) {
+            exceptionHandler(data)
+          } else {
+            setServerData(data)
+          }
+        })
+      }
+    } else {
+      setServerData(pageServerData)
+    }
+  }, [page, size, pageServerData])
+
   return (
-    <div>VisitListComponent</div>
-  )
+    <div>
+      <div className='grid grid-cols-7'>
+        <div>No</div>
+        <div>차량번호</div>
+        <div>이름</div>
+        <div>동</div>
+        <div>호</div>
+        <div>전화번호</div>
+        <div>입차 예정 날짜</div>
+      </div>
+
+      {/* Data Rendering */}
+      {serverData.dtoList.map((visit, index) => (
+        <div key={index} className='grid grid-cols-7'>
+          <div>
+            <input
+              type='checkbox'
+              checked={checked.includes(visit.vpno)} // 페이지 이동 시 체크항목 유지
+              onChange={() => handleCheckChange(visit.vpno)}
+            />
+          </div>
+          <div>{visit.carNum}</div>
+          <div>{visit.name}</div>
+          <div>{visit.household ? visit.household.householdPK.dong : ''}</div>
+          <div>{visit.household ? visit.household.householdPK.ho : ''}</div>
+          <div>{visit.phone}</div>
+          <div>{visit.expectedDate}</div>
+        </div>
+      ))}
+      <PageComponent serverData={serverData} movePage={(pageParam) => moveToPath('/parking/visit', pageParam)} />
+    </div>
+  );
 }
 
 export default VisitListComponent

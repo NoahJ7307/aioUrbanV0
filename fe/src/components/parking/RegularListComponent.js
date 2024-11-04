@@ -25,18 +25,18 @@ const RegularListComponent = ({ pageServerData }) => {
     const { setCheckedRpno } = useOutletContext() // 부모에게서 전달된 함수
     const { exceptionHandler, loadLoginData } = useCustomLogin()
 
-    const handleCheckChange = (uno) => {
+    const handleCheckChange = (rpno) => {
         console.log(serverData)
         setChecked(checkedItem => {
-            if (checkedItem.includes(uno)) {
-                return checkedItem.filter(item => item !== uno)
+            if (checkedItem.includes(rpno)) {
+                return checkedItem.filter(item => item !== rpno)
             } else {
-                return [...checkedItem, uno];
+                return [...checkedItem, rpno];
             }
         })
     }
 
-    // 체크된 항목이 변경 시 부모에 [uno] 전달 / 부모(UserPage) 업데이트
+    // 체크된 항목이 변경 시 부모에 [rpno] 전달 / 부모 업데이트
     useEffect(() => {
         if (checked.length > 0) {
             setCheckedRpno(checked);
@@ -52,7 +52,7 @@ const RegularListComponent = ({ pageServerData }) => {
             ho: loadLoginData().ho,
         }
         if (!pageServerData.dtoList || pageServerData.dtoList.length === 0) { // 검색 결과 유무 분기
-            if (loadLoginData().role == 'ADMIN' || loadLoginData().role == 'ROOT') { // 권한 분기
+            if (loadLoginData().role === 'ADMIN' || loadLoginData().role === 'ROOT') { // 권한 분기
                 console.log(loadLoginData().role)
                 regularGetList({ page, size }).then(data => {
                     if (data.error) {
@@ -88,7 +88,7 @@ const RegularListComponent = ({ pageServerData }) => {
                 <div>등록 일자</div>
             </div>
 
-            {/* 유저 데이터를 map으로 렌더링 */}
+            {/* Data Rendering */}
             {serverData.dtoList.map((regular, index) => (
                 <div key={index} className="grid grid-cols-7">
                     <div>
@@ -100,8 +100,8 @@ const RegularListComponent = ({ pageServerData }) => {
                     </div>
                     <div>{regular.carNum}</div>
                     <div>{regular.name}</div>
-                    <div>{regular.household ? regular.household.householdPK.dong : 'Null'}</div>
-                    <div>{regular.household ? regular.household.householdPK.ho : 'Null'}</div>
+                    <div>{regular.household ? regular.household.householdPK.dong : ''}</div>
+                    <div>{regular.household ? regular.household.householdPK.ho : ''}</div>
                     <div>{regular.phone}</div>
                     <div>{regular.regDate}</div>
                 </div>
