@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface GymParticipantRepository extends JpaRepository<GymParticipant,Long> {
     boolean existsByGymAndUser(Gym gym, User user);
     List<GymParticipant> findByGym(Gym gym);
+    List<GymParticipant> findByGymAndWaitlisted(Gym gym, boolean waitlisted);
 
     // 특정 프로그램과 사용자에 해당하는 참가자 조회
     Optional<GymParticipant> findByGymAndUser(Gym gym, User user);

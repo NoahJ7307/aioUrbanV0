@@ -107,6 +107,18 @@ export const fetchRegisteredUsers = async (programId) => {
         throw error;
     }
 };
+// 프로그램 ID에 따른 대기자 리스트 가져오기
+export const fetchWaitlistUsers = async (programId) => {
+    const config = getConfig();
+    try {
+        const response = await axios.get(`${host}/${programId}/waitlist`,config);
+        console.log("프로그램에 따른 대기자 명단 조회 API: ", response)
+        return response.data;
+    } catch (error) {
+        console.error("Failed to fetch registered users:", error);
+        throw error;
+    }
+};
 // export const getRegisteredUsersByProgramId = async ({uno}) => {
 //     console.log("뭐가찍히나요1105: ", uno);
 //     const config = getConfig();

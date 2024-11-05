@@ -225,6 +225,23 @@ public class GymServiceImpl implements GymService {
                 })
                 .collect(Collectors.toList());
     }
+    //프로그램 id별 대기자 user 조회 메서드
+    @Override
+    public List<UserDTO> getWaitlistUsers(Long programId) {
+        Gym gym = gymRepository.findById(programId)
+                .orElseThrow(() -> new EntityNotFoundException("Gym program not found with id: " + programId));
+        List<GymParticipant> waitlist = gymParticipantRepository.findByGymAndWaitlisted(gym, true);
+        return waitlist.stream()
+                .map(participant -> {
+                    User user = participant.getUser();
+                    return UserDTO.builder()
+                            .uno(user.getUno())
+                            .userName(user.getUserName())
+                            .phone(user.getPhone())
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
 
 
 

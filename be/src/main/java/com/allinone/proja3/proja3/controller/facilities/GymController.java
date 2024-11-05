@@ -137,6 +137,13 @@ public class GymController {
         System.out.println("participants1105 " + participants);
         return ResponseEntity.ok(participants);
     }
+    //대기자 명단 불러오기
+    @GetMapping("/{programId}/waitlist")
+    public ResponseEntity<List<UserDTO>> getWaitlistUsers(@PathVariable Long programId) {
+        List<UserDTO> waitlist = service.getWaitlistUsers(programId);
+        System.out.println("waitlists1105 " + waitlist);
+        return ResponseEntity.ok(waitlist);
+    }
 
     //참가취소 메서드
 //    @DeleteMapping("/{programId}/participants/cancel")

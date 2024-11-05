@@ -30,4 +30,5 @@ public interface GymService {
 //    public GymParticipant findDataByUno (Long uno);
     public List<UserDTO> getRegisterdUsers(Long programId);
 //    public String cancelParticipant(Long programId, User user);
+    public List<UserDTO> getWaitlistUsers(Long programId);
 }

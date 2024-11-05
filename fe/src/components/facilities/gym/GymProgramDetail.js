@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { applyForProgram, applyForWaitlist, deletePost, fetchRegisteredUsers, getGymListByProgramId, getRegisteredUsersByProgramId } from '../../api/facilities/gymApi';
+import { applyForProgram, applyForWaitlist, deletePost, fetchRegisteredUsers, fetchWaitlistUsers, getGymListByProgramId, getRegisteredUsersByProgramId } from '../../api/facilities/gymApi';
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
 import axios from 'axios';
@@ -8,7 +8,7 @@ import { createReducer } from '@reduxjs/toolkit';
 
 const GymProgramDetail = () => {
     const [participants, setParticipants] = useState([]);
-    // const [pendingParticipants, setPendingParticipants] = useState([]);// 대기자 유저 
+    const [waitlist, setWaitlist] = useState([]);// 대기자 유저 
     const [uno, setUno] = useState(); // 로그인한 사용자 uno
     const [userName, setUserName] = useState(); // 로그인한 사용자 name
     const [phone, setPhone] = useState(); // 로그인한 사용자 phone
@@ -36,7 +36,7 @@ const GymProgramDetail = () => {
         if (!getUno && !getUserName && !getPhone) console.log("로그인 정보가 없습니다.");
 
     }, [])
-   
+
 
     useEffect(() => {
         if (gym.programId) {
@@ -56,6 +56,15 @@ const GymProgramDetail = () => {
                 .catch((error) => {
                     console.error("Failed to fetch registered users:", error)
                 })
+            //대기자 유저 목록 가져오기
+            fetchWaitlistUsers(gym.programId)
+                .then((users) => {
+                    setWaitlist(users);
+                })
+                .catch((error) => {
+                    console.error("Failed to fetch registered users:", error)
+                })
+
 
 
         }
@@ -99,10 +108,10 @@ const GymProgramDetail = () => {
 
     // JSX 부분에서 버튼 렌더링
     const buttonState = determineButtonState(gym);
-    
+
     //참가 대기자 로직
     const handleWaiting = async () => {
-    
+
         const waitlistData = {
             uno,
             userName,
@@ -117,7 +126,7 @@ const GymProgramDetail = () => {
         if (!confirmed) {
             return; // 사용자가 취소를 선택한 경우 함수를 종료합니다.
         }
-        
+
         try {
             const waitlistResponse = await applyForWaitlist(waitlistData);
             console.log("응답 코드:", waitlistResponse);
@@ -141,7 +150,7 @@ const GymProgramDetail = () => {
     const getApplicationState = (gym) => {
         return gym.currentParticipants < gym.participantLimit ? '접수 완료' : '대기 중';
     };
-    
+
     //참가접수 로직
     const handleApply = async () => {
         const applicationState = getApplicationState(gym);
@@ -216,8 +225,8 @@ const GymProgramDetail = () => {
                 <h2>대기중인 유저 목록</h2>
                 <ul>
 
-                    {participants.length > 0 ? (
-                        participants.map(user => (
+                    {waitlist.length > 0 ? (
+                        waitlist.map(user => (
                             <li key={user.uno}>
                                 {user.userName} - {user.phone}
                             </li>
