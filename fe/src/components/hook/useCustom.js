@@ -28,11 +28,6 @@ const useCustom = () => {
     }
 
     const moveToPath = (path, pageParam = {}) => {
-        // console.log("movteopaht interannl : ", pageParam)
-        // const { state } = pageParam;
-        // const { pageNum, sizeNum } = state
-
-        // console.log("movteopaht interannl 200) : ", pageNum, sizeNum)
         let queryStr = ""
         if (pageParam) {
             const pageNum = getNum(pageParam.page, 1)

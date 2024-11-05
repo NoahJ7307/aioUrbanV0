@@ -23,6 +23,8 @@ public class GymDTO {
     private LocalDateTime applicationEndDate; //접수기간 종료일
     private LocalDateTime applicationStartDate; //접수기간 시작일
     private int participantLimit; //모집정원
+    private int currentParticipants; // 현재 참가 인원
+
     private String title;
     private String target;
     private String content;

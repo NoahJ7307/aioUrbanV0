@@ -32,9 +32,7 @@ public class RoleTests {
     @Test
     public void insertRolesAdmin() {
         User userAdmin = User.builder()
-                .userName("admin7")
-                .phone("admin7")
-                .pw(passwordEncoder.encode("1111"))
+
                 .userName("admin")
                 .phone("1231")
                 .pw(passwordEncoder.encode("1"))

@@ -1,55 +1,19 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getList, listGym } from '../../api/facilities/gymApi';
-import FetchingModal from '../common/FetchingModal';
+import { listGym } from '../../api/facilities/gymApi';
 import useCustom from '../../hook/useCustom';
-import GymProgramDetail from './GymProgramDetail';
 import PageComponent from '../../common/PageComponent';
-
-const initState = {
-  dtoList: [],
-  pageNumList: [],
-  pageRequestDTO: null,
-  prev: false,
-  next: false,
-  totalCount: 0,
-  prevPage: 0,
-  nextPage: 0,
-  totalPage: 0,
-  current: 0
-}
 
 const GymList = ({ page, size }) => {
   const navigate = useNavigate();
-  const [serverData, setServerData] = useState(initState)
-  const { moveToList, moveToPath } = useCustom()
-  const [checked, setChecked] = useState([])
-  const [checkedProgramId, setCheckedProgramId] = useState([])
-  //로그인에 따라 다르게 보여주는 속성으로 인한 권한 변수선언
-  const role = localStorage.getItem("role")
-  //모달 상태 및 선택된 예약 id관리
-  const [isModalOpen, setIsModalOpen] = useState(false); //모달 열림상태
-  // const [selectedProgramId, setSelectedProgramId] = useState(null); //선택된 예약 id
-
-
-  const handleCheckChange = (programId) => {
-    setChecked((prevChecked) => {
-      const isChecked = prevChecked.includes(programId);
-      const updatedChecked = isChecked
-        ? prevChecked.filter(item => item !== programId)
-        : [...prevChecked, programId];
-      setCheckedProgramId(updatedChecked);
-      return updatedChecked;
-    });
-  };
+  const [serverData, setServerData] = useState({ dtoList: [], totalPage: 0 });
+  const { moveToList } = useCustom();
+  const role = localStorage.getItem("role");
 
   const fetchGymProgramList = async () => {
     try {
       const data = await listGym({ page, size });
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      console.log("Fetched data: ", data);
+      if (data.error) throw new Error(data.error);
       setServerData(data);
     } catch (err) {
       console.error("데이터를 가져오는데 오류가 발생했습니다 => ", err);
@@ -58,60 +22,73 @@ const GymList = ({ page, size }) => {
   };
 
   useEffect(() => {
-    console.log(page, size)
     fetchGymProgramList();
-  }, [page, size])
+  }, [page, size]);
 
-  const handeClickAdd = useCallback(() => {
-    navigate('/facilities/gym/add');
-
-  }, [navigate]);
-  const handleProgramClick = (gym, page, size) => {
-    console.log("handlePraclick :", page, size, gym)
-    // 예시: 수정 페이지로 이동 시 쿼리 파라미터 포함
+  const handleProgramClick = (gym) => {
     navigate(`/facilities/gym/detail/${gym.programId}?page=${page}&size=${size}`, { state: { gym } });
-
-
-
   };
-  return (
 
+  const determineButtonState = (gym) => {
+    switch (gym.programState) {
+      case 'NOT_STARTED':
+        return <button onClick={() => handleProgramClick(gym)}>접수 전</button>;
+      case 'AVAILABLE':
+        return <button onClick={() => handleProgramClick(gym)}>접수 중</button>;
+      case 'WAITLIST':
+        return <button onClick={() => handleProgramClick(gym)}>대기 가능</button>;
+      case 'CLOSED':
+        return <button onClick={() => handleProgramClick(gym)}>마감</button>;
+      default:
+        return null;
+    }
+  };
+
+  return (
     <div>
       <h2>프로그램 신청 목록</h2>
-      <div className='flex justify-between mb-4'>
-        {/* {role === 'ADMIN' && (
-                    <div>
-                        <button onClick={handleDelete}> 선택 삭제 </button>
-                    </div>
-                )} */}
-      </div>
-      <div>
-        {serverData.dtoList.map((gym) => (
-          <div key={gym.programId} onClick={() => handleProgramClick(gym, page, size)} >
-            <h1>{gym.title}</h1>
-            <p>{gym.content}</p>
-            <button onClick={() => handleProgramClick(gym, page, size)} style={{ marginLeft: '10px' }}>신청하기 </button>
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr>
 
-            <hr />
-          </div>
+            <th style={{ border: '1px solid black', padding: '10px' }}>no</th>
+            <th style={{ border: '1px solid black', padding: '10px' }} onClick={handleProgramClick}>프로그램</th>
+            <th style={{ border: '1px solid black', padding: '10px' }}>모집현황</th>
+            <th style={{ border: '1px solid black', padding: '10px' }}>접수 버튼</th>
+          </tr>
 
-        ))}
-        {/* {selectedProgramId && <GymProgramDetail gym={selectedProgramId} />} */}
-      </div>
+        </thead>
+        <tbody>
+          {serverData.dtoList.map((gym) => (
+            <tr key={gym.programId}>
+              <td style={{ border: '1px solid black', padding: '10px' }}>{gym.programId}</td>
+              <td style={{ border: '1px solid black', padding: '10px' }} onClick={() => handleProgramClick(gym)}>
+                <h1 style={{ cursor: 'pointer' }}>{gym.title}</h1>
+                <p>{gym.content}</p>
+                <p>프로그램 진행 기간 : {gym.programStartDate}~{gym.programEndDate}</p>
+              </td>
+              <td style={{ border: '1px solid black', padding: '10px' }}>{gym.currentParticipants}/{gym.participantLimit}</td>
+              <td style={{ border: '1px solid black', padding: '10px' }}>
+                {determineButtonState(gym)}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+        {/* <hr /> */}
+      </table>
       {role === 'ADMIN' && (
-        <div>
-          <button onClick={handeClickAdd}>프로그램 등록</button>
+        <div style={{ marginTop: '20px' }}>
+          <button onClick={() => navigate('/facilities/gym/add')}>프로그램 등록</button>
         </div>
       )}
-      {serverData && serverData.dtoList && serverData.dtoList.length > 0 && (
+      {serverData.dtoList.length > 0 && (
         <PageComponent
           serverData={serverData}
-          movePage={(pageParam) => moveToList(pageParam, '/facilities/gym/list')} />
+          movePage={(pageParam) => moveToList(pageParam, '/facilities/gym/list')}
+        />
       )}
     </div>
+  );
+};
 
-
-  )
-}
-
-export default GymList
+export default GymList;

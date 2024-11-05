@@ -1,5 +1,7 @@
 package com.allinone.proja3.proja3.model;
 
+import com.allinone.proja3.proja3.model.facilities.Gym;
+import com.allinone.proja3.proja3.model.facilities.GymParticipant;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,5 +31,9 @@ public class User {
     private List<UserRole> userRoleList = new ArrayList<>();
     public void addRole(UserRole userRole){ userRoleList.add(userRole);}
     public void clearRole(){ userRoleList.clear();}
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<GymParticipant> gymParticipants;
+
 
 }

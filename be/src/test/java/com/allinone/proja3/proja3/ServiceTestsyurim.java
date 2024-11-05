@@ -1,6 +1,5 @@
 package com.allinone.proja3.proja3;
 
-import com.allinone.proja3.proja3.dto.UserDTO;
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.facilities.StudyDTO;
@@ -57,12 +56,13 @@ public class ServiceTestsyurim {
 
     @Test
     public  void insertGymTest() {
-        for(int i = 0; i <100; i++) {
+        for(int i = 0; i <10; i++) {
             GymDTO gymDTO = GymDTO.builder()
 //                    .programId(1L)
                     .title("제목입니다"+i)
                     .content("내용입니다" +i)
                     .target("타겟"+i)
+                    .participantLimit(10)
                     .programStartDate(LocalDate.of(2024, 11, 16))
                     .programEndDate(LocalDate.of(2024, 12, 16))
                     .programStartTime(LocalTime.of(10,30))
@@ -71,7 +71,7 @@ public class ServiceTestsyurim {
                     .applicationEndDate(LocalDateTime.of(2024, 11, 10, 18, 30))
                     //.membershipType("Basic")
                     .delFlag(false) // delFlag 값을 설정
-                    .programState(ProgramState.Pending)
+//                    .programState(ProgramState.WAITING)
                     .build();
             Gym gym = gymService.dtoToEntity(gymDTO);
             gymService.newProgramPost(gym);

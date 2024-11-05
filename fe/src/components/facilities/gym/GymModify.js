@@ -13,6 +13,7 @@ const GymModify = () => {
     programEndTime: '',
     applicationStartDate: '',
     applicationEndDate: '',
+    participantLimit: '',
     price: '',
 
   });
@@ -22,7 +23,6 @@ const GymModify = () => {
   //URL 쿼리에서 page와 size가져오기
 
 
-  //1030여기부터 다시 수정할때 기존정보 안불려짐
 
 
   useEffect(() => {
@@ -40,6 +40,7 @@ const GymModify = () => {
             programEndTime: data.programEndTime || '',
             applicationStartDate: data.applicationStartDate || '',
             applicationEndDate: data.applicationEndDate || '',
+            participantLimit: data.participantLimit || '',
             price: data.price || '',
 
           })
@@ -63,11 +64,7 @@ const GymModify = () => {
     try {
       await modifyPost(programId, formData);
       alert('프로그램이 수정되었습니다.');
-      // navigate(`/facilities/gym/detail/${programId}`, { state: { gym: { programId, ...formData } } })
-      // navigate(`/facilities/gym/detail?page=${page}&size=${size}`, { state: { gym: { programId, ...formData } } });
       navigate(`/facilities/gym/detail/${programId}?page=${page}&size=${size}`, { state: { gym: { programId, ...formData } } });
-      // navigate(`/gym/detail/${programId}`);
-      // navigate(`/facilities/gym/detail/${programId}?page=${page}&size=${size}`); // 여기에서 page와 size를 전달
     } catch (error) {
       console.error('수정중 오류발생', error)
       alert('오류발생함')
@@ -107,6 +104,16 @@ const GymModify = () => {
             onChange={handleModify}
             required
           />
+        </p>
+        <p>
+          모집정원:
+          <input
+            type={'number'}
+            name="participantLimit"
+            value={formData.participantLimit || ''}
+            onChange={handleModify}
+            required
+          />명
         </p>
         <p>
           진행 기간:

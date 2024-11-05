@@ -22,13 +22,16 @@ const useCustomLogin = () => {
         const action = await dispatch(loginPostAsync(loginParam))
 
         if (action.type === 'loginPostAsync/fulfilled') {
-            const { accessToken, uno, roleNames, dong, ho } = action.payload
+            // const { accessToken, uno, roleNames, dong, ho } = action.payload
+            const { accessToken, uno, roleNames, dong, ho, phone, userName } = action.payload
             console.log(action.payload)
             localStorage.setItem("token", accessToken)
             localStorage.setItem("uno", uno)
             localStorage.setItem("role", roleNames)
             localStorage.setItem("dong", dong)
             localStorage.setItem("ho", ho)
+            localStorage.setItem("phone", phone)// gym 프로그램 신청 유저확인을 위해 추가함 
+            localStorage.setItem("userName", userName)// gym 프로그램 신청 유저확인을 위해 추가함
             alert("로그인 되었습니다.")
             moveToPath('/')
         } else {

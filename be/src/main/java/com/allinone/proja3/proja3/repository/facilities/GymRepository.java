@@ -23,5 +23,4 @@ public interface GymRepository extends JpaRepository<Gym, Long> {
     void updateToDelete(@Param("programId") Long programId, @Param("flag") boolean flag);
     @Query("SELECT g FROM Gym g WHERE g.delFlag = false ORDER BY g.programId DESC")
     Page<Gym> findNonDeletedPrograms(Pageable pageable);
-//    List<Gym> findGymBydelFlag(Boolean delflag);
 }
