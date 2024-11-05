@@ -2,10 +2,7 @@ package com.allinone.proja3.proja3.parking;
 
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
-import com.allinone.proja3.proja3.dto.parking.HouseholdDTO;
-import com.allinone.proja3.proja3.dto.parking.RegularParkingDTO;
-import com.allinone.proja3.proja3.dto.parking.RegularSearchDataDTO;
-import com.allinone.proja3.proja3.dto.parking.VisitParkingDTO;
+import com.allinone.proja3.proja3.dto.parking.*;
 import com.allinone.proja3.proja3.model.parking.Household;
 import com.allinone.proja3.proja3.model.parking.HouseholdPK;
 import com.allinone.proja3.proja3.service.parking.HouseholdService;
@@ -68,8 +65,8 @@ public class ParkingServiceTest {
                 VisitParkingDTO visitParkingDTO = VisitParkingDTO.builder()
                         .householdDTO(householdDTO)
                         .carNum((i*10)+"가"+(1000*j))
-                        .name("Test"+i+".."+j)
-                        .phone("Test"+i+".."+j)
+                        .name("Test2"+i+".."+j)
+                        .phone("Test2"+i+".."+j)
                         .expectedDate(LocalDate.parse("2024-0"+i+"-0"+j))
                         .build();
 
@@ -127,6 +124,21 @@ public class ParkingServiceTest {
                 .size(10)
                 .build();
         PageResponseDTO<RegularParkingDTO> list = regularParkingService.getSearchList(pageRequestDTO, regularSearchDataDTO);
+        list.getDtoList().forEach(System.out::println);
+    }
+
+    @Test
+    public void visitGetSearchListTest(){
+        VisitSearchDataDTO visitSearchDataDTO = VisitSearchDataDTO.builder()
+                .searchCategory("expectedDate")
+                .expectedDateStart(LocalDate.parse("2024-11-01"))
+                .expectedDateEnd(LocalDate.parse("2024-11-12"))
+                .build();
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .build();
+        PageResponseDTO<VisitParkingDTO> list = visitParkingService.getSearchList(pageRequestDTO, visitSearchDataDTO);
         list.getDtoList().forEach(System.out::println);
     }
 }

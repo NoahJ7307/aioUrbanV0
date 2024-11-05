@@ -27,8 +27,8 @@ public class VisitController {
     public PageResponseDTO<VisitParkingDTO> getUserList(@RequestBody VisitReqDTO visitReqDTO) {
         PageRequestDTO pageRequestDTO = visitReqDTO.getPageRequestDTO();
         HouseholdDTO householdDTO = visitReqDTO.getHouseholdDTO();
-        System.out.println("VisitParking getList controller P : " + pageRequestDTO);
-        System.out.println("VisitParking getList controller H : " + householdDTO);
+        System.out.println("VisitParking getList controller pageRequestDTO : " + pageRequestDTO);
+        System.out.println("VisitParking getList controller householdDTO : " + householdDTO);
         return visitParkingService.getUserList(pageRequestDTO, householdDTO);
     }
 
@@ -36,8 +36,8 @@ public class VisitController {
     public PageResponseDTO<VisitParkingDTO> getSearchList(@RequestBody VisitSearchReqDTO visitSearchReqDTO){
         PageRequestDTO pageRequestDTO = visitSearchReqDTO.getPageRequestDTO();
         VisitSearchDataDTO visitSearchDataDTO = visitSearchReqDTO.getVisitSearchDataDTO();
-        System.out.println("Visit getSearchList controller P : "+pageRequestDTO);
-        System.out.println("Visit getSearchList controller U : "+ visitSearchDataDTO);
+        System.out.println("Visit getSearchList controller pageRequestDTO : "+pageRequestDTO);
+        System.out.println("Visit getSearchList controller visitSearchDataDTO : "+ visitSearchDataDTO);
         System.out.println("----"+visitSearchReqDTO);
         return visitParkingService.getSearchList(pageRequestDTO, visitSearchDataDTO);
     }

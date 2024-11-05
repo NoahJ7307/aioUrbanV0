@@ -103,7 +103,7 @@ public class VisitParkingServiceImpl implements VisitParkingService{
             case "ho": result = visitParkingRepository.findByHo(visitSearchDataDTO.getSearchValue(), pageable); break;
             case "name": result = visitParkingRepository.findByName(visitSearchDataDTO.getSearchValue(), pageable); break;
             case "phone": result = visitParkingRepository.findByPhone(visitSearchDataDTO.getSearchValue(), pageable); break;
-            case "regDate" : {
+            case "expectedDate" : {
                 LocalDate start = visitSearchDataDTO.getExpectedDateStart();
                 LocalDate end = visitSearchDataDTO.getExpectedDateEnd();
                 result = visitParkingRepository.findByExpectedDate(start, end, pageable);
@@ -112,7 +112,7 @@ public class VisitParkingServiceImpl implements VisitParkingService{
         }
 
         // entityToDto를 사용하여 엔티티 -> DTO 변환
-        List<VisitParkingDTO> dtoList = result.get()
+        List<VisitParkingDTO> dtoList = result.getContent().stream()
                 .map(this::entityToDto)  // entityToDto 메서드를 사용하여 변환
                 .collect(Collectors.toList());
 

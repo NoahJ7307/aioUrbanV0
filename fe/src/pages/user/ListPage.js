@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import UserListComponent from '../../components/user/UserListComponent'
 import useCustomLogin from '../../components/hook/useCustomLogin'
-import { Outlet, useNavigate, useOutletContext } from 'react-router-dom'
-import { deleteChecked, getSearchList } from '../../components/api/userApi'
+import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom'
+import { deleteChecked, getList, getSearchList } from '../../components/api/userApi'
 import useCustom from '../../components/hook/useCustom'
 
 const initStateSearchData = {
@@ -27,8 +27,8 @@ const ListPage = () => {
     const navigate = useNavigate()
     const { checkedUno, setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
     const [searchData, setSearchData] = useState(initStateSearchData)
-    const { page, size } = useCustom()
     const [pageServerData, setPageServerData] = useState(initStateServerData)
+    const location = useLocation()
 
     const handleClickModify = useCallback(() => {
         if (checkedUno.length == 1) {
@@ -57,11 +57,58 @@ const ListPage = () => {
         setSearchData(prevData => ({ ...prevData, searchCategory: e.target.value }))
     }
     const handleClickSearch = () => {
-        const pageParam = { page, size }
+        const pageParam = { page: 1, size: 10 }
         getSearchList(pageParam, searchData).then(data => {
             setPageServerData(data)
+            // 결과 예외 처리
+            if (!data.dtoList || data.dtoList.length === 0) {
+                alert('검색 결과가 없습니다')
+            }
         })
+
+
+        // queryParameter 생성
+        const searchParams = new URLSearchParams()
+        searchParams.set('page', 1)
+        searchParams.set('size', 10)
+
+        if (searchData.searchCategory) {
+            searchParams.set('searchCategory', searchData.searchCategory)
+        }
+        if (searchData.searchValue) {
+            searchParams.set('searchValue', searchData.searchValue)
+        }
+
+        // queryParameter 경로 설정
+        navigate(`/user/list?${searchParams.toString()}`)
     }
+
+    useEffect(() => {
+        // queryParameter 설정
+        const queryParams = new URLSearchParams(location.search)
+        const page = parseInt(queryParams.get('page')) || 1
+        const size = parseInt(queryParams.get('size')) || 10
+
+        const newSearchData = {
+            searchCategory: queryParams.get('searchCategory') || '',
+            searchValue: queryParams.get('searchValue') || '',
+        }
+        setSearchData(newSearchData)
+
+        const pageParam = { page, size }
+
+        if (newSearchData.searchCategory) {
+            getSearchList(pageParam, newSearchData).then(data => {
+                setPageServerData(data)
+            })
+        } else {
+            // 기본 데이터 로드
+            getList(pageParam).then(data => {
+                setPageServerData(data)
+            })
+        }
+    }, [location.search])
+
     const handleClickClear = () => {
         setPageServerData(initStateServerData)
     }
@@ -111,7 +158,7 @@ const ListPage = () => {
                 </li>
                 {/* // -------------------- */}
             </ul>
-            <UserListComponent pageServerData={pageServerData} />
+            <UserListComponent pageServerData={pageServerData} searchData={searchData} />
 
             {/* 자식요소로 uno 설정 함수 전달 */}
             <Outlet context={{ checkedUno, setCheckedUno }} />

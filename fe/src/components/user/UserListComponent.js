@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getList } from '../api/userApi'
 import useCustom from '../hook/useCustom'
-import { useOutletContext } from 'react-router-dom'
+import { useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import PageComponent from '../common/PageComponent'
 import useCustomLogin from '../hook/useCustomLogin'
 
@@ -18,12 +18,14 @@ const initState = {
     current: 0
 }
 
-const UserListComponent = ({ pageServerData }) => {
+const UserListComponent = ({ pageServerData, searchData }) => {
     const [serverData, setServerData] = useState(initState)
     const { page, size, moveToList } = useCustom()
     const [checked, setChecked] = useState([])
     const { setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
-    const { exceptionHandler, loadLoginData, navigate } = useCustomLogin()
+    const { exceptionHandler, loadLoginData } = useCustomLogin()
+    const location = useLocation()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (!pageServerData.dtoList || pageServerData.dtoList.length === 0) {
@@ -51,6 +53,23 @@ const UserListComponent = ({ pageServerData }) => {
 
     }, [page, size, pageServerData])
 
+    const movePage = (pageParam) => {
+        const searchParams = new URLSearchParams(location.search)
+
+        searchParams.set('page', pageParam.page)
+
+        if (searchData.searchCategory) {
+            searchParams.set('searchCategory', searchData.searchCategory)
+        }
+        if (searchData.searchValue) {
+            searchParams.set('searchValue', searchData.searchValue)
+        }
+
+        navigate({
+            pathname: '/user/list',
+            search: `?${searchParams.toString()}`,
+        })
+    }
     const handleCheckChange = (uno) => {
         setChecked(checkedItem => {
             if (checkedItem.includes(uno)) {
@@ -99,7 +118,7 @@ const UserListComponent = ({ pageServerData }) => {
                     <div>{user.userRoleList}</div>
                 </div>
             ))}
-            <PageComponent serverData={serverData} movePage={moveToList} />
+            <PageComponent serverData={serverData} movePage={movePage} />
         </div>
     );
 }

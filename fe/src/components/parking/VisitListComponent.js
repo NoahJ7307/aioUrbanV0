@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useCustom from '../hook/useCustom'
-import { useOutletContext } from 'react-router-dom'
+import { useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import PageComponent from '../common/PageComponent'
 import useCustomLogin from '../hook/useCustomLogin'
 import { visitGetList, visitGetUserList } from '../api/parking/visitApi'
@@ -18,12 +18,14 @@ const initState = {
   current: 0
 }
 
-const VisitListComponent = ({ pageServerData }) => {
+const VisitListComponent = ({ pageServerData, searchData }) => {
   const [serverData, setServerData] = useState(initState)
-  const { page, size, moveToPath } = useCustom()
+  const { page, size } = useCustom()
   const [checked, setChecked] = useState([])
   const { setCheckedVpno } = useOutletContext() // 부모에게서 전달된 함수
   const { exceptionHandler, loadLoginData } = useCustomLogin()
+  const location = useLocation()
+  const navigate = useNavigate()
 
   const handleCheckChange = (vpno) => {
     console.log(serverData)
@@ -31,7 +33,7 @@ const VisitListComponent = ({ pageServerData }) => {
       if (checkedItem.includes(vpno)) {
         return checkedItem.filter(item => item !== vpno)
       } else {
-        return [...checkedItem, vpno];
+        return [...checkedItem, vpno]
       }
     })
   }
@@ -39,12 +41,12 @@ const VisitListComponent = ({ pageServerData }) => {
   // 체크된 항목이 변경 시 부모에 [vpno] 전달 / 부모 업데이트
   useEffect(() => {
     if (checked.length > 0) {
-      setCheckedVpno(checked);
+      setCheckedVpno(checked)
       console.log('checked:' + checked)
     } else {
-      setCheckedVpno([]);
+      setCheckedVpno([])
     }
-  }, [checked, setCheckedVpno]);
+  }, [checked, setCheckedVpno])
 
   useEffect(() => {
     const loginUser = {
@@ -76,6 +78,30 @@ const VisitListComponent = ({ pageServerData }) => {
     }
   }, [page, size, pageServerData])
 
+  const movePage = (pageParam) => {
+    const searchParams = new URLSearchParams(location.search)
+
+    searchParams.set('page', pageParam.page)
+
+    if (searchData.searchCategory) {
+      searchParams.set('searchCategory', searchData.searchCategory)
+    }
+    if (searchData.searchValue) {
+      searchParams.set('searchValue', searchData.searchValue)
+    }
+    if (searchData.expectedDateStart) {
+      searchParams.set('expectedDateStart', searchData.expectedDateStart)
+    }
+    if (searchData.expectedDateEnd) {
+      searchParams.set('expectedDateEnd', searchData.expectedDateEnd)
+    }
+
+    navigate({
+      pathname: '/parking/visit',
+      search: `?${searchParams.toString()}`,
+    })
+  }
+
   return (
     <div>
       <div className='grid grid-cols-7'>
@@ -106,9 +132,9 @@ const VisitListComponent = ({ pageServerData }) => {
           <div>{visit.expectedDate}</div>
         </div>
       ))}
-      <PageComponent serverData={serverData} movePage={(pageParam) => moveToPath('/parking/visit', pageParam)} />
+      <PageComponent serverData={serverData} movePage={movePage} />
     </div>
-  );
+  )
 }
 
 export default VisitListComponent

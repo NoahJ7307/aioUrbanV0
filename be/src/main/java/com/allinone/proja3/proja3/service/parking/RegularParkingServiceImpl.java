@@ -118,7 +118,7 @@ public class RegularParkingServiceImpl implements RegularParkingService{
         }
 
         // entityToDto를 사용하여 엔티티 -> DTO 변환
-        List<RegularParkingDTO> dtoList = result.get()
+        List<RegularParkingDTO> dtoList = result.getContent().stream()
                 .map(this::entityToDto)  // entityToDto 메서드를 사용하여 변환
                 .collect(Collectors.toList());
 

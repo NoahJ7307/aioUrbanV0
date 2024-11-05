@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // entityToDto를 사용하여 엔티티 -> DTO 변환
-        List<UserDTO> dtoList = result.get()
+        List<UserDTO> dtoList = result.getContent().stream()
                 .map(this::entityToDto)  // entityToDto 메서드를 사용하여 변환
                 .collect(Collectors.toList());
 

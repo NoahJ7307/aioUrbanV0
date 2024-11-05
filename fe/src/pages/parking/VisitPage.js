@@ -1,9 +1,9 @@
 import VisitListComponent from '../../components/parking/VisitListComponent'
-import React, { useCallback, useState } from 'react'
-import { Outlet, useNavigate, useOutletContext } from 'react-router-dom'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import useCustomLogin from '../../components/hook/useCustomLogin'
 import useCustom from '../../components/hook/useCustom'
-import { visitGetSearchList, visitParkingDeleteChecked } from '../../components/api/parking/visitApi'
+import { visitGetList, visitGetSearchList, visitParkingDeleteChecked } from '../../components/api/parking/visitApi'
 
 const initStateSearchData = {
   searchCategory: '',
@@ -30,9 +30,10 @@ const VisitPage = () => {
   const { checkedVpno, setCheckedVpno } = useOutletContext() // 부모에게서 전달된 함수
   const { loadLoginData } = useCustomLogin()
   const [searchData, setSearchData] = useState(initStateSearchData)
-  const { page, size } = useCustom()
   const [pageServerData, setPageServerData] = useState(initStateServerData)
   const [inputTitle, setInputTitle] = useState('')
+  const location = useLocation()
+
 
   const handleClickAdd = useCallback(() => { navigate({ pathname: 'add' }) })
 
@@ -88,6 +89,7 @@ const VisitPage = () => {
     }))
   }
 
+
   const handleClickSearch = () => {
     // 검색 범위 예외처리
     if (searchData.searchCategory === 'expectedDate') {
@@ -100,7 +102,7 @@ const VisitPage = () => {
         return
       }
     }
-    const pageParam = { page, size }
+    const pageParam = { page: 1, size: 10 }
     visitGetSearchList(pageParam, searchData).then(data => {
       setPageServerData(data)
       // 결과 예외 처리
@@ -108,10 +110,61 @@ const VisitPage = () => {
         alert('검색 결과가 없습니다')
       }
     })
+
+    // queryParameter 생성
+    const searchParams = new URLSearchParams()
+    searchParams.set('page', 1)
+    searchParams.set('size', 10)
+
+    if (searchData.searchCategory) {
+      searchParams.set('searchCategory', searchData.searchCategory)
+    }
+    if (searchData.searchValue) {
+      searchParams.set('searchValue', searchData.searchValue)
+    }
+    if (searchData.expectedDateStart) {
+      searchParams.set('expectedDateStart', searchData.expectedDateStart)
+    }
+    if (searchData.expectedDateEnd) {
+      searchParams.set('expectedDateEnd', searchData.expectedDateEnd)
+    }
+
+    // queryParameter 경로 설정
+    navigate(`/parking/visit?${searchParams.toString()}`)
   }
+
+  useEffect(() => {
+    // queryParameter 설정
+    const queryParams = new URLSearchParams(location.search)
+    const page = parseInt(queryParams.get('page')) || 1
+    const size = parseInt(queryParams.get('size')) || 10
+
+    const newSearchData = {
+      searchCategory: queryParams.get('searchCategory') || '',
+      searchValue: queryParams.get('searchValue') || '',
+      expectedDateStart: queryParams.get('expectedDateStart') || '',
+      expectedDateEnd: queryParams.get('expectedDateEnd') || '',
+    }
+    setSearchData(newSearchData)
+
+    const pageParam = { page, size }
+
+    if (newSearchData.searchCategory) {
+      visitGetSearchList(pageParam, newSearchData).then(data => {
+        setPageServerData(data)
+      })
+    } else {
+      // 기본 데이터 로드
+      visitGetList(pageParam).then(data => {
+        setPageServerData(data)
+      })
+    }
+  }, [location.search])
+
 
   const handleClickClear = () => {
     setPageServerData(initStateServerData)
+    navigate('/parking/visit')
   }
   // --------------------
   return (
@@ -149,7 +202,7 @@ const VisitPage = () => {
               <option value='expectedDate'>입차 예정 날짜</option>
             </select>
           </li>
-          {searchData.searchCategory === 'exitDate' ?
+          {searchData.searchCategory === 'expectedDate' ?
             <li>
               <input className=''
                 type='date'
@@ -188,7 +241,7 @@ const VisitPage = () => {
           {/* // -------------------- */}
         </ul>
       }
-      <VisitListComponent pageServerData={pageServerData} />
+      <VisitListComponent pageServerData={pageServerData} searchData={searchData} />
       <Outlet context={{ checkedVpno, setCheckedVpno }} />
     </div>
   )

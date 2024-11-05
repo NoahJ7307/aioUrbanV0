@@ -14,6 +14,7 @@ export const visitGetList = async (pageParam) => {
         params: { page, size },
     }
     const res = await axios.get(`${host}/list`, config)
+    console.log('getList : ', res.data)
     return res.data
 }
 
@@ -48,8 +49,9 @@ export const visitGetSearchList = async (pageParam, searchData) => {
         pageRequestDTO: pageParam,
         visitSearchDataDTO: searchData,
     }
+    console.log(body)
     const res = await axios.post(`${host}/search`, body, config)
-    console.log('regular api : ', res.data)
+    console.log('search data api : ', res.data)
     return res.data
 }
 

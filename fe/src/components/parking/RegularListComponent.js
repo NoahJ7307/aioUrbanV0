@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useCustom from '../hook/useCustom'
-import { useOutletContext } from 'react-router-dom'
+import { useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import PageComponent from '../common/PageComponent'
 import useCustomLogin from '../hook/useCustomLogin'
 import { regularGetList, regularGetUserList } from '../api/parking/regularApi'
@@ -18,12 +18,14 @@ const initState = {
     current: 0
 }
 
-const RegularListComponent = ({ pageServerData }) => {
+const RegularListComponent = ({ pageServerData, searchData }) => {
     const [serverData, setServerData] = useState(initState)
     const { page, size, moveToPath } = useCustom()
     const [checked, setChecked] = useState([])
     const { setCheckedRpno } = useOutletContext() // 부모에게서 전달된 함수
     const { exceptionHandler, loadLoginData } = useCustomLogin()
+    const location = useLocation()
+    const navigate = useNavigate()
 
     const handleCheckChange = (rpno) => {
         console.log(serverData)
@@ -76,6 +78,29 @@ const RegularListComponent = ({ pageServerData }) => {
         }
     }, [page, size, pageServerData])
 
+    const movePage = (pageParam) => {
+        const searchParams = new URLSearchParams(location.search)
+
+        searchParams.set('page', pageParam.page)
+
+        if (searchData.searchCategory) {
+            searchParams.set('searchCategory', searchData.searchCategory)
+        }
+        if (searchData.searchValue) {
+            searchParams.set('searchValue', searchData.searchValue)
+        }
+        if (searchData.regDateStart) {
+            searchParams.set('regDateStart', searchData.regDateStart)
+        }
+        if (searchData.regDateEnd) {
+            searchParams.set('regDateEnd', searchData.regDateEnd)
+        }
+
+        navigate({
+            pathname: '/parking/regular',
+            search: `?${searchParams.toString()}`,
+        })
+    }
     return (
         <div>
             <div className="grid grid-cols-7">
@@ -106,7 +131,7 @@ const RegularListComponent = ({ pageServerData }) => {
                     <div>{regular.regDate}</div>
                 </div>
             ))}
-            <PageComponent serverData={serverData} movePage={(pageParam) => moveToPath('/parking/regular', pageParam)} />
+            <PageComponent serverData={serverData} movePage={movePage} />
         </div>
     );
 }
