@@ -19,8 +19,6 @@ public class HouseholdServiceImpl implements HouseholdService {
         System.out.println("Household register service : "+householdDTO);
         Household household = dtoToEntity(householdDTO);
         Household result = householdRepository.save(household);
-        System.out.println("Household register service result : "+result.getHouseholdPK().getDong());
-        System.out.println("Household register service result : "+result.getHouseholdPK().getHo());
         return result.getHouseholdPK();
     }
 

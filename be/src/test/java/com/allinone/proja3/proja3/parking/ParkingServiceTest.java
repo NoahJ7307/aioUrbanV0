@@ -113,6 +113,23 @@ public class ParkingServiceTest {
     }
 
     @Test
+    public void visitPutOneTest(){
+        VisitParkingDTO visitParkingDTO = VisitParkingDTO.builder()
+                .householdDTO(HouseholdDTO.builder()
+                        .dong("333")
+                        .ho("333")
+                        .build())
+                .carNum("service test")
+                .name("service test")
+                .phone("service test")
+                .expectedDate(LocalDate.parse("2000-01-01"))
+                .build();
+        Long vpno = 76L;
+        visitParkingService.putOne(visitParkingDTO,vpno);
+        System.out.println(visitParkingDTO);
+    }
+
+    @Test
     public void getSearchListTest(){
         RegularSearchDataDTO regularSearchDataDTO = RegularSearchDataDTO.builder()
                 .searchCategory("regDate")

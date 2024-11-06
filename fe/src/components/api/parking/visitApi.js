@@ -67,7 +67,7 @@ export const visitParkingDeleteChecked = async (checkedVpno) => {
     return res.data
 }
 
-export const visitPostAdd = async (userData) => {
+export const visitPostAdd = async (serverData) => {
     const token = localStorage.getItem('token')
     const config = {
         headers: {
@@ -75,17 +75,18 @@ export const visitPostAdd = async (userData) => {
             'Content-Type': 'application/json',
         },
     }
-    const updateUserData = {
-        carNum: userData.carNum,
-        name: userData.name,
-        phone: userData.phone,
+    const { carNum, name, phone, dong, ho, expectedDate } = serverData
+    const updateServerData = {
+        carNum: carNum,
+        name: name,
+        phone: phone,
+        expectedDate: expectedDate,
         householdDTO: {
-            dong: userData.dong,
-            ho: userData.ho,
-        }
+            dong: dong,
+            ho: ho,
+        },
     }
-    console.log(updateUserData)
-    const res = await axios.post(`${host}/`, updateUserData, config)
+    const res = await axios.post(`${host}/`, updateServerData, config)
     return res.data
 }
 
@@ -111,19 +112,18 @@ export const visitPutOne = async (vpno, serverData) => {
             'Content-Type': 'application/json',
         },
     }
-    const { carNum, name, phone, dong, ho } = serverData
-    const body = {
-        regularParkingDTO: {
-            carNum: carNum,
-            name: name,
-            phone: phone,
-        },
+    const { carNum, name, phone, dong, ho, expectedDate } = serverData
+    const updateServerData = {
+        carNum: carNum,
+        name: name,
+        phone: phone,
+        expectedDate: expectedDate,
         householdDTO: {
             dong: dong,
             ho: ho,
-        }
+        },
     }
-    const res = await axios.put(`${host}/${vpno}`, body, config)
+    const res = await axios.put(`${host}/${vpno}`, updateServerData, config)
     console.log('api', res.data)
     return res.data
 }

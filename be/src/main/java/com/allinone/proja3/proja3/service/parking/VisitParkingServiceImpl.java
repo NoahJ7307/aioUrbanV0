@@ -7,7 +7,9 @@ import com.allinone.proja3.proja3.dto.parking.VisitParkingDTO;
 import com.allinone.proja3.proja3.dto.parking.VisitReqDTO;
 import com.allinone.proja3.proja3.dto.parking.VisitSearchDataDTO;
 import com.allinone.proja3.proja3.model.parking.Household;
+import com.allinone.proja3.proja3.model.parking.HouseholdPK;
 import com.allinone.proja3.proja3.model.parking.VisitParking;
+import com.allinone.proja3.proja3.repository.parking.HouseholdRepository;
 import com.allinone.proja3.proja3.repository.parking.VisitParkingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,14 +25,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class VisitParkingServiceImpl implements VisitParkingService{
+public class VisitParkingServiceImpl implements VisitParkingService {
     private final VisitParkingRepository visitParkingRepository;
-    private final HouseholdService householdService;
+    private final HouseholdRepository householdRepository;
 
     @Override
     public Long register(VisitParkingDTO visitParkingDTO) {
         System.out.println("VisitParking register service" + visitParkingDTO);
-        householdService.register(visitParkingDTO.getHouseholdDTO());
+        householdReg(visitParkingDTO);
         VisitParking visitParking = dtoToEntity(visitParkingDTO);
         VisitParking result = visitParkingRepository.save(visitParking);
         return result.getVpno();
@@ -66,8 +68,13 @@ public class VisitParkingServiceImpl implements VisitParkingService{
                 pageRequestDTO.getSize(),
                 Sort.by("vpno").descending());
 
+        Household household = Household.builder()
+                .householdPK(HouseholdPK.builder()
+                        .dong(householdDTO.getDong())
+                        .ho(householdDTO.getHo())
+                        .build())
+                .build();
 
-        Household household = householdService.getHousehold(householdDTO);
         Page<VisitParking> result = visitParkingRepository.findAllByHousehold(household, pageable);
         System.out.println(result);
         List<VisitParkingDTO> dtoList = result.get()
@@ -92,23 +99,34 @@ public class VisitParkingServiceImpl implements VisitParkingService{
 
         // 검색 필터
         Page<VisitParking> result;
-        switch (visitSearchDataDTO.getSearchCategory()){
+        switch (visitSearchDataDTO.getSearchCategory()) {
             case "dong-ho": {
                 String[] value = visitSearchDataDTO.getSearchValue().split("-");
                 String dong = value[0];
                 String ho = value[1];
                 result = visitParkingRepository.findByDongHo(dong, ho, pageable);
-            } break;
-            case "dong": result = visitParkingRepository.findByDong(visitSearchDataDTO.getSearchValue(), pageable); break;
-            case "ho": result = visitParkingRepository.findByHo(visitSearchDataDTO.getSearchValue(), pageable); break;
-            case "name": result = visitParkingRepository.findByName(visitSearchDataDTO.getSearchValue(), pageable); break;
-            case "phone": result = visitParkingRepository.findByPhone(visitSearchDataDTO.getSearchValue(), pageable); break;
-            case "expectedDate" : {
+            }
+            break;
+            case "dong":
+                result = visitParkingRepository.findByDong(visitSearchDataDTO.getSearchValue(), pageable);
+                break;
+            case "ho":
+                result = visitParkingRepository.findByHo(visitSearchDataDTO.getSearchValue(), pageable);
+                break;
+            case "name":
+                result = visitParkingRepository.findByName(visitSearchDataDTO.getSearchValue(), pageable);
+                break;
+            case "phone":
+                result = visitParkingRepository.findByPhone(visitSearchDataDTO.getSearchValue(), pageable);
+                break;
+            case "expectedDate": {
                 LocalDate start = visitSearchDataDTO.getExpectedDateStart();
                 LocalDate end = visitSearchDataDTO.getExpectedDateEnd();
                 result = visitParkingRepository.findByExpectedDate(start, end, pageable);
-            } break;
-            default: result = Page.empty(pageable);
+            }
+            break;
+            default:
+                result = Page.empty(pageable);
         }
 
         // entityToDto를 사용하여 엔티티 -> DTO 변환
@@ -126,37 +144,34 @@ public class VisitParkingServiceImpl implements VisitParkingService{
 
     @Override
     public void remove(Long vpno) {
-        System.out.println("VisitParking remove service : "+vpno);
+        System.out.println("VisitParking remove service : " + vpno);
         visitParkingRepository.deleteById(vpno);
     }
 
     @Override
     public VisitParkingDTO getOne(Long vpno) {
-        System.out.println("VisitParking getOne service : "+vpno);
+        System.out.println("VisitParking getOne service : " + vpno);
         Optional<VisitParking> result = visitParkingRepository.findById(vpno);
         VisitParking visitParking = result.orElseThrow();
         return entityToDto(visitParking);
     }
 
     @Override
-    public void putOne(VisitReqDTO visitReqDTO, Long vpno) {
-        System.out.println("VisitParking getOne service : "+visitReqDTO);
+    public void putOne(VisitParkingDTO visitParkingDTO, Long vpno) {
+        System.out.println("VisitParking putOne service : " + visitParkingDTO);
 
-        VisitParkingDTO visitParkingDTO = visitReqDTO.getVisitParkingDTO();
-        HouseholdDTO householdDTO = visitReqDTO.getHouseholdDTO();
-        householdService.register(householdDTO);
-        visitParkingDTO.setHousehold(householdService.getHousehold(householdDTO));
+        Household household = householdReg(visitParkingDTO);
 
         Optional<VisitParking> result = visitParkingRepository.findById(vpno);
-        VisitParking updateVisit = result.orElseThrow();
 
+        VisitParking updateVisit = result.orElseThrow();
         VisitParking visitParking = dtoToEntity(visitParkingDTO);
 
-        updateVisit.setHousehold(visitParking.getHousehold());
+        updateVisit.setHousehold(household);
         updateVisit.setCarNum(visitParking.getCarNum());
         updateVisit.setName(visitParking.getName());
         updateVisit.setPhone(visitParking.getPhone());
-        updateVisit.setExpectedDate(updateVisit.getExpectedDate());
+        updateVisit.setExpectedDate(visitParking.getExpectedDate());
 
         visitParkingRepository.save(updateVisit);
     }
@@ -181,5 +196,16 @@ public class VisitParkingServiceImpl implements VisitParkingService{
                 .phone(visitParking.getPhone())
                 .expectedDate(visitParking.getExpectedDate())
                 .build();
+    }
+
+    private Household householdReg(VisitParkingDTO visitParkingDTO) {
+        HouseholdPK householdPK = HouseholdPK.builder()
+                .dong(visitParkingDTO.getHouseholdDTO().getDong())
+                .ho(visitParkingDTO.getHouseholdDTO().getHo())
+                .build();
+        Household household = Household.builder()
+                .householdPK(householdPK)
+                .build();
+        return householdRepository.save(household);
     }
 }

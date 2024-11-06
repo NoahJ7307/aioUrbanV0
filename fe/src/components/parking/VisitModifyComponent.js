@@ -113,11 +113,13 @@ const VisitModifyComponent = () => {
                             <div>
                                 <input className='border'
                                     name='dong'
+                                    value={serverData.dong}
                                     onChange={handleChange} />
                             </div>
                             <div>
                                 <input className='border'
                                     name='ho'
+                                    value={serverData.ho}
                                     onChange={handleChange} />
                             </div>
                         </>

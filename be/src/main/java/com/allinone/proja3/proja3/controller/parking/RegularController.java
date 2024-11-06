@@ -67,8 +67,8 @@ public class RegularController {
     }
 
     @PutMapping("/{rpno}")
-    public void putOne(@PathVariable(name = "rpno") Long rpno, @RequestBody RegularReqDTO regularReqDTO){
-        System.out.println("modify : "+regularReqDTO);
-        regularParkingService.putOne(regularReqDTO, rpno);
+    public void putOne(@PathVariable(name = "rpno") Long rpno, @RequestBody RegularParkingDTO regularParkingDTO){
+        System.out.println("modify : "+regularParkingDTO);
+        regularParkingService.putOne(regularParkingDTO, rpno);
     }
 }

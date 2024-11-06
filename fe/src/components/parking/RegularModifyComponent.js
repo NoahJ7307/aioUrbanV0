@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useCustom from '../hook/useCustom'
 import { regularGetOne, regularPutOne } from '../api/parking/regularApi'
 import { useOutletContext } from 'react-router-dom'
+import useCustomLogin from '../hook/useCustomLogin'
 
 const initState = {
     carNum: '',
@@ -15,6 +16,7 @@ const RegularModifyComponent = () => {
     const { moveToPath, page, size } = useCustom()
     const [serverData, setServerData] = useState({ ...initState })
     const { checkedRpno } = useOutletContext()
+    const { loadLoginData } = useCustomLogin()
 
     // data 수신
     useEffect(() => {
@@ -83,18 +85,40 @@ const RegularModifyComponent = () => {
                             value={serverData.phone}
                             onChange={handleChange} />
                     </div>
-                    <div>
-                        <input className='border'
-                            name='dong'
-                            value={serverData.dong}
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            name='ho'
-                            value={serverData.ho}
-                            onChange={handleChange} />
-                    </div>
+                    {/* 권한 별 분기 - 동/호 선택 여부 */}
+                    {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
+                        <>
+                            <div>
+                                <input className='border'
+                                    name='dong'
+                                    value={loadLoginData().dong}
+                                    readOnly
+                                    onChange={handleChange} />
+                            </div>
+                            <div>
+                                <input className='border'
+                                    name='ho'
+                                    value={loadLoginData().ho}
+                                    readOnly
+                                    onChange={handleChange} />
+                            </div>
+                        </>
+                        :
+                        <>
+                            <div>
+                                <input className='border'
+                                    name='dong'
+                                    value={serverData.dong}
+                                    onChange={handleChange} />
+                            </div>
+                            <div>
+                                <input className='border'
+                                    name='ho'
+                                    value={serverData.ho}
+                                    onChange={handleChange} />
+                            </div>
+                        </>
+                    }
                 </div>
                 <div>
                     <button type='button' className='bg-blue-400 p-2'

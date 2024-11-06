@@ -2,10 +2,7 @@ package com.allinone.proja3.proja3.service.parking;
 
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
-import com.allinone.proja3.proja3.dto.parking.HouseholdDTO;
-import com.allinone.proja3.proja3.dto.parking.RegularParkingDTO;
-import com.allinone.proja3.proja3.dto.parking.RegularReqDTO;
-import com.allinone.proja3.proja3.dto.parking.RegularSearchDataDTO;
+import com.allinone.proja3.proja3.dto.parking.*;
 import com.allinone.proja3.proja3.dto.user.UserDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.parking.Household;
@@ -29,12 +26,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RegularParkingServiceImpl implements RegularParkingService{
     private final RegularParkingRepository regularParkingRepository;
-    private final HouseholdService householdService;
+    private final HouseholdRepository householdRepository;
 
     @Override
     public Long register(RegularParkingDTO regularParkingDTO) {
         System.out.println("RegularParking register service" + regularParkingDTO);
-        householdService.register(regularParkingDTO.getHouseholdDTO());
+        householdReg(regularParkingDTO);
 //        regularParkingDTO.setRegDate(LocalDate.parse("2024-01-01")); // 등록 날짜 Test 용도
         regularParkingDTO.setRegDate(LocalDate.now());
         RegularParking regularParking = dtoToEntity(regularParkingDTO);
@@ -72,8 +69,13 @@ public class RegularParkingServiceImpl implements RegularParkingService{
                 pageRequestDTO.getSize(),
                 Sort.by("rpno").descending());
 
+        Household household = Household.builder()
+                .householdPK(HouseholdPK.builder()
+                        .dong(householdDTO.getDong())
+                        .ho(householdDTO.getHo())
+                        .build())
+                .build();
 
-        Household household = householdService.getHousehold(householdDTO);
         Page<RegularParking> result = regularParkingRepository.findAllByHousehold(household, pageable);
         System.out.println(result);
         List<RegularParkingDTO> dtoList = result.get()
@@ -145,24 +147,21 @@ public class RegularParkingServiceImpl implements RegularParkingService{
     }
 
     @Override
-    public void putOne(RegularReqDTO regularReqDTO, Long rpno) {
-        System.out.println("RegularParking getOne service : "+regularReqDTO);
+    public void putOne(RegularParkingDTO regularParkingDTO, Long rpno) {
+        System.out.println("RegularParking putOne service : "+regularParkingDTO);
 
-        RegularParkingDTO regularParkingDTO = regularReqDTO.getRegularParkingDTO();
-        HouseholdDTO householdDTO = regularReqDTO.getHouseholdDTO();
-        householdService.register(householdDTO);
-        regularParkingDTO.setHousehold(householdService.getHousehold(householdDTO));
+        Household household = householdReg(regularParkingDTO);
 
         Optional<RegularParking> result = regularParkingRepository.findById(rpno);
-        RegularParking updateRegular = result.orElseThrow();
 
+        RegularParking updateRegular = result.orElseThrow();
         RegularParking regularParking = dtoToEntity(regularParkingDTO);
 
-        updateRegular.setHousehold(regularParking.getHousehold());
+        updateRegular.setHousehold(household);
         updateRegular.setCarNum(regularParking.getCarNum());
         updateRegular.setName(regularParking.getName());
         updateRegular.setPhone(regularParking.getPhone());
-        updateRegular.setRegDate(updateRegular.getRegDate());
+        updateRegular.setRegDate(regularParking.getRegDate());
 
         regularParkingRepository.save(updateRegular);
     }
@@ -187,5 +186,16 @@ public class RegularParkingServiceImpl implements RegularParkingService{
                 .phone(regularParking.getPhone())
                 .regDate(regularParking.getRegDate())
                 .build();
+    }
+
+    private Household householdReg(RegularParkingDTO regularParkingDTO) {
+        HouseholdPK householdPK = HouseholdPK.builder()
+                .dong(regularParkingDTO.getHouseholdDTO().getDong())
+                .ho(regularParkingDTO.getHouseholdDTO().getHo())
+                .build();
+        Household household = Household.builder()
+                .householdPK(householdPK)
+                .build();
+        return householdRepository.save(household);
     }
 }

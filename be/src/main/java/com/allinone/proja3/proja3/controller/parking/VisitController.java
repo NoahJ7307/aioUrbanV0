@@ -67,8 +67,8 @@ public class VisitController {
     }
 
     @PutMapping("/{vpno}")
-    public void putOne(@PathVariable(name = "vpno") Long vpno, @RequestBody VisitReqDTO visitReqDTO){
-        System.out.println("modify : "+ visitReqDTO);
-        visitParkingService.putOne(visitReqDTO, vpno);
+    public void putOne(@PathVariable(name = "vpno") Long vpno, @RequestBody VisitParkingDTO visitParkingDTO){
+        System.out.println("VisitParking putOne : "+ visitParkingDTO);
+        visitParkingService.putOne(visitParkingDTO, vpno);
     }
 }

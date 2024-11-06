@@ -115,10 +115,10 @@ export const regularPutOne = async (rpno, serverData) => {
             carNum: carNum,
             name: name,
             phone: phone,
-        },
-        householdDTO: {
-            dong: dong,
-            ho: ho,
+            householdDTO: {
+                dong: dong,
+                ho: ho,
+            },
         }
     }
     const res = await axios.put(`${host}/${rpno}`, body, config)

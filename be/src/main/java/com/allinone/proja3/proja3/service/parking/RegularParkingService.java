@@ -18,6 +18,6 @@ public interface RegularParkingService {
     PageResponseDTO<RegularParkingDTO> getUserList(PageRequestDTO pageRequestDTO, HouseholdDTO householdDTO);
     void remove(Long rpno);
     RegularParkingDTO getOne(Long rpno);
-    void putOne(RegularReqDTO regularReqDTO, Long rpno);
+    void putOne(RegularParkingDTO regularParkingDTO, Long rpno);
     PageResponseDTO<RegularParkingDTO> getSearchList(PageRequestDTO pageRequestDTO, RegularSearchDataDTO regularSearchDataDTO);
 }

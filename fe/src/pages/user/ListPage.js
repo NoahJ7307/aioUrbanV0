@@ -31,7 +31,7 @@ const ListPage = () => {
     const location = useLocation()
 
     const handleClickModify = useCallback(() => {
-        if (checkedUno.length == 1) {
+        if (checkedUno.length === 1) {
             navigate({ pathname: `modify/${checkedUno[0]}` })  // 1개 체크 시
         } else if (checkedUno.length > 1) {
             alert("하나만 선택해주세요") // 여러개 체크 시
@@ -57,15 +57,6 @@ const ListPage = () => {
         setSearchData(prevData => ({ ...prevData, searchCategory: e.target.value }))
     }
     const handleClickSearch = () => {
-        const pageParam = { page: 1, size: 10 }
-        getSearchList(pageParam, searchData).then(data => {
-            setPageServerData(data)
-            // 결과 예외 처리
-            if (!data.dtoList || data.dtoList.length === 0) {
-                alert('검색 결과가 없습니다')
-            }
-        })
-
 
         // queryParameter 생성
         const searchParams = new URLSearchParams()
@@ -100,6 +91,10 @@ const ListPage = () => {
         if (newSearchData.searchCategory) {
             getSearchList(pageParam, newSearchData).then(data => {
                 setPageServerData(data)
+                // 결과 예외 처리
+                if (!data.dtoList || data.dtoList.length === 0) {
+                    alert('검색 결과가 없습니다')
+                }
             })
         } else {
             // 기본 데이터 로드

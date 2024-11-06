@@ -50,10 +50,11 @@ const VisitPage = () => {
   const handleClickDelete = async () => {
     if (checkedVpno.length > 0) {
       await visitParkingDeleteChecked(checkedVpno)
-      navigate({ pathname: '/parking/visit' }) // 삭제 후 새로고침 기능 수행
+      setPageServerData(initStateServerData) // 삭제 후 새로고침 기능 수행
+      navigate('/parking/visit')
     } else {
       alert('선택된 항목이 없습니다')
-      navigate({ pathname: '/parking/visit' })
+      navigate('/parking/visit')
     }
   }
 
@@ -102,14 +103,6 @@ const VisitPage = () => {
         return
       }
     }
-    const pageParam = { page: 1, size: 10 }
-    visitGetSearchList(pageParam, searchData).then(data => {
-      setPageServerData(data)
-      // 결과 예외 처리
-      if (!data.dtoList || data.dtoList.length === 0) {
-        alert('검색 결과가 없습니다')
-      }
-    })
 
     // queryParameter 생성
     const searchParams = new URLSearchParams()
@@ -152,6 +145,10 @@ const VisitPage = () => {
     if (newSearchData.searchCategory) {
       visitGetSearchList(pageParam, newSearchData).then(data => {
         setPageServerData(data)
+        // 결과 예외 처리
+        if (!data.dtoList || data.dtoList.length === 0) {
+          alert('검색 결과가 없습니다')
+        }
       })
     } else {
       // 기본 데이터 로드

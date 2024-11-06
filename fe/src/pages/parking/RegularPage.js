@@ -50,10 +50,11 @@ const RegularPage = () => {
   const handleClickDelete = async () => {
     if (checkedRpno.length > 0) {
       await regularParkingDeleteChecked(checkedRpno)
-      navigate({ pathname: '/parking/regular' }) // 삭제 후 새로고침 기능 수행
+      setPageServerData(initStateServerData) // 삭제 후 새로고침 기능 수행
+      navigate('/parking/regular')
     } else {
       alert('선택된 항목이 없습니다')
-      navigate({ pathname: '/parking/regular' })
+      navigate('/parking/regular')
     }
   }
 
@@ -101,15 +102,6 @@ const RegularPage = () => {
         return
       }
     }
-    const pageParam = { page: 1, size: 10 }
-    regularGetSearchList(pageParam, searchData).then(data => {
-      setPageServerData(data)
-      // 결과 예외 처리
-      if (!data.dtoList || data.dtoList.length === 0) {
-        alert('검색 결과가 없습니다')
-      }
-    })
-
 
     // queryParameter 생성
     const searchParams = new URLSearchParams()
@@ -152,6 +144,10 @@ const RegularPage = () => {
     if (newSearchData.searchCategory) {
       regularGetSearchList(pageParam, newSearchData).then(data => {
         setPageServerData(data)
+        // 결과 예외 처리
+        if (!data.dtoList || data.dtoList.length === 0) {
+          alert('검색 결과가 없습니다')
+        }
       })
     } else {
       // 기본 데이터 로드
@@ -164,6 +160,7 @@ const RegularPage = () => {
 
   const handleClickClear = () => {
     setPageServerData(initStateServerData)
+    navigate('/parking/regular')
   }
   // --------------------
   return (
