@@ -114,6 +114,20 @@ public class GymController {
                 return new ResponseEntity<>("B003", HttpStatus.INTERNAL_SERVER_ERROR); // 기타 에러
         }
     }
+//    @PostMapping("/detail/waitlist/{programId}")
+//    public ResponseEntity<String> registerWaitlist(@PathVariable Long programId, @RequestBody User user) {
+//        String response = service.registerWaitlist(programId, user);
+//
+//        if("Already registered".equals(response)) {
+//            return new ResponseEntity<>("B000", HttpStatus.OK);//이미 정식참가자인경우
+//        }else if ("Already on waitlist".equals(response)) {
+//            return new ResponseEntity<>("B001", HttpStatus.OK); // 이미 대기자인 경우
+//        } else if ("Added to waitlist".equals(response)) {
+//            return new ResponseEntity<>("B002", HttpStatus.OK); // 대기자 등록 성공
+//        } else {
+//            return new ResponseEntity<>("B003", HttpStatus.OK); // 기타 에러
+//        }
+//    }
 
 
     //참가 신청한 명단 불러오기

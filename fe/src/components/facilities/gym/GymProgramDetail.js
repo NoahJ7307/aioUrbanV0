@@ -208,26 +208,23 @@ const GymProgramDetail = () => {
 
 
             <div>
-                <h2>접수된 유저 목록</h2>
+                <h2>참가자 명단</h2>
                 <ul>
-
                     {participants.length > 0 ? (
-                        participants.map(user => (
-                            <li key={user.uno}>
+                        participants.map((user, index) => (
+                            <li key={`participant-${user.uno}-${index}`}>
                                 {user.userName} - {user.phone}
                             </li>
                         ))
                     ) : (
                         <li>등록된 유저가 없습니다.</li>
                     )}
-
                 </ul>
-                <h2>대기중인 유저 목록</h2>
+                <h2>대기자 명단</h2>
                 <ul>
-
                     {waitlist.length > 0 ? (
-                        waitlist.map(user => (
-                            <li key={user.uno}>
+                        waitlist.map((user, index) => (
+                            <li key={`waitlist-${user.uno}-${index}`}>
                                 {user.userName} - {user.phone}
                             </li>
                         ))

@@ -141,12 +141,11 @@ public class GolfServiceImpl implements GolfService {
 
 
     @Override
-    public GolfDTO findDataByUno(Long uno) {
+    public Golf findDataByUno(Long uno) {
         System.out.println("golf service : " + uno );
         Golf golf = golfRepository.findById(uno)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        GolfDTO dto = this.entityToDto(golf);
-        return dto;
+        return golf;
     }
 //    @Override
 //    public Golf findDataByUno(Long uno) {

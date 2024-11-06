@@ -95,33 +95,34 @@ public class ServiceTestsyurim {
 //    @Test
 //    public void insertTest2() {
 //        for (int i = 0; i < 130; i++) {
-//            int randIdx = (int) (Math.random() * 100) + 1;
+////            int randIdx = (int) (Math.random() * 100) + 1;
 //            int randId = (int) (Math.random() * 10) + 1;
-//            Golf golf = Golf.builder()
+//            GolfDTO golfDTO = GolfDTO.builder()
 //                    .date(LocalDate.of(2024, 10, 16))
 //                    .startTime(LocalTime.of(11, 55, 0))
 //                    .endTime(LocalTime.of(13, 55, 0))
 //                    .teeBox(randId)
 //                    .build();
-//            golfService.register(golf);
+//            Golf golf = gymService.dtoToEntity(golf);
+//            golfService.register(golfDTO);
 //        }
 //    }
 
-    @Test
-    public void insertTest3() {
-        for (int i = 0; i < 50; i++) {
-            int randIdx = (int) (Math.random() * 100) + 1;
-            int randId = (int) (Math.random() * 10) + 1;
-//            StudyDTO studyDTO = StudyDTO.builder()
-            GolfDTO golfDTO = GolfDTO.builder()
-                    .date(LocalDate.of(2024, 10, 16))
-                    .startTime(LocalTime.of(11, 55, 0))
-                    .endTime(LocalTime.of(13, 55, 0))
-                    .teeBox(randId)
-                    .build();
-            golfService.register(golfDTO);
-        }
-    }
+//    @Test
+//    public void insertTest3() {
+//        for (int i = 0; i < 50; i++) {
+//            int randIdx = (int) (Math.random() * 100) + 1;
+//            int randId = (int) (Math.random() * 10) + 1;
+////            StudyDTO studyDTO = StudyDTO.builder()
+//            GolfDTO golfDTO = GolfDTO.builder()
+//                    .date(LocalDate.of(2024, 10, 16))
+//                    .startTime(LocalTime.of(11, 55, 0))
+//                    .endTime(LocalTime.of(13, 55, 0))
+//                    .teeBox(randId)
+//                    .build();
+//            golfService.register(golfDTO);
+//        }
+//    }
 
 //    @Test
 //    public void getTest1() {
