@@ -48,7 +48,7 @@ public class VisitParkingServiceImpl implements VisitParkingService {
 
         Page<VisitParking> result = visitParkingRepository.findAll(pageable);
 
-        List<VisitParkingDTO> dtoList = result.get()
+        List<VisitParkingDTO> dtoList = result.getContent().stream()
                 .map(this::entityToDto)
                 .collect(Collectors.toList());
 
@@ -76,8 +76,8 @@ public class VisitParkingServiceImpl implements VisitParkingService {
                 .build();
 
         Page<VisitParking> result = visitParkingRepository.findAllByHousehold(household, pageable);
-        System.out.println(result);
-        List<VisitParkingDTO> dtoList = result.get()
+        System.out.println("getUserList-------------------------"+result);
+        List<VisitParkingDTO> dtoList = result.getContent().stream()
                 .map(this::entityToDto)
                 .collect(Collectors.toList());
 

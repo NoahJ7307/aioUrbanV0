@@ -1,22 +1,18 @@
-package com.allinone.proja3.proja3.model.parking;
+package com.allinone.proja3.proja3.dto.parking;
 
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "tbl_entry_car")
-public class EntryExitCar {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EntryExitCarDTO {
     private Long eeno;
-
     private String carNum;
     private boolean isExit;
     private String dong;

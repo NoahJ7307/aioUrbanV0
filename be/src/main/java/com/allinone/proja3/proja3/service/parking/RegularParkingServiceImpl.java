@@ -49,7 +49,7 @@ public class RegularParkingServiceImpl implements RegularParkingService{
 
         Page<RegularParking> result = regularParkingRepository.findAll(pageable);
 
-        List<RegularParkingDTO> dtoList = result.get()
+        List<RegularParkingDTO> dtoList = result.getContent().stream()
                 .map(this::entityToDto)
                 .collect(Collectors.toList());
 
@@ -78,7 +78,7 @@ public class RegularParkingServiceImpl implements RegularParkingService{
 
         Page<RegularParking> result = regularParkingRepository.findAllByHousehold(household, pageable);
         System.out.println(result);
-        List<RegularParkingDTO> dtoList = result.get()
+        List<RegularParkingDTO> dtoList = result.getContent().stream()
                 .map(this::entityToDto)
                 .collect(Collectors.toList());
 

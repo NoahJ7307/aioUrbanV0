@@ -97,14 +97,14 @@ const VisitModifyComponent = () => {
                                 <input className='border'
                                     name='dong'
                                     value={loadLoginData().dong}
-                                    readOnly
+                                    disabled
                                     onChange={handleChange} />
                             </div>
                             <div>
                                 <input className='border'
                                     name='ho'
                                     value={loadLoginData().ho}
-                                    readOnly
+                                    disabled
                                     onChange={handleChange} />
                             </div>
                         </>

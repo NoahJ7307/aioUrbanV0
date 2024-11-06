@@ -151,10 +151,7 @@ const VisitPage = () => {
         }
       })
     } else {
-      // 기본 데이터 로드
-      visitGetList(pageParam).then(data => {
-        setPageServerData(data)
-      })
+      setPageServerData(initStateServerData)
     }
   }, [location.search])
 
@@ -166,26 +163,35 @@ const VisitPage = () => {
   // --------------------
   return (
     <div>
-      {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
-        <></> :
-        <ul className='flex justify-center'>
-          <li>
-            <button className='bg-gray-300 p-2 mr' onClick={handleClickAdd}>
-              등록
-            </button>
-          </li>
-          <li>
-            <button className='bg-gray-300 p-2 mr' onClick={handleClickModify}>
-              수정
-            </button>
-          </li>
-          <li>
-            <button className='bg-gray-300 p-2 mr' onClick={handleClickDelete}>
-              삭제
-            </button>
-          </li>
-          {/* // ------- 검색 ------- */}
-          <li>
+      <ul className='flex justify-center'>
+        <li>
+          <button className='bg-gray-300 p-2 mr' onClick={handleClickAdd}>
+            등록
+          </button>
+        </li>
+        <li>
+          <button className='bg-gray-300 p-2 mr' onClick={handleClickModify}>
+            수정
+          </button>
+        </li>
+        <li>
+          <button className='bg-gray-300 p-2 mr' onClick={handleClickDelete}>
+            삭제
+          </button>
+        </li>
+        {/* // ------- 검색 ------- */}
+        <li>
+          {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
+            <select className=''
+              name='searchCategory'
+              onChange={handleChangeSearchCategory}>
+              <option value=''>검색 필터</option>
+              <option value='name' title='예시) 김어반'>이름</option>
+              <option value='carNum' title='예시) 00반0000'>차량번호</option>
+              <option value='phone' title='예시) 01012345678'>전화번호</option>
+              <option value='expectedDate'>입차 예정 날짜</option>
+            </select>
+            :
             <select className=''
               name='searchCategory'
               onChange={handleChangeSearchCategory}>
@@ -198,46 +204,46 @@ const VisitPage = () => {
               <option value='phone' title='예시) 01012345678'>전화번호</option>
               <option value='expectedDate'>입차 예정 날짜</option>
             </select>
-          </li>
-          {searchData.searchCategory === 'expectedDate' ?
-            <li>
-              <input className=''
-                type='date'
-                name='expectedDateStart'
-                value={searchData.expectedDateStart}
-                onChange={handleChangeSearchDate}
-              />
-              ~
-              <input className=''
-                type='date'
-                name='expectedDateEnd'
-                value={searchData.expectedDateEnd}
-                onChange={handleChangeSearchDate}
-              />
-            </li>
-            :
-            <li>
-              <input className=''
-                name='searchValue'
-                value={searchData.searchValue}
-                placeholder={inputTitle}
-                onChange={handleChangeSearchValue}
-              />
-            </li>
           }
+        </li>
+        {searchData.searchCategory === 'expectedDate' ?
           <li>
-            <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>
-              검색
-            </button>
+            <input className=''
+              type='date'
+              name='expectedDateStart'
+              value={searchData.expectedDateStart}
+              onChange={handleChangeSearchDate}
+            />
+            ~
+            <input className=''
+              type='date'
+              name='expectedDateEnd'
+              value={searchData.expectedDateEnd}
+              onChange={handleChangeSearchDate}
+            />
           </li>
+          :
           <li>
-            <button className='bg-gray-300 p-2 mr' onClick={handleClickClear}>
-              검색 초기화
-            </button>
+            <input className=''
+              name='searchValue'
+              value={searchData.searchValue}
+              placeholder={inputTitle}
+              onChange={handleChangeSearchValue}
+            />
           </li>
-          {/* // -------------------- */}
-        </ul>
-      }
+        }
+        <li>
+          <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>
+            검색
+          </button>
+        </li>
+        <li>
+          <button className='bg-gray-300 p-2 mr' onClick={handleClickClear}>
+            검색 초기화
+          </button>
+        </li>
+        {/* // -------------------- */}
+      </ul>
       <VisitListComponent pageServerData={pageServerData} searchData={searchData} />
       <Outlet context={{ checkedVpno, setCheckedVpno }} />
     </div>

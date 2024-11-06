@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         Page<User> result = userRepository.notPendingList(UserRole.PENDING, pageable);// PENDING 이 아닌 유저만 필터링
 
         // entityToDto를 사용하여 엔티티 -> DTO 변환
-        List<UserDTO> dtoList = result.get()
+        List<UserDTO> dtoList = result.getContent().stream()
                 .map(this::entityToDto)  // entityToDto 메서드를 사용하여 변환
                 .collect(Collectors.toList());
 
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
         Page<User> result = userRepository.pendingList(UserRole.PENDING, pageable); // PENDING 유저만 필터링
 
         // entityToDto를 사용하여 엔티티 -> DTO 변환
-        List<UserDTO> dtoList = result.get()
+        List<UserDTO> dtoList = result.getContent().stream()
                 .map(this::entityToDto)  // entityToDto 메서드를 사용하여 변환
                 .collect(Collectors.toList());
 

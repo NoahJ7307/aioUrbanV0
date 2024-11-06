@@ -35,4 +35,19 @@ public interface RegularParkingRepository extends JpaRepository<RegularParking, 
 
     @Query("select p from RegularParking p where p.regDate between :start and :end")
     Page<RegularParking> findByRegDate(@Param("start") LocalDate start, @Param("end") LocalDate end, Pageable pageable);
+
+//     Query Method 사용
+//    // Like 연산을 위해 이름에 Containing 을 사용하여 대체
+//    Page<RegularParking> findByHousehold_HouseholdPK_DongContainingAndHousehold_HouseholdPK_HoContaining(String dong, String ho, Pageable pageable);
+//
+//    Page<RegularParking> findByHousehold_HouseholdPK_DongContaining(String value, Pageable pageable);
+//
+//    Page<RegularParking> findByHousehold_HouseholdPK_HoContaining(String value, Pageable pageable);
+//
+//    Page<RegularParking> findByNameContaining(String value, Pageable pageable);
+//
+//    Page<RegularParking> findByPhoneContaining(String value, Pageable pageable);
+//
+//    // Between 연산자를 위한 메서드 명 구성
+//    Page<RegularParking> findByRegDateBetween(LocalDate start, LocalDate end, Pageable pageable);
 }

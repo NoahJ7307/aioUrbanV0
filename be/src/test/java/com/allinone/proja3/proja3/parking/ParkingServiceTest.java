@@ -5,7 +5,6 @@ import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.parking.*;
 import com.allinone.proja3.proja3.model.parking.Household;
 import com.allinone.proja3.proja3.model.parking.HouseholdPK;
-import com.allinone.proja3.proja3.service.parking.HouseholdService;
 import com.allinone.proja3.proja3.service.parking.RegularParkingService;
 import com.allinone.proja3.proja3.service.parking.VisitParkingService;
 import org.junit.jupiter.api.Test;
@@ -21,9 +20,6 @@ public class ParkingServiceTest {
 
     @Autowired
     private VisitParkingService visitParkingService;
-
-    @Autowired
-    private HouseholdService householdService;
 
     @Test
     public void insertRP(){

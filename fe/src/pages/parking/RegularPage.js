@@ -150,10 +150,7 @@ const RegularPage = () => {
         }
       })
     } else {
-      // 기본 데이터 로드
-      regularGetList(pageParam).then(data => {
-        setPageServerData(data)
-      })
+      setPageServerData(initStateServerData)
     }
   }, [location.search])
 
