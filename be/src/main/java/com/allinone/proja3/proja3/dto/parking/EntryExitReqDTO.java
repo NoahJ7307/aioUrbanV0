@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VisitSearchReqDTO {
+public class EntryExitReqDTO {
     private PageRequestDTO pageRequestDTO;
-    private VisitSearchDataDTO visitSearchDataDTO;
+    private EntryExitSearchDataDTO entryExitSearchDataDTO;
+    private HouseholdDTO householdDTO;
 }

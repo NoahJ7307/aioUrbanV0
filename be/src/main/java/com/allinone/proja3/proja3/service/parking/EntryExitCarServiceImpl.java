@@ -17,7 +17,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +32,8 @@ public class EntryExitCarServiceImpl implements EntryExitCarService{
     public Long entry(EntryExitCarDTO entryExitCarDTO) {
         System.out.println("EntryExitCar entry service" + entryExitCarDTO);
         EntryExitCar entryExitCar = dtoToEntity(entryExitCarDTO);
+//        entryExitCar.setEntryDate(LocalDate.parse("2024-01-01")); // Date test
+        entryExitCar.setEntryDate(LocalDate.now());
         EntryExitCar result = entryExitCarRepository.save(entryExitCar);
         return result.getEeno();
     }
@@ -39,7 +43,20 @@ public class EntryExitCarServiceImpl implements EntryExitCarService{
         System.out.println("EntryExitCar exit service" + entryExitCarDTO);
         List<EntryExitCar> exitList = entryExitCarRepository.findAllByCarNum(entryExitCarDTO.getCarNum());
         // 가장 최근에 입차한 차량의 isExit 를 true 로 설정 ... 이하
-        exitList.forEach(System.out::println);
+
+        // eeno 가 가장 큰 값을 최근에 입차한 차량으로 판단
+        // 최근 입차 차량의 exitDate 를 현재 시간으로 설정
+        exitList.stream()
+                .max(Comparator.comparingLong(EntryExitCar::getEeno))
+                .filter(exit -> !exit.isExit()) //
+//                .ifPresent(exit -> exit.setExitDate(LocalDate.parse("2024-01-05"))); // Date test
+                .ifPresent(exit -> exit.setExitDate(LocalDate.now()));
+
+        // 중복 입차된 동일 차량의 isExit 를 true 로 하여 출차 처리
+        exitList.forEach(exit ->{
+            exit.setExit(true);
+        });
+        entryExitCarRepository.saveAll(exitList);
     }
 
     @Override
@@ -52,7 +69,7 @@ public class EntryExitCarServiceImpl implements EntryExitCarService{
 
         Page<EntryExitCar> result = entryExitCarRepository.findAll(pageable);
 
-        List<EntryExitCarDTO> dtoList = result.get()
+        List<EntryExitCarDTO> dtoList = result.getContent().stream()
                 .map(this::entityToDto)
                 .collect(Collectors.toList());
 
@@ -75,7 +92,7 @@ public class EntryExitCarServiceImpl implements EntryExitCarService{
         Page<EntryExitCar> result = entryExitCarRepository
                 .findAllByDongAndHo(householdDTO.getDong(), householdDTO.getHo(), pageable);
 
-        List<EntryExitCarDTO> dtoList = result.get()
+        List<EntryExitCarDTO> dtoList = result.getContent().stream()
                 .map(this::entityToDto)
                 .collect(Collectors.toList());
 
@@ -122,6 +139,7 @@ public class EntryExitCarServiceImpl implements EntryExitCarService{
                 LocalDate end = entryExitSearchDataDTO.getEntryExitDateEnd();
                 result = entryExitCarRepository.findByEntryDateBetween(start, end, pageable);
             }
+            break;
             case "exitDate": {
                 LocalDate start = entryExitSearchDataDTO.getEntryExitDateStart();
                 LocalDate end = entryExitSearchDataDTO.getEntryExitDateEnd();

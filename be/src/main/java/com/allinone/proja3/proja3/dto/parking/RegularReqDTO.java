@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegularReqDTO {
     private PageRequestDTO pageRequestDTO;
-    private RegularParkingDTO regularParkingDTO;
+    private RegularSearchDataDTO regularSearchDataDTO;
     private HouseholdDTO householdDTO;
 }

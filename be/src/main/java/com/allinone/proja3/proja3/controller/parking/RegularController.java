@@ -33,12 +33,11 @@ public class RegularController {
     }
 
     @PostMapping("/search")
-    public PageResponseDTO<RegularParkingDTO> getSearchList(@RequestBody RegularSearchReqDTO regularSearchReqDTO){
-        PageRequestDTO pageRequestDTO = regularSearchReqDTO.getPageRequestDTO();
-        RegularSearchDataDTO regularSearchDataDTO = regularSearchReqDTO.getRegularSearchDataDTO();
+    public PageResponseDTO<RegularParkingDTO> getSearchList(@RequestBody RegularReqDTO regularReqDTO){
+        PageRequestDTO pageRequestDTO = regularReqDTO.getPageRequestDTO();
+        RegularSearchDataDTO regularSearchDataDTO = regularReqDTO.getRegularSearchDataDTO();
         System.out.println("Regular getSearchList controller P : "+pageRequestDTO);
         System.out.println("Regular getSearchList controller U : "+regularSearchDataDTO);
-        System.out.println("----"+regularSearchReqDTO);
         return regularParkingService.getSearchList(pageRequestDTO,regularSearchDataDTO);
     }
 
