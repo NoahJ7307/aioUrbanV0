@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "tbl_gym")
 @Data
-@ToString
+@ToString(exclude = "participants")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -83,7 +83,6 @@ public class Gym {
     public void changeApplicationEndDate (LocalDateTime applicationEndDate) {this.applicationEndDate = applicationEndDate; }
     public void changeParticipantLimit (int participantLimit) {this.participantLimit = participantLimit; }
     public void changeProgramState (ProgramState programState) {this.programState = programState; }
-
 
 
 }

@@ -56,11 +56,11 @@ public class ServiceTestsyurim {
 
     @Test
     public  void insertGymTest() {
-        for(int i = 0; i <10; i++) {
+        for(int i = 0; i <3; i++) {
             GymDTO gymDTO = GymDTO.builder()
 //                    .programId(1L)
-                    .title("제목입니다"+i)
-                    .content("내용입니다" +i)
+                    .title("귤입니다"+i)
+                    .content("감입니다" +i)
                     .target("타겟"+i)
                     .participantLimit(10)
                     .programStartDate(LocalDate.of(2024, 11, 16))

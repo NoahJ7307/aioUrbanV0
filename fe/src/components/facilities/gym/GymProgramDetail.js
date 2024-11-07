@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { applyForProgram, applyForWaitlist, deletePost, fetchRegisteredUsers, fetchWaitlistUsers, getGymListByProgramId, getRegisteredUsersByProgramId } from '../../api/facilities/gymApi';
+import { applyForProgram, applyForWaitlist, cancelParticipant, deletePost, fetchRegisteredUsers, fetchWaitlistUsers, getGymListByProgramId, getRegisteredUsersByProgramId } from '../../api/facilities/gymApi';
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
 import axios from 'axios';
@@ -88,7 +88,6 @@ const GymProgramDetail = () => {
                 console.log("삭제 요청 중 오류 발생 : ", error)
             }
         }
-
     };
     const determineButtonState = (gym) => {
         console.log("프로그램 상태 :", gym)
@@ -151,6 +150,31 @@ const GymProgramDetail = () => {
         return gym.currentParticipants < gym.participantLimit ? '접수 완료' : '대기 중';
     };
 
+    // const handleUserCancel = async () => {
+    //     const confirmed = window.confirm("정말 참가를 취소하시겠습니까?");
+    //     if (!confirmed) {
+    //         return;
+    //     }
+    //     try {
+    //         const response = await cancelParticipant(gym.programId, { uno });
+    //         if (response === "C001") {
+    //             alert("참가 취소가 완료되었습니다.")
+    //             window.location.reload()//페이지 새로고침하여 참가자목록 업데이트
+    //         } else if (response === "C002") {
+    //             alert("이미 취소된 참가입니다.")
+    //         } else if (response === "C003") {
+    //             alert("참가 취소가 완료되었습니다.");
+    //             window.location.reload(); // 페이지 새로고침
+    //         } else {
+    //             alert("알 수 없는 오류가 발생했습니다.");
+    //         }
+    //     } catch (error) {
+    //         console.error("참가 취소 중 오류 발생: ", error);
+    //         alert("참가 취소 중 오류가 발생했습니다.");
+    //     }
+
+    // };
+
     //참가접수 로직
     const handleApply = async () => {
         const applicationState = getApplicationState(gym);
@@ -168,7 +192,7 @@ const GymProgramDetail = () => {
         // 먼저 확인 창을 띄움
         const confirmed = window.confirm("해당 프로그램을 접수하시겠습니까?");
         if (!confirmed) {
-            return; // 사용자가 취소를 선택한 경우 함수를 종료합니다.
+            return; // 사용자가 취소를 선택한 경우 함수 종료
         }
 
         try {
@@ -187,7 +211,7 @@ const GymProgramDetail = () => {
             alert('신청에 실패했습니다.');
         }
     };
-
+    
     const handleBackToList = () => {
         navigate(`/facilities/gym/list?page=${page}&size=${size}`, { state: { gym } });
     };
@@ -217,7 +241,7 @@ const GymProgramDetail = () => {
                             </li>
                         ))
                     ) : (
-                        <li>등록된 유저가 없습니다.</li>
+                        <li>등록된 참가자가 없습니다.</li>
                     )}
                 </ul>
                 <h2>대기자 명단</h2>
@@ -229,7 +253,7 @@ const GymProgramDetail = () => {
                             </li>
                         ))
                     ) : (
-                        <li>등록된 유저가 없습니다.</li>
+                        <li>등록된 대기자가 없습니다.</li>
                     )}
 
                 </ul>
@@ -242,6 +266,7 @@ const GymProgramDetail = () => {
                     {buttonState.text}
                 </button>
                 <button type="button" onClick={handleBackToList}>목록</button>
+                {/* <button type="button" onClick={handleUserCancel}>참가취소 </button> */}
             </div>
 
         </>

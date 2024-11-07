@@ -1,29 +1,29 @@
 package com.allinone.proja3.proja3.controller.facilities;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
+import com.allinone.proja3.proja3.dto.SearchPageRequestDTO;
+import com.allinone.proja3.proja3.dto.SearchPageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.user.UserDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Gym;
-import com.allinone.proja3.proja3.model.facilities.GymParticipant;
 import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.service.facilities.GymService;
-import jakarta.persistence.EntityNotFoundException;
-import jdk.swing.interop.SwingInterOpUtils;
+import com.querydsl.core.BooleanBuilder;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.MergedAnnotations;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 @Log4j2
 @RestController
-//@RequiredArgsConstructor
-//@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/facilities/gym")
 public class GymController {
 
@@ -43,19 +43,34 @@ public class GymController {
 
     //조회
     @GetMapping("/list")
-    public PageResponseDTO<GymDTO> getList(PageRequestDTO pageRequestDTO) {
+    public SearchPageResponseDTO<GymDTO> getList(SearchPageRequestDTO pageRequestDTO) {
         System.out.println("get list controller: " + pageRequestDTO);
-        PageResponseDTO<GymDTO> list = service.getNonDeletedPrograms(pageRequestDTO);
+        SearchPageResponseDTO<GymDTO> list = service.getNonDeletedPrograms(pageRequestDTO);
         System.out.println("after service list 120) : " +list);
         return  list;
     }
+
+
+
 //    @GetMapping("/list")
 //    public PageResponseDTO<GymDTO> getList(PageRequestDTO pageRequestDTO) {
 //        System.out.println("get list controller: " + pageRequestDTO);
 //        PageResponseDTO<GymDTO> list = service.getNonDeletedPrograms(pageRequestDTO);
 //        System.out.println("after service list 120) : " +list);
-//        return  service.getNonDeletedReservations(pageRequestDTO);
+//        return  list;
 //    }
+
+    //검색
+    @GetMapping("/list/search")
+    public ResponseEntity<SearchPageResponseDTO<GymDTO>> searchGymPrograms(@ModelAttribute SearchPageRequestDTO searchPageRequestDTO) {
+        System.out.println("searchpage 1) : " + searchPageRequestDTO);
+        Pageable pageable = PageRequest.of(searchPageRequestDTO.getPage() -1 , searchPageRequestDTO.getSize(), Sort.by("programId").ascending());
+        SearchPageResponseDTO<GymDTO> pageResponseDTO = service.searchList(searchPageRequestDTO);
+        System.out.println("searchpage 2)  : " +pageResponseDTO);
+        return ResponseEntity.ok(pageResponseDTO);
+    }
+
+
     //특정 게시물 조회 메서드
     @GetMapping("/detail/{programId}")
     public GymDTO getProgramPost(@PathVariable Long programId) {
@@ -90,6 +105,10 @@ public class GymController {
             service.remove(programId);
     }
 
+    //검색
+
+
+    //-------------참가 메서드 ----------------
     //참가자 등록
     @PostMapping("/detail/register/{programId}")
     public ResponseEntity<String> registerParticipant(@PathVariable Long programId,  @RequestBody User user) {
@@ -114,7 +133,34 @@ public class GymController {
                 return new ResponseEntity<>("B003", HttpStatus.INTERNAL_SERVER_ERROR); // 기타 에러
         }
     }
+    //-------------취소 메서드 ----------------
+    //참가취소
+    @DeleteMapping("/detail/register/cancel/{programId}")
+    public ResponseEntity<String> cancelParticipant(@PathVariable Long programId, @RequestBody User user) {
+        String response = service.cancelParticipant(programId, user);
+        if(response.equals("Not Registered")) {
+            return new ResponseEntity<>("C001", HttpStatus.OK); // 등록되지 않은 사용자
+        } else if(response.equals("Canceled")) {
+            return new ResponseEntity<>("C002", HttpStatus.OK);
+        }else if (response.equals("Cancelled and updated")) {
+            return new ResponseEntity<>("C003", HttpStatus.OK); // 성공적으로 취소 및 대기자 참가자 등록
+        } else {
+            return new ResponseEntity<>("C004", HttpStatus.INTERNAL_SERVER_ERROR); // 서버 오류
+        }
+    }
+    //대기자 취소
+    @DeleteMapping("/detail/waitlist/cancel/{programId}")
+    public ResponseEntity<String> cancelWaitlist(@PathVariable Long programId, @RequestBody User user){
+        String response = service.cancelWaitlist(programId,user);
+        if(response.equals("Not on Waitlist")) {
+            return new ResponseEntity<>("D001", HttpStatus.OK);// 대기자 명단에 없는 경우
+        } else if (response.equals("Waitlist Canceled")) {
+            return new ResponseEntity<>("D002", HttpStatus.OK); // 대기자 취소 성공
+        }else{
+            return new ResponseEntity<>("D003", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
+    }
 
     //참가 신청한 명단 불러오기
     @GetMapping("/{programId}/participants")
@@ -130,24 +176,6 @@ public class GymController {
         System.out.println("waitlists1105 " + waitlist);
         return ResponseEntity.ok(waitlist);
     }
-
-    //참가취소 메서드
-//    @DeleteMapping("/{programId}/participants/cancel")
-//    public ResponseEntity<String> cancelParticipant(@PathVariable Long programId, @RequestBody User user){
-//        String response = service.cancelParticipant(programId, user);
-//        if(response.equals("Not Found")) {
-//            return new ResponseEntity<>("Participant not found", HttpStatus.NOT_FOUND);
-//        }else if (response.equals("Canceled")) {
-//            return new ResponseEntity<>("Cancellation successful", HttpStatus.OK);
-//        }else {
-//            return new ResponseEntity<>("Error during cancellation", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
-
-
-
-
 
 
 }

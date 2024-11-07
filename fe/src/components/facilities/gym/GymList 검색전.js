@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { listGym } from '../../api/facilities/gymApi';
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
-import { listGym, listSearchGym } from '../../api/facilities/gymApitt';
 
 const GymList = ({ page, size }) => {
   const navigate = useNavigate();
   const [serverData, setServerData] = useState({ dtoList: [], totalPage: 0 });
-  const [searchType, setSearchType] = useState('title');
-  const [searchKeyword, setSearchKeyword] = useState('');
   const { moveToList } = useCustom();
   const role = localStorage.getItem("role");
 
@@ -23,19 +21,6 @@ const GymList = ({ page, size }) => {
     }
   };
 
-
-  const fetchGymListSearch = async () => {
-    try {
-      const data = await listSearchGym({ page, size }, searchType, searchKeyword);
-      console.log(data);
-      if (data.error) throw new Error(data.error);
-      setServerData(data);
-    } catch (err) {
-      console.error("데이터를 가져오는데 오류가 발생했습니다 => ", err);
-      alert("프로그램 정보를 가져오는 데 오류가 발생했습니다. 다시 시도해주세요 ");
-    }
-  };
-  
   useEffect(() => {
     fetchGymProgramList();
   }, [page, size]);
@@ -59,35 +44,9 @@ const GymList = ({ page, size }) => {
     }
   };
 
-  const handleSearchInputChange = (e) => {
-    setSearchKeyword(e.target.value);
-  }
-  const handleSearch = (e) => {
-    console.log("검색 버튼이 클릭되었습니다.");
-    fetchGymListSearch();
-  };
-
   return (
     <div>
       <h2>프로그램 신청 목록</h2>
-
-      <div>
-        <select value={searchType} onChange={(e) => setSearchType(e.target.value)}>
-          <option value="title">프로그램 제목</option>
-          <option value="content">내용</option>
-          <option value="target">대상</option>
-          <option value="titleAndContent">제목+내용</option>
-        </select>
-
-        <input
-          type="text"
-          value={searchKeyword}
-          onChange={handleSearchInputChange}
-          placeholder='검색어를 입력해 주세요'
-        />
-        <button onClick={handleSearch}>검색</button>
-      </div>
-
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>

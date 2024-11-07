@@ -38,33 +38,35 @@ export const listGym = async (pageParam) => {
     return res.data;
 }
 
-export const searchListGym = async (page, size, searchType, searchKeyWord) => {
-    console.log("gymsearch 777");
+export const searchGymPrograms = async (page, size, searchType, searchKeyword) => {
+    console.log("gymsearch");
     try {
-        //검색조건을 쿼리 파라미터로 추가 
+        // 검색 조건을 쿼리 파라미터로 추가
         const response = await axios.get(`${host}/list/search`, {
             params: {
                 page: page,
                 size: size,
                 searchType: searchType,
-                searchKeyWord: searchKeyWord
+                searchKeyword: searchKeyword
             }
         });
-        return response.data;
+
+        return response.data; // GymPageDTO 객체 리턴
     } catch (error) {
-        console.error('검색 api오류 : ', error);
+        console.error('검색 API 오류:', error);
         throw error;
     }
 };
-// export const listSearchGym = async (pageParam, type, keyword) => {
-//     const { page, size } = pageParam
-//     const config = {
-//         ...getConfig(),
-//         params: { page, size,type, keyword },
-//     }
-//     const res = await axios.get(`${host}/list/search`, config);
-//     return res.data;
-// }
+export const listSearchGym = async (pageParam, type, keyword) => {
+    const { page, size } = pageParam
+    const config = {
+        ...getConfig(),
+        params: { page, size, type, keyword },
+    }
+    const res = await axios.get(`${host}/list/search`, config);
+    console.log("res:", res);
+    return res.data;
+}
 
 
 // export const listGym = async (pageParam) => {
@@ -88,8 +90,6 @@ export const getGymListByProgramId = async ({ programId, page, size }) => {
     console.log(res)
     return res.data
 }
-
-
 // export const getGymListByProgramId = async ({ programId,page,size}) => {
 //     console.log("Fetching program gym by programId : ", programId,page,size)
 //     const config = {

@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { listGym, listSearchGym } from '../../api/facilities/gymApi';
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
-import { listGym, listSearchGym } from '../../api/facilities/gymApitt';
 
 const GymList = ({ page, size }) => {
   const navigate = useNavigate();
@@ -35,7 +35,6 @@ const GymList = ({ page, size }) => {
       alert("프로그램 정보를 가져오는 데 오류가 발생했습니다. 다시 시도해주세요 ");
     }
   };
-  
   useEffect(() => {
     fetchGymProgramList();
   }, [page, size]);
@@ -76,7 +75,6 @@ const GymList = ({ page, size }) => {
           <option value="title">프로그램 제목</option>
           <option value="content">내용</option>
           <option value="target">대상</option>
-          <option value="titleAndContent">제목+내용</option>
         </select>
 
         <input
@@ -102,16 +100,14 @@ const GymList = ({ page, size }) => {
         <tbody>
           {serverData.dtoList.map((gym) => (
             <tr key={gym.programId}>
-              <td style={{ border: '1px solid black', padding: '10px' }}>{gym.programId}</td>
-              <td style={{ border: '1px solid black', padding: '10px' }} onClick={() => handleProgramClick(gym)}>
-                <h1 style={{ cursor: 'pointer' }}>{gym.title}</h1>
+              <td>{gym.programId}</td>
+              <td onClick={() => handleProgramClick(gym)}>
+                <h1>{gym.title}</h1>
                 <p>{gym.content}</p>
                 <p>프로그램 진행 기간 : {gym.programStartDate}~{gym.programEndDate}</p>
               </td>
-              <td style={{ border: '1px solid black', padding: '10px' }}>{gym.currentParticipants}/{gym.participantLimit}</td>
-              <td style={{ border: '1px solid black', padding: '10px' }}>
-                {determineButtonState(gym)}
-              </td>
+              <td>{gym.currentParticipants}/{gym.participantLimit}</td>
+              <td>{determineButtonState(gym)}</td>
             </tr>
           ))}
         </tbody>
