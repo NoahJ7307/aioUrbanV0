@@ -14,7 +14,6 @@ import java.time.LocalDate;
 public class EntryExitSearchDataDTO {
     private String searchCategory;
     private String searchValue;
-    private boolean isExit;
     private LocalDate entryExitDateStart;
     private LocalDate entryExitDateEnd;
 }

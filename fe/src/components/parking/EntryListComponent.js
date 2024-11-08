@@ -66,9 +66,6 @@ const EntryListComponent = ({ pageServerData, searchData }) => {
     if (searchData.searchValue) {
       searchParams.set('searchValue', searchData.searchValue)
     }
-    if (searchData.isExit) {
-      searchParams.set('isExit', searchData.isExit)
-    }
     if (searchData.entryExitDateStart) {
       searchParams.set('entryExitDateStart', searchData.entryExitDateStart)
     }
@@ -108,7 +105,7 @@ const EntryListComponent = ({ pageServerData, searchData }) => {
           <div>{entry.ho ? entry.ho : ''}</div>
           <div>{entry.entryDate}</div>
           <div>{entry.exitDate}</div>
-          <div>{entry.isExit ? '출차완료' : '미출차'}</div>
+          <div>{entry.exit ? '출차완료' : '미출차'}</div>
         </div>
       ))}
       <PageComponent serverData={serverData} movePage={movePage} />

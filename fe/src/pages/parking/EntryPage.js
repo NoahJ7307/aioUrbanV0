@@ -8,7 +8,6 @@ import { entryGetSearchList } from '../../components/api/parking/entryApi'
 const initStateSearchData = {
   searchCategory: '',
   searchValue: '',
-  isExit: false,
   entryExitDateStart: '',
   entryExitDateEnd: '',
 }
@@ -43,7 +42,6 @@ const EntryPage = () => {
       ...prevData,
       searchCategory: e.target.value,
       searchValue: '',
-      isExit: false,
       entryExitDateStart: '',
       entryExitDateEnd: '',
     }))
@@ -66,16 +64,6 @@ const EntryPage = () => {
       [name]: value
     }))
   }
-
-  // isExit onChange 설정
-  const handleChangeIsExit = (e) => {
-    const { name, value } = e.target
-    setSearchData(prevData => ({
-      ...prevData,
-      [name]: value === 'true' ? true : false
-    }))
-  }
-
 
   const handleClickSearch = () => {
     // 검색 범위 예외처리
@@ -101,9 +89,6 @@ const EntryPage = () => {
     if (searchData.searchValue) {
       searchParams.set('searchValue', searchData.searchValue)
     }
-    if (searchData.isExit) {
-      searchParams.set('isExit', searchData.isExit)
-    }
     if (searchData.entryExitDateStart) {
       searchParams.set('entryExitDateStart', searchData.entryExitDateStart)
     }
@@ -124,7 +109,6 @@ const EntryPage = () => {
     const newSearchData = {
       searchCategory: queryParams.get('searchCategory') || '',
       searchValue: queryParams.get('searchValue') || '',
-      isExit: queryParams.get('isExit') || false,
       entryExitDateStart: queryParams.get('entryExitDateStart') || '',
       entryExitDateEnd: queryParams.get('entryExitDateEnd') || '',
     }
@@ -203,9 +187,10 @@ const EntryPage = () => {
             <li>
               <select className=''
                 name='isExit'
-                onChange={handleChangeIsExit}>
-                <option value='false'>미출차</option>
-                <option value='true'>출차완료</option>
+                onChange={handleChangeSearchValue}>
+                <option value=''>--------</option>
+                <option value='entry'>미출차</option>
+                <option value='exit'>출차완료</option>
               </select>
             </li>
           ) : (
