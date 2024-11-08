@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import useCustomLogin from '../hook/useCustomLogin'
+import '../../css/_modules/header.css'
 
 const MenuComponent = () => {
     const loginState = useSelector(state => state.loginSlice)
@@ -14,7 +15,7 @@ const MenuComponent = () => {
     }
 
     return (
-        <div className='flex flex-col bg-black text-white'>
+        <div className='flex flex-col bg-black text-white headerBox'>
             <div className='relative'>
                 <div className='flex justify-center'>
                     <Link to={'/'}>Logo</Link>

@@ -1,0 +1,26 @@
+/* components\menu\MenuComponent.js */
+
+/* 두꺼운 글씨체 : 리아체 */
+@font-face {
+    font-family: 'RiaSans-ExtraBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/RiaSans-ExtraBold.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* weight 3 , 5, 9 .G마켓 산스 */
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.headerBox a {
+    font-family: 'GmarketSansMedium';
+    padding: 2px;
+}
+.headerBox a:hover{
+    color: rgb(189, 245, 245);
+}
+
