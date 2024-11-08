@@ -1,9 +1,5 @@
 /* components\main\MainComponent.js */
 
-.mainHoverBox {
-    font-family: 'GmarketSansMedium';
-    padding: 2px;
-}
 
 /* 전체 레이아웃 */
 .mainComponent {
@@ -57,6 +53,7 @@
 
 /* 오버레이 스타일 */
 .mainHoverBox {
+    font-family: 'GmarketSansMedium';
     position: absolute;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.5);
