@@ -62,11 +62,11 @@
 .logoLink .logo-char {
     display: inline-block;
     transform: translateY(0);
-    transition: transform 0.3s ease; /* 부드러운 이동 효과 */
+    transition: transform 0.4s ease, color 0.4s ease; /* 부드러운 이동 효과 */
 }
 .logoLink:hover .logo-char {
     color: white;
-    animation: bounce 1.2s ease infinite; /* 속도를 1초로 설정 */
+    animation: bounce 1.2s ease infinite; 
 }
 .logoLink .logo-char:nth-child(1) { animation-delay: 0.1s; }
 .logoLink .logo-char:nth-child(2) { animation-delay: 0.2s; }
@@ -94,8 +94,8 @@
     margin-right: 0.5rem;
 }
 
-/* 링크 및 호버 스타일 */
-.headerBox a {
+/* 링크 스타일 */
+.headerBox a,.headerBox button {
     font-family: 'GmarketSansMedium', sans-serif;
     padding: 2px;
     text-decoration: none;
