@@ -1,5 +1,9 @@
 package com.allinone.proja3.proja3;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> JJY
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.facilities.StudyDTO;

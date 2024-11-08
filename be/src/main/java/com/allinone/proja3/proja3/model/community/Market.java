@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_market")
@@ -27,8 +28,10 @@ public class Market {
     @Column(name = "thumbnail_url") // 썸네일 이미지 URL
     private String thumbnailUrl;
 
+    @ElementCollection // 여러 이미지를 위한 리스트
+    @CollectionTable(name = "tbl_market_images", joinColumns = @JoinColumn(name = "mno"))
     @Column(name = "image_url") // 전체 이미지 URL
-    private String imageUrl;
+    private List<String> imageUrls; // 이미지 URL 리스트
 
     @CreationTimestamp
     private LocalDateTime createdAt; // 작성일

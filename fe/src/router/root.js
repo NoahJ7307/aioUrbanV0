@@ -13,6 +13,7 @@ const User = lazy(() => import("../pages/user/UserPage"))
 const Login = lazy(() => import("../pages/login/LoginPage"))
 const Join = lazy(() => import("../pages/JoinPage"))
 const Parking = lazy(() => import("../pages/parking/ParkingPage"))
+const ChatPage = lazy(() => import("../pages/community/chat/ChatPage"))
 
 
 const root = createBrowserRouter([
@@ -39,6 +40,7 @@ const root = createBrowserRouter([
         element: <Suspense fallback={Loading}><Parking /></Suspense>,
         children: parkingRouter()
     },
+
     ...facilities,
     ...communities,
 ])

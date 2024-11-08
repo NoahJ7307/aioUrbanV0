@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import PageComponent from '../../common/PageComponent';
 import CommunityCustom from '../../hook/CommunityCustom';
 
-// 초기 상태 설정
 const initState = {
     dtoList: [],
     pageNumList: [],
@@ -19,18 +18,18 @@ const initState = {
 };
 
 const MarketListComponents = () => {
-    const [loading, setLoading] = useState(true); // 로딩 상태
-    const [error, setError] = useState(null); // 에러 상태
-    const [uno, setUno] = useState(); // 로그인한 사용자 uno
-    const [serverData, setServerData] = useState(initState); // 서버 데이터 상태
-    const [showModal, setShowModal] = useState(false); // 모달 상태
-    const [currentPost, setCurrentPost] = useState(null); // 현재 모달에 표시할 게시물
-    const { page, size, moveToList } = CommunityCustom(); // 페이지 이동 훅
-    const navigate = useNavigate(); // 페이지 이동 훅
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [uno, setUno] = useState();
+    const [serverData, setServerData] = useState(initState);
+    const [showModal, setShowModal] = useState(false);
+    const [currentPost, setCurrentPost] = useState(null);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0); // 현재 이미지 인덱스 추가
+    const { page, size, moveToList } = CommunityCustom();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getUno = localStorage.getItem('uno');
-        console.log(getUno,)
         if (getUno) {
             setUno(Number(getUno));
         } else {
@@ -41,14 +40,12 @@ const MarketListComponents = () => {
     useEffect(() => {
         get({ page, size })
             .then(data => {
-                console.log("받은 데이터:", data); // 데이터 로그
                 setServerData(data);
-                setLoading(false); // 로딩 상태 업데이트
+                setLoading(false);
             })
             .catch(err => {
-                console.error("Axios 에러", err);
-                setError("데이터를 가져오는 데 실패했습니다."); // 에러 상태 설정
-                setLoading(false); // 로딩 상태 업데이트
+                setError("데이터를 가져오는 데 실패했습니다.");
+                setLoading(false);
             });
     }, [page, size]);
 
@@ -61,7 +58,6 @@ const MarketListComponents = () => {
                     ...prevData,
                     dtoList: updatedList
                 }));
-                console.log("삭제 성공");
             }
         } catch {
             console.error("삭제 에러", error);
@@ -70,12 +66,25 @@ const MarketListComponents = () => {
 
     const openModal = (post) => {
         setCurrentPost(post);
+        setCurrentImageIndex(0); // 모달 열 때 이미지 인덱스를 초기화
         setShowModal(true);
     };
 
     const closeModal = () => {
         setShowModal(false);
         setCurrentPost(null);
+    };
+
+    const handleNextImage = () => {
+        if (currentPost) {
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % currentPost.imageUrls.length);
+        }
+    };
+
+    const handlePrevImage = () => {
+        if (currentPost) {
+            setCurrentImageIndex((prevIndex) => (prevIndex - 1 + currentPost.imageUrls.length) % currentPost.imageUrls.length);
+        }
     };
 
     return (
@@ -93,13 +102,19 @@ const MarketListComponents = () => {
                 ) : (
                     serverData.dtoList.map((item, index) => (
                         <div key={index} className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                            <img
-                                src={item.thumbnailUrl}
-                                alt={item.title}
-                                className="w-full h-48 object-cover"
-                            />
+                            {item.thumbnailUrl ? (
+                                <img
+                                    src={`http://localhost:8080${item.thumbnailUrl}`} // /uploads/ 경로로 접근
+                                    alt={item.title}
+                                    className="w-full h-48 object-cover"
+                                />
+                            ) : (
+                                <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                    <p className="text-gray-500">이미지 없음</p>
+                                </div>
+                            )}
                             <div className="p-4">
-                                <h2 className="text-xl font-semibold mb-2">상품명:{item.title}</h2>
+                                <h2 className="text-xl font-semibold mb-2">상품명: {item.title}</h2>
                                 <p className="text-gray-600">가격: {item.price} 원</p>
                                 <p className="text-gray-500">판매자: {item.userName}</p>
                                 <button
@@ -123,6 +138,12 @@ const MarketListComponents = () => {
                                     >
                                         {uno !== item.userId ? '본인확인' : '삭제'}
                                     </button>
+                                    <button
+                                        onClick={() => { navigate(`/communities/market/chat/${item.mno}`); }}
+                                        className="bg-green-500 text-white py-1 px-3 rounded-lg hover:bg-green-600 transition duration-200"
+                                    >
+                                        1:1 대화
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -141,10 +162,9 @@ const MarketListComponents = () => {
                 <PageComponent serverData={serverData} movePage={moveToList} />
             </div>
 
-            {/* 모달 */}
             {showModal && currentPost && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="w-full md:w-1/2 bg-gray-200 p-6 rounded-lg shadow-lg">
+                    <div className="w-full md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-auto bg-gray-200 p-6 rounded-lg shadow-lg">
                         <h2 className="text-2xl font-semibold mb-4">게시물 상세</h2>
                         <table className="min-w-full text-sm text-gray-600 bg-white shadow-md rounded-lg mb-4">
                             <tbody>
@@ -172,7 +192,54 @@ const MarketListComponents = () => {
                             <h3 className="font-semibold">내용</h3>
                             <p>{currentPost.content}</p>
                         </div>
+                        <div className="mt-4">
+                            <h3 className="font-semibold">상품 이미지</h3>
+                            <div className="flex cursor-pointer relative">
+                                <div
+                                    className="absolute left-0 top-0 bottom-0 w-1/3"
+                                    onClick={() => handlePrevImage()}
+                                ></div>
+                                <img
+                                    src={`http://localhost:8080${currentPost.imageUrls[currentImageIndex]}`}
+                                    alt="게시물 이미지"
+                                    className="w-auto h-auto rounded-lg"
+                                />
+                                <div
+                                    className="absolute right-0 top-0 bottom-0 w-1/3"
+                                    onClick={() => handleNextImage()}                                ></div>
+                                <img
+                                    src={`http://localhost:8080${currentPost.imageUrls[currentImageIndex]}`}
+                                    alt="게시물 이미지"
+                                    className="w-auto h-auto rounded-lg"
+                                />
+                                <div
+                                    className="absolute right-0 top-0 bottom-0 w-1/3"
+                                    onClick={() => handleNextImage()}
+                                ></div>
+                            </div>
+                        </div>
+                        <div className="mt-4 flex overflow-x-auto">
+                            {currentPost.imageUrls.map((url, index) => (
+                                <img
+                                    key={index}
+                                    src={`http://localhost:8080${url}`}
+                                    alt={`썸네일 ${index + 1}`}
+                                    className={`w-24 h-24 object-cover rounded-lg cursor-pointer m-1 ${currentImageIndex === index ? 'border-2 border-blue-500' : ''}`}
+                                    onClick={() => setCurrentImageIndex(index)}
+                                />
+                            ))}
+                        </div>
                         <div className="text-right mt-4">
+                            <button
+                                onClick={() => {
+                                    // 현재 선택된 게시물의 mno를 사용하여 채팅 페이지로 이동
+                                    navigate(`/communities/market/chat/${currentPost.mno}`);
+                                }}
+                                className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 ml-2"
+                            >
+                                1:1 대화
+                            </button>
+
                             <button
                                 onClick={closeModal}
                                 className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
@@ -188,3 +255,4 @@ const MarketListComponents = () => {
 };
 
 export default MarketListComponents;
+
