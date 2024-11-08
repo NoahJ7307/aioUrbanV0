@@ -67,6 +67,15 @@ const EntryPage = () => {
     }))
   }
 
+  // isExit onChange 설정
+  const handleChangeIsExit = (e) => {
+    const { name, value } = e.target
+    setSearchData(prevData => ({
+      ...prevData,
+      [name]: value === 'true' ? true : false
+    }))
+  }
+
 
   const handleClickSearch = () => {
     // 검색 범위 예외처리
@@ -194,7 +203,7 @@ const EntryPage = () => {
             <li>
               <select className=''
                 name='isExit'
-                onChange={handleChangeSearchValue}>
+                onChange={handleChangeIsExit}>
                 <option value='false'>미출차</option>
                 <option value='true'>출차완료</option>
               </select>

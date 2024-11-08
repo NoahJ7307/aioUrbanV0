@@ -47,7 +47,7 @@ export const entryGetSearchList = async (pageParam, searchData) => {
     }
     const body = {
         pageRequestDTO: pageParam,
-        entrySearchDataDTO: searchData,
+        entryExitSearchDataDTO: searchData,
     }
     console.log(body)
     const res = await axios.post(`${host}/search`, body, config)
