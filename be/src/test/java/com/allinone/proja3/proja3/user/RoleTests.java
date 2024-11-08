@@ -23,7 +23,7 @@ public class RoleTests {
         User userPending = User.builder()
                 .userName("root")
                 .phone("root")
-                .pw(passwordEncoder.encode("1"))
+                .pw(passwordEncoder.encode("1111"))
                 .build();
         userPending.addRole(UserRole.ROOT);
         repository.save(userPending);
@@ -32,12 +32,9 @@ public class RoleTests {
     @Test
     public void insertRolesAdmin() {
         User userAdmin = User.builder()
-                .userName("admin7")
-                .phone("admin7")
+                .userName("정승균")
+                .phone("정승균")
                 .pw(passwordEncoder.encode("1111"))
-                .userName("admin")
-                .phone("1231")
-                .pw(passwordEncoder.encode("1"))
                 .build();
         userAdmin.addRole(UserRole.ADMIN);
         repository.save(userAdmin);

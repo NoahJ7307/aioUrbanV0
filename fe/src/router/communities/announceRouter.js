@@ -23,10 +23,7 @@ const announceRouter = [
                 path: "modify/:pno",
                 element: <AnnounceModifyPage />
             },
-            {
-                path: "cancel",
-                element: <GymCancel />
-            },
+
         ]
     },
 ];

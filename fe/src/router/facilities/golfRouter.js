@@ -23,14 +23,7 @@ const golfRouter = [
                 path: "detail/:uno",
                 element: <Suspense fallback={Loading}><GolfModifyPage /></Suspense>
             },
-            // {
-            //     path: "modify/:uno/:page/:size",
-            //     element: <GolfModifyPage />
-            // },
-            // {
-            //     path: "cancel",
-            //     element: <GolfCancelPage/>
-            // },
+
         ]
     },
 ];

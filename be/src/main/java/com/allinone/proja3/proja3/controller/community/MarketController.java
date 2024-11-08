@@ -8,6 +8,7 @@ import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.community.Announce;
 import com.allinone.proja3.proja3.model.community.Market;
 import com.allinone.proja3.proja3.repository.UserRepository;
+import com.allinone.proja3.proja3.service.UserService;
 import com.allinone.proja3.proja3.service.community.AnnounceService;
 import com.allinone.proja3.proja3.service.community.MarketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,42 +28,49 @@ import java.util.List;
 public class MarketController {
     @Autowired
     private MarketService service;
+    private UserService userService;
     @Autowired
     private UserRepository repository;
-
+    @GetMapping("/modify/{mno}")
+    public ResponseEntity<MarketDTO> getModify(@PathVariable Long mno) {
+        MarketDTO marketDTO = service.findByMno(mno); // 서비스에서 Mno로 데이터 조회
+        return ResponseEntity.ok(marketDTO);
+    }
     @GetMapping("/list")
     public ResponseEntity<PageResponseDTO<MarketDTO>> getMarket(PageRequestDTO pageRequestDTO) {
         PageResponseDTO<MarketDTO> response = service.findAllmarket(pageRequestDTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
     @PostMapping("/add")
-    public ResponseEntity<MarketDTO> createPost(@RequestBody Market market, @RequestParam Long uno) {
-        User user = repository.findById(uno)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        market.setUser(user); // 게시물에 사용자 정보를 설정
-        Market newPost = service.createPost(user, market);
+    public ResponseEntity<MarketDTO> addMarket(
+            @RequestParam("uno") Long userId,
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("price") int price,
+            @RequestParam("thumbnail") MultipartFile thumbnail,
+            @RequestParam("images") List<MultipartFile> images) throws IOException {
 
-        // entitytoDto 메서드를 호출하여 AnnounceDTO를 생성
-        MarketDTO response = service.entityDto(newPost); // newPost를 사용하여 DTO 생성
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        // UserService를 사용하여 사용자 정보 조회
+        User user = service.findByUno(userId);
+
+        // Market 객체 생성
+        Market market = Market.builder()
+                .title(title)
+                .content(content)
+                .price(price)
+                .build();
+
+        // Service에서 Market을 저장하고 이미지 URL을 설정
+        Market savedMarket = service.createPost(user, market, thumbnail, images);
+
+        // 저장된 Market의 DTO 생성
+        MarketDTO savedMarketDTO = service.entityDto(savedMarket);
+
+        // 저장된 Market의 imageUrls를 로그로 출력하여 확인
+        System.out.println("Saved Market Image URLs: " + savedMarketDTO.getImageUrls());
+
+        return ResponseEntity.ok(savedMarketDTO);
     }
-
-
-    @GetMapping("/modify/{pno}")
-    public ResponseEntity<MarketDTO> modifyMarket(@PathVariable Long mno) {
-        System.out.println("Request received for post ID: " + mno);
-
-        MarketDTO marketDTO = service.getMno(mno, new User());
-        if (marketDTO != null) {
-            System.out.println("Post found: " + marketDTO);
-            return ResponseEntity.ok(marketDTO);
-        } else {
-            System.out.println("No post found for ID: " + mno);
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @GetMapping("/{uno}")
     public List<MarketDTO> read(@PathVariable(name = "uno") Long uno) {
         User user = repository.findById(uno)
@@ -73,7 +81,7 @@ public class MarketController {
 
 
     @DeleteMapping("/{mno}")
-    public ResponseEntity<String> deletePost(@PathVariable("pno") Long mno, @RequestParam("uno") Long uno) {
+    public ResponseEntity<String> deletePost(@PathVariable("mno") Long mno, @RequestParam("uno") Long uno) {
         service.deletePost(mno, uno);
 
 
@@ -81,63 +89,37 @@ public class MarketController {
 
     }
 
-    @PutMapping("/modify/{pno}")
+    @PutMapping("/modify/{mno}")
     public ResponseEntity<String> modify(
             @PathVariable(name = "mno") Long mno,
             @RequestParam(name = "uno") Long uno,
-            @RequestBody MarketDTO marketDTO) {
+            @RequestParam(name = "title") String title,
+            @RequestParam(name = "content") String content,
+            @RequestParam(name = "price") int price,
+            @RequestParam(name = "thumbnail", required = false) MultipartFile thumbnail,
+            @RequestParam(name = "images", required = false) List<MultipartFile> images) {
 
-        // 입력된 값 출력 (디버깅용)
-        System.out.println("Received mno123: " + mno);
-        System.out.println("Received uno123: " + uno);
-        System.out.println("CommunityDTO123: " + marketDTO);
-
-        // CommunityDTO에 pno와 uno 값 설정
-        marketDTO.setUserId(uno);
+        MarketDTO marketDTO = new MarketDTO();
         marketDTO.setMno(mno);
+        marketDTO.setUserId(uno);
+        marketDTO.setTitle(title);
+        marketDTO.setContent(content);
+        marketDTO.setPrice(price);
 
         try {
-            // 서비스 레이어 호출 (수정 로직 처리)
-            boolean isModified = service.modify(marketDTO);
+            boolean isModified = service.modify(marketDTO, thumbnail, images); // 서비스 호출 시 이미지 전달
 
             if (isModified) {
-                // 성공적으로 수정되었을 경우 200 OK 응답
-                return ResponseEntity.ok("업데이트 성공123!");
+                return ResponseEntity.ok("업데이트 성공!");
             } else {
-                // 수정 실패 시 400 Bad Request 응답
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("업데이트 실패123");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("업데이트 실패");
             }
         } catch (Exception e) {
-            // 예외 발생 시 500 Internal Server Error 응답
-            System.err.println("수정 중 오류 발생123: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생123");
+            System.err.println("수정 중 오류 발생: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생");
         }
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image) {
-        if (image.isEmpty()) {
-            return ResponseEntity.badRequest().body("파일이 비어 있습니다.");
-        }
-
-        try {
-            // 파일이 저장될 경로 설정
-            String uploadDir = "upload/"; // 예: 프로젝트 루트 디렉토리 내의 'upload' 폴더
-            File uploadDirectory = new File(uploadDir);
-            if (!uploadDirectory.exists()) {
-                uploadDirectory.mkdir(); // 디렉토리가 없으면 생성
-            }
-
-            // 파일 저장
-            File file = new File(uploadDir + image.getOriginalFilename());
-            image.transferTo(file);
-
-            return ResponseEntity.ok("파일 업로드 성공: " + file.getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 중 오류 발생");
-        }
-    }
 
 
 
