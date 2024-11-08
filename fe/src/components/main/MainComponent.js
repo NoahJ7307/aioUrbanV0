@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import '../../css/_modules/main.css'
 const MainComponent = () => {
   // 카드 정보 배열
   const cards = [
@@ -32,9 +32,8 @@ const MainComponent = () => {
             />
             {/* 오버레이 내용 */}
             <div
-              className={`absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center text-white p-4 transition-opacity duration-300 ${
-                activeIndex === index ? "opacity-100" : "opacity-0"
-              }`}
+              className={`absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center text-white p-4 transition-opacity duration-300 
+               mainHoverBox ${activeIndex === index ? "opacity-100" : "opacity-0"}`}
             >
               <h2 className="text-2xl font-semibold mb-2">{card.title}</h2>
               <p className="text-gray-200 mb-4">{card.description}</p>
