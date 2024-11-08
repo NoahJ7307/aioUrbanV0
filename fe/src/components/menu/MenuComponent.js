@@ -17,7 +17,7 @@ const MenuComponent = () => {
     return (
         <div className='headerBox'>
             <div className='positionRelative'>
-                <div className='center'>
+                <div className='flexCenter'>
                     <Link to={'/'}><h1 className='logoLink'>
                         {Array.from('aio Urban').map((char, index) => (
                             <span key={index} className='logo-char'>
@@ -43,7 +43,7 @@ const MenuComponent = () => {
                     }
                 </div>
             </div>
-            <ul className='center'>
+            <ul className='flexCenter'>
                 {/* <li><Link to={'/'}>홈</Link></li> */}
                 <li><Link to={'/user'}>입주민관리</Link></li>
                 <li><Link to={'/facilities'}>시설예약</Link></li>

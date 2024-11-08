@@ -78,7 +78,7 @@
 .logoLink .logo-char:nth-child(8) { animation-delay: 0.8s; }
 .logoLink .logo-char:nth-child(9) { animation-delay: 0.9s; }
 /* 중앙 정렬 */
-.headerBox .center {
+.headerBox .flexCenter {
     display: flex;
     justify-content: center;
 }
