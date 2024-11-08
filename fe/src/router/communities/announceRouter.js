@@ -22,10 +22,6 @@ const announceRouter = [
                 path: "modify/:pno",
                 element: <AnnounceModifyPage />
             },
-<<<<<<< HEAD
-=======
-        
->>>>>>> CYR
         ]
     },
 ];
