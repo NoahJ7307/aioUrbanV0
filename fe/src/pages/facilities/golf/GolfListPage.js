@@ -5,9 +5,9 @@ import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-do
 const GolfListPage = () => {
   const [checkedReservationId, setCheckedReservationId] = useState([]);
   const [searchParams] = useSearchParams();
-  const page = searchParams.get('page');// URL 쿼리에서 page 가져오기
-  const size = searchParams.get('size');// URL 쿼리에서 size 가져오기
-  console.log(page, size)
+  const page = searchParams.get('page') || 1 // URL 쿼리에서 page 가져오기
+  const size = searchParams.get('size') || 10// URL 쿼리에서 size 가져오기
+  console.log("GolfListPage:", page, size)
   // useEffect(() => {
   //   if (loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT') {
   //     alert('권한이 없습니다')

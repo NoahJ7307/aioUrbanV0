@@ -44,7 +44,7 @@ const GolfList = ({ page, size }) => {
     useEffect(() => {
         const getUno = localStorage.getItem('uno');
         const getUserName = localStorage.getItem('userName');
-        const getPhone = localStorage.getItem('userPhone');
+        const getPhone = localStorage.getItem('phone');
 
         if (getUno) setUno(Number(getUno));
         if (getUserName) setUserName(getUserName);

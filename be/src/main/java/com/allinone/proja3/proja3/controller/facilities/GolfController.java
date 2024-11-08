@@ -93,8 +93,9 @@ public class GolfController {
 
 
     //==========사용자의 uno, 이름, phone 불러오기================
+    //수정 버튼 클릭시 이전 데이터 내용 불러오기
     @GetMapping({"/detail/{uno}"})
-    public Golf readUno(@PathVariable(name = "uno") Long uno) {
+    public GolfDTO readUno(@PathVariable(name = "uno") Long uno) {
         System.out.println("데이터 조회: " + uno);
         return service.findDataByUno(uno);
     }

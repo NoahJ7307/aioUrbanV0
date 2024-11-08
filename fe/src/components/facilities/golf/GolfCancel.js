@@ -2,7 +2,7 @@ import React from 'react'
 import { cancelGolf } from '../../api/facilities/golfApi';
 
 //체크된 예약 삭제 로직
-export const handleCheckedCancel = async (checkedReservationId, fetchGolfReservations, setCheckedReservationId) => {
+export const handleCheckedCancel = async (checkedReservationId) => {
     console.log("전송될 예약 ID: ", checkedReservationId);
     
     if (checkedReservationId.length > 0) {

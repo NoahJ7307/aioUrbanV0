@@ -14,6 +14,7 @@ const initState = {
   programEndTime: "",
   applicationStartDate: "",
   applicationEndDate: "",
+  participantLimit: "",
   price: "",
 };
 
@@ -44,16 +45,16 @@ const GymProgramAdd = () => {
     } catch (error) {
       console.error('Error adding program: ', error)
     }
-  
+
     navigate(`/facilities/gym/list`);
   };
 
 
   return (
     <>
-      {fetching ? <FetchingModal/> : <></>}
+      {fetching ? <FetchingModal /> : <></>}
       <div>
-        <div>프로그램명
+        <div>프로그램명 :
           <input
             name='title'
             type={'text'}
@@ -64,7 +65,7 @@ const GymProgramAdd = () => {
       </div>
       <div>
         <div>
-          세부내용
+          세부내용 :
         </div>
         <textarea
           name='content'
@@ -76,7 +77,7 @@ const GymProgramAdd = () => {
       </div>
       <div>
         <div>
-          대상
+          대상 :
         </div>
         <textarea
           name='target'
@@ -88,17 +89,28 @@ const GymProgramAdd = () => {
       </div>
       <div>
         <div>
-          진행기간
+          모집정원 :
+        </div>
+        <input
+          name='participantLimit'
+          type={'number'}
+          onChange={handleChangeProgram}
+          value={program.participantLimit}>
+        </input>명
+      </div>
+      <div>
+        <div>
+          진행기간 :
         </div>
         <input
           type="date"
           name="programStartDate"
           onChange={handleChangeProgram}
           value={program.programStartDate}
-        /> 
-        
-        ~ 
-    
+        />
+
+        ~
+
         <input
           type="date"
           name="programEndDate"
@@ -108,47 +120,47 @@ const GymProgramAdd = () => {
       </div>
       <div>
         <div>
-          진행시간
+          진행시간 :
         </div>
         <input
           type="time"
           name="programStartTime"
           onChange={handleChangeProgram}
           value={program.programStartTime}
-        /> 
-        
-        ~ 
-    
+        />
+
+        ~
+
         <input
           type="time"
           name="programEndTime"
           onChange={handleChangeProgram}
           value={program.programEndTime}
-        /> 
+        />
       </div>
       <div>
         <div>
-          접수기간
+          접수기간 :
         </div>
         <input
           type="datetime-local"
           name="applicationStartDate"
           onChange={handleChangeProgram}
           value={program.applicationStartDate}
-        /> 
-        
-        ~ 
-    
+        />
+
+        ~
+
         <input
           type="datetime-local"
           name="applicationEndDate"
           onChange={handleChangeProgram}
           value={program.applicationEndDate}
-        /> 
+        />
       </div>
       <div>
         <div>
-        금액(마일리지,포인트중에 결정하고 마저 구현할것): 
+          금액(마일리지,포인트중에 결정하고 마저 구현할것):
         </div>
         <input
           name='price'

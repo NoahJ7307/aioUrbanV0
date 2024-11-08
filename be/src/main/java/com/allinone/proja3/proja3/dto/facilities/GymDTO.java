@@ -23,17 +23,24 @@ public class GymDTO {
     private LocalDateTime applicationEndDate; //접수기간 종료일
     private LocalDateTime applicationStartDate; //접수기간 시작일
     private int participantLimit; //모집정원
+    private int currentParticipants; // 현재 참가 인원
+
     private String title;
     private String target;
     private String content;
     private boolean delFlag;
     private ProgramState programState;
+
+    public GymDTO(String title, String target, String content){
+        this.title =title;
+        this.target=target;
+        this.content=content;
+    }
 //    private int point;
 
     //user에서 가져올데이터
 //    private Long uno; // 사용자 ID
 //    private String userName; // 사용자 이름 추가
 //    private String phone;
-
 
 }

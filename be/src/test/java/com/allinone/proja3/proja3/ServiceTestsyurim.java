@@ -56,12 +56,13 @@ public class ServiceTestsyurim {
 
     @Test
     public  void insertGymTest() {
-        for(int i = 0; i <100; i++) {
+        for(int i = 0; i <3; i++) {
             GymDTO gymDTO = GymDTO.builder()
 //                    .programId(1L)
-                    .title("제목입니다"+i)
-                    .content("내용입니다" +i)
+                    .title("귤입니다"+i)
+                    .content("감입니다" +i)
                     .target("타겟"+i)
+                    .participantLimit(10)
                     .programStartDate(LocalDate.of(2024, 11, 16))
                     .programEndDate(LocalDate.of(2024, 12, 16))
                     .programStartTime(LocalTime.of(10,30))
@@ -70,7 +71,7 @@ public class ServiceTestsyurim {
                     .applicationEndDate(LocalDateTime.of(2024, 11, 10, 18, 30))
                     //.membershipType("Basic")
                     .delFlag(false) // delFlag 값을 설정
-                    .programState(ProgramState.Pending)
+//                    .programState(ProgramState.WAITING)
                     .build();
             Gym gym = gymService.dtoToEntity(gymDTO);
             gymService.newProgramPost(gym);
@@ -94,33 +95,34 @@ public class ServiceTestsyurim {
 //    @Test
 //    public void insertTest2() {
 //        for (int i = 0; i < 130; i++) {
-//            int randIdx = (int) (Math.random() * 100) + 1;
+////            int randIdx = (int) (Math.random() * 100) + 1;
 //            int randId = (int) (Math.random() * 10) + 1;
-//            Golf golf = Golf.builder()
+//            GolfDTO golfDTO = GolfDTO.builder()
 //                    .date(LocalDate.of(2024, 10, 16))
 //                    .startTime(LocalTime.of(11, 55, 0))
 //                    .endTime(LocalTime.of(13, 55, 0))
 //                    .teeBox(randId)
 //                    .build();
-//            golfService.register(golf);
+//            Golf golf = gymService.dtoToEntity(golf);
+//            golfService.register(golfDTO);
 //        }
 //    }
 
-    @Test
-    public void insertTest3() {
-        for (int i = 0; i < 50; i++) {
-            int randIdx = (int) (Math.random() * 100) + 1;
-            int randId = (int) (Math.random() * 10) + 1;
-//            StudyDTO studyDTO = StudyDTO.builder()
-            GolfDTO golfDTO = GolfDTO.builder()
-                    .date(LocalDate.of(2024, 10, 16))
-                    .startTime(LocalTime.of(11, 55, 0))
-                    .endTime(LocalTime.of(13, 55, 0))
-                    .teeBox(randId)
-                    .build();
-            golfService.register(golfDTO);
-        }
-    }
+//    @Test
+//    public void insertTest3() {
+//        for (int i = 0; i < 50; i++) {
+//            int randIdx = (int) (Math.random() * 100) + 1;
+//            int randId = (int) (Math.random() * 10) + 1;
+////            StudyDTO studyDTO = StudyDTO.builder()
+//            GolfDTO golfDTO = GolfDTO.builder()
+//                    .date(LocalDate.of(2024, 10, 16))
+//                    .startTime(LocalTime.of(11, 55, 0))
+//                    .endTime(LocalTime.of(13, 55, 0))
+//                    .teeBox(randId)
+//                    .build();
+//            golfService.register(golfDTO);
+//        }
+//    }
 
 //    @Test
 //    public void getTest1() {
