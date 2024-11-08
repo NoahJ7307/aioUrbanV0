@@ -15,36 +15,45 @@ const MenuComponent = () => {
     }
 
     return (
-        <div className='flex flex-col bg-black text-white headerBox'>
-            <div className='relative'>
-                <div className='flex justify-center'>
-                    <Link to={'/'}>Logo</Link>
+        <div className='headerBox'>
+            <div className='positionRelative'>
+                <div className='center'>
+                    <Link to={'/'}><h1 className='logoLink'>
+                        {Array.from('aio Urban').map((char, index) => (
+                            <span key={index} className='logo-char'>
+                                {char}
+                            </span>
+                        ))}
+                    </h1></Link>
                 </div>
-                <div className='flex justify-end'>
+                <div className='flexEnd'>
 
                     {!isLogin ?
                         <>
-                            <div className='flex justify-end mr-2'>
+                            <div className='flexEnd marginRight0_5'>
                                 <Link to={'/login'}>로그인</Link>
                             </div>
-                            <div className='flex justify-end mr-2'>
+                            <div className='flexEnd marginRight0_5'>
                                 <Link to={'/join'}>회원가입</Link>
                             </div>
                         </>
-                        : <div className='flex justify-end mr-2'>
+                        : <div className='flexEnd marginRight0_5'>
                             <button onClick={handleClickLogout}>로그아웃</button>
                         </div>
                     }
                 </div>
             </div>
-            <ul className='flex justify-center'>
-                <li className='p-2'><Link to={'/'}>홈</Link></li>
-                <li className='p-2'><Link to={'/user'}>입주민관리</Link></li>
-                <li className='p-2'><Link to={'/facilities'}>시설예약</Link></li>
-                <li className='p-2'><Link to={'/communities'}>소통</Link></li>
-                <li className='p-2'><Link to={'/parking'}>주차관리</Link></li>
+            <ul className='center'>
+                {/* <li><Link to={'/'}>홈</Link></li> */}
+                <li><Link to={'/user'}>입주민관리</Link></li>
+                <li><Link to={'/facilities'}>시설예약</Link></li>
+                <li><Link to={'/communities'}>소통</Link></li>
+                <li><Link to={'/parking'}>주차관리</Link></li>
                 {loginState.phone ?
-                    <li className='p-2'><Link to={'/'}>LoginTest</Link></li>
+                    <>
+                        <li><Link to={'/mileage'}>마일리지결제</Link></li>
+                        {/* <li><Link to={'/'}>LoginTest</Link></li> */}
+                    </>
                     : <></>
                 }
             </ul>

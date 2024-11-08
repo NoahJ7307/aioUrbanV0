@@ -4,6 +4,7 @@ import facilities from './facilities/facilitiesRouter'
 import parkingRouter from './parking/parkingRouter'
 import loginRouter from './login/loginRouter'
 import communities from './communities/communityRouter'
+import mileageRouter from './mileage/mileageRouter';
 
 const { createBrowserRouter } = require("react-router-dom")
 
@@ -14,6 +15,7 @@ const Login = lazy(() => import("../pages/login/LoginPage"))
 const Join = lazy(() => import("../pages/JoinPage"))
 const Parking = lazy(() => import("../pages/parking/ParkingPage"))
 const ChatPage = lazy(() => import("../pages/community/chat/ChatPage"))
+const MileagePage= lazy(() => import("../pages/mileage/MileagePage")) ;
 
 
 const root = createBrowserRouter([
@@ -40,7 +42,11 @@ const root = createBrowserRouter([
         element: <Suspense fallback={Loading}><Parking /></Suspense>,
         children: parkingRouter()
     },
-
+    {
+        path: "mileage",
+        element: <Suspense fallback={Loading}><MileagePage /></Suspense>,
+        children: mileageRouter()
+    },
     ...facilities,
     ...communities,
 ])

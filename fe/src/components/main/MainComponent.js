@@ -4,9 +4,9 @@ import '../../css/_modules/main.css'
 const MainComponent = () => {
   // 카드 정보 배열
   const cards = [
-    { title: "시설 예약", link: "/facilities", description: "공용 시설 예약", image: "/path/to/image2.jpg" },
-    { title: "소통", link: "/communities", description: "입주민 간 소통 공간", image: "/path/to/image3.jpg" },
-    { title: "주차 관리", link: "/parking", description: "주차 공간 확인 및 관리", image: "/path/to/image4.jpg" },
+    { title: "시설 예약", link: "/facilities", description: "공용 시설 예약", image: "/images/city.jpg" },
+    { title: "소통", link: "/communities", description: "입주민 간 소통 공간", image: "/images/cafe.jpg" },
+    { title: "주차 관리", link: "/parking", description: "주차 공간 확인 및 관리", image: "/images/parking.jpg" },
   ];
 
   // 현재 활성화된 카드의 인덱스
