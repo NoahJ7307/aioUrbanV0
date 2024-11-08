@@ -50,8 +50,6 @@ public class GymController {
         return  list;
     }
 
-
-
 //    @GetMapping("/list")
 //    public PageResponseDTO<GymDTO> getList(PageRequestDTO pageRequestDTO) {
 //        System.out.println("get list controller: " + pageRequestDTO);

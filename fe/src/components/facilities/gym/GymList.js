@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
-import { listGym, listSearchGym } from '../../api/facilities/gymApitt';
+import { listGym, searchListGym } from '../../api/facilities/gymApi';
 
 const GymList = ({ page, size }) => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const GymList = ({ page, size }) => {
 
   const fetchGymListSearch = async () => {
     try {
-      const data = await listSearchGym({ page, size }, searchType, searchKeyword);
+      const data = await searchListGym({ page, size }, searchType, searchKeyword);
       console.log(data);
       if (data.error) throw new Error(data.error);
       setServerData(data);
