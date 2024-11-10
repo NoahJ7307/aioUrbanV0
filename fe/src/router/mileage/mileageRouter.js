@@ -1,22 +1,32 @@
-import { lazy, Suspense } from "react"
+import {  Suspense } from "react"
 import { Navigate } from "react-router-dom"
 import MileagePage from "../../pages/mileage/MileagePage"
-const mileageRouter = () => {
+import ManualPayment from "../../components/mileage/ManualPayment"
+import AutomaticPayment from "../../components/mileage/AutomaticPayment"
 
-    const Loading = <div>....</div>
-    //const Parking = lazy(() => import("../../pages/mileagePage"))
-    
+const mileageRouter = () => {
+    const Loading = <div>....</div>;
 
     return [
         {
-            path: "",
-            element: <Navigate replace to="/mileage" />
+            path: "mileage/*", // 상위 경로에 `*` 추가
+            element: <Suspense fallback={Loading}><MileagePage /></Suspense>,
+            children: [
+                {
+                    path: "manual",
+                    element: <ManualPayment />,
+                },
+                {
+                    path: "auto",
+                    element: <AutomaticPayment />,
+                },
+            ],
         },
         {
-            path: "",
-            element: <Suspense fallback={Loading}><MileagePage /></Suspense>
+            path: "*",
+            element: <Navigate replace to="/mileage" />, // 리다이렉트 경로 수정
         },
+    ];
+};
 
-    ]
-}
 export default mileageRouter;

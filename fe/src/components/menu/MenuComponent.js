@@ -49,7 +49,7 @@ const MenuComponent = () => {
                 <li><Link to={'/facilities'}>시설예약</Link></li>
                 <li><Link to={'/communities'}>소통</Link></li>
                 <li><Link to={'/parking'}>주차관리</Link></li>
-                {loginState.phone ?
+                {isLogin ?
                     <>
                         <li><Link to={'/mileage'}>마일리지결제</Link></li>
                         {/* <li><Link to={'/'}>LoginTest</Link></li> */}
