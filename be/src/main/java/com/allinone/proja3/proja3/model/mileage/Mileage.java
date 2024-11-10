@@ -27,6 +27,13 @@ public class Mileage {
     private boolean state = true;
     // true일 때만 활성화된 마일리지
 
+    private boolean autopay; // 자동결제 설정
+
+    @OneToOne
+    @JoinColumn(name = "card_id")
+    private CardInfo cardInfo; // 카드 정보와 연관관계 설정
+
+
     // 마일리지 상태 확인 메소드 (Optional)
     public boolean isActive() {
         return state;
