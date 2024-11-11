@@ -23,6 +23,7 @@ export const sendMessage = async (chatMessage) => {
 };
 
 // 특정 상품에 대한 메시지 조회
+// 특정 상품에 대한 메시지 조회
 export const getMessages = async (productId) => {
     const token = localStorage.getItem("token");
     const config = {
@@ -34,12 +35,14 @@ export const getMessages = async (productId) => {
 
     try {
         const response = await axios.get(`${host}/${productId}`, config); // 상품 ID로 메시지 조회
+        console.log("메시지 조회 응답:", response.data); // 추가된 로그
         return response.data; // 성공 시 메시지 목록 반환
     } catch (error) {
         console.error("메시지 조회 실패", error);
         throw error; // 에러를 호출한 곳으로 전달
     }
 };
+
 export const getProductByMno = async (mno) => {
     const token = localStorage.getItem("token");
     const config = {

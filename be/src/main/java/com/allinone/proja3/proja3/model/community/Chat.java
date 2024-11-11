@@ -32,6 +32,9 @@ public class Chat {
     @Column(name = "recipient_id", nullable = false)
     private Long recipientId; // 수신자 ID (User의 uno)
 
+    private String senderName;
+    private String recipientName;
+
     private String message; // 메시지 내용
 
     @Column(name = "timestamp", nullable = false)

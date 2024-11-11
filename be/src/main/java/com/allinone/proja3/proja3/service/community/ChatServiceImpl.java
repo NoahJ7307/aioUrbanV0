@@ -25,6 +25,8 @@ public class ChatServiceImpl implements Chatservice {
                 .market(new Market() {{ setMno(chatDTO.getProductId()); }}) // 관련 상품 ID로 설정
                 .senderId(chatDTO.getSenderId())
                 .recipientId(chatDTO.getRecipientId())
+                .recipientName(chatDTO.getRecipientName())
+                .senderName(chatDTO.getSenderName())
                 .message(chatDTO.getMessage())
                 .timestamp(LocalDateTime.now()) // 현재 시간 설정
                 .build();
@@ -40,6 +42,8 @@ public class ChatServiceImpl implements Chatservice {
                 .productId(message.getMarket().getMno()) // 상품 ID
                 .senderId(message.getSenderId()) // 발신자 ID
                 .recipientId(message.getRecipientId()) // 수신자 ID
+                .senderName(message.getSenderName())
+                .recipientName(message.getRecipientName())
                 .message(message.getMessage()) // 메시지 내용
                 .timestamp(message.getTimestamp()) // 전송 시간
                 .build()).collect(Collectors.toList());
