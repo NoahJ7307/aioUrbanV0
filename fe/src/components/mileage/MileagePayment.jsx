@@ -39,7 +39,7 @@ const MileagePayment = () => {
                 </NavLink>
                 <NavLink to="auto"
                     onClick={() => setClick(false)}>
-                    <span className='linkname'>자동 결제</span>
+                    <span className='linkname'>자동 충전</span>
                     <img className='mileageIcon' src={click ? '/images/cursorIcon.png' : '/images/cursorIcon2.png'} alt="결제 아이콘" />
                 </NavLink>
             </nav>

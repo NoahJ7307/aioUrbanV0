@@ -1,32 +1,34 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { formatNumber } from "../api/utils";
 
 
 const AutomaticPayment = () => {
-    const [cardNumber, setCardNumber] = useState(['', '', '', '']);
-    const [cvc, setCvc] = useState('');
+    const cardNumberRef = [useRef(), useRef(), useRef(), useRef()];
+    const cvcRef = useRef();
 
     const changeCard = (e, index) => {
-        const value = e.target.value;
-        if (/^\d*$/.test(value) && value.length <= 4) {
-            // 숫자만 입력되도록 제한하고 최대 4자리로 제한
-            setCardNumber((pre) => {
-                const newCard = [...pre];
-                newCard[index] = value;
-                return newCard;
-            });
-        } else {
+        const {value} = e.target;
+
+        if (!/^\d*$/.test(value)) {
+            e.target.value = value.replace(/\D/g, ''); // 숫자 외 문자를 제거
             alert('숫자로 알맞게 입력하세요.');
+            return;
         }
-
+        if(value.length === 4 ){
+            if(index === cardNumberRef.length - 1 ){
+                cvcRef.current.focus();
+            }else{
+                cardNumberRef[index+1].current.focus();
+            }
+        }
     }
-    console.log('cardNumber', cardNumber);
-
+    console.log('cardNumberRef 상태:', cardNumberRef.map((ref) => ref.current?.value || ''));
+    console.log('cvcRef',cvcRef.current);
     const changeCvc = (e) => {
         const value = e.target.value;
         if (/^\d*$/.test(value) && value.length <= 3) {
             // 숫자만 입력되도록 제한하고 최대 3자리로 제한
-            setCvc(value);
+            cvcRef.current = value;
         } else {
             alert('숫자로 알맞게 입력하세요.');
         }
@@ -39,11 +41,11 @@ const AutomaticPayment = () => {
                 <span> 카드 번호</span>
                 <label htmlFor="cvc">CVC</label>
                 <div class="cardInput">
-                    {cardNumber.map((num, index) => (
+                    {cardNumberRef.map((num, index) => (
                         <input
                             key={index}
                             type="text"
-                            value={num}
+                            ref={num}
                             onChange={(e) => changeCard(e, index)}
                             maxLength="4"
 
@@ -54,12 +56,13 @@ const AutomaticPayment = () => {
                     <input
                         id="cvc"
                         type="password"
-                        value={cvc}
+                        ref={cvcRef}
                         onChange={changeCvc}
                         maxLength="3"
                     />
                 </div>
             </div>
+
 
         </div>
     )
