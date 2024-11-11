@@ -33,7 +33,7 @@ public class EntryController {
         PageRequestDTO pageRequestDTO = entryExitReqDTO.getPageRequestDTO();
         EntryExitSearchDataDTO entryExitSearchDataDTO = entryExitReqDTO.getEntryExitSearchDataDTO();
         System.out.println("Regular getSearchList controller P : "+pageRequestDTO);
-        System.out.println("Regular getSearchList controller U : "+entryExitSearchDataDTO);
+        System.out.println("Regular getSearchList controller E : "+entryExitSearchDataDTO);
         return entryExitCarService.getSearchList(pageRequestDTO,entryExitSearchDataDTO);
     }
 

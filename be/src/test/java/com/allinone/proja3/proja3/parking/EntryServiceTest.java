@@ -97,7 +97,7 @@ public class EntryServiceTest {
         // isExit test
         EntryExitSearchDataDTO isExitTest = EntryExitSearchDataDTO.builder()
                 .searchCategory("isExit")
-                .isExit(true)
+                .searchValue("exit")
                 .build();
         PageResponseDTO<EntryExitCarDTO> isExitList = entryExitCarService.getSearchList(pageRequestDTO, isExitTest);
         System.out.println("-------<isExit>-------");
