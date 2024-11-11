@@ -28,6 +28,7 @@ const ChatComponent = () => {
                 setReceiverName(data.userName);
 
                 const messages = await getMessages(mno);
+                console.log(message)
                 setChat(messages);
             } catch (error) {
                 console.error('게시물 데이터 가져오기 실패:', error);
@@ -56,7 +57,7 @@ const ChatComponent = () => {
     }, [mno, message, senderId]);
 
     const handleSendMessage = async () => {
-        if (message && receiverId && senderId ) {
+        if (message && receiverId && senderId) {
             const chatMessage = {
                 productId: mno,
                 senderId,
@@ -65,6 +66,7 @@ const ChatComponent = () => {
                 timestamp: new Date().toISOString(),
                 senderName
             };
+
 
             // 클라이언트에서 즉시 렌더링
             setChat((prevChat) => [...prevChat, chatMessage]);
@@ -99,6 +101,7 @@ const ChatComponent = () => {
                 )}
                 <div className="w-full h-96 border border-gray-300 rounded-lg p-4 bg-gray-50 overflow-y-scroll">
                     {chat.map((msg, index) => {
+                        console.log(msg)
                         const isMessageFromSeller = msg.senderId === postDetails?.userId;
                         const isPreviousMessageFromSameUser = index > 0 && chat[index - 1].senderId === msg.senderId;
 
@@ -109,7 +112,7 @@ const ChatComponent = () => {
                             >
                                 {!isPreviousMessageFromSameUser && (
                                     <span className="text-xs text-gray-500 mb-1">
-                                        {isMessageFromSeller ? receiverName : senderName} {/* 오른쪽은 receiverName, 왼쪽은 senderName 표시 */}
+                                        {/* {isMessageFromSeller ? msg.receiverName : msg.senderName} 오른쪽은 receiverName, 왼쪽은 senderName 표시 */}
                                     </span>
                                 )}
                                 <div
@@ -120,8 +123,9 @@ const ChatComponent = () => {
                                 >
                                     <p className="text-sm">{msg.message}</p>
                                     <small className="text-gray-500 text-xs">
-                                        {isMessageFromSeller ? receiverName : senderName} {/* 오른쪽은 receiverName, 왼쪽은 senderName 표시 */}
+                                        {isMessageFromSeller ? receiverName : msg.senderName} {/* 오른쪽은 receiverName, 왼쪽은 senderName 표시 */}
                                         <br />
+
                                         {new Date(msg.timestamp).toLocaleString()}
                                     </small>
                                 </div>
