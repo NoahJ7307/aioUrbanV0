@@ -17,14 +17,16 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.*;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class GymServiceImpl implements GymService {
@@ -165,6 +167,7 @@ public class GymServiceImpl implements GymService {
 
     //취소 로직
     //1)참가취소 메서드
+
     @Override
     public String cancelParticipant(Long programId, User user) {
         Gym gym = gymRepository.findById(programId)
@@ -179,16 +182,22 @@ public class GymServiceImpl implements GymService {
 
         //대기자 목록에서 가장 오래된 대기자를 참가자로 등록
         Optional<GymParticipant> oldestWaitlistedParticipant = gymParticipantRepository.findFirstByGymAndWaitlistedOrderByCreatedAtAsc(gym, true);
+
         if(oldestWaitlistedParticipant.isPresent()) {
             GymParticipant waitlistParticipant = oldestWaitlistedParticipant.get();
             waitlistParticipant.setWaitlisted(false); //대기자에서 정식참가자로 변경
             gym.setCurrentParticipants(gym.getCurrentParticipants()+1); // 참가자 수 증가
             gymParticipantRepository.save(waitlistParticipant);
+            log.info("Oldest waitlist participant registered as official participant: {}", waitlistParticipant);
+
+        }else {
+            log.info("No waitlisted participants. Just canceled.");
+            return "Canceled";
         }
         gym.updateProgramState();
         gymRepository.save(gym);
 
-        return "Cancelled and updated";
+        return "Canceled and updated";
     }
     //2) 대기자 취소 메서드
     @Override
@@ -199,7 +208,7 @@ public class GymServiceImpl implements GymService {
         GymParticipant waitlistParticipant = gymParticipantRepository.findByGymAndUserAndWaitlisted(gym, user, true)
                 .orElseThrow(() -> new EntityNotFoundException("Waitlist entry not found for this program"));
         gymParticipantRepository.delete(waitlistParticipant);
-        return "Waitlist cancelled";
+        return "Waitlist Canceled";
     }
 
     //프로그램 ID별로 등록된 User 조회 메서드
@@ -207,7 +216,9 @@ public class GymServiceImpl implements GymService {
     public List<UserDTO> getRegisterdUsers(Long programId) {
         Gym gym = gymRepository.findById(programId)
                 .orElseThrow(() -> new EntityNotFoundException("Gym program not found with id: " + programId));
-        List<GymParticipant> participants = gymParticipantRepository.findByGym(gym);
+//        List<GymParticipant> participants = gymParticipantRepository.findByGym(gym);
+        List<GymParticipant> participants = gymParticipantRepository.findByGymAndWaitlisted(gym, false);
+//        List<GymParticipant> participants = gymParticipantRepository.findByGymAndStatus(gym, "REGISTERED");
         return participants.stream()
                 .map(participant -> {
                     User user = participant.getUser();

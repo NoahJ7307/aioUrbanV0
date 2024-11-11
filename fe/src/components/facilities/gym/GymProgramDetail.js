@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { applyForProgram, applyForWaitlist, cancelParticipant, deletePost, fetchRegisteredUsers, fetchWaitlistUsers, getGymListByProgramId, getRegisteredUsersByProgramId } from '../../api/facilities/gymApi';
+import { applyForProgram, applyForWaitlist, cancelParticipant, cancelWaitlist, deletePost, fetchRegisteredUsers, fetchWaitlistUsers, getGymListByProgramId, getRegisteredUsersByProgramId } from '../../api/facilities/gymApi';
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
 import axios from 'axios';
@@ -13,6 +13,8 @@ const GymProgramDetail = () => {
     const [userName, setUserName] = useState(); // 로그인한 사용자 name
     const [phone, setPhone] = useState(); // 로그인한 사용자 phone
     // const [registeredUsers, setRegisteredUsers] = useState([]);
+    const [isParticipant, setIsParticipant] = useState(false); // 로그인한 사용자가 참가자인지 여부
+    const [isWaitList, setIsWaitList] = useState(false); // 로그인한 사용자가 대기자인지 여부
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     console.log("searchParams", searchParams)
@@ -39,40 +41,46 @@ const GymProgramDetail = () => {
         if (getPhone) setPhone(getPhone);
         if (!getUno && !getUserName && !getPhone) console.log("로그인 정보가 없습니다.");
 
+
+
     }, [])
 
 
     useEffect(() => {
+        const getUno = localStorage.getItem('uno');
+        // if (!gym.programId) return;
         if (gym.programId) {
             console.log('예약 수정: ', page, size, gym);
             //기존예약정보가져오기 (예약 ID로 API 호출하여 데이터 가져옴)
             getGymListByProgramId({ programId: gym.programId })
                 .then((data) => {
-                    // console.log(data)
+                    console.log("기존예약데이터:", data)
                 }).catch((error) => {
-                    console.error(error);
+                    console.error("Failed to fetch gym list:",error);
                 });
-            // 등록된 유저 목록 가져오기
-            fetchRegisteredUsers(gym.programId)
-                .then((users) => {
-                    setParticipants(users);
-                })
-                .catch((error) => {
-                    console.error("Failed to fetch registered users:", error)
-                })
-            //대기자 유저 목록 가져오기
-            fetchWaitlistUsers(gym.programId)
-                .then((users) => {
-                    setWaitlist(users);
-                })
-                .catch((error) => {
-                    console.error("Failed to fetch registered users:", error)
-                })
+            // 프로그램 ID가 있을 때 참가자 목록 가져오기
+            if (gym.programId) {
+                fetchRegisteredUsers(gym.programId)
+                    .then((users) => {
+                        console.log("참가자목록 :" , users);
+                        setParticipants(users);
+                        // 로그인한 사용자가 참가자 목록에 포함되어 있는지 확인
+                        setIsParticipant(users.some(user => user.uno === Number(getUno)));
+                    })
+                    .catch((error) => console.error("Failed to fetch registered users:", error));
 
-
+                // 대기자 목록 가져오기
+                fetchWaitlistUsers(gym.programId)
+                    .then((users) => {
+                        setWaitlist(users);
+                        setIsWaitList(users.some(user => user.uno === Number(getUno)));
+                    })
+                    .catch((error) => console.error("Failed to fetch waitlist users:", error));
+            }
 
         }
-    }, [gym.programId]);
+    }
+    , [gym.programId, page, size]);
 
     const handleModify = () => {
         console.log("수정버튼 눌림")
@@ -109,75 +117,10 @@ const GymProgramDetail = () => {
         }
     }
 
+
     // JSX 부분에서 버튼 렌더링
     const buttonState = determineButtonState(gym);
 
-    //참가 대기자 로직
-    const handleWaiting = async () => {
-
-        const waitlistData = {
-            uno,
-            userName,
-            phone,
-            programId: gym.programId,
-            title: gym.title,
-            applicationDate: new Date().toISOString(), // 현재 날짜
-            applicationState: '대기 중' // 대기자로 등록할 경우 상태
-        };
-        // 먼저 확인 창을 띄움
-        const confirmed = window.confirm("해당 프로그램을 참가대기하시겠습니까?");
-        if (!confirmed) {
-            return; // 사용자가 취소를 선택한 경우 함수를 종료합니다.
-        }
-
-        try {
-            const waitlistResponse = await applyForWaitlist(waitlistData);
-            console.log("응답 코드:", waitlistResponse);
-
-            if (waitlistResponse === "B000") {
-                alert("이미 정식 접수된 회원입니다.");
-            } else if (waitlistResponse === "B001") {
-                alert("이미 대기자로 등록된 회원입니다.");
-            } else if (waitlistResponse === "B002") {
-                alert('대기자로 등록되었습니다.');
-            } else {
-                alert('대기자 등록에 실패했습니다.');
-            }
-        } catch (error) {
-            console.error("대기자 등록 중 오류 발생: ", error);
-            alert('대기자 등록에 실패했습니다. ')
-        }
-    }
-
-
-    const getApplicationState = (gym) => {
-        return gym.currentParticipants < gym.participantLimit ? '접수 완료' : '대기 중';
-    };
-
-    // const handleUserCancel = async () => {
-    //     const confirmed = window.confirm("정말 참가를 취소하시겠습니까?");
-    //     if (!confirmed) {
-    //         return;
-    //     }
-    //     try {
-    //         const response = await cancelParticipant(gym.programId, { uno });
-    //         if (response === "C001") {
-    //             alert("참가 취소가 완료되었습니다.")
-    //             window.location.reload()//페이지 새로고침하여 참가자목록 업데이트
-    //         } else if (response === "C002") {
-    //             alert("이미 취소된 참가입니다.")
-    //         } else if (response === "C003") {
-    //             alert("참가 취소가 완료되었습니다.");
-    //             window.location.reload(); // 페이지 새로고침
-    //         } else {
-    //             alert("알 수 없는 오류가 발생했습니다.");
-    //         }
-    //     } catch (error) {
-    //         console.error("참가 취소 중 오류 발생: ", error);
-    //         alert("참가 취소 중 오류가 발생했습니다.");
-    //     }
-
-    // };
 
     //참가접수 로직
     const handleApply = async () => {
@@ -215,7 +158,107 @@ const GymProgramDetail = () => {
             alert('신청에 실패했습니다.');
         }
     };
+
+    //참가 대기자 로직
+    const handleWaiting = async () => {
+        const applicationState = getApplicationState(gym);
+        const waitlistData = {
+            uno,
+            userName,
+            phone,
+            programId: gym.programId,
+            title: gym.title,
+            applicationDate: new Date().toISOString(), // 현재 날짜
+            applicationState // 대기자로 등록할 경우 상태
+        };
+        console.log("전송할 신청 데이터:", waitlistData);
+        // 먼저 확인 창을 띄움
+        const confirmed = window.confirm("해당 프로그램을 참가대기하시겠습니까?");
+        if (!confirmed) {
+            return; // 사용자가 취소를 선택한 경우 함수를 종료합니다.
+        }
+
+        try {
+            const waitlistResponse = await applyForWaitlist(waitlistData);
+            console.log("응답 코드:", waitlistResponse);
+
+            if (waitlistResponse === "B000") {
+                alert("이미 정식 접수된 회원입니다.");
+            } else if (waitlistResponse === "B001") {
+                alert("이미 대기자로 등록된 회원입니다.");
+            } else if (waitlistResponse === "B002") {
+                alert('대기자로 등록되었습니다.');
+            } else {
+                alert('대기자 등록에 실패했습니다.');
+            }
+        } catch (error) {
+            console.error("대기자 등록 중 오류 발생: ", error);
+            alert('대기자 등록에 실패했습니다. ')
+        }
+    }
+
+
+    const getApplicationState = (gym) => {
+        return gym.currentParticipants < gym.participantLimit ? '접수 완료' : '대기 중';
+    };
+
+    //참가취소!!!
+    const handleUserCancel = async () => {
+        const confirmed = window.confirm("정말 참가를 취소하시겠습니까?");
+        if (!confirmed) {
+            return;
+        }
+        try {
+            const response = await cancelParticipant(gym.programId, { uno });
+            if (response === "C001") {
+                alert("참가 취소가 완료되었습니다.")
+                window.location.reload()//페이지 새로고침하여 참가자목록 업데이트
+            } else if (response === "C002") {
+                alert("참가 취소가 완료되었습니다.")
+            } else if (response === "C003") {
+                alert("참가 취소가 완료되었습니다."); //해당프로그램에 대기자명단이있을시 참가 취소 하고 대기자 명단 참가자로 등록하는 로직임
+                window.location.reload(); // 페이지 새로고침
+            } else {
+                alert("알 수 없는 오류가 발생했습니다.");
+            }
+        } catch (error) {
+            console.error("참가 취소 중 오류 발생: ", error);
+            alert("참가 취소 중 오류가 발생했습니다.");
+        }
+
+    };
     
+
+    //대기 취소 !!!
+    const handleWaitingCancel = async () => {
+        const confirmed = window.confirm("정말 대기를 취소하시겠습니까?");
+        if (!confirmed) {
+            return;
+        }
+        try {
+            const response = await cancelWaitlist(gym.programId, { uno });
+            if (response === "D001") {
+                alert("대기자가 아닙니다.")
+                window.location.reload()//페이지 새로고침하여 참가자목록 업데이트
+            } else if (response === "D002") {
+                alert("대기 취소가 완료되었습니다.")
+            }
+            // else if (response === "D003") {
+            //     alert("대기 취소가 완료되었습니다.");
+            //     window.location.reload(); // 페이지 새로고침
+            // }
+            else {
+                alert("알 수 없는 오류가 발생했습니다.");
+            }
+        } catch (error) {
+            console.error("대기 취소 중 오류 발생: ", error);
+            alert("대기 취소 중 오류가 발생했습니다.");
+        }
+
+    };
+
+
+
     const handleBackToList = () => {
         // navigate(`/facilities/gym/list?page=${page}&size=${size}`, { state: { gym } });
         navigate(`/facilities/gym/list?type=${type}&keyword=${keyword}&page=${page}&size=${size}`, { state: { gym } });
@@ -237,9 +280,9 @@ const GymProgramDetail = () => {
 
 
             <div>
-                <h2>참가자 명단</h2>
+                <h2>----------------참가자 명단--------------------</h2>
                 <ul>
-                    {participants.length > 0 ? (
+                    {participants && participants.length > 0 ? (
                         participants.map((user, index) => (
                             <li key={`participant-${user.uno}-${index}`}>
                                 {user.userName} - {user.phone}
@@ -249,9 +292,9 @@ const GymProgramDetail = () => {
                         <li>등록된 참가자가 없습니다.</li>
                     )}
                 </ul>
-                <h2>대기자 명단</h2>
+                <h2>---------------대기자 명단-------------------</h2>
                 <ul>
-                    {waitlist.length > 0 ? (
+                    {waitlist && waitlist.length > 0 ? (
                         waitlist.map((user, index) => (
                             <li key={`waitlist-${user.uno}-${index}`}>
                                 {user.userName} - {user.phone}
@@ -271,7 +314,17 @@ const GymProgramDetail = () => {
                     {buttonState.text}
                 </button>
                 <button type="button" onClick={handleBackToList}>목록</button>
-                {/* <button type="button" onClick={handleUserCancel}>참가취소 </button> */}
+                {/* <button type="button"
+                    onClick={isParticipant ? handleUserCancel : (isWaitList ? handleWaitingCancel : null)}
+                    disabled={!(isParticipant || isWaitList)}>
+                    {isParticipant ? '참가 취소' : (isWaitList ? '대기 취소' : '')}
+                </button> */}
+                {isParticipant && (
+                    <button type="button" onClick={handleUserCancel}>참가 취소</button>
+                )}
+                {isWaitList && (
+                    <button type="button" onClick={handleWaitingCancel}>대기 취소</button>
+                )}
             </div>
 
         </>

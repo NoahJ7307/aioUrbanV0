@@ -187,10 +187,11 @@ export const cancelWaitlist = async (programId, user) => {
     const config = getConfig();
     try {
         const response = await axios.delete(`${host}/detail/waitlist/cancel/${programId}`, {
+            // params: {user},
             data: user,
             ...config
         })
-        console.log("대기취소 조회: ", response)
+        console.log("대기취소 조회: ", response.data)
         return response.data;
     } catch (error) {
         console.error("대기 취소 중 오류 발생 ", error);

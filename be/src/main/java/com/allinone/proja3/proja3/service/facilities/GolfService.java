@@ -19,8 +19,10 @@ import java.util.List;
 public interface GolfService {
 
     Long register(GolfDTO golfDTO);
+//    String validateReservation(LocalDate date, LocalTime startTime, LocalTime endTime, int teeBox);
     PageResponseDTO<GolfDTO> getList(PageRequestDTO pageRequestDTO);
     boolean isTimeAvailable(LocalDate date, LocalTime startTime, LocalTime endTime, int teeBox);
+//    String isValidReservation(LocalDate date, LocalTime startTime, LocalTime endTime);
     PageResponseDTO<GolfDTO> getUserReservations(Long uno, PageRequestDTO pageRequestDTO);
     void modify(GolfDTO golfDTO);
     void remove(Long reservationId);

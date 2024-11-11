@@ -9,6 +9,7 @@ import com.allinone.proja3.proja3.model.facilities.Golf;
 import com.allinone.proja3.proja3.model.facilities.Study;
 import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.repository.facilities.GolfRepository;
+import jakarta.persistence.Id;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
@@ -16,10 +17,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +38,14 @@ public class GolfServiceImpl implements GolfService {
 
     @Override
     public Long register(GolfDTO golfDTO) {
+
+//        // 예약 유효성 검증
+//        String validationMessage = validateReservation(golfDTO.getDate(), golfDTO.getStartTime(), golfDTO.getEndTime(), golfDTO.getTeeBox());
+//        if(!validationMessage.equals("예약가능합니다")) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validationMessage); // 예약이 유효하지 않으면 예외 발생
+//        } //까지 추가됨
+
+
         Golf golf = dtoToEntity(golfDTO);
         Golf result = golfRepository.save(golf);
         return result.getReservationId();
@@ -62,6 +74,21 @@ public class GolfServiceImpl implements GolfService {
                 .build();
 
     }
+    //예약시 오류처리
+//    @Override
+//    public String validateReservation(LocalDate date, LocalTime startTime, LocalTime endTime, int teeBox) {
+//        //시간 유효성 체크
+//        String timeValidationResult = isValidReservation(date, startTime, endTime);
+//        if(!timeValidationResult.equals("valid")) {
+//            return timeValidationResult;
+//        }
+//        //중복예약 체크
+//        if(!isTimeAvailable(date, startTime, endTime,teeBox)) {
+//            return "이미 예약된 시간입니다. 다른 시간을 선택해주세요.";
+//        }
+//        return "예약 가능합니다.";
+//    }
+//
     //중복 예약 확인 메서드 구현
     @Override
     public boolean isTimeAvailable(LocalDate date, LocalTime startTime, LocalTime endTime, int teeBox) {
@@ -69,6 +96,25 @@ public class GolfServiceImpl implements GolfService {
 
         return existingReservations.isEmpty(); //예약이 없다면 true 반환
     }
+    //시간 유효성 체크 로직
+//    @Override
+//    public String  isValidReservation(LocalDate date, LocalTime startTime, LocalTime endTime) {
+//        LocalDate today = LocalDate.now();
+//        LocalTime now = LocalTime.now();
+//
+//        //과거 날짜인지 확인
+//        if(date.isBefore(today)) {
+//            return "과거 날짜는 예약할 수 없습니다.";
+//        }
+//        if(date.equals(today)&& startTime.isBefore(now)) {
+//            return "오늘은 현재 시간 이후에만 예약 가능합니다.";
+//        }
+//        //시작시간이 종료시간과 같거나 이후일 수 없는 로직
+//        if(startTime.isAfter(endTime)||startTime.equals(endTime)) {
+//            return "시작 시간이 종료 시간보다 늦거나 같을 수 없습니다."; // 시간 오류 메시지
+//        }
+//        return "valid"; // 유효한 시간
+//    }
 
 
 
@@ -148,15 +194,7 @@ public class GolfServiceImpl implements GolfService {
         GolfDTO dto = this.entityToDto(golf);
         return dto;
     }
-//    @Override
-//    public Golf findDataByUno(Long uno) {
-//        User user = userRepository.findById(uno)
-//                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-//        List<Golf> golf = golfRepository.findByUser(user); // User 객체로 검색
-//        return golf.stream()
-//                .map(this::entityToDto)
-//                .collect(Collectors.toList());
-//    }
+
 
     //레시피 → 요리 (dtoToEntity)
     // 클라이언트로부터 받은 정보를 바탕으로 실제 데이터베이스에 저장할 수 있는 형식으로 변환합니다.

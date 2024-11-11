@@ -63,19 +63,19 @@ public class ServiceTestsyurim {
 
     @Test
     public  void insertGymTest() {
-        for(int i = 0; i <3; i++) {
+        for(int i = 0; i <15; i++) {
             GymDTO gymDTO = GymDTO.builder()
 //                    .programId(1L)
-                    .title("apple"+i)
-                    .content("banana" +i)
+                    .title("title"+i)
+                    .content("content" +i)
                     .target("타겟"+i)
-                    .participantLimit(10)
+                    .participantLimit(3)
                     .programStartDate(LocalDate.of(2024, 11, 16))
                     .programEndDate(LocalDate.of(2024, 12, 16))
                     .programStartTime(LocalTime.of(10,30))
                     .programEndTime(LocalTime.of(12,30))
                     .applicationStartDate(LocalDateTime.of(2024, 10, 16, 10, 30))
-                    .applicationEndDate(LocalDateTime.of(2024, 11, 10, 18, 30))
+                    .applicationEndDate(LocalDateTime.of(2024, 12, 30, 18, 30))
                     //.membershipType("Basic")
                     .delFlag(false) // delFlag 값을 설정
 //                    .programState(ProgramState.WAITING)
@@ -159,7 +159,7 @@ public class ServiceTestsyurim {
     public void insertRolesAdmin() {
         User userAdmin = User.builder()
                 .userName("최유림")
-                .phone("0000")
+                .phone("0509")
                 .pw(passwordEncoder.encode("1"))
                 .build();
         userAdmin.addRole(UserRole.ADMIN);

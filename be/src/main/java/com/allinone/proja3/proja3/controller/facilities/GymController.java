@@ -1,8 +1,5 @@
 package com.allinone.proja3.proja3.controller.facilities;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-import com.allinone.proja3.proja3.dto.PageRequestDTO;
-import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.SearchPageRequestDTO;
 import com.allinone.proja3.proja3.dto.SearchPageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymDTO;
@@ -11,10 +8,8 @@ import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Gym;
 import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.service.facilities.GymService;
-import com.querydsl.core.BooleanBuilder;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -168,13 +163,27 @@ public class GymController {
         if(response.equals("Not Registered")) {
             return new ResponseEntity<>("C001", HttpStatus.OK); // 등록되지 않은 사용자
         } else if(response.equals("Canceled")) {
+
             return new ResponseEntity<>("C002", HttpStatus.OK);
-        }else if (response.equals("Cancelled and updated")) {
+        }else if (response.equals("Canceled and updated")) {
             return new ResponseEntity<>("C003", HttpStatus.OK); // 성공적으로 취소 및 대기자 참가자 등록
         } else {
             return new ResponseEntity<>("C004", HttpStatus.INTERNAL_SERVER_ERROR); // 서버 오류
         }
     }
+//    @DeleteMapping("/detail/register/cancel/{programId}")
+//    public ResponseEntity<String> cancelParticipant(@PathVariable Long programId, @RequestBody User user) {
+//        String response = service.cancelParticipant(programId, user);
+//        if(response.equals("Not Registered")) {
+//            return new ResponseEntity<>("C001", HttpStatus.OK); // 등록되지 않은 사용자
+//        } else if(response.equals("Canceled")) {
+//            return new ResponseEntity<>("C002", HttpStatus.OK);
+//        }else if (response.equals("Canceled and updated")) {
+//            return new ResponseEntity<>("C003", HttpStatus.OK); // 성공적으로 취소 및 대기자 참가자 등록
+//        } else {
+//            return new ResponseEntity<>("C004", HttpStatus.INTERNAL_SERVER_ERROR); // 서버 오류
+//        }
+//    }
     //대기자 취소
     @DeleteMapping("/detail/waitlist/cancel/{programId}")
     public ResponseEntity<String> cancelWaitlist(@PathVariable Long programId, @RequestBody User user){
@@ -191,7 +200,7 @@ public class GymController {
 
     //참가 신청한 명단 불러오기
     @GetMapping("/{programId}/participants")
-    public ResponseEntity<List<UserDTO>> getRegisteredUsers(@PathVariable Long programId) {
+    public ResponseEntity<List<UserDTO>> getRegisterdUsers(@PathVariable Long programId) {
         List<UserDTO> participants = service.getRegisterdUsers(programId);
         System.out.println("participants1105 " + participants);
         return ResponseEntity.ok(participants);
