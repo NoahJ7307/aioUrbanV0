@@ -42,4 +42,12 @@ public class MileageHistory {
     public boolean isDeduction() {
         return "-".equals(type);
     }
+
+    // 엔터티가 처음 저장될 때 호출되는 메소드
+    @PrePersist
+    protected void onCreate() {
+        if (id.getTimestamp() == null) {
+            id.setTimestamp(LocalDateTime.now()); // 현재 시간으로 설정
+        }
+    }
 }

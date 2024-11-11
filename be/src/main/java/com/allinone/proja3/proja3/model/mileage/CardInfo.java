@@ -23,6 +23,4 @@ public class CardInfo{
     private String encryptedCardNumber; // 암호화된 카드 번호
 
     private String cardExpiry; // 카드 유효기간 등 추가 정보
-
-
 }

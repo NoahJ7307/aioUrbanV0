@@ -5,25 +5,27 @@ import { formatNumber } from "../api/utils";
 const AutomaticPayment = () => {
     const cardNumberRef = [useRef(), useRef(), useRef(), useRef()];
     const cvcRef = useRef();
+    const dong = JSON.parse(localStorage.getItem("dong"));
+    const ho = JSON.parse(localStorage.getItem("ho"));
 
     const changeCard = (e, index) => {
-        const {value} = e.target;
+        const { value } = e.target;
 
         if (!/^\d*$/.test(value)) {
             e.target.value = value.replace(/\D/g, ''); // 숫자 외 문자를 제거
             alert('숫자로 알맞게 입력하세요.');
             return;
         }
-        if(value.length === 4 ){
-            if(index === cardNumberRef.length - 1 ){
+        if (value.length === 4) {
+            if (index === cardNumberRef.length - 1) {
                 cvcRef.current.focus();
-            }else{
-                cardNumberRef[index+1].current.focus();
+            } else {
+                cardNumberRef[index + 1].current.focus();
             }
         }
     }
     console.log('cardNumberRef 상태:', cardNumberRef.map((ref) => ref.current?.value || ''));
-    console.log('cvcRef',cvcRef.current);
+    console.log('cvcRef', cvcRef.current);
     const changeCvc = (e) => {
         const value = e.target.value;
         if (/^\d*$/.test(value) && value.length <= 3) {
@@ -34,6 +36,23 @@ const AutomaticPayment = () => {
         }
 
     };
+
+    const setPayment = () => {
+        const pass = cardNumberRef.every(ref => ref.current && ref.current.value.length === 4);
+        if (!pass) {
+            alert('카드번호를 제대로 입력해 주세요');
+            return;
+        }
+
+        // CVC 유효성 검사
+        // if (!cvcRef.current || !cvcRef.current.value || cvcRef.current.value.length !== 3) {
+        //     alert('CVC를 제대로 입력해 주세요');
+        //     return;
+        // }
+
+    }
+
+
     return (
         <div className="automaticPayment">
             <p>자동 결제 등록하기</p>
@@ -62,7 +81,11 @@ const AutomaticPayment = () => {
                     />
                 </div>
             </div>
-
+            <div className="paymentButtonContainer">
+                <button onClick={setPayment} className="paymentButton">
+                    결제하기
+                </button>
+            </div>
 
         </div>
     )

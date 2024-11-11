@@ -3,8 +3,7 @@ package com.allinone.proja3.proja3.model.mileage;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,7 +11,7 @@ import lombok.*;
 public class Mileage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int mileageId; // 고유 식별자
+    private Long mileageId; // 고유 식별자
 
     @Column(nullable = false)
     private int dong;
@@ -29,7 +28,7 @@ public class Mileage {
 
     private boolean autopay; // 자동결제 설정
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true) // cardid 삭제시 , null로 처리
     @JoinColumn(name = "card_id")
     private CardInfo cardInfo; // 카드 정보와 연관관계 설정
 
@@ -39,14 +38,6 @@ public class Mileage {
         return state;
     }
 
+    public boolean isAutopay() {return autopay;}
 
-     // 필요해 보이지 않아서 일단 막음.
-     //양방향 관계 설정
-//    @OneToMany(mappedBy = "mileage", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<MileageHistory> historyList = new ArrayList<>();
-//
-//    public void addHistory(MileageHistory history) {
-//        historyList.add(history);
-//        history.setMileage(this);
-//    }
 }
