@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://dapi.kakao.com http://*.daumcdn.net; 
+                   script-src 'self' 'unsafe-inline' https://dapi.kakao.com http://*.daumcdn.net; 
+                   img-src 'self' 'unsafe-inline' https://dapi.kakao.com http://*.daumcdn.net;
+                   font-src 'self' https://fonts.gstatic.com https://fastly.jsdelivr.net;">
+    
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://dapi.kakao.com http://*.daumcdn.net; 
+                   script-src 'self' 'unsafe-inline' https://dapi.kakao.com http://*.daumcdn.net; 
+                   img-src 'self' 'unsafe-inline' https://dapi.kakao.com http://*.daumcdn.net;
+                   font-src 'self' https://fonts.gstatic.com https://fastly.jsdelivr.net;"> -->
+    
+    <script type="text/javascript"
+      src="https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=f7170da7f526766a008e434e58cb8af7"></script>
+
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,6 +22,7 @@
       name="description"
       content="Web site created using create-react-app"
     />
+    
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a

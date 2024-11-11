@@ -7,7 +7,7 @@ const InfoPage = () => {
     const uno = 3;
     const navigate = useNavigate();
     const handleClickList = useCallback(() => {
-        navigate('/communities/info/main');
+        navigate('/communities/info/jobs');
     }, [navigate]);
 
 
@@ -18,7 +18,7 @@ const InfoPage = () => {
 
             <ul className='flex justify-center space-x-8'>
                 <li>
-                    <button className="button" onClick={handleClickList}>동네 생활정보</button>
+                    <button className="button" onClick={handleClickList}>동네 알바 </button>
                 </li>
             </ul>
           

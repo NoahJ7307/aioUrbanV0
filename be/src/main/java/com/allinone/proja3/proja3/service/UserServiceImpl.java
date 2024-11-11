@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -46,6 +45,29 @@ public class UserServiceImpl implements UserService {
                 Sort.by("uno").descending());
 
         Page<User> result = userRepository.notPendingList(UserRole.PENDING, pageable);// PENDING 이 아닌 유저만 필터링
+
+        // entityToDto를 사용하여 엔티티 -> DTO 변환
+        List<UserDTO> dtoList = result.getContent().stream()
+                .map(this::entityToDto)  // entityToDto 메서드를 사용하여 변환
+                .collect(Collectors.toList());
+
+        long totalCount = result.getTotalElements();
+        return PageResponseDTO.<UserDTO>withAll()
+                .dtoList(dtoList)
+                .pageRequestDTO(pageRequestDTO)
+                .totalCount(totalCount)
+                .build();
+    }
+
+    @Override
+    public PageResponseDTO<UserDTO> getAllList(PageRequestDTO pageRequestDTO) {
+        System.out.println("getAllList service");
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("uno").descending());
+
+        Page<User> result = userRepository.findAll(pageable);
 
         // entityToDto를 사용하여 엔티티 -> DTO 변환
         List<UserDTO> dtoList = result.getContent().stream()
@@ -153,13 +175,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addRole(Long uno, UserRole role) {
+    public Long addRole(Long uno, UserRole role) {
         System.out.println("addRoleUser service : "+uno);
         Optional<User> result = userRepository.findById(uno);
         User user = result.orElseThrow();
         user.clearRole();
         user.addRole(role);
         userRepository.save(user);
+        return uno;
     }
 
     @Override

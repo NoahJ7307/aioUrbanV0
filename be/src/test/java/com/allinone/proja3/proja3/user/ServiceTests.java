@@ -66,4 +66,9 @@ public class ServiceTests {
         PageResponseDTO<UserDTO> list = userService.getSearchList(pageRequestDTO, userSearchDataDTO);
         list.getDtoList().forEach(System.out::println);
     }
+
+    @Test
+    public void addRoleTest(){
+        userService.addRole(77L, UserRole.USER);
+    }
 }
