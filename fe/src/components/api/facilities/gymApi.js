@@ -38,18 +38,22 @@ export const listGym = async (pageParam) => {
     return res.data;
 }
 
-export const searchListGym = async (page, size, searchType, searchKeyWord) => {
-    console.log("gymsearch 777");
+export const searchListGym = async ({ page, size } , searchType, searchKeyWord) => {
+    console.log("gymsearch 777", searchKeyWord);
+    console.log("gymsearch 777", searchType);
+
     try {
         //검색조건을 쿼리 파라미터로 추가 
-        const response = await axios.get(`${host}/list/search`, {
+        const config = {
+            ...getConfig(),
             params: {
                 page: page,
                 size: size,
                 searchType: searchType,
                 searchKeyWord: searchKeyWord
             }
-        });
+        }
+        const response = await axios.get(`${host}/list/search`, config);
         return response.data;
     } catch (error) {
         console.error('검색 api오류 : ', error);

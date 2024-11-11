@@ -4,7 +4,6 @@ import { applyForProgram, applyForWaitlist, cancelParticipant, deletePost, fetch
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
 import axios from 'axios';
-import { createReducer } from '@reduxjs/toolkit';
 
 const GymProgramDetail = () => {
     const [participants, setParticipants] = useState([]);
@@ -14,17 +13,14 @@ const GymProgramDetail = () => {
     const [phone, setPhone] = useState(); // 로그인한 사용자 phone
     // const [registeredUsers, setRegisteredUsers] = useState([]);
     const navigate = useNavigate();
+    const [gym, setGym] = useCustom(null)
     const [searchParams] = useSearchParams();
     console.log("searchParams", searchParams)
-    // const { moveToList, page, size } = useCustom()
-    const type = searchParams.get('type') || '';
-    const keyword = searchParams.get('keyword') || '';
-    const page = searchParams.get('page') || 1;
-    const size = searchParams.get('size') || 10;
+    const { moveToList, page, size } = useCustom()
     // console.log('예약 수정asfda: ', page, size);
 
     const location = useLocation();
-    const { gym } = location.state || { title: '', content: '', target: '', participantLimit: 0, programId: null, currentParticipants: 0, applicationStartDate: '', applicationEndDate: '', price: 0 };
+    // const { gym } = location.state || { title: '', content: '', target: '', participantLimit: 0, programId: null, currentParticipants: 0, applicationStartDate: '', applicationEndDate: '', price: 0 };
     console.log("detail gym", gym)
 
 
@@ -41,38 +37,51 @@ const GymProgramDetail = () => {
 
     }, [])
 
-
     useEffect(() => {
-        if (gym.programId) {
-            console.log('예약 수정: ', page, size, gym);
-            //기존예약정보가져오기 (예약 ID로 API 호출하여 데이터 가져옴)
-            getGymListByProgramId({ programId: gym.programId })
-                .then((data) => {
-                    // console.log(data)
-                }).catch((error) => {
-                    console.error(error);
-                });
-            // 등록된 유저 목록 가져오기
-            fetchRegisteredUsers(gym.programId)
-                .then((users) => {
-                    setParticipants(users);
-                })
-                .catch((error) => {
-                    console.error("Failed to fetch registered users:", error)
-                })
-            //대기자 유저 목록 가져오기
-            fetchWaitlistUsers(gym.programId)
-                .then((users) => {
-                    setWaitlist(users);
-                })
-                .catch((error) => {
-                    console.error("Failed to fetch registered users:", error)
-                })
-
-
-
+        if (location.state?.gym) {
+            setGym(location.state.gym);
+            fetchRegisteredUsers(location.state.gym.programId)
+                .then((users) => setParticipants(users))
+                .catch((error) => console.error(error));
+            fetchWaitlistUsers(location.state.gym.programId)
+                .then((users) => setWaitlist(users))
+                .catch((error) => console.error(error));
         }
-    }, [gym.programId]);
+    }, [location.state]);
+    
+    // useEffect(() => {
+    //     if (gym.programId) {
+    //         console.log('예약 수정: ', page, size, gym);
+    //         //기존예약정보가져오기 (예약 ID로 API 호출하여 데이터 가져옴)
+    //         getGymListByProgramId({ programId: gym.programId })
+    //             .then((data) => {
+    //                 // console.log(data)
+    //             }).catch((error) => {
+    //                 console.error(error);
+    //             });
+    //         // 등록된 유저 목록 가져오기
+    //         fetchRegisteredUsers(gym.programId)
+    //             .then((users) => {
+    //                 setParticipants(users);
+    //             })
+    //             .catch((error) => {
+    //                 console.error("Failed to fetch registered users:", error)
+    //             })
+    //         //대기자 유저 목록 가져오기
+    //         fetchWaitlistUsers(gym.programId)
+    //             .then((users) => {
+    //                 setWaitlist(users);
+    //             })
+    //             .catch((error) => {
+    //                 console.error("Failed to fetch registered users:", error)
+    //             })
+
+
+
+    //     }
+    // }, [gym.programId]);
+
+
 
     const handleModify = () => {
         console.log("수정버튼 눌림")
@@ -217,8 +226,8 @@ const GymProgramDetail = () => {
     };
     
     const handleBackToList = () => {
-        // navigate(`/facilities/gym/list?page=${page}&size=${size}`, { state: { gym } });
-        navigate(`/facilities/gym/list?type=${type}&keyword=${keyword}&page=${page}&size=${size}`, { state: { gym } });
+        const queryParams = {page, size, ...Object.fromEntries(searchParams)}
+        navigate(`/facilities/gym/list?page=${page}&size=${size}`, { state: { gym } });
     };
     return (
         <>

@@ -25,6 +25,7 @@ import java.util.Map;
 @Log4j2
 @RestController
 @RequestMapping("/api/facilities/gym")
+//@CrossOrigin(origins = "http://localhost:3000")
 public class GymController {
 
     @Autowired
@@ -60,13 +61,41 @@ public class GymController {
 
     //검색
     @GetMapping("/list/search")
-    public ResponseEntity<SearchPageResponseDTO<GymDTO>> searchGymPrograms(@ModelAttribute SearchPageRequestDTO searchPageRequestDTO) {
-        System.out.println("searchpage 1) : " + searchPageRequestDTO);
-        Pageable pageable = PageRequest.of(searchPageRequestDTO.getPage() -1 , searchPageRequestDTO.getSize(), Sort.by("programId").ascending());
-        SearchPageResponseDTO<GymDTO> pageResponseDTO = service.searchList(searchPageRequestDTO);
-        System.out.println("searchpage 2)  : " +pageResponseDTO);
+    public ResponseEntity<SearchPageResponseDTO<GymDTO>> searchGymPrograms(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "searchType", required = false) String searchType,
+            @RequestParam(value = "searchKeyWord", required = false) String searchKeyWord) {
+
+        // 디버깅을 위한 출력
+        System.out.println("searchType 1: " + searchType);
+        System.out.println("searchKeyWord 2: " + searchKeyWord);
+
+        // Pageable 객체 생성
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("programId").ascending());
+
+        // 서비스 호출
+        SearchPageRequestDTO requestDTO = SearchPageRequestDTO.builder()
+                .page(page)
+                .size(size)
+                .type(searchType)
+                .keyword(searchKeyWord)
+                .build();
+
+        SearchPageResponseDTO<GymDTO> pageResponseDTO = service.searchList(requestDTO);
+
+        // 결과 반환
         return ResponseEntity.ok(pageResponseDTO);
     }
+
+//    @GetMapping("/list/search")
+//    public ResponseEntity<SearchPageResponseDTO<GymDTO>> searchGymPrograms(@ModelAttribute SearchPageRequestDTO searchPageRequestDTO) {
+//        System.out.println("searchpage 1) : " + searchPageRequestDTO);
+//        Pageable pageable = PageRequest.of(searchPageRequestDTO.getPage() -1 , searchPageRequestDTO.getSize(), Sort.by("programId").ascending());
+//        SearchPageResponseDTO<GymDTO> pageResponseDTO = service.searchList(searchPageRequestDTO);
+//        System.out.println("searchpage 2)  : " +pageResponseDTO);
+//        return ResponseEntity.ok(pageResponseDTO);
+//    }
 
 
     //특정 게시물 조회 메서드

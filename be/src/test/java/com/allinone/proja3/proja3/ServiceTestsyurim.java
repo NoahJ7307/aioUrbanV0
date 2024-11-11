@@ -3,9 +3,11 @@ import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.facilities.StudyDTO;
 import com.allinone.proja3.proja3.model.User;
+import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.model.facilities.Golf;
 import com.allinone.proja3.proja3.model.facilities.Gym;
 import com.allinone.proja3.proja3.model.facilities.ProgramState;
+import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.repository.facilities.GymRepository;
 import com.allinone.proja3.proja3.service.UserService;
 import com.allinone.proja3.proja3.service.facilities.GolfService;
@@ -15,6 +17,7 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,6 +38,11 @@ public class ServiceTestsyurim {
     private GymService gymService;
     @Autowired
     private GymRepository gymRepository;
+
+    @Autowired
+    private UserRepository repository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 //    @Test
 //    public void insertTest() {
@@ -58,8 +66,8 @@ public class ServiceTestsyurim {
         for(int i = 0; i <3; i++) {
             GymDTO gymDTO = GymDTO.builder()
 //                    .programId(1L)
-                    .title("귤입니다"+i)
-                    .content("감입니다" +i)
+                    .title("apple"+i)
+                    .content("banana" +i)
                     .target("타겟"+i)
                     .participantLimit(10)
                     .programStartDate(LocalDate.of(2024, 11, 16))
@@ -146,6 +154,17 @@ public class ServiceTestsyurim {
 //        PageResponseDTO<UserDTO> list = userService.getList(pageRequestDTO);
 //        list.getDtoList().forEach(System.out::println);
 //    }
+
+    @Test
+    public void insertRolesAdmin() {
+        User userAdmin = User.builder()
+                .userName("최유림")
+                .phone("0000")
+                .pw(passwordEncoder.encode("1"))
+                .build();
+        userAdmin.addRole(UserRole.ADMIN);
+        repository.save(userAdmin);
+    }
 
 
 
