@@ -66,6 +66,7 @@ public class UrbanSecurityConfig {
                     .authenticationEntryPoint(new UrbanAuthenticationEntryPoint()); // 인증되지 않은 사용자 처리
         });
 
+
         return http.build();
     }
 

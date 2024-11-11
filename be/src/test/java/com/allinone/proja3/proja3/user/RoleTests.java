@@ -44,6 +44,7 @@ public class RoleTests {
         User yr = User.builder()
                 .userName("정승균")
                 .phone("정승균")
+                .pw(passwordEncoder.encode("1111"))
                 .build();
         yr.addRole(UserRole.ADMIN);
         repository.save(yr);
