@@ -3,6 +3,8 @@ package com.allinone.proja3.proja3.user;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.repository.UserRepository;
+import com.allinone.proja3.proja3.service.UserService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,23 +12,31 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 public class RoleTests {
     @Autowired
     private UserRepository repository;
     @Autowired
+    private UserService service;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Test
     public void insertRolesRoot() {
-        User userPending = User.builder()
+        User userRoot = User.builder()
                 .userName("root")
                 .phone("root")
-                .pw(passwordEncoder.encode("1111"))
+                .pw(passwordEncoder.encode("1"))
                 .build();
-        userPending.addRole(UserRole.ROOT);
-        repository.save(userPending);
+        userRoot.addRole(UserRole.ROOT);
+        repository.save(userRoot);
+    }
+
+    @Test
+    public void roleChangeRoot() {
+        service.addRole(52L, UserRole.ROOT);
     }
 
     @Test
@@ -37,7 +47,6 @@ public class RoleTests {
                 .pw(passwordEncoder.encode("1"))
                 .userName("정승균")
                 .phone("정승균")
-                .pw(passwordEncoder.encode("1111"))
                 .build();
         userAdmin.addRole(UserRole.ADMIN);
         repository.save(userAdmin);

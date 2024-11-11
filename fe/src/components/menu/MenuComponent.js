@@ -6,7 +6,7 @@ import '../../css/_modules/header.css'
 
 const MenuComponent = () => {
     const loginState = useSelector(state => state.loginSlice)
-    const { doLogout, moveToPath, isLogin } = useCustomLogin()
+    const { doLogout, moveToPath, isLogin, loadLoginData } = useCustomLogin()
 
     const handleClickLogout = () => {
         doLogout()
@@ -45,7 +45,12 @@ const MenuComponent = () => {
             </div>
             <ul className='flexCenter'>
                 {/* <li><Link to={'/'}>홈</Link></li> */}
-                <li><Link to={'/user'}>입주민관리</Link></li>
+                {loadLoginData().role === 'ADMIN' ||
+                    loadLoginData().role === 'ROOT' ?
+                    <li><Link to={'/user'}>입주민관리</Link></li>
+                    :
+                    <></>
+                }
                 <li><Link to={'/facilities'}>시설예약</Link></li>
                 <li><Link to={'/communities'}>소통</Link></li>
                 <li><Link to={'/parking'}>주차관리</Link></li>
@@ -55,6 +60,11 @@ const MenuComponent = () => {
                         {/* <li><Link to={'/'}>LoginTest</Link></li> */}
                     </>
                     : <></>
+                }
+                {loadLoginData().role === 'ROOT' ?
+                    <li><Link to={'/superAdmin'}>관리자 모드</Link></li>
+                    :
+                    <></>
                 }
             </ul>
         </div>
