@@ -45,6 +45,18 @@ public class MileageController {
 
     }
 
+    @PutMapping("/autopay")
+    public ResponseEntity<?> autoPay(@RequestBody ManualRequestDTO dto) {
+        try {
+            MileageDTO mileageDTO = paymentService.processRegisterAutoPay(dto);
+            return ResponseEntity.ok(mileageDTO);
+        } catch (Exception e) {
+            log.error(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
 
 
 

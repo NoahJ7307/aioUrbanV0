@@ -1,16 +1,22 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { formatNumber, apiCall } from "../api/utils";
 
 
 
 
-const ManualPayment = ({ setMoney }) => {
+const ManualPayment = ({sendMileage , setMoney }) => {
     const [selectPrice, setSelectPrice] = useState(0);
     const cardNumberRef = [useRef(), useRef(), useRef(), useRef()];
     const cvcRef = useRef();
     const dong = JSON.parse(localStorage.getItem("dong"));
     const ho = JSON.parse(localStorage.getItem("ho"));
+    const [mileage, setMileage] = useState({});
 
+    useEffect(()=>{
+        if(sendMileage){
+            setMileage(sendMileage);
+        }
+    },[])
 
     const changePayment = (e) => {
         const value = parseInt(e.target.value, 10);
@@ -85,7 +91,7 @@ const ManualPayment = ({ setMoney }) => {
             mileage: {
                 dong: dong,
                 ho: ho,
-                autopay: false,
+                autopay: mileage.autopay,
                 state: true,
 
             },
@@ -100,6 +106,7 @@ const ManualPayment = ({ setMoney }) => {
                 if (response.data != null && !isNaN(response.data.price)) {
                     setMoney(Number(response.data.price));
                     setSelectPrice(0);
+                    setMileage(response.data);
                     clearCardInput();
                 }
             } else {

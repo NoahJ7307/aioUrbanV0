@@ -74,7 +74,7 @@ const MileagePayment = () => {
 
 
             <Routes>
-                <Route path="manual" element={<ManualPayment setMoney={setMoney} />} />
+                <Route path="manual" element={<ManualPayment setMoney={setMoney} sendMileage ={mileage}/>} />
                 <Route path="auto" element={<AutomaticPayment setMoney={setMoney} />} />
             </Routes>
         </div>

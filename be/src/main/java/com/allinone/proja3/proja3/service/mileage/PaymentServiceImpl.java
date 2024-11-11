@@ -21,6 +21,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final MileagehistoryService mileagehistoryService;
     private final PaymentHistoryService paymentHistoryService;
 
+    //수동 결제 시스템
     @Transactional
     public MileageDTO processManualPayment(ManualRequestDTO requestDTO) {
         // CardInfo 저장
@@ -29,14 +30,14 @@ public class PaymentServiceImpl implements PaymentService {
             throw new RuntimeException("카드 정보 저장 실패");
         }
         log.info("Saved CardInfo : {}", savedCard);
-        //MileageDTO mileageDTO = mileageService.findByDongHoDTO(requestDTO.getMileage().getDong(), requestDTO.getMileage().getHo());
+
+        // Mileage 저장
         MileageDTO dto = requestDTO.getMileage();
         dto.setCardId(savedCard.getCardId());
 
         Mileage mileageEntity = mileageService.duplicate(dto, requestDTO.getPaymentAmount());
 
         log.info("Saved mileageEntity : {}", mileageEntity);
-        // Mileage 저장
 
         if (mileageEntity == null) {
             throw new RuntimeException("마일리지 정보 처리 실패");
@@ -69,6 +70,32 @@ public class PaymentServiceImpl implements PaymentService {
                 .timestamp(LocalDateTime.now())
                 .build();
         paymentHistoryService.savePaymentHistoryEntity(pay);
+        dto = mileageService.findByDongHoDTO(dto.getDong(),dto.getHo());
+        return dto;
+    }
+
+    //자동 결제 시스템
+    public MileageDTO processRegisterAutoPay(ManualRequestDTO requestDTO){
+        // CardInfo 저장
+        CardInfo savedCard = cardInfoService.saveCardInfo(requestDTO.getCard());
+        if (savedCard == null) {
+            throw new RuntimeException("카드 정보 저장 실패");
+        }
+        log.info("Saved CardInfo : {}", savedCard);
+
+        // Mileage 저장
+        MileageDTO dto = requestDTO.getMileage();
+        dto.setCardId(savedCard.getCardId());
+
+        Mileage mileageEntity = mileageService.duplicate(dto, requestDTO.getPaymentAmount());
+
+        log.info("Saved mileageEntity : {}", mileageEntity);
+
+
+        if (mileageEntity == null) {
+            throw new RuntimeException("마일리지 정보 처리 실패");
+        }
+
         dto = mileageService.findByDongHoDTO(dto.getDong(),dto.getHo());
         return dto;
     }

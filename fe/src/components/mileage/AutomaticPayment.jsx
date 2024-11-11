@@ -1,12 +1,11 @@
-import { useRef } from "react";
-import { formatNumber } from "../api/utils";
+import { useRef, useState } from "react";
+import { apiCall } from "../api/utils";
 
 
 const AutomaticPayment = () => {
     const cardNumberRef = [useRef(), useRef(), useRef(), useRef()];
     const cvcRef = useRef();
-    const dong = JSON.parse(localStorage.getItem("dong"));
-    const ho = JSON.parse(localStorage.getItem("ho"));
+    const [mileage, setMileage] = useState({}); // 요청 갔다온 mileage
 
     const changeCard = (e, index) => {
         const { value } = e.target;
@@ -36,22 +35,59 @@ const AutomaticPayment = () => {
         }
 
     };
-
-    const setPayment = () => {
+    // 카드 번호와 CVC 초기화 함수
+    const clearCardInput = () => {
+        cardNumberRef.forEach(ref => {
+            if (ref.current) ref.current.value = "";
+        });
+        if (cvcRef.current) cvcRef.current.value = "";
+    };
+    const setPayment = async () => {
         const pass = cardNumberRef.every(ref => ref.current && ref.current.value.length === 4);
         if (!pass) {
             alert('카드번호를 제대로 입력해 주세요');
             return;
         }
 
+        const cvc = cvcRef.current.value;
         // CVC 유효성 검사
-        // if (!cvcRef.current || !cvcRef.current.value || cvcRef.current.value.length !== 3) {
-        //     alert('CVC를 제대로 입력해 주세요');
-        //     return;
-        // }
+        if (!cvc || cvc.length <= 2) {
+            alert('CVC를 제대로 입력해 주세요');
+            return;
+        }
+
+        const cardNumber = cardNumberRef.map(ref => ref.current.value).join("");
+        const dong = JSON.parse(localStorage.getItem("dong"));
+        const ho = JSON.parse(localStorage.getItem("ho"));
+        const paymentData = {
+            card: {
+                uno: localStorage.getItem("uno"),
+                encryptedCardNumber: cardNumber,
+                cardExpiry: cvc,
+            },
+            mileage: {
+                dong: dong,
+                ho: ho,
+                autopay: true,
+                state: true,
+            },
+
+        };
+        try {
+            // apiCall을 사용하여 서버로 결제 요청을 보냄
+            const response = await apiCall(`/mileage/autopay`, "PUT", paymentData);
+            if (response.status === 200) {
+                alert("자동 결제가 등록되었습니다!");
+                clearCardInput();
+                setMileage(response.data);
+            }
+        } catch (error) {
+            console.error("결제 요청 오류:", error);
+            alert("자동 결제가 등록되지 못했습니다");
+        }
 
     }
-
+    console.log(`mileage`, mileage);
 
     return (
         <div className="automaticPayment">
