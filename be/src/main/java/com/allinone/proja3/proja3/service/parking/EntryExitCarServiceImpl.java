@@ -132,7 +132,8 @@ public class EntryExitCarServiceImpl implements EntryExitCarService{
                 result = entryExitCarRepository.findByCarNumContaining(entryExitSearchDataDTO.getSearchValue(), pageable);
                 break;
             case "isExit":
-                result = entryExitCarRepository.findAllByIsExit(entryExitSearchDataDTO.isExit(), pageable);
+                boolean isExit = entryExitSearchDataDTO.getSearchValue().equals("exit");
+                result = entryExitCarRepository.findAllByIsExit(isExit, pageable);
                 break;
             case "entryDate": {
                 LocalDate start = entryExitSearchDataDTO.getEntryExitDateStart();
