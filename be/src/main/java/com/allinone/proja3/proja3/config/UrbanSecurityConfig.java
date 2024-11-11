@@ -52,6 +52,7 @@ public class UrbanSecurityConfig {
                         .requestMatchers("/ws/chat").permitAll()// 웹소켓 허용
                         .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "ROOT") // 접근 권한 설정
                         .requestMatchers("/api/parking/**").hasAnyRole("USER", "ADMIN", "ROOT") // 접근 권한 설정
+                        .requestMatchers("/api/superAdmin/**").hasRole("ROOT") // 접근 권한 설정
                         .anyRequest().authenticated()  // 그 외의 요청은 인증 필요
                 )
 
