@@ -87,9 +87,11 @@ public class PaymentServiceImpl implements PaymentService {
 
         // Mileage 저장
         MileageDTO dto = requestDTO.getMileage();
+        log.info("requestDTO.Mileage Mileage : {}", dto);
+
         dto.setCardId(savedCard.getCardId());
 
-        Mileage mileageEntity = mileageService.duplicate(dto, requestDTO.getPaymentAmount());
+        Mileage mileageEntity = mileageService.autoState(dto, savedCard);
 
         log.info("Saved mileageEntity : {}", mileageEntity);
 
