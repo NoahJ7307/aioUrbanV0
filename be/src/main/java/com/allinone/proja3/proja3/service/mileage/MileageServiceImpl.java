@@ -77,6 +77,7 @@ public class MileageServiceImpl implements MileageService {
 
 
 
+    //동 호를 입력하여 마일리지 찾기 (Entity 반환)
     @Override
     public Mileage findByDongHoentity(String dong, String ho) {
         Optional<Mileage> entity = mileageRepository.findByDongAndHoAndStateTrue(dong,ho);
@@ -84,10 +85,17 @@ public class MileageServiceImpl implements MileageService {
             return entity.get();
         }else return null;
     }
+
+    //동 호를 입력하여 마일리지 찾기 (DTO 반환)
     @Override
     public MileageDTO findByDongHoDTO(String dong, String ho) {
         Optional<Mileage> entity = mileageRepository.findByDongAndHoAndStateTrue(dong, ho);
         return entity.map(this::getDTO).orElse(null);
+    }
+    @Override
+    public Mileage saveEntity(Mileage mileage) {
+        return mileageRepository.save(mileage);
+
     }
 
 

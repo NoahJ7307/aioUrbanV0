@@ -10,6 +10,7 @@ public interface MileageService {
     Mileage findByDongHoentity(String dong , String ho);
     MileageDTO findByDongHoDTO(String dong , String ho);
     Mileage saveDto(MileageDTO dto);
+    Mileage saveEntity(Mileage mileage);
     //수동 충전 로직
     Mileage duplicate(MileageDTO dto , int paymetAmont );
     //자동 결제 로직
