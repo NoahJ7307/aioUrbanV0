@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PaymentHistoryService {
 
-    List<PaymentHistoryDTO> getAllPaymentHistory(int dong , int ho);
+    List<PaymentHistoryDTO> getAllPaymentHistory(String dong , String ho);
 
     PaymentHistory savePaymentHistoryDTO(PaymentHistoryDTO dto);
 

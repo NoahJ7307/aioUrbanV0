@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface MileageRepository extends JpaRepository<Mileage, Long> {
 
-    public Optional<Mileage> findByDongAndHoAndStateTrue(int dong, int ho);
+    public Optional<Mileage> findByDongAndHoAndStateTrue(String dong, String ho);
 }

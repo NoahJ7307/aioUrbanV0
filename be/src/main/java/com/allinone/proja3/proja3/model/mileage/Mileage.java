@@ -14,10 +14,10 @@ public class Mileage {
     private Long mileageId; // 고유 식별자
 
     @Column(nullable = false)
-    private int dong;
+    private String dong;
 
     @Column(nullable = false)
-    private int ho;
+    private String ho;
 
     @Column(nullable = false)
     private int price;
