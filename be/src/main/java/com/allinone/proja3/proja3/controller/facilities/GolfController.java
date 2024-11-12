@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,6 +20,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
 @Log4j2
 @RestController
 @RequiredArgsConstructor
@@ -67,6 +70,7 @@ public class GolfController {
 
 
     //예약 등록을 위한 로직
+
     @PostMapping("/reserve")
     public Long register(@RequestBody GolfDTO golfDTO) {
         System.out.println("golf register...."+golfDTO);

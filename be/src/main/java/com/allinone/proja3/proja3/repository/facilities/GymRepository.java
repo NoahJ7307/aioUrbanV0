@@ -41,10 +41,8 @@ public interface GymRepository extends JpaRepository<Gym, Long>, QuerydslPredica
             } else if ("target".equals(requestDTO.getType())) {
                 builder.and(gym.target.containsIgnoreCase(keyword));
             }
-
             if("titleAndContent".equals(requestDTO.getType())) {
                 builder.and(gym.title.containsIgnoreCase(keyword).or(gym.content.containsIgnoreCase(keyword)));
-
             }
         }
         System.out.println("requestDto getType : 999)" + requestDTO.getType());

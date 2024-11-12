@@ -1,5 +1,6 @@
 package com.allinone.proja3.proja3.model.mileage;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 public class MileageHistoryId implements Serializable {
-    private int mileageId;
+    private Long mileageId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime timestamp;
 
     @Override

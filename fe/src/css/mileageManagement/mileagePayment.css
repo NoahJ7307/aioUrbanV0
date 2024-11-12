@@ -217,3 +217,31 @@
     margin: 0.5rem 0; 
     text-align: center;
 }
+
+.paymentButtonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.paymentButton {
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #749fcd;
+    border: none;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    box-shadow: 0 0 4px #749fcd9c;
+    transition: background-color 0.3s ease;
+}
+
+.paymentButton:hover {
+    background-color:#749fcd9c;
+    box-shadow: 2 2 4px #749fcd9c;
+}
+
+.paymentButton:active {
+    background-color: #749fcd9c;
+    transform: scale(0.98);
+}

@@ -1,32 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
 import { listGym, searchListGym } from '../../api/facilities/gymApi';
 
-const GymList = () => {
+const GymList = ({ page, size }) => {
   const navigate = useNavigate();
   const [serverData, setServerData] = useState({ dtoList: [], totalPage: 0 });
-
-  const [searchParams] = useSearchParams(); 
-
-  const initialType = searchParams.get('type') || 'title';
-  const initialKeyword = searchParams.get('keyword') || '';
-  const initialPage = parseInt(searchParams.get('page'), 10) || 1;
-  const initialSize = parseInt(searchParams.get('size'), 10) || 10;
-
-
-  const [type, setType] = useState(initialType);
-  const [keyword, setKeyword] = useState(initialKeyword);
+  const [type, setType] = useState('title');
+  const [keyword, setKeyword] = useState('');
+  const [searchParams, setSearchParams] = useState({ type: '', keyword: '' }); // 검색 시에만 적용될 상태
+  const { moveToList } = useCustom();
+  const role = localStorage.getItem("role");
+  const urlWithKeyword =`type=${searchParams.type}&keyword=${searchParams.keyword}`
   const [page, setPage] = useState(initialPage);
   const [size, setSize] = useState(initialSize);
 
-  const role = localStorage.getItem("role");
-
-  // const { moveToList } = useCustom();
-  // const urlWithKeyword =`type=${type}&keyword=${searchParams.keyword}`
-  
-  
   const fetchGymProgramList = async () => {
     try {
       const data = await listGym({ page, size });
@@ -41,11 +30,16 @@ const GymList = () => {
 
   const fetchGymListSearch = async () => {
     try {
-      const data = await searchListGym({ page, size }, type, keyword);
+      const data = await searchListGym({ page, size }, searchParams.type, searchParams.keyword);
       console.log("검색결과를 확인합니다:", data);
       if (data.error) throw new Error(data.error);
       setServerData(data);
-      return data.dtoList.length;  //검색결과의 개수를 반환
+      if (Array.isArray(data.dtoList)) {
+        return data.dtoList.length;
+      } else {
+        return 0;
+      }
+      // return data.length //검색결과의 개수를 반환
     } catch (err) {
       console.error("데이터를 가져오는데 오류가 발생했습니다 => ", err);
       alert("프로그램 정보를 가져오는 데 오류가 발생했습니다. 다시 시도해주세요 ");
@@ -54,16 +48,15 @@ const GymList = () => {
   };
 
   useEffect(() => {
-    if (initialKeyword) {
+    if (searchParams.keyword) {
       fetchGymListSearch();
     } else {
       fetchGymProgramList();
     }
-  }, [page, size, type]);
+  }, [page, size, searchParams]);
 
   const handleProgramClick = (gym) => {
-    // navigate(`/facilities/gym/detail/${gym.programId}?${urlWithKeyword}&page=${page}&size=${size}`, { state: { gym } });
-    navigate(`/facilities/gym/detail/${gym.programId}?type=${type}&keyword=${keyword}&page=${page}&size=${size}`, { state: { gym } });
+    navigate(`/facilities/gym/detail/${gym.programId}?${urlWithKeyword}&page=${page}&size=${size}`, { state: { gym } });
   };
 
   const determineButtonState = (gym) => {
@@ -84,25 +77,37 @@ const GymList = () => {
   const handleSearchInputChange = (e) => {
     setKeyword(e.target.value);
   }
-  const handleSearch = async() => {
-    console.log("검색 버튼이 클릭되었습니다.");
+  // const handleSearch = async(e) => {
+  //   console.log("검색 버튼이 클릭되었습니다.");
+  //   const resultCount = await fetchGymListSearch();
+  //   if (resultCount === 0) {
+  //     alert("검색 결과가 없습니다 😓")
+  //   } else {
+  //     setSearchParams({ type, keyword });
+  //     // fetchGymListSearch();
+  //     navigate(`/facilities/gym/list?type=${type}&keyword=${keyword}&page=1&size=${size}`);
+      
+  //   }
+  // };
+  const handleSearch = async () => {
     const resultCount = await fetchGymListSearch();
     if (resultCount === 0) {
-      alert("검색 결과가 없습니다 😓")
+      alert("검색 결과가 없습니다 😓");
     } else {
       const params = new URLSearchParams({ type, keyword, page: 1, size }).toString();
       navigate(`/facilities/gym/list?${params}`);
-      setPage(1);
-
+      setPage(1); // Reset to page 1 after search
     }
   };
 
+  // const handlePageChange = (pageParam) => {
+  //   moveToList(pageParam, `/facilities/gym/list?${urlWithKeyword}&page=${pageParam}&size=${size}`);
+  // }
   const handlePageChange = ({ page: newPage }) => {
     const params = new URLSearchParams({ type, keyword, page: newPage, size }).toString();
     navigate(`/facilities/gym/list?${params}`);
-    setPage(newPage);
-  }
-
+    setPage(newPage); // Update page state
+  };
 
   return (
     <div>
@@ -161,6 +166,7 @@ const GymList = () => {
       {serverData.dtoList.length > 0 && (
         <PageComponent
           serverData={serverData}
+          // movePage={(pageParam) => moveToList(pageParam, '/facilities/gym/list')}
           movePage={handlePageChange}
         />
       )}
