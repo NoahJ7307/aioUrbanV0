@@ -119,9 +119,28 @@ public class PaymentServiceImpl implements PaymentService {
             throw new RuntimeException("마일리지가 없습니다.");
         }
         //마일리지 금액 조회
-        if(mileage.getPrice()<amount){
-            log.error("결제 중 금액 부족 현재 금액 : {}", mileage.getPrice());
-            throw new RuntimeException("금액이 부족합니다.");
+        // 잔액이 충분하지 않은 경우 (자동 충전 여부에 따라 처리 분기)
+        if (mileage.getPrice() < amount) {
+            if (!mileage.isAutopay()) {
+                log.error("잔액 부족: 현재 잔액 = {}, 필요한 금액 = {}", mileage.getPrice(), amount);
+                throw new RuntimeException("금액이 부족합니다.");
+            } else {
+                log.info("자동 충전 요망: 현재 잔액 = {}, 필요한 금액 = {}", mileage.getPrice(), amount);
+                int requiredAmount = amount - mileage.getPrice(); // 부족한 금액 계산
+                int topUpAmount = ((requiredAmount + 9999) / 10000) * 10000; // 10,000원 단위로 올림
+                mileage = mileageService.duplicate(requestDTO, topUpAmount); //금액 충전 후 저장
+
+                // PaymentHistory 저장
+                PaymentHistory pay = PaymentHistory.builder()
+                        .ho(mileage.getHo())
+                        .dong(mileage.getDong())
+                        .price(topUpAmount)
+                        .uno(mileage.getCardInfo().getUser().getUno())
+                        .cardId(mileage.getCardInfo().getCardId())
+                        .timestamp(LocalDateTime.now())
+                        .build();
+                paymentHistoryService.savePaymentHistoryEntity(pay);
+            }
         }
 
         //마일리지 차감
