@@ -75,6 +75,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     //자동 결제 시스템
+    @Transactional
+    @Override
     public MileageDTO processRegisterAutoPay(ManualRequestDTO requestDTO){
         // CardInfo 저장
         CardInfo savedCard = cardInfoService.saveCardInfo(requestDTO.getCard());

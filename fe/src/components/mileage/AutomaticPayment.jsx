@@ -43,6 +43,19 @@ const AutomaticPayment = () => {
         if (cvcRef.current) cvcRef.current.value = "";
     };
     const setPayment = async () => {
+
+        const dong = localStorage.getItem("dong");
+        const ho = localStorage.getItem("ho");
+
+        // JSON 파싱 전에 "undefined" 문자열 여부 확인
+        const parsedDong = dong && dong !== "undefined" ? JSON.parse(dong) : null;
+        const parsedHo = ho && ho !== "undefined" ? JSON.parse(ho) : null;
+
+        // 필수 정보 검증
+        if (!parsedDong || !parsedHo) {
+            alert("동 호수가 기입되지 않았습니다. 수정이 필요합니다.");
+            return;
+        }
         const pass = cardNumberRef.every(ref => ref.current && ref.current.value.length === 4);
         if (!pass) {
             alert('카드번호를 제대로 입력해 주세요');
@@ -57,8 +70,7 @@ const AutomaticPayment = () => {
         }
 
         const cardNumber = cardNumberRef.map(ref => ref.current.value).join("");
-        const dong = JSON.parse(localStorage.getItem("dong"));
-        const ho = JSON.parse(localStorage.getItem("ho"));
+
         const paymentData = {
             card: {
                 uno: localStorage.getItem("uno"),
@@ -66,8 +78,8 @@ const AutomaticPayment = () => {
                 cardExpiry: cvc,
             },
             mileage: {
-                dong: dong,
-                ho: ho,
+                dong: parsedDong,
+                ho: parsedHo,
                 autopay: true,
                 state: true,
             },
@@ -119,7 +131,7 @@ const AutomaticPayment = () => {
             </div>
             <div className="paymentButtonContainer">
                 <button onClick={setPayment} className="paymentButton">
-                    결제하기
+                    카드 등록하기
                 </button>
             </div>
 

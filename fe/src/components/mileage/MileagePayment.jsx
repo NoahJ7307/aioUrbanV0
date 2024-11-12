@@ -16,24 +16,33 @@ const MileagePayment = () => {
     const [money, setMoney] = useState(0);
     const [mileage, setMileage] = useState({});
     useEffect(() => {
-        const dong = JSON.parse(localStorage.getItem("dong"));
-        const ho = JSON.parse(localStorage.getItem("ho"));
+        const dong = localStorage.getItem("dong");
+        const ho = localStorage.getItem("ho");
 
-        const params = { dong, ho };
+        const parsedDong = dong && dong !== "undefined" ? JSON.parse(dong) : null;
+        const parsedHo = ho && ho !== "undefined" ? JSON.parse(ho) : null;
 
-        apiCall('/mileage/getmileage', 'GET', params)
-            .then(response => {
-                console.log(response.data);
-                if (response.data != null && !isNaN(response.data.price)) {
-                    setMoney(Number(response.data.price)); // 숫자로 변환
-                    setMileage(response.data);
-                } else {
-                    setMoney(0);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+
+        if (parsedDong && parsedHo) {
+            const params = { dong: parsedDong, ho: parsedHo };
+
+            apiCall('/mileage/getmileage', 'GET', params)
+                .then(response => {
+                    console.log(response.data);
+                    if (response.data != null && !isNaN(response.data.price)) {
+                        setMoney(Number(response.data.price)); // 숫자로 변환
+                        setMileage(response.data);
+                    } else {
+                        setMoney(0);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        } else {
+            setMoney(0);
+        }
+
     }, []);
 
     console.log(`money`, money);
@@ -74,7 +83,7 @@ const MileagePayment = () => {
 
 
             <Routes>
-                <Route path="manual" element={<ManualPayment setMoney={setMoney} sendMileage ={mileage}/>} />
+                <Route path="manual" element={<ManualPayment setMoney={setMoney} sendMileage={mileage} />} />
                 <Route path="auto" element={<AutomaticPayment setMoney={setMoney} />} />
             </Routes>
         </div>
