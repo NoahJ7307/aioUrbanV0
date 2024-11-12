@@ -39,16 +39,6 @@ const UserManagePage = () => {
         }
     }, [checkedUno, navigate])
 
-    // const handleClickRecovery = async () => {
-    //     if (checkedUno.length > 0) {
-    //         await superAdminRecovery(checkedUno)
-    //         navigate({ pathname: '/superAdmin/userManage' }) // 삭제 후 새로고침 기능 수행
-    //     } else {
-    //         alert("선택된 항목이 없습니다")
-    //         navigate({ pathname: '/superAdmin/userManage' })
-    //     }
-    // }
-
     const handleClickHardDelete = async () => {
         if (checkedUno.length > 0) {
             await superAdminHardDelete(checkedUno)
