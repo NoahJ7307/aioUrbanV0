@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PaymentHistoryRepository extends JpaRepository<PaymentHistory, Long> {
 
-    List<PaymentHistory> findByDongAndHo(int dong , int ho);
+    List<PaymentHistory> findByDongAndHo(String dong , String ho);
 }

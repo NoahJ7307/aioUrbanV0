@@ -47,7 +47,7 @@ public class PaymentHistoryServiceImpl implements PaymentHistoryService {
     }
 
     @Override
-    public List<PaymentHistoryDTO> getAllPaymentHistory(int dong, int ho) {
+    public List<PaymentHistoryDTO> getAllPaymentHistory(String dong, String ho) {
         return paymentHistoryRepository.findByDongAndHo(dong, ho).stream()
                 .map(this::getDto)
                 .collect(Collectors.toList());

@@ -12,8 +12,8 @@ public class PaymentHistoryDTO {
     private Long paymentId;
     private Long uno; // 사용자 고유 ID
     private Long cardId; // 카드 고유 ID
-    private int dong;
-    private int ho;
+    private String dong;
+    private String ho;
     private int price;
     private LocalDateTime timestamp;
 }

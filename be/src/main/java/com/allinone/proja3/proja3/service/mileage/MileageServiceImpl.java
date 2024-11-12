@@ -52,14 +52,14 @@ public class MileageServiceImpl implements MileageService {
 
 
     @Override
-    public Mileage findByDongHoentity(int dong, int ho) {
+    public Mileage findByDongHoentity(String dong, String ho) {
         Optional<Mileage> entity = mileageRepository.findByDongAndHoAndStateTrue(dong,ho);
         if(entity.isPresent()) {
             return entity.get();
         }else return null;
     }
     @Override
-    public MileageDTO findByDongHoDTO(int dong, int ho) {
+    public MileageDTO findByDongHoDTO(String dong, String ho) {
         Optional<Mileage> entity = mileageRepository.findByDongAndHoAndStateTrue(dong, ho);
         return entity.map(this::getDTO).orElse(null);
     }

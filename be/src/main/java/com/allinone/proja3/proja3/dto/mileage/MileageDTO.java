@@ -8,8 +8,8 @@ import lombok.*;
 @Data
 public class MileageDTO {
     private Long mileageId;
-    private int dong;
-    private int ho;
+    private String dong;
+    private String ho;
     private int price;
     private boolean state; // 활성화 상태
     private boolean autopay; // 자동 결제 설정 여부

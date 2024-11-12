@@ -30,8 +30,8 @@ public class PaymentHistory {
 // 탈퇴후에도 이력을 남기기 위함.
     private Long uno; // 회원의 고유 ID를 직접 저장
 
-    private int dong;
-    private int ho;
+    private String dong;
+    private String ho;
 
     private int price;
 

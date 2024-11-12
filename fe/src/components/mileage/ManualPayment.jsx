@@ -67,9 +67,18 @@ const ManualPayment = ({ sendMileage, setMoney }) => {
         const dong = localStorage.getItem("dong");
         const ho = localStorage.getItem("ho");
 
-        // JSON 파싱 전에 "undefined" 문자열 여부 확인
-        const parsedDong = dong && dong !== "undefined" ? JSON.parse(dong) : null;
-        const parsedHo = ho && ho !== "undefined" ? JSON.parse(ho) : null;
+        // JSON 형식인지 확인한 후 JSON 파싱 시도
+        const isJSON = (str) => {
+            try {
+                JSON.parse(str);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        };
+
+        const parsedDong = dong && dong !== "undefined" && isJSON(dong) ? JSON.parse(dong) : dong;
+        const parsedHo = ho && ho !== "undefined" && isJSON(ho) ? JSON.parse(ho) : ho;
 
         if (!parsedDong || !parsedHo) {
             alert(`동 호수가 기입되지 않았습니다. 수정이 필요합니다.`)
