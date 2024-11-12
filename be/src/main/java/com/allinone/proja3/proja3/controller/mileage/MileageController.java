@@ -21,7 +21,7 @@ public class MileageController {
     private final PaymentService paymentService;
 
     @GetMapping("/getmileage")
-    public ResponseEntity<?> getMileage(@RequestParam("dong") int dong , @RequestParam("ho") int ho) {
+    public ResponseEntity<?> getMileage(@RequestParam("dong") String dong , @RequestParam("ho") String ho) {
 
         MileageDTO dto = mileageService.findByDongHoDTO(dong, ho);
 
