@@ -24,12 +24,14 @@ const UserApprovalComponent = () => {
     const handleClickAccess = (e) => {
         const uno = e.target.value
         addUserRole(uno)
+        alert('승인 완료')
         getList()
     }
 
     const handleClickDenial = (e) => {
         const uno = [e.target.value]
         deleteChecked(uno)
+        alert('거부 완료')
         getList()
     }
 

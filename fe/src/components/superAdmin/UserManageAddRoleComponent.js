@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import useCustom from '../hook/useCustom'
 import { getOne, putOne } from '../api/userApi'
 import { useNavigate, useOutletContext } from 'react-router-dom'
-import useCustomLogin from '../hook/useCustomLogin'
-import axios from 'axios'
 import { addRole } from '../api/superAdmin/superAdminApi'
 
 const initState = {
@@ -27,7 +25,6 @@ const UserManageAddRoleComponent = () => {
     const { moveToPath } = useCustom()
     const [userData, setUserData] = useState({ ...initState })
     const { checkedUno } = useOutletContext()
-    const [roleLabel, setRoleLabel] = useState('')
     const [roleData, setRoleData] = useState('')
 
     // data 수신
@@ -49,9 +46,10 @@ const UserManageAddRoleComponent = () => {
     }, [checkedUno])
 
     const handleChange = (e) => {
-        const value = e.target.value
+        let value = e.target.value
         if (e.target.name === 'delFlag') {
             value = value === 'true'
+            console.log(value)
         }
         userData[e.target.name] = e.target.value
         setUserData({ ...userData })
@@ -156,7 +154,7 @@ const UserManageAddRoleComponent = () => {
                 </div>
                 <div>
                     <button type='button' className='bg-blue-400 p-2'
-                        onClick={handleClick}>추가</button>
+                        onClick={handleClick}>수정</button>
                     <button type='button' className='bg-red-400 p-2'
                         onClick={() => moveToPath('/superAdmin/userManage')}>취소</button>
                 </div>

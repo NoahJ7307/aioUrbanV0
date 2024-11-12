@@ -13,8 +13,8 @@ drop table tbl_visit_parking;
 drop table tbl_household;
 -- -------------------------------------------------------------
 select * from tbl_user order by uno desc;
-select * from tbl_user where uno = 51;
-select * from user_user_role_list where uno = 51 order by user_uno desc;
+select * from tbl_user where uno = 77;
+select * from user_user_role_list where user_uno = 77 order by user_uno desc;
 select * from user_user_role_list where user_role_list = 2 order by user_uno desc;
 select * from tbl_household;
 select * from tbl_regular_parking order by rpno desc;

@@ -11,42 +11,49 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query("select u from User u where u.delFlag = false")
-    Page<User> selectList(Pageable pageable);
+    // delFlag
+    Page<User> findByDelFlag(boolean delFlag, Pageable pageable);
 
     // role(전달값) 이 아닌 유저만 필터링
-    @Query("select u from User u where :role not member of u.userRoleList and u.delFlag = false")
-    Page<User> notPendingList(@Param("role") UserRole role, Pageable pageable);
+    Page<User> findByUserRoleListNotContainingAndDelFlagFalse(UserRole role, Pageable pageable);
 
     // role(전달값) 유저만 필터링
-    @Query("select u from User u where :role member of u.userRoleList and u.delFlag = false")
-    Page<User> pendingList(@Param("role") UserRole role, Pageable pageable);
+    Page<User> findByUserRoleListContainingAndDelFlagFalse(UserRole role, Pageable pageable);
+    Page<User> findByUserRoleListContaining(UserRole role, Pageable pageable);
 
+    // delFlag 업데이트
     @Modifying
     @Query("update User u set u.delFlag = :flag where u.uno = :uno")
     void updateToDelete(@Param("uno") Long uno, @Param("flag") boolean flag);
 
+    // phone 으로 조회 (즉시 with role)
     @EntityGraph(attributePaths = {"userRoleList"})
-    @Query("select u from User u where u.phone = :phone")
-    User getWithRoles(@Param("phone") String phone);
+    User findByPhone(String phone);
+
+    // search method
+    @EntityGraph(attributePaths = {"userRoleList"})
+    Page<User> findByDongContainingAndHoContainingAndDelFlagFalse(String dong, String ho, Pageable pageable);
+    @EntityGraph(attributePaths = {"userRoleList"})
+    Page<User> findByDongContainingAndHoContaining(String dong, String ho, Pageable pageable);
 
     @EntityGraph(attributePaths = {"userRoleList"})
-    @Query("select u from User u where u.dong like %:dong% and u.ho like %:ho% and u.delFlag = false")
-    Page<User> findByDongHo(@Param("dong") String dong, @Param("ho") String ho, Pageable pageable);
+    Page<User> findByDongContainingAndDelFlagFalse(String dong, Pageable pageable);
+    @EntityGraph(attributePaths = {"userRoleList"})
+    Page<User> findByDongContaining(String dong, Pageable pageable);
 
     @EntityGraph(attributePaths = {"userRoleList"})
-    @Query("select u from User u where u.dong like %:value% and u.delFlag = false")
-    Page<User> findByDong(@Param("value") String value, Pageable pageable);
+    Page<User> findByHoContainingAndDelFlagFalse(String ho, Pageable pageable);
+    @EntityGraph(attributePaths = {"userRoleList"})
+    Page<User> findByHoContaining(String ho, Pageable pageable);
 
     @EntityGraph(attributePaths = {"userRoleList"})
-    @Query("select u from User u where u.ho like %:value% and u.delFlag = false")
-    Page<User> findByHo(@Param("value") String value, Pageable pageable);
+    Page<User> findByUserNameContainingAndDelFlagFalse(String userName, Pageable pageable);
+    @EntityGraph(attributePaths = {"userRoleList"})
+    Page<User> findByUserNameContaining(String userName, Pageable pageable);
 
     @EntityGraph(attributePaths = {"userRoleList"})
-    @Query("select u from User u where u.userName like %:value% and u.delFlag = false")
-    Page<User> findByName(@Param("value") String value, Pageable pageable);
-
+    Page<User> findByPhoneContainingAndDelFlagFalse(String phone, Pageable pageable);
     @EntityGraph(attributePaths = {"userRoleList"})
-    @Query("select u from User u where u.phone like %:value% and u.delFlag = false")
-    Page<User> findByPhone(@Param("value") String value, Pageable pageable);
+    Page<User> findByPhoneContaining(String phone, Pageable pageable);
+
 }

@@ -19,7 +19,7 @@ const initState = {
 
 const UserManageComponent = ({ pageServerData, searchData }) => {
   const [serverData, setServerData] = useState(initState)
-  const { page, size, moveToList } = useCustomLogin()
+  const { page, size } = useCustomLogin()
   const [checked, setChecked] = useState([])
   const { setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
   const { exceptionHandler, loadLoginData } = useCustomLogin()

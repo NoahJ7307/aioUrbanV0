@@ -26,6 +26,15 @@ public class SuperAdminController {
         return userService.getAllList(pageRequestDTO);
     }
 
+    @PostMapping("/search")
+    public PageResponseDTO<UserDTO> getAllSearchList(@RequestBody UserSearchReqDTO userSearchReqDTO){
+        PageRequestDTO pageRequestDTO = userSearchReqDTO.getPageRequestDTO();
+        UserSearchDataDTO userSearchDataDTO = userSearchReqDTO.getUserSearchDataDTO();
+        System.out.println("User getSearchList controller P : "+pageRequestDTO);
+        System.out.println("User getSearchList controller U : "+userSearchDataDTO);
+        return userService.getAllSearchList(pageRequestDTO,userSearchDataDTO);
+    }
+
     @PostMapping("/addRole")
     public Long addRole(@RequestBody AddRoleReqDTO addRoleReqDTO){
         Long uno = addRoleReqDTO.getUno();
@@ -44,5 +53,10 @@ public class SuperAdminController {
         System.out.println("superAdmin addRole controller U : "+ uno);
         System.out.println("superAdmin addRole controller R : "+ roleStr);
         return userService.addRole(uno, role);
+    }
+
+    @PostMapping("/delete")
+    public void deleteChecked(@RequestBody List<Long> checkedUno){
+        checkedUno.forEach(userService::hardRemove);
     }
 }
