@@ -131,8 +131,7 @@ const EntryPage = () => {
 
 
   const handleClickClear = () => {
-    setPageServerData(initStateServerData)
-    navigate('/parking/entry')
+    navigate({ pathname: '/parking/entry' })
   }
   // --------------------
   return (

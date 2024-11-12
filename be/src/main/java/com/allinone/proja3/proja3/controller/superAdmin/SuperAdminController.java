@@ -26,6 +26,15 @@ public class SuperAdminController {
         return userService.getAllList(pageRequestDTO);
     }
 
+    @PostMapping("/search")
+    public PageResponseDTO<UserDTO> getSearchList(@RequestBody UserSearchReqDTO userSearchReqDTO){
+        PageRequestDTO pageRequestDTO = userSearchReqDTO.getPageRequestDTO();
+        UserSearchDataDTO userSearchDataDTO = userSearchReqDTO.getUserSearchDataDTO();
+        System.out.println("User getSearchList controller P : "+pageRequestDTO);
+        System.out.println("User getSearchList controller U : "+userSearchDataDTO);
+        return userService.getSearchList(pageRequestDTO,userSearchDataDTO);
+    }
+
     @PostMapping("/addRole")
     public Long addRole(@RequestBody AddRoleReqDTO addRoleReqDTO){
         Long uno = addRoleReqDTO.getUno();

@@ -156,8 +156,7 @@ const RegularPage = () => {
 
 
   const handleClickClear = () => {
-    setPageServerData(initStateServerData)
-    navigate('/parking/regular')
+    navigate({ pathname: '/parking/regular' })
   }
   // --------------------
   return (

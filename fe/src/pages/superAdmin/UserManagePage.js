@@ -26,6 +26,7 @@ const UserManagePage = () => {
     const { checkedUno, setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
     const [searchData, setSearchData] = useState(initStateSearchData)
     const [pageServerData, setPageServerData] = useState(initStateServerData)
+    const [inputTitle, setInputTitle] = useState('')
     const location = useLocation()
 
     const handleClickAddRole = useCallback(() => {
@@ -63,6 +64,8 @@ const UserManagePage = () => {
         setSearchData(prevData => ({ ...prevData, searchValue: e.target.value }))
     }
     const handleChangeSearchCategory = (e) => {
+        // select option(category) title 가져와서 input(value) placeholder 에 설정
+        setInputTitle(e.target.options[e.target.selectedIndex].getAttribute('title'))
         setSearchData(prevData => ({ ...prevData, searchCategory: e.target.value }))
     }
     const handleClickSearch = () => {
@@ -80,7 +83,7 @@ const UserManagePage = () => {
         }
 
         // queryParameter 경로 설정
-        navigate(`/user/list?${searchParams.toString()}`)
+        navigate(`/superAdmin/userManage?${searchParams.toString()}`)
     }
 
     useEffect(() => {
@@ -114,7 +117,7 @@ const UserManagePage = () => {
     }, [location.search])
 
     const handleClickClear = () => {
-        setPageServerData(initStateServerData)
+        navigate({ pathname: '/superAdmin/userManage' })
     }
     // --------------------
 
@@ -138,16 +141,17 @@ const UserManagePage = () => {
                         name='searchCategory'
                         onChange={handleChangeSearchCategory}>
                         <option value=''>검색 필터</option>
-                        <option value="dong-ho">동-호</option>
-                        <option value="dong">동</option>
-                        <option value="ho">호</option>
-                        <option value="name">이름</option>
-                        <option value="phone">전화번호</option>
+                        <option value='dong-ho' title='예시) 101-101'>동-호</option>
+                        <option value='dong' title='예시) 101'>동</option>
+                        <option value='ho' title='예시) 101'>호</option>
+                        <option value="name" title='예시) 김어반'>이름</option>
+                        <option value="phone" title='예시) 01012345678'>전화번호</option>
                     </select>
                 </li>
                 <li>
                     <input className=''
                         name='searchValue'
+                        placeholder={inputTitle}
                         onChange={handleChangeSearchValue}
                     />
                 </li>
