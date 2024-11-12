@@ -90,11 +90,12 @@ public class RoleTests {
         }
     }
 
+    @Transactional
     @Test
     public void read() {
         List<String> list = new ArrayList<>();
         list.add("admin");
         list.add("pending");
-        list.forEach(s -> System.out.println(repository.getWithRoles(s)));
+        list.forEach(s -> System.out.println(repository.findByPhone(s)));
     }
 }

@@ -42,10 +42,10 @@ const UserManagePage = () => {
     const handleClickHardDelete = async () => {
         if (checkedUno.length > 0) {
             await superAdminHardDelete(checkedUno)
-            navigate({ pathname: '/superAdmin/userManage' }) // 삭제 후 새로고침 기능 수행
+            navigate({ pathname: '/superAdmin' }) // 삭제 후 새로고침 기능 수행
         } else {
             alert("선택된 항목이 없습니다")
-            navigate({ pathname: '/superAdmin/userManage' })
+            navigate({ pathname: '/superAdmin' })
         }
     }
 
@@ -136,14 +136,46 @@ const UserManagePage = () => {
                         <option value='ho' title='예시) 101'>호</option>
                         <option value="name" title='예시) 김어반'>이름</option>
                         <option value="phone" title='예시) 01012345678'>전화번호</option>
+                        <option value="delFlag">삭제여부</option>
+                        <option value="role">권한</option>
                     </select>
                 </li>
                 <li>
-                    <input className=''
-                        name='searchValue'
-                        placeholder={inputTitle}
-                        onChange={handleChangeSearchValue}
-                    />
+                    {(() => {
+                        if (searchData.searchCategory === 'role') {
+                            return (
+                                <div>
+                                    <select className=''
+                                        name='searchValue'
+                                        onChange={handleChangeSearchValue}>
+                                        <option value=''>권한선택</option>
+                                        <option value='PENDING'>승인대기</option>
+                                        <option value='USER'>입주민</option>
+                                        <option value='ADMIN'>관리자</option>
+                                        <option value='ROOT'>ROOT</option>
+                                    </select>
+                                </div>
+                            )
+                        } else if (searchData.searchCategory === 'delFlag') {
+                            return (
+                                <select className=''
+                                    name='searchValue'
+                                    onChange={handleChangeSearchValue}>
+                                    <option value=''>삭제여부</option>
+                                    <option value='false'>삭제되지 않음</option>
+                                    <option value='true'>삭제됨</option>
+                                </select>
+                            )
+                        } else {
+                            return (
+                                <input className=''
+                                    name='searchValue'
+                                    placeholder={inputTitle}
+                                    onChange={handleChangeSearchValue}
+                                />
+                            )
+                        }
+                    })()}
                 </li>
                 <li>
                     <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>

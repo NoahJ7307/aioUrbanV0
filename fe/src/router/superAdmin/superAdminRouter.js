@@ -10,6 +10,10 @@ const userRouter = () => {
 
     return [
         {
+            path: "",
+            element: <Navigate replace to="/superAdmin/userManage" />
+        },
+        {
             path: "userManage",
             element: <Suspense fallback={Loading}><UserManage /></Suspense>,
         },
