@@ -75,3 +75,20 @@ export async function apiCall(url, method, requestData) {
             return Promise.reject(err.response);
         });
 }
+
+
+// =============JSON 형식인지 확인하는 함수
+export const isJSON = (str) => {
+    try {
+        JSON.parse(str);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+
+// =================안전하게 JSON 파싱을 시도하는 함수
+export const getParsedItem = (key) => {
+    const item = localStorage.getItem(key);
+    return item && item !== "undefined" && isJSON(item) ? JSON.parse(item) : item;
+};

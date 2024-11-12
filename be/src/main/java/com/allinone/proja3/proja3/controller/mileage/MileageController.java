@@ -46,7 +46,7 @@ public class MileageController {
     }
 
     @PutMapping("/autopay")
-    public ResponseEntity<?> autoPay(@RequestBody ManualRequestDTO dto) {
+    public ResponseEntity<?> fatchAutoPayTure(@RequestBody ManualRequestDTO dto) {
         try {
             MileageDTO mileageDTO = paymentService.processRegisterAutoPay(dto);
             return ResponseEntity.ok(mileageDTO);
@@ -55,6 +55,17 @@ public class MileageController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
+    }
+
+    @PatchMapping("/autopay")
+    public ResponseEntity<?> fatchAutoPayFalse(@RequestBody MileageDTO dto) {
+        try {
+            MileageDTO mileageDTO = mileageService.fatchAutoPay(dto);
+            return ResponseEntity.ok(mileageDTO);
+        } catch (Exception e) {
+            log.error(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 

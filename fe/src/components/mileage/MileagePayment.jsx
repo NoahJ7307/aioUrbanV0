@@ -15,6 +15,7 @@ const MileagePayment = () => {
     const [click, setClick] = useState(true);
     const [money, setMoney] = useState(0);
     const [mileage, setMileage] = useState({});
+    const [isAutopay, setIsAutopay] = useState(mileage && mileage.autopay ? mileage.autopay : false);
     useEffect(() => {
         const dong = localStorage.getItem("dong");
         const ho = localStorage.getItem("ho");
@@ -42,6 +43,7 @@ const MileagePayment = () => {
                     if (response.data != null && !isNaN(response.data.price)) {
                         setMoney(Number(response.data.price)); // 숫자로 변환
                         setMileage(response.data);
+                        setIsAutopay(response.data.autopay);
                     } else {
                         setMoney(0);
                     }
@@ -77,6 +79,7 @@ const MileagePayment = () => {
             <div className='balace'>
                 현재 잔액 : <span className='redpoint'>{formatNumber(+money)}</span> 원
             </div>
+            <div className='balace'>{isAutopay ? `현재 자동 결제 시스템이 활성화된 상태입니다.` : `현재 자동 결제 시스템이 비활성화된 상태입니다.`} </div>
             <nav className='mileageLink'>
                 <NavLink to="manual"
                     onClick={() => setClick(true)}>
@@ -94,7 +97,7 @@ const MileagePayment = () => {
 
             <Routes>
                 <Route path="manual" element={<ManualPayment setMoney={setMoney} sendMileage={mileage} />} />
-                <Route path="auto" element={<AutomaticPayment setMoney={setMoney} />} />
+                <Route path="auto" element={<AutomaticPayment sendMileage={mileage} isAutopay={isAutopay} setIsAutopay={setIsAutopay} />} />
             </Routes>
         </div>
     )
