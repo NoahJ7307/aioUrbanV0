@@ -28,7 +28,8 @@ public class Mileage {
 
     private boolean autopay; // 자동결제 설정
 
-    @OneToOne(orphanRemoval = true) // cardid 삭제시 , null로 처리
+    //@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true) // cardid 삭제시 , null로 처리
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "card_id")
     private CardInfo cardInfo; // 카드 정보와 연관관계 설정
 
@@ -40,4 +41,8 @@ public class Mileage {
 
     public boolean isAutopay() {return autopay;}
 
+    // CardInfo를 제거하는 메서드
+    public void removeCardInfo() {
+        this.cardInfo = null;
+    }
 }

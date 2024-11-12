@@ -104,7 +104,7 @@ public class UrbanSecurityConfig {
         // CORS 요청 시 허용 출처
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         // CORS 요청 시 허용 메서드
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET", "POST","PATCH", "PUT", "DELETE", "HEAD", "OPTIONS"));
         // CORS 요청 시 허용 헤더
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

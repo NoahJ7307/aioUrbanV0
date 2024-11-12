@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { formatNumber, apiCall } from "../api/utils";
+import { formatNumber, apiCall ,getParsedItem } from "../api/utils";
 
 
 
@@ -64,24 +64,12 @@ const ManualPayment = ({ sendMileage, setMoney }) => {
 
     const setPayment = async () => {
 
-        const dong = localStorage.getItem("dong");
-        const ho = localStorage.getItem("ho");
+        const dong = getParsedItem("dong");
+        const ho = getParsedItem("ho");
 
-        // JSON 형식인지 확인한 후 JSON 파싱 시도
-        const isJSON = (str) => {
-            try {
-                JSON.parse(str);
-                return true;
-            } catch (e) {
-                return false;
-            }
-        };
 
-        const parsedDong = dong && dong !== "undefined" && isJSON(dong) ? JSON.parse(dong) : dong;
-        const parsedHo = ho && ho !== "undefined" && isJSON(ho) ? JSON.parse(ho) : ho;
-
-        if (!parsedDong || !parsedHo) {
-            alert(`동 호수가 기입되지 않았습니다. 수정이 필요합니다.`)
+        if (!dong || !ho) {
+            alert(`동과 호수 정보가 누락되었습니다. 설정을 확인해 주세요.`)
             return;
         }
 
@@ -111,8 +99,9 @@ const ManualPayment = ({ sendMileage, setMoney }) => {
                 cardExpiry: cvc,
             },
             mileage: {
-                dong: parsedDong,
-                ho: parsedHo,
+                mileageId: mileage.mileageId ? mileage.mileageId : null,
+                dong: dong,
+                ho: ho,
                 autopay: mileage.autopay,
                 state: true,
 

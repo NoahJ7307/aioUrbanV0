@@ -16,7 +16,8 @@ public class CardInfo{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cardId;
 
-    @OneToOne(cascade = CascadeType.REMOVE) // User 삭제 시 CardInfo도 함께 삭제
+//    @OneToOne(cascade = CascadeType.REMOVE) // User 삭제 시 CardInfo도 함께 삭제
+    @OneToOne
     @JoinColumn(name = "uno")
     private User user; // 사용자와의 연관관계 설정
 

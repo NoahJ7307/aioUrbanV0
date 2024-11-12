@@ -21,6 +21,13 @@ public class PaymentServiceImpl implements PaymentService {
     private final MileagehistoryService mileagehistoryService;
     private final PaymentHistoryService paymentHistoryService;
 
+
+    private MileageHistoryId makehistoryID(Mileage mileage) {
+        return MileageHistoryId.builder()
+                .mileageId(mileage.getMileageId())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
     //수동 결제 시스템
     @Transactional
     public MileageDTO processManualPayment(ManualRequestDTO requestDTO) {
@@ -44,10 +51,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
 
-        MileageHistoryId pk = MileageHistoryId.builder()
-                .mileageId(mileageEntity.getMileageId())
-                .timestamp(LocalDateTime.now())
-                .build();
+        MileageHistoryId pk = makehistoryID(mileageEntity);
         log.info("Saved historyPk : {}", pk);
         // MileageHistory 저장
         MileageHistory mileageHistory = MileageHistory.builder()
@@ -87,9 +91,11 @@ public class PaymentServiceImpl implements PaymentService {
 
         // Mileage 저장
         MileageDTO dto = requestDTO.getMileage();
+        log.info("requestDTO.Mileage Mileage : {}", dto);
+
         dto.setCardId(savedCard.getCardId());
 
-        Mileage mileageEntity = mileageService.duplicate(dto, requestDTO.getPaymentAmount());
+        Mileage mileageEntity = mileageService.autoState(dto, savedCard);
 
         log.info("Saved mileageEntity : {}", mileageEntity);
 
@@ -100,6 +106,42 @@ public class PaymentServiceImpl implements PaymentService {
 
         dto = mileageService.findByDongHoDTO(dto.getDong(),dto.getHo());
         return dto;
+    }
+
+    //마일리지 사용 시스템
+    @Override
+    @Transactional
+    public MileageDTO processUseMileage(MileageDTO requestDTO ,Long userId, int amount , String description ) {
+        //마일리지 내역 조회
+        Mileage mileage = mileageService.findByDongHoentity(requestDTO.getDong(),requestDTO.getHo());
+        if (mileage == null) {
+            log.error("결제 도중 마일리지가 없음 = 마일리지 부족과 같은 상태");
+            throw new RuntimeException("마일리지가 없습니다.");
+        }
+        //마일리지 금액 조회
+        if(mileage.getPrice()<amount){
+            log.error("결제 중 금액 부족 현재 금액 : {}", mileage.getPrice());
+            throw new RuntimeException("금액이 부족합니다.");
+        }
+
+        //마일리지 차감
+        mileage.setPrice(mileage.getPrice()-amount);
+        //마일리지 저장
+        mileage = mileageService.saveEntity(mileage);
+
+
+        //마일리지 사용 내역
+        MileageHistory history = MileageHistory.builder()
+                .id(makehistoryID(mileage))
+                .uno(userId)
+                .amount(amount) // 차감이므로 음수로 기록
+                .description(description)
+                .mileage(mileage)
+                .type("-")
+                .build();
+        mileagehistoryService.saveMileageHistory(history);
+
+        return mileageService.getDTO(mileage);
     }
 
 
