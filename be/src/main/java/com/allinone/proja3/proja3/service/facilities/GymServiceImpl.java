@@ -1,7 +1,5 @@
 package com.allinone.proja3.proja3.service.facilities;
 
-import com.allinone.proja3.proja3.dto.PageRequestDTO;
-import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.SearchPageRequestDTO;
 import com.allinone.proja3.proja3.dto.SearchPageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymDTO;
@@ -11,15 +9,13 @@ import com.allinone.proja3.proja3.model.facilities.*;
 import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.repository.facilities.GymParticipantRepository;
 import com.allinone.proja3.proja3.repository.facilities.GymRepository;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,17 +30,25 @@ public class GymServiceImpl implements GymService {
     private final GymRepository gymRepository;
     private final UserRepository userRepository;
     private final GymParticipantRepository gymParticipantRepository;
+    private final SmsService smsService;
+
+//    @Autowired
+//    public GymServiceImpl(SmsService smsService) {
+//        this.smsService = smsService;
+//    }
 
 
     @PersistenceContext
     private EntityManager entityManager;
+
     //게시글 등록 메서드
     @Override
     public Gym newProgramPost(Gym gym) {
         gym.setCurrentParticipants(0);  //프로그램 등록 시 기본 참가 인원수를 0으로 설정
-        System.out.println("service gym: " +gym);
+        System.out.println("service gym: " + gym);
         return gymRepository.save(gym);
     }
+
     //선택한 게시글 상세조회 메서드
     @Override
     public GymDTO getProgramPost(Long programId) {
@@ -53,6 +57,7 @@ public class GymServiceImpl implements GymService {
         return entityToDto(gym);
     }
 
+    //조회 리스트
     @Override
     public SearchPageResponseDTO<GymDTO> getNonDeletedPrograms(SearchPageRequestDTO pageRequestDTO) {
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());
@@ -60,7 +65,7 @@ public class GymServiceImpl implements GymService {
 
 
         List<GymDTO> dtoList = result.getContent().stream()
-                .map(e->entityToDto(e))
+                .map(e -> entityToDto(e))
                 .collect(Collectors.toList());
         return SearchPageResponseDTO.<GymDTO>withAll()
                 .dtoList(dtoList)
@@ -77,6 +82,7 @@ public class GymServiceImpl implements GymService {
         System.out.println("remove service: " + programId);
         gymRepository.updateToDelete(programId, true);
     }
+
     //게시글 수정
     @Override
     public void modify(GymDTO gymDTO) {
@@ -97,22 +103,24 @@ public class GymServiceImpl implements GymService {
         gymRepository.save(gym);
 
     }
+
     //수정시 기존내용 유지 로직
     @Override
     public GymDTO findDataByProgramId(Long programId) {
         System.out.println("gym service" + programId);
         Gym gym = gymRepository.findById(programId)
-                .orElseThrow(()-> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
         GymDTO dto = this.entityToDto(gym);
         return dto;
     }
+
     //참가자 등록 메서드
     @Override
     public String registerParticipant(Long programId, User user) {
         Gym gym = gymRepository.findById(programId)
                 .orElseThrow(() -> new EntityNotFoundException("post not found with Id: " + programId));
         boolean isAlreadyRegistered = gymParticipantRepository.existsByGymAndUser(gym, user);
-        if(isAlreadyRegistered) {
+        if (isAlreadyRegistered) {
             return "Already";
         }
 
@@ -129,13 +137,54 @@ public class GymServiceImpl implements GymService {
             gym.updateProgramState();  // 상태 업데이트
             gymRepository.save(gym);
 
+            if(participant.isWaitlisted()) {
+                //프로그램 이름과 상세 정보를 포함한 메시지 생성
+                String messageText = user.getUserName() + "님, 프로그램: [" + gym.getTitle() + "] 신청이 완료되었습니다.";
+                System.out.println(messageText);
+                // 참가 신청 완료 후 알림 메시지 전송
+//                boolean isSent = smsService.sendConfirmationMessage(user.getPhone(), messageText);
+//                System.out.println("1212" + user + " " + isSent);
+//                if (isSent) {
+//                    System.out.println("메시지가 성공적으로 전송되었습니다.");
+//                } else {
+//                    System.out.println("메시지 전송에 실패했습니다.");
+//                }
+            }
+
             return "Done";
         } else {
             return "Over";
-            // 대기자 등록 로직을 별도의 메서드로 호출
-//            return registerWaitlist(programId, user);
+
         }
     }
+//    public String registerParticipant(Long programId, User user) {
+//        Gym gym = gymRepository.findById(programId)
+//                .orElseThrow(() -> new EntityNotFoundException("post not found with Id: " + programId));
+//        boolean isAlreadyRegistered = gymParticipantRepository.existsByGymAndUser(gym, user);
+//        if(isAlreadyRegistered) {
+//            return "Already";
+//        }
+//
+//        //모집인원 확인 및 참가자 등록처리
+//        if (gym.getCurrentParticipants() < gym.getParticipantLimit()) {
+//            gym.setCurrentParticipants(gym.getCurrentParticipants() + 1);
+//
+//            GymParticipant participant = new GymParticipant();
+//            participant.setGym(gym);
+//            participant.setUser(user);
+//            participant.setWaitlisted(false); //정식참가자로 등록
+//
+//            gymParticipantRepository.save(participant);  // 중간 엔티티 저장
+//            gym.updateProgramState();  // 상태 업데이트
+//            gymRepository.save(gym);
+//
+//            return "Done";
+//        } else {
+//            return "Over";
+//            // 대기자 등록 로직을 별도의 메서드로 호출
+////            return registerWaitlist(programId, user);
+//        }
+//    }
     //대기자 등록 로직
     @Override
     public String registerWaitlist(Long programId, User user) {
@@ -189,6 +238,14 @@ public class GymServiceImpl implements GymService {
             gym.setCurrentParticipants(gym.getCurrentParticipants()+1); // 참가자 수 증가
             gymParticipantRepository.save(waitlistParticipant);
             log.info("Oldest waitlist participant registered as official participant: {}", waitlistParticipant);
+
+
+
+            //프로그램 이름과 상세 정보를 포함한 메시지 생성
+//            String messageText ="안녕하세요! " + waitlistParticipant.getUser().getUserName()+"님, 귀하께서 대기 중이던 프로그램: ["+gym.getTitle() +"]에 참가자로 등록되어 상태가 변경되었음을 알려드립니다. 감사합니다! ";
+//            System.out.println("1212"+messageText);
+//            smsService.sendConfirmationMessage(waitlistParticipant.getUser().getPhone(), messageText);
+
 
         }else {
             log.info("No waitlisted participants. Just canceled.");

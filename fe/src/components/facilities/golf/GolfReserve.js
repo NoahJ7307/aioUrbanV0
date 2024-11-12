@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { reserveGolf } from '../../api/facilities/golfApi';
+import { listGolf, reserveGolf } from '../../api/facilities/golfApi';
 import loadLoginData from '../../hook/useCustomLogin'
 import { useNavigate } from 'react-router-dom';
 import useFormFields from '../../hook/facilities/useFormFields';
@@ -14,6 +14,7 @@ const GolfReserve = () => {
         teeBox: '',
     });
 
+
     useEffect(() => {
         const getUno = localStorage.getItem('uno');
         if (getUno) {
@@ -24,22 +25,50 @@ const GolfReserve = () => {
             console.log("로그인 정보가 없습니다.");
         }
     }, []);
+    const validateReservation = (data) => {
+        const selectedDate = new Date(data.date);
+        const today = new Date();
+        console.log("today:", today, "selectedDate", selectedDate)
+
+        if (selectedDate < today.setHours(0, 0, 0, 0)) {
+            alert("선택하신 날짜는 오늘 이후여야 합니다.");
+            return false;
+        }
+
+        const startTime = new Date(`${data.date}T${data.startTime}`);
+        const endTime = new Date(`${data.date}T${data.endTime}`);
+        if (startTime >= endTime) {
+            alert("시작 시간은 종료 시간보다 이전이어야 합니다.");
+            return false;
+        }
+
+        if (selectedDate.toDateString() === today.toDateString() && startTime <= today) {
+            alert("예약 시작 시간은 현재 시간 이후여야 합니다.");
+            return false;
+        }
+
+        return true;
+    };
 
     const handleReserve = async () => {
+        if (!formData.date || !formData.startTime || !formData.endTime || !formData.teeBox) {
+            alert('모든 필드를 채워 주세요.');
+            return;
+        }
+
         const reservationData = {
             uno,
             date: formData.date,
-            startTime : formData.startTime,
+            startTime: formData.startTime,
             endTime: formData.endTime,
             delFlag: false,
             teeBox: parseInt(formData.teeBox),
         };
         console.log(reservationData)
-    
 
-        if ( !formData.date || !formData.startTime || !formData.endTime || !formData.teeBox) {
-            alert('모든 필드를 채워 주세요.');
-            return;
+
+        if (!validateReservation(reservationData)) {
+            return;//유효하지 않으면 중단
         }
 
         try {
@@ -58,7 +87,7 @@ const GolfReserve = () => {
         <div>
             <h2> Reserve Golf</h2>
 
-        
+
             <input
                 type="date"
                 name="date"
@@ -80,13 +109,37 @@ const GolfReserve = () => {
                 value={formData.endTime}
                 onChange={handleFieldChange}
             />
-            <input
+            {/* <input
                 type="number"
                 name="teeBox"
                 placeholder="예약구역"
                 value={formData.teeBox}
                 onChange={handleFieldChange}
-            />
+            /> */}
+            <div className="sm:col-span-3">
+                <label htmlFor="teeBox" className="block text-sm font-medium text-gray-900">
+                    예약구역
+                </label>
+                <div className="mt-2">
+                    <select
+                        id="teeBox"
+                        name="teeBox"
+                        value={formData.teeBox}
+                        onChange={handleFieldChange}
+                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm"
+                        style={{ maxHeight: '120px', overflowY: 'auto' }} 
+                    >
+
+                        <option value="">구역을 선택하세요</option>
+                        {Array.from({ length: 10 }, (_, index) => (
+                            <option key={index + 1} value={index + 1}>
+                                {index + 1}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+
             <button onClick={handleReserve}>Reserve</button>
         </div>
     );
