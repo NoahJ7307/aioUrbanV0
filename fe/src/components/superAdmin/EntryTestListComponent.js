@@ -20,10 +20,21 @@ const initState = {
 
 const EntryTestListComponent = ({ pageServerData, searchData }) => {
     const [serverData, setServerData] = useState(initState)
+    const [checkedEeno, setCheckedEeno] = useState([])
     const { page, size } = useCustom()
     const { exceptionHandler } = useCustomLogin()
     const location = useLocation()
     const navigate = useNavigate()
+
+    const handleCheckChange = (eeno) => {
+        setCheckedEeno(checkedItem => {
+            if (checkedItem.includes(eeno)) {
+                return checkedItem.filter(item => item !== eeno)
+            } else {
+                return [...checkedItem, eeno]
+            }
+        })
+    }
 
     useEffect(() => {
         if (!pageServerData.dtoList || pageServerData.dtoList.length === 0) { // 검색 결과 유무 분기
@@ -34,6 +45,7 @@ const EntryTestListComponent = ({ pageServerData, searchData }) => {
                     setServerData(data)
                 }
             })
+        } else {
             setServerData(pageServerData)
         }
     }, [page, size, pageServerData])
@@ -57,7 +69,7 @@ const EntryTestListComponent = ({ pageServerData, searchData }) => {
         }
 
         navigate({
-            pathname: '/parking/entry',
+            pathname: '/superAdmin/entryTest',
             search: `?${searchParams.toString()}`,
         })
     }
@@ -80,7 +92,8 @@ const EntryTestListComponent = ({ pageServerData, searchData }) => {
                     <div>
                         <input
                             type='checkbox'
-                            disabled
+                            checked={checkedEeno.includes(entry.eeno)} // 페이지 이동 시 체크항목 유지
+                            onChange={() => handleCheckChange(entry.eeno)}
                         />
                     </div>
                     <div>{entry.carNum}</div>

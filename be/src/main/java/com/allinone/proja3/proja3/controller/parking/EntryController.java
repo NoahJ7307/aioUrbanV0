@@ -3,6 +3,8 @@ package com.allinone.proja3.proja3.controller.parking;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.parking.*;
+import com.allinone.proja3.proja3.model.parking.Household;
+import com.allinone.proja3.proja3.model.parking.HouseholdPK;
 import com.allinone.proja3.proja3.service.parking.EntryExitCarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +39,15 @@ public class EntryController {
         return entryExitCarService.getSearchList(pageRequestDTO,entryExitSearchDataDTO);
     }
 
-    // entry, exit controller 추가...
+    @PostMapping("/entry")
+    public void entry(@RequestBody EntryExitCarDTO entryExitCarDTO) {
+        System.out.println("EntryExitCar entry : " + entryExitCarDTO);
+        entryExitCarService.entry(entryExitCarDTO);
+    }
+
+    @PostMapping("/exit")
+    public void exit(@RequestBody EntryExitCarDTO entryExitCarDTO) {
+        System.out.println("EntryExitCar exit : " + entryExitCarDTO);
+        entryExitCarService.exit(entryExitCarDTO);
+    }
 }

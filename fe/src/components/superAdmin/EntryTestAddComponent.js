@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import useCustom from '../hook/useCustom'
-import { visitPostAdd } from '../api/parking/visitApi'
-import useCustomLogin from '../hook/useCustomLogin'
+import { entryPost, exitPost } from '../api/parking/entryApi'
 
 const initState = {
     carNum: '',
@@ -9,23 +8,28 @@ const initState = {
     phone: '',
     dong: 0,
     ho: 0,
-    expectedDate: '',
+    entryDate: '',
+    exitDate: '',
 }
 
 const EntryTestAddComponent = () => {
-    const { page, size, moveToPath } = useCustom()
     const [serverData, setServerData] = useState({ ...initState })
-    const { loadLoginData } = useCustomLogin()
 
     const handleChange = (e) => {
         serverData[e.target.name] = e.target.value
         setServerData({ ...serverData })
     }
-    const handleClick = () => {
-        visitPostAdd(serverData).then(data => {
-            console.log('success : ' + data)
-            moveToPath('/parking/visit', { page, size })
-        })
+
+    const handleClickEntry = () => {
+        entryPost(serverData)
+        window.location.reload()
+
+    }
+
+    const handleClickExit = () => {
+        exitPost(serverData)
+        window.location.reload()
+
     }
     return (
         <div className='flex p-2'>
@@ -35,19 +39,16 @@ const EntryTestAddComponent = () => {
                         차량번호
                     </div>
                     <div>
-                        이름
-                    </div>
-                    <div>
-                        전화번호
-                    </div>
-                    <div>
                         동
                     </div>
                     <div>
                         호
                     </div>
                     <div>
-                        입차 예상 날짜
+                        입차일
+                    </div>
+                    <div>
+                        출차일
                     </div>
                 </div>
             </div>
@@ -60,59 +61,32 @@ const EntryTestAddComponent = () => {
                     </div>
                     <div>
                         <input className='border'
-                            name='name'
+                            name='dong'
                             onChange={handleChange} />
                     </div>
                     <div>
                         <input className='border'
-                            name='phone'
+                            name='ho'
                             onChange={handleChange} />
                     </div>
-                    {/* 권한 별 분기 - 동/호 선택 여부 */}
-                    {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
-                        <>
-                            <div>
-                                <input className='border'
-                                    name='dong'
-                                    value={loadLoginData().dong}
-                                    readOnly
-                                    onChange={handleChange} />
-                            </div>
-                            <div>
-                                <input className='border'
-                                    name='ho'
-                                    value={loadLoginData().ho}
-                                    readOnly
-                                    onChange={handleChange} />
-                            </div>
-                        </>
-                        :
-                        <>
-                            <div>
-                                <input className='border'
-                                    name='dong'
-                                    onChange={handleChange} />
-                            </div>
-                            <div>
-                                <input className='border'
-                                    name='ho'
-                                    onChange={handleChange} />
-                            </div>
-                        </>
-                    }
-                    {/* --------------- */}
                     <div>
                         <input className='border'
                             type='date'
-                            name='expectedDate'
+                            name='entryDate'
+                            onChange={handleChange} />
+                    </div>
+                    <div>
+                        <input className='border'
+                            type='date'
+                            name='exitDate'
                             onChange={handleChange} />
                     </div>
                 </div>
                 <div>
                     <button type='button' className='bg-blue-400 p-2'
-                        onClick={handleClick}>입차 추가</button>
+                        onClick={handleClickEntry}>입차 추가</button>
                     <button type='button' className='bg-red-400 p-2'
-                        onClick={(pageParam) => moveToPath('/parking/visit', pageParam)}>출차 추가</button>
+                        onClick={handleClickExit}>출차 추가</button>
                 </div>
             </div>
         </div>

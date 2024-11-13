@@ -54,3 +54,48 @@ export const entryGetSearchList = async (pageParam, searchData) => {
     console.log('search data api : ', res.data)
     return res.data
 }
+
+
+export const entryPost = async (serverData) => {
+    const token = localStorage.getItem('token')
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    }
+    const { carNum, name, phone, dong, ho, entryDate, exitDate } = serverData
+    const updateServerData = {
+        carNum: carNum,
+        name: name,
+        phone: phone,
+        dong: dong,
+        ho: ho,
+        entryDate: entryDate,
+        exitDate: exitDate,
+    }
+    const res = await axios.post(`${host}/entry`, updateServerData, config)
+    return res.data
+}
+
+export const exitPost = async (serverData) => {
+    const token = localStorage.getItem('token')
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    }
+    const { carNum, name, phone, dong, ho, entryDate, exitDate } = serverData
+    const updateServerData = {
+        carNum: carNum,
+        name: name,
+        phone: phone,
+        dong: dong,
+        ho: ho,
+        entryDate: entryDate,
+        exitDate: exitDate,
+    }
+    const res = await axios.post(`${host}/exit`, updateServerData, config)
+    return res.data
+}
