@@ -109,6 +109,7 @@ const ListPage = () => {
 
     const handleClickClear = () => {
         navigate({ pathname: '/user/list' })
+        window.location.reload()
     }
     // --------------------
 

@@ -37,7 +37,11 @@ const MenuComponent = () => {
                                 <Link to={'/join'}>회원가입</Link>
                             </div>
                         </>
-                        : <div className='flexEnd marginRight0_5'>
+                        :
+                        <div className='flexEnd marginRight0_5'>
+                            <div className='flexEnd marginRight0_5'>
+                                <Link to={'/myPage'}>마이페이지</Link>
+                            </div>
                             <button onClick={handleClickLogout}>로그아웃</button>
                         </div>
                     }

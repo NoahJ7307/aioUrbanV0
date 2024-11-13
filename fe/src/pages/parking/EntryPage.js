@@ -132,6 +132,7 @@ const EntryPage = () => {
 
   const handleClickClear = () => {
     navigate({ pathname: '/parking/entry' })
+    window.location.reload()
   }
   // --------------------
   return (

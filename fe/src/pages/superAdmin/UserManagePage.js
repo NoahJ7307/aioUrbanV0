@@ -108,6 +108,7 @@ const UserManagePage = () => {
 
     const handleClickClear = () => {
         navigate({ pathname: '/superAdmin/userManage' })
+        window.location.reload()
     }
     // --------------------
 
