@@ -24,49 +24,64 @@ const GolfReserve = () => {
             console.log("로그인 정보가 없습니다.");
         }
     }, []);
+    const validateReservation = (data) => {
+        const selectedDate = new Date(data.date);
+        const today = new Date();
+        console.log("today:" ,today, "selectedDate" ,selectedDate)
+
+        if (selectedDate < today.setHours(0,0,0,0)) {
+            alert("선택하신 날짜는 오늘 이후여야 합니다.");
+            return false;
+        }
+
+        const startTime = new Date(`${data.date}T${data.startTime}`);
+        const endTime = new Date(`${data.date}T${data.endTime}`);
+        if (startTime >= endTime) {
+            alert("시작 시간은 종료 시간보다 이전이어야 합니다.");
+            return false;
+        }
+
+        if (selectedDate.toDateString() === today.toDateString() && startTime <= today) {
+            alert("예약 시작 시간은 현재 시간 이후여야 합니다.");
+            return false;
+        }
+        // if (selectedDate.toDateString() === today.toDateString() && startTime <= today) {
+        //     alert("예약 시작 시간은 현재 시간 이후여야 합니다.")
+        //     return false;
+        // }
+        return true;
+    };
 
     const handleReserve = async () => {
-     
-        const reservationData = {
-            uno,
-            date: formData.date,
-            startTime: formData.startTime,
-            endTime: formData.endTime,
-            delFlag: false,
-            teeBox: formData.teeBox ? parseInt(formData.teeBox) : null,
-        };
-        console.log(reservationData)
-
-
-        if (!formData.date || !formData.startTime || !formData.endTime || !formData.teeBox) {
+        if ( !formData.date || !formData.startTime || !formData.endTime || !formData.teeBox) {
             alert('모든 필드를 채워 주세요.');
             return;
         }
-        try {
-            const response = await reserveGolf(reservationData);
-            if (response.status === 200) {
-                alert('예약에 성공하셨습니다 😃');
-                navigate('/facilities/golf/list')
-            }
 
-        } catch (error) {
-            console.error("error 발생 : ", error);
-            if (error.response) {
-                const errorMessage = error.response.data.message; 
-                if(errorMessage === "이미 예약된 시간입니다. 다른 시간을 선택해주세요.") {
-                alert('해당 시간대에 이미 예약된 좌석입니다. 다른 시간대를 선택해 주세요 😥');
-            } else if (errorMessage === "예약 가능한 시간이 아닙니다.") {
-                alert('유효하지 않은 시간입니다. 다시 확인 후 선택해 주세요.');
-            } else {
-                alert('예약 처리 중 오류가 발생했습니다. 나중에 다시 시도해 주세요.');
-            }
-        } else {
-            // 네트워크 오류 등
-            alert('서버와의 연결에 문제가 발생했습니다. 다시 시도해 주세요.');
-        }
-
-        }
+        const reservationData = {
+            uno,
+            date: formData.date,
+            startTime : formData.startTime,
+            endTime: formData.endTime,
+            delFlag: false,
+            teeBox: parseInt(formData.teeBox),
+        };
+        console.log(reservationData)
     
+
+        if (!validateReservation(reservationData)) {
+            return;//유효하지 않으면 중단
+        }
+
+        try {
+            await reserveGolf(reservationData);
+            alert('예약에 성공하셨습니다 😃');
+            navigate('/facilities/golf/list')
+        } catch (error) {
+            console.error("error발생 :", error);
+            alert('해당 시간대에 이미 예약된 좌석입니다. 다른 시간대를 선택해 주세요 😥 ')
+
+        }
     };
 
 
@@ -74,7 +89,7 @@ const GolfReserve = () => {
         <div>
             <h2> Reserve Golf</h2>
 
-
+        
             <input
                 type="date"
                 name="date"

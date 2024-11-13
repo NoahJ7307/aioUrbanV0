@@ -46,13 +46,6 @@ public class GymController {
         return  list;
     }
 
-//    @GetMapping("/list")
-//    public PageResponseDTO<GymDTO> getList(PageRequestDTO pageRequestDTO) {
-//        System.out.println("get list controller: " + pageRequestDTO);
-//        PageResponseDTO<GymDTO> list = service.getNonDeletedPrograms(pageRequestDTO);
-//        System.out.println("after service list 120) : " +list);
-//        return  list;
-//    }
 
     //검색
     @GetMapping("/list/search")
@@ -82,15 +75,6 @@ public class GymController {
         // 결과 반환
         return ResponseEntity.ok(pageResponseDTO);
     }
-
-//    @GetMapping("/list/search")
-//    public ResponseEntity<SearchPageResponseDTO<GymDTO>> searchGymPrograms(@ModelAttribute SearchPageRequestDTO searchPageRequestDTO) {
-//        System.out.println("searchpage 1) : " + searchPageRequestDTO);
-//        Pageable pageable = PageRequest.of(searchPageRequestDTO.getPage() -1 , searchPageRequestDTO.getSize(), Sort.by("programId").ascending());
-//        SearchPageResponseDTO<GymDTO> pageResponseDTO = service.searchList(searchPageRequestDTO);
-//        System.out.println("searchpage 2)  : " +pageResponseDTO);
-//        return ResponseEntity.ok(pageResponseDTO);
-//    }
 
 
     //특정 게시물 조회 메서드
@@ -139,6 +123,7 @@ public class GymController {
         else if(response.equals("Done"))   return new ResponseEntity<>("A002",HttpStatus.OK);
         else return new ResponseEntity<>("A003",HttpStatus.OK);
     }
+
     // 대기자 등록
     @PostMapping("/detail/waitlist/{programId}")
     public ResponseEntity<String> registerWaitlist(@PathVariable Long programId, @RequestBody User user) {
