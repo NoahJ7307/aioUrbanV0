@@ -9,6 +9,8 @@ import com.allinone.proja3.proja3.service.parking.EntryExitCarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/parking/entry")
@@ -49,5 +51,10 @@ public class EntryController {
     public void exit(@RequestBody EntryExitCarDTO entryExitCarDTO) {
         System.out.println("EntryExitCar exit : " + entryExitCarDTO);
         entryExitCarService.exit(entryExitCarDTO);
+    }
+
+    @PostMapping("/delete")
+    public void deleteChecked(@RequestBody List<Long> checkedEeno){
+        checkedEeno.forEach(entryExitCarService::remove);
     }
 }

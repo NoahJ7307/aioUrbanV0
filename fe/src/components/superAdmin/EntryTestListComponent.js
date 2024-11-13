@@ -18,9 +18,8 @@ const initState = {
     current: 0
 }
 
-const EntryTestListComponent = ({ pageServerData, searchData }) => {
+const EntryTestListComponent = ({ pageServerData, searchData, checkedEeno, setCheckedEeno }) => {
     const [serverData, setServerData] = useState(initState)
-    const [checkedEeno, setCheckedEeno] = useState([])
     const { page, size } = useCustom()
     const { exceptionHandler } = useCustomLogin()
     const location = useLocation()

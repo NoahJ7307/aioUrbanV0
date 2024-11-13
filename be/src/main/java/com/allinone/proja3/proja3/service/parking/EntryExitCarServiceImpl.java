@@ -60,6 +60,11 @@ public class EntryExitCarServiceImpl implements EntryExitCarService{
     }
 
     @Override
+    public void remove(Long eeno) {
+        entryExitCarRepository.deleteById(eeno);
+    }
+
+    @Override
     public PageResponseDTO<EntryExitCarDTO> getList(PageRequestDTO pageRequestDTO) {
         System.out.println("EntryExitCar getList service");
         Pageable pageable = PageRequest.of(

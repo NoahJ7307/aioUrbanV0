@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import useCustomLogin from '../../components/hook/useCustomLogin'
-import useCustom from '../../components/hook/useCustom'
-import { entryGetSearchList } from '../../components/api/parking/entryApi'
+import { entryDeleteChecked, entryGetSearchList } from '../../components/api/parking/entryApi'
 import EntryTestAddComponent from '../../components/superAdmin/EntryTestAddComponent'
 import EntryTestListComponent from '../../components/superAdmin/EntryTestListComponent'
 
@@ -29,10 +28,19 @@ const initStateServerData = {
 const EntryTestPage = () => {
     const navigate = useNavigate()
     const { loadLoginData } = useCustomLogin()
+    const [checkedEeno, setCheckedEeno] = useState([])
     const [searchData, setSearchData] = useState(initStateSearchData)
     const [pageServerData, setPageServerData] = useState(initStateServerData)
     const [inputTitle, setInputTitle] = useState('')
     const location = useLocation()
+
+    const handleClickDelete = () => {
+        entryDeleteChecked(checkedEeno).then(() => {
+            alert('삭제가 완료되었습니다.')
+            setCheckedEeno([])
+            window.location.reload()
+        })
+    }
 
     // ------- 검색 -------
     // Category 변경 시 value 값 초기화
@@ -140,7 +148,7 @@ const EntryTestPage = () => {
         <div>
             <ul className='flex justify-center'>
                 <li>
-                    <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>
+                    <button className='bg-gray-300 p-2 mr' onClick={handleClickDelete}>
                         삭제
                     </button>
                 </li>
@@ -226,7 +234,11 @@ const EntryTestPage = () => {
                     <EntryTestAddComponent />
                 </div>
                 <div>
-                    <EntryTestListComponent pageServerData={pageServerData} searchData={searchData} />
+                    <EntryTestListComponent
+                        pageServerData={pageServerData}
+                        searchData={searchData}
+                        checkedEeno={checkedEeno}
+                        setCheckedEeno={setCheckedEeno} />
                 </div>
             </div>
         </div>

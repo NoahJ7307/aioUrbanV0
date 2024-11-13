@@ -99,3 +99,15 @@ export const exitPost = async (serverData) => {
     const res = await axios.post(`${host}/exit`, updateServerData, config)
     return res.data
 }
+
+export const entryDeleteChecked = async (checkedEeno) => {
+    const token = localStorage.getItem("token")
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    }
+    const res = await axios.post(`${host}/delete`, checkedEeno, config)
+    return res.data
+}
