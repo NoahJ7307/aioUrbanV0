@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Log4j2
@@ -64,6 +65,19 @@ public class CardInfoServiceImpl implements CardInfoService {
 
     @Override
     public void deleteCardInfo(CardInfoDTO dto) {
-        cardInfoRepository.delete(getEntity(dto));
+        cardInfoRepository.delete(getEntity(dto))
+        ;
+    }
+
+    //카드 정보 삭제 : 존재하면 삭제하고 아니면 삭제안함. String으로 결과 전송
+    @Override
+    public String deleteCardByUserId(Long uno){
+        Optional<CardInfo> card = cardInfoRepository.findByUserUno(uno);
+        if(card.isPresent()) {
+            cardInfoRepository.delete(card.get());
+            return "Card 가 존재 deleted 완료";
+        }else{
+            return "Card 가 존재하지않아 , 삭제되지 않았습니다.";
+        }
     }
 }

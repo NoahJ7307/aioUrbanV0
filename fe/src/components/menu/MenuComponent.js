@@ -60,7 +60,7 @@ const MenuComponent = () => {
                 <li><Link to={'/parking'}>주차관리</Link></li>
                 {isLogin ?
                     <>
-                        <li><Link to={'/mileage'}>마일리지결제</Link></li>
+                        <li><Link to={'/mileage/manual'}>마일리지결제</Link></li>
                         {/* <li><Link to={'/'}>LoginTest</Link></li> */}
                     </>
                     : <></>

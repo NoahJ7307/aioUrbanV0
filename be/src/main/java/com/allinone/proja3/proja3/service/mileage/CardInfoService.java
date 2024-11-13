@@ -9,5 +9,5 @@ public interface CardInfoService {
 
     CardInfo saveCardInfo(CardInfoDTO cardInfo);
     void deleteCardInfo(CardInfoDTO dto);
-
+    String deleteCardByUserId(Long uno);
 }
