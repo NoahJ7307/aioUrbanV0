@@ -152,9 +152,14 @@ public class MileageServiceImpl implements MileageService {
         return getDTO(entity);
     }
 
+    //해당하는 동호수의 상태 비활성화 : 관리자가 사용하면 좋을 것 같아요
     @Override
-    public void deleteMileage(Mileage mileage) {
-        mileageRepository.delete(mileage);
+    public void deleteMileageActive(String dong , String ho) {
+        Mileage entity = findByDongHoentity(dong,ho);
+        if(entity != null) {
+            entity.setState(false);
+            entity = mileageRepository.save(entity);
+        }
     }
 
 

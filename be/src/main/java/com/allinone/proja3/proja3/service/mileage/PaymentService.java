@@ -14,4 +14,8 @@ public interface PaymentService {
 
     //마일리지 사용 메서드
     MileageDTO processUseMileage(MileageDTO requestDTO ,Long userId, int amount , String description );
+
+    //카드 와 마일리지 비활성화 메서드
+    String deleteCardAndMileageStateFalse(String dong , String ho , Long uno);
+
 }
