@@ -65,13 +65,14 @@ public class MileagehistoryServiceImpl implements MileagehistoryService {
     public void savehistory(Mileage mileage , Long uno ,
                      int amount ,String type , String description) {
         MileageHistory history = MileageHistory.builder()
-                .id(makehistoryID(mileage))
-                .mileage(mileage)
-                .uno(uno)
-                .type(type)
-                .amount(amount)
-                .description(description)
+                .id(makehistoryID(mileage))//인자로들어간 mileage와 , 현재 시간으로 make
+                .mileage(mileage)//매개변수 : 들어온 mileage
+                .uno(uno) //매개변수 : 이 마일리지를 사용한 사람
+                .type(type) //매개변수 : + 인지 , - 인지
+                .amount(amount)// 매개변수 : 사용 금액
+                .description(description)// 매개변수 : 내역으로 남길 글귀 정리
                 .build();
+        //엔터티 새롭게 저장
         mileageHistoryRepository.save(history);
     }
 

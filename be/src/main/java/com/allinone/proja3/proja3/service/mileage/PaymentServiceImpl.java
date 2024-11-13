@@ -71,6 +71,7 @@ public class PaymentServiceImpl implements PaymentService {
         // CardInfo 저장
         CardInfo savedCard = cardInfoService.saveCardInfo(requestDTO.getCard());
         if (savedCard == null) {
+            log.error("자동 결제 등록중 카드 등록실패 ");
             throw new RuntimeException("카드 정보 저장 실패");
         }
         log.info("Saved CardInfo : {}", savedCard);
@@ -83,10 +84,11 @@ public class PaymentServiceImpl implements PaymentService {
 
         Mileage mileageEntity = mileageService.autoState(dto, savedCard);
 
-        log.info("Saved mileageEntity : {}", mileageEntity);
+        log.info("자동 결제로 변경된 mileageEntity : {}", mileageEntity);
 
 
         if (mileageEntity == null) {
+            log.error("자동 결제 등록중 변경된 마일리지 엔터티가 없음");
             throw new RuntimeException("마일리지 정보 처리 실패");
         }
 
@@ -98,20 +100,23 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public MileageDTO processUseMileage(MileageDTO requestDTO ,Long userId, int amount , String description ) {
-        //마일리지 내역 조회
+        //1. 마일리지 존재 조회
         Mileage mileage = mileageService.findByDongHoentity(requestDTO.getDong(),requestDTO.getHo());
         if (mileage == null) {
             log.error("결제 도중 마일리지가 없음 = 마일리지 부족과 같은 상태");
             throw new RuntimeException("마일리지가 없습니다.");
         }
-        //마일리지 금액 조회
-        // 잔액이 충분하지 않은 경우 (자동 충전 여부에 따라 처리 분기)
+        //2. 마일리지 금액 조회
+        // -> 잔액이 충분하지 않은 경우 (자동 충전 여부에 따라 처리 분기)
         if (mileage.getPrice() < amount) {
+            // 2-1 : 수동결제 & 잔액 부족 => Exception
             if (!mileage.isAutopay()) {
                 log.error("잔액 부족: 현재 잔액 = {}, 필요한 금액 = {}", mileage.getPrice(), amount);
                 throw new RuntimeException("금액이 부족합니다.");
+            // 2-2 : 자동결제 & 잔액 부족 => 충전후 사용
             } else {
                 log.info("자동 충전 요망: 현재 잔액 = {}, 필요한 금액 = {}", mileage.getPrice(), amount);
+                //2-2-1. 부족금액 계산을 통해 충전할 금액 계산.
                 int requiredAmount = amount - mileage.getPrice(); // 부족한 금액 계산
                 int topUpAmount = ((requiredAmount + 9999) / 10000) * 10000; // 10,000원 단위로 올림
                 //ex requiredAmount(1일 경우)
@@ -126,31 +131,34 @@ public class PaymentServiceImpl implements PaymentService {
                 // -> 2 * 10000 = 20000
                 // -> topUpAmount = 20000
 
-                //// Mileage 업데이트
+                //2-2-2. Mileage 금액 증가 업데이트
                 mileage = mileageService.duplicate(requestDTO, topUpAmount); //금액 충전 후 저장
-                // MileageHistory 내역 저장
+                //2-2-3. MileageHistory 내역 저장
                 mileagehistoryService.savehistory(mileage,userId, topUpAmount,
                         "+","자동결제 결제로 인한 마일리지 충전: " + topUpAmount + "원");
-                // PaymentHistory 저장
+                //2-2-4.PaymentHistory 저장
                 PaymentHistory pay = PaymentHistory.builder()
                         .ho(mileage.getHo())
                         .dong(mileage.getDong())
-                        .price(topUpAmount)
+                        .price(topUpAmount)//결제금액은 충전된 금액
                         .uno(mileage.getCardInfo().getUser().getUno())
+                        //해당 사용자가 아닌 마일리지 card의 사용자 정보
                         .cardId(mileage.getCardInfo().getCardId())
+                        // 해당 사용자의 card가 아닌 마일리지 card의 사용자 정보
                         .timestamp(LocalDateTime.now())
                         .build();
                 paymentHistoryService.savePaymentHistoryEntity(pay);
             }
         }
 
-        //마일리지 차감
+        //3. 잔액 부족의 케이스를 제외하고 마일리지 충전이 완료됬다면,
+        //인자만큼의 금액을 마일리지에서 차감 및 저장
         mileage.setPrice(mileage.getPrice()-amount);
-        //마일리지 저장
         mileage = mileageService.saveEntity(mileage);
 
 
-        //마일리지 사용 내역 : MileageHistory 내역 저장
+        //4. 마일리지 사용 내역 : MileageHistory 내역 저장
+        //인자로의 사용한 유저 및 금액 , 이력을 위한 문구 , 마일리지 entity를 활용하여
         mileagehistoryService.savehistory(mileage,userId,amount,"-",description);
 
         return mileageService.getDTO(mileage);

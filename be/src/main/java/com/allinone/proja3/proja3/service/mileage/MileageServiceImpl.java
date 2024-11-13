@@ -105,23 +105,29 @@ public class MileageServiceImpl implements MileageService {
         return mileageRepository.save(entity);
     }
 
-    //수동 충전 로직
+    //수동 충전 로직 사용 , 결제시 자동결제될때 추가적으로 사용됨.
     public Mileage duplicate(MileageDTO dto , int paymetAmount ) {
         Mileage entity =findByDongHoentity(dto.getDong(), dto.getHo());
         CardInfo cardInfo = cardInfoRepository.findById(dto.getCardId()).orElse(null);
 
+        //1. 해당 마일리지가 있으면 충전된 금액을 추가
+        //결제시 자동결제될때는 마일리지가 있는 상황이기 때문에 else로 빠지지 않음.
         if(entity != null) {
             entity.setPrice(entity.getPrice()+paymetAmount);
+        //2. 해당 마일리지가 없으면 충전된 금액을 담아 새로 생성
         }else{
             entity = Mileage.builder()
                     .dong(dto.getDong())
                     .ho(dto.getHo())
                     .state(true)
                     .cardInfo(cardInfo)
+                    // 수동 충전 :이부분은 카드를 만들고나면 , 마일리지 DTO에 card를 set해서 보내기 때문에
+                    //해당하는 카드를 꺼낼 수 있음.
                     .autopay(dto.isAutopay())
                     .price(paymetAmount)
                     .build();
         }
+        //3. 저장된 엔터티 반환
         return mileageRepository.save(entity);
     }
 
