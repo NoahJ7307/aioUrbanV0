@@ -9,14 +9,14 @@ const GymPage = () => {
         navigate('/facilities/gym/list');
     }, [navigate]);
     const handleClickReserve = useCallback(() => {
-        navigate('/facilities/gym/reserve');
+        navigate('/facilities/gym/signup');
     }, [navigate]);
-    // const handleClickModify = useCallback(() => {
-    //     navigate('/facilities/gym/modify');
+    const handleClickModify = useCallback(() => {
+        navigate('/facilities/gym/membershipState');
+    }, [navigate]);
+    // const handleClickCancel = useCallback(() => {
+    //     navigate('/facilities/gym/cancel');
     // }, [navigate]);
-    const handleClickCancel = useCallback(() => {
-        navigate('/facilities/gym/cancel');
-    }, [navigate]);
 
 
 
@@ -33,12 +33,12 @@ const GymPage = () => {
                 <li>
                     <button className="button" onClick={handleClickReserve}>이용권 등록 </button>
                 </li>
-                {/* <li>
-                    <button className="button" onClick={handleClickModify}>이용권 변경</button>
-                </li> */}
                 <li>
-                    <button className="button" onClick={handleClickCancel}>이용권 취소</button>
+                    <button className="button" onClick={handleClickModify}>이용권 변경</button>
                 </li>
+                {/* <li>
+                    <button className="button" onClick={handleClickCancel}>이용권 취소</button>
+                </li> */}
 
             </ul>
             <h1>Gym Facilities</h1>

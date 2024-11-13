@@ -16,10 +16,8 @@ const GolfPage = () => {
     }, [navigate]);
     const handleClickModify = useCallback(() => {
         navigate('/facilities/golf/modify');
-    }, [navigate]);
-    // const handleClickCancel = useCallback(() => {
-    //     navigate('/facilities/golf/cancel');
-    // }, [navigate]);
+    }, [navigate]); //나중에 마이페이지 구현후 링크 연동 
+
 
 
     return (
@@ -33,11 +31,8 @@ const GolfPage = () => {
                 <li>
                     <button className="button" onClick={handleClickReserve}>예약 등록 </button>
                 </li>
-                {/* <li>
-                    <button className="button" onClick={handleClickUserList}>나의 예약 확인</button>
-                </li> */}
                 <li>
-                    <button className="button" onClick={handleClickModify}>예약 변경</button>
+                    <button className="button" onClick={handleClickModify}>나의 예약 확인</button>
                 </li>
             
             </ul>
