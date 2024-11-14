@@ -1,5 +1,5 @@
 import InfoMainComponents from '../../components/community/info/InfoMainComponents';
-import InfoMainPage from '../../pages/community/info/InfoMainPage';
+import UnifiedMapComponent from '../../components/community/info/InfoMainComponents';
 import InfoPage from '../../pages/community/info/InfoPage';
 
 
@@ -11,7 +11,7 @@ const infoRouter = [
         children: [
             {
                 path: "jobs",
-                element: <InfoMainPage />
+                element: <InfoMainComponents />
             },
         ]
     },

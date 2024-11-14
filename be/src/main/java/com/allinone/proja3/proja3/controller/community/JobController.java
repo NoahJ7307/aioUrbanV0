@@ -1,35 +1,29 @@
 package com.allinone.proja3.proja3.controller.community;
 
-
 import com.allinone.proja3.proja3.dto.community.JobDTO;
 import com.allinone.proja3.proja3.service.community.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/communities/info")
+@CrossOrigin("http://localhost:3000")
 public class JobController {
 
     @Autowired
     private JobService jobService;
 
-    // 채용공고 리스트 조회
-    @GetMapping("/jobs")
-    public List<JobDTO> getAllJobs() {
-        return jobService.getAllJobs();
+    // Saramin API에서 채용공고 데이터를 조회하고 DB에 저장
+    @GetMapping("/jobs/search/{keyword}")
+    public ResponseEntity<List<JobDTO>> getJobsFromSaramin(@PathVariable String keyword) {
+        System.out.println("Saramin 검색 키워드: " + keyword);
+        List<JobDTO> jobData = jobService.fetchJobsFromSaraminAndSave(keyword);
+        System.out.println("조회된 채용공고 데이터: " + jobData);
+        return ResponseEntity.ok(jobData);
     }
 
-    // 채용공고 ID로 조회
-    @GetMapping("/jobs/{id}")
-    public JobDTO getJobById(@PathVariable Long id) {
-        return jobService.getJobById(id);
-    }
-
-    // 채용공고 생성
-    @PostMapping("/jobs")
-    public JobDTO createJob(@RequestBody JobDTO jobDTO) {
-        return jobService.createJob(jobDTO);
-    }
 }

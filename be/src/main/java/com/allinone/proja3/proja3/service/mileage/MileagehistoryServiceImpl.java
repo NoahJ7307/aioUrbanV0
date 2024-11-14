@@ -36,11 +36,12 @@ public class MileagehistoryServiceImpl implements MileagehistoryService {
     }
     private MileageHistoryDTO getDTO(MileageHistory entity) {
         Optional<User> user = userRepository.findById(entity.getUno());
+        log.info(user);
         return MileageHistoryDTO.builder()
                 .uno(entity.getUno())
                 .mileageId(entity.getMileage().getMileageId())
                 .type(entity.getType())
-                .name(user.isPresent()?user.get().getUserName() : null)
+                .name(user.isPresent()?user.get().getUserName() : "탈퇴 유저")
                 .amount(entity.getAmount())
                 .description(entity.getDescription())
                 .timestamp(entity.getId().getTimestamp())

@@ -184,28 +184,28 @@ public class ServiceTestsyurim {
         int amount= 8500;
         CardInfoDTO cardInfoDTO = CardInfoDTO.builder()
                 .cardExpiry("123")
-                .uno(53L)
+                .uno(52L)
                 .encryptedCardNumber("1233456778941234")
                 .build();
         Mileage mileage = Mileage.builder()
                 .autopay(false)
-                .ho("105")
-                .dong("101")
+                .ho("1")
+                .dong("1")
                 .price(amount)
                 .build();
         ManualRequestDTO manualRequestDTO = ManualRequestDTO.builder()
                 .card(cardInfoDTO)
                 .mileage(mileageService.getDTO(mileage))
-                .paymentAmount(200000)
+                .paymentAmount(500000)
                 .build();
         paymentService.processManualPayment(manualRequestDTO);
         MileageHistoryDTO mileageHistoryDTO = MileageHistoryDTO.builder()
-                .uno(53L)
+                .uno(52L)
                 .timestamp(LocalDateTime.now())
                 .amount(amount)
                 .description("헬스장 일일이용권이 결제되었습니다.")
                 .build();
-        paymentService.processUseMileage(mileageService.getDTO(mileage), 53L, amount, "헬스장 일일이용권이 결제되었습니다." );
+        paymentService.processUseMileage("1","1", 52L, amount, "헬스장 일일이용권이 결제되었습니다." );
     }
 
 

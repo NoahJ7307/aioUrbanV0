@@ -34,12 +34,10 @@ public class GymMembership {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @Column(nullable = true)
-    private LocalDate dayPassDate;
+//    @Column(nullable = true)
+//    private LocalDate dayPassDate;
 
-
-
-//    private boolean isOnHold = false; // 홀딩상태 관리하는 변수
+    private boolean isOnHold = false; // 홀딩상태 관리하는 변수
 //    private long remainingDaysBeforeHold = 0;
 
 

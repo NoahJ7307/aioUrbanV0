@@ -26,8 +26,8 @@ public class RoleTests {
     @Test
     public void insertRolesRoot() {
         User userRoot = User.builder()
-                .userName("root")
-                .phone("root")
+                .userName("root2")
+                .phone("root2")
                 .pw(passwordEncoder.encode("1"))
                 .build();
         userRoot.addRole(UserRole.ROOT);
