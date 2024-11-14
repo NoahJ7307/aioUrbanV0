@@ -17,5 +17,5 @@ public interface MileageService {
     Mileage autoState(MileageDTO dto, CardInfo card);
     // 자동 결제 변경 로직
     MileageDTO fatchAutoPay(MileageDTO dto);
-    void deleteMileage(Mileage mileage);
+    void deleteMileageActive(String dong , String ho);
 }

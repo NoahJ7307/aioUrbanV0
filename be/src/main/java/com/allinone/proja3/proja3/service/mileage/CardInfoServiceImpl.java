@@ -8,8 +8,10 @@ import com.allinone.proja3.proja3.repository.mileage.CardInfoRepository;
 import com.allinone.proja3.proja3.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Log4j2
@@ -19,6 +21,8 @@ public class CardInfoServiceImpl implements CardInfoService {
 
     private final CardInfoRepository cardInfoRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     private CardInfoDTO getDTO(CardInfo entity) {
         CardInfoDTO dto = CardInfoDTO.builder()
@@ -53,17 +57,37 @@ public class CardInfoServiceImpl implements CardInfoService {
         return card.map(this::getDTO).orElse(null);
     }
 
+    //수동 결제 및 자동결제 중 제일먼저 하는 로직.
+    //카드번호를 업데이트할거야.
+    //카드가 없으면 카드를 만들고 , 있으면
     @Override
     public CardInfo saveCardInfo(CardInfoDTO dto) {
+        //CardDTO의 uno를 통해 카드가 있는지 찾는다.
         CardInfoDTO selectDTO = findByUno(dto.getUno());
+        //카드가 있다면 dto에 없는 정보인 cardId를 세팅마치고
         if (selectDTO != null) {
             dto.setCardId(selectDTO.getCardId());
         }
+
+        //업데이트 또는 저장 !
         return cardInfoRepository.save(getEntity(dto));
     }
 
     @Override
     public void deleteCardInfo(CardInfoDTO dto) {
-        cardInfoRepository.delete(getEntity(dto));
+        cardInfoRepository.delete(getEntity(dto))
+        ;
+    }
+
+    //카드 정보 삭제 : 존재하면 삭제하고 아니면 삭제안함. String으로 결과 전송
+    @Override
+    public String deleteCardByUserId(Long uno){
+        Optional<CardInfo> card = cardInfoRepository.findByUserUno(uno);
+        if(card.isPresent()) {
+            cardInfoRepository.delete(card.get());
+            return "Card 가 존재 deleted 완료";
+        }else{
+            return "Card 가 존재하지않아 , 삭제되지 않았습니다.";
+        }
     }
 }

@@ -37,7 +37,11 @@ const MenuComponent = () => {
                                 <Link to={'/join'}>회원가입</Link>
                             </div>
                         </>
-                        : <div className='flexEnd marginRight0_5'>
+                        :
+                        <div className='flexEnd marginRight0_5'>
+                            <div className='flexEnd marginRight0_5'>
+                                <Link to={'/myPage'}>마이페이지</Link>
+                            </div>
                             <button onClick={handleClickLogout}>로그아웃</button>
                         </div>
                     }
@@ -56,7 +60,7 @@ const MenuComponent = () => {
                 <li><Link to={'/parking'}>주차관리</Link></li>
                 {isLogin ?
                     <>
-                        <li><Link to={'/mileage'}>마일리지결제</Link></li>
+                        <li><Link to={'/mileage/manual'}>마일리지결제</Link></li>
                         {/* <li><Link to={'/'}>LoginTest</Link></li> */}
                     </>
                     : <></>

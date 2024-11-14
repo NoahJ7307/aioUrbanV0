@@ -158,6 +158,7 @@ const VisitPage = () => {
 
   const handleClickClear = () => {
     navigate({ pathname: '/parking/visit' })
+    window.location.reload()
   }
   // --------------------
   return (

@@ -1,0 +1,21 @@
+.mileageMypage {
+    margin: auto;
+}
+
+.mileageLinkNav {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.mileageLinkNav a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    border: 0.2px solid #DEE5D4;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    gap: 0.5rem;
+    padding: 0.1rem 0.3rem;
+}

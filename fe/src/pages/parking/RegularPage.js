@@ -157,6 +157,7 @@ const RegularPage = () => {
 
   const handleClickClear = () => {
     navigate({ pathname: '/parking/regular' })
+    window.location.reload()
   }
   // --------------------
   return (
