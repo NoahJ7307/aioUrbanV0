@@ -62,20 +62,6 @@ export const superAdminRecovery = async (pageParam) => {
     // const res = await axios.get(`${host}/list`, config)
     return res.data
 }
-export const superAdminHardDelete = async (pageParam) => {
-    const { page, size } = pageParam
-    const token = localStorage.getItem("token")
-    const config = {
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-        },
-        params: { page, size },
-    }
-    const res = null
-    // const res = await axios.get(`${host}/list`, config)
-    return res.data
-}
 
 export const addRole = async (uno, roleData) => {
     const token = localStorage.getItem("token")
@@ -86,9 +72,21 @@ export const addRole = async (uno, roleData) => {
         },
     }
     const body = {
-        uno : uno,
-        role : roleData,
+        uno: uno,
+        role: roleData,
     }
     const res = await axios.post(`${host}/addRole`, body, config)
+    return res.data
+}
+
+export const superAdminHardDelete = async (checkedUno) => {
+    const token = localStorage.getItem("token")
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+    }
+    const res = await axios.post(`${host}/delete`, checkedUno, config)
     return res.data
 }

@@ -1,7 +1,7 @@
 import { Children, lazy, Suspense } from "react"
 import { Navigate } from "react-router-dom"
 
-const userRouter = () => {
+const superAdminRouter = () => {
 
     const Loading = <div>....</div>
     const UserManage = lazy(() => import("../../pages/superAdmin/UserManagePage"))
@@ -9,6 +9,10 @@ const userRouter = () => {
     const EntryTest = lazy(() => import("../../pages/superAdmin/EntryTestPage"))
 
     return [
+        {
+            path: "",
+            element: <Navigate replace to="/superAdmin/userManage" />
+        },
         {
             path: "userManage",
             element: <Suspense fallback={Loading}><UserManage /></Suspense>,
@@ -23,4 +27,4 @@ const userRouter = () => {
         },
     ]
 }
-export default userRouter
+export default superAdminRouter

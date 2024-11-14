@@ -65,6 +65,7 @@ const GolfList = ({ page, size }) => {
         });
     };
 
+    
     const fetchGolfReservations = async () => {
         try {
             const data = await listGolf({ page, size });

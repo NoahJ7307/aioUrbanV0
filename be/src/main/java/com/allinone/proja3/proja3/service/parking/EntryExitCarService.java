@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface EntryExitCarService {
     Long entry(EntryExitCarDTO entryExitCarDTO);
     void exit(EntryExitCarDTO entryExitCarDTO);
+    void remove(Long eeno);
     PageResponseDTO<EntryExitCarDTO> getList(PageRequestDTO pageRequestDTO);
     PageResponseDTO<EntryExitCarDTO> getUserList(PageRequestDTO pageRequestDTO, HouseholdDTO householdDTO);
     PageResponseDTO<EntryExitCarDTO> getSearchList(PageRequestDTO pageRequestDTO, EntryExitSearchDataDTO entryExitSearchDataDTO);

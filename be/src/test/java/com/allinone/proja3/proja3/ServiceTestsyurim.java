@@ -2,17 +2,25 @@ package com.allinone.proja3.proja3;
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.facilities.StudyDTO;
+import com.allinone.proja3.proja3.dto.mileage.CardInfoDTO;
+import com.allinone.proja3.proja3.dto.mileage.ManualRequestDTO;
+import com.allinone.proja3.proja3.dto.mileage.MileageDTO;
+import com.allinone.proja3.proja3.dto.mileage.MileageHistoryDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.model.facilities.Golf;
 import com.allinone.proja3.proja3.model.facilities.Gym;
+import com.allinone.proja3.proja3.model.facilities.MembershipType;
 import com.allinone.proja3.proja3.model.facilities.ProgramState;
+import com.allinone.proja3.proja3.model.mileage.Mileage;
 import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.repository.facilities.GymRepository;
 import com.allinone.proja3.proja3.service.UserService;
 import com.allinone.proja3.proja3.service.facilities.GolfService;
 import com.allinone.proja3.proja3.service.facilities.GymService;
 import com.allinone.proja3.proja3.service.facilities.StudyService;
+import com.allinone.proja3.proja3.service.mileage.MileageService;
+import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +51,11 @@ public class ServiceTestsyurim {
     private UserRepository repository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private PaymentService paymentService;
+    @Autowired
+    private  MileageService mileageService;
 
 //    @Test
 //    public void insertTest() {
@@ -164,6 +177,35 @@ public class ServiceTestsyurim {
                 .build();
         userAdmin.addRole(UserRole.ADMIN);
         repository.save(userAdmin);
+    }
+
+    @Test
+    public void pro() {
+        int amount= 8500;
+        CardInfoDTO cardInfoDTO = CardInfoDTO.builder()
+                .cardExpiry("123")
+                .uno(52L)
+                .encryptedCardNumber("1233456778941234")
+                .build();
+        Mileage mileage = Mileage.builder()
+                .autopay(false)
+                .ho("1")
+                .dong("1")
+                .price(amount)
+                .build();
+        ManualRequestDTO manualRequestDTO = ManualRequestDTO.builder()
+                .card(cardInfoDTO)
+                .mileage(mileageService.getDTO(mileage))
+                .paymentAmount(500000)
+                .build();
+        paymentService.processManualPayment(manualRequestDTO);
+        MileageHistoryDTO mileageHistoryDTO = MileageHistoryDTO.builder()
+                .uno(52L)
+                .timestamp(LocalDateTime.now())
+                .amount(amount)
+                .description("헬스장 일일이용권이 결제되었습니다.")
+                .build();
+        paymentService.processUseMileage("1","1", 52L, amount, "헬스장 일일이용권이 결제되었습니다." );
     }
 
 

@@ -8,6 +8,7 @@ import com.allinone.proja3.proja3.dto.user.UserSearchDataDTO;
 import com.allinone.proja3.proja3.dto.user.UserSearchReqDTO;
 import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.service.UserService;
+import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +20,21 @@ import java.util.Map;
 @RequestMapping("/api/superAdmin")
 public class SuperAdminController {
     private final UserService userService;
+    private final PaymentService paymentService;
 
     @GetMapping("/list")
     public PageResponseDTO<UserDTO> getAllList(PageRequestDTO pageRequestDTO){
         System.out.println("superAdmin getList controller : "+ pageRequestDTO);
         return userService.getAllList(pageRequestDTO);
+    }
+
+    @PostMapping("/search")
+    public PageResponseDTO<UserDTO> getAllSearchList(@RequestBody UserSearchReqDTO userSearchReqDTO){
+        PageRequestDTO pageRequestDTO = userSearchReqDTO.getPageRequestDTO();
+        UserSearchDataDTO userSearchDataDTO = userSearchReqDTO.getUserSearchDataDTO();
+        System.out.println("User getSearchList controller P : "+pageRequestDTO);
+        System.out.println("User getSearchList controller U : "+userSearchDataDTO);
+        return userService.getAllSearchList(pageRequestDTO,userSearchDataDTO);
     }
 
     @PostMapping("/addRole")
@@ -44,5 +55,10 @@ public class SuperAdminController {
         System.out.println("superAdmin addRole controller U : "+ uno);
         System.out.println("superAdmin addRole controller R : "+ roleStr);
         return userService.addRole(uno, role);
+    }
+
+    @PostMapping("/delete")
+    public void deleteChecked(@RequestBody List<Long> checkedUno){
+        checkedUno.forEach(userService::hardRemove);
     }
 }

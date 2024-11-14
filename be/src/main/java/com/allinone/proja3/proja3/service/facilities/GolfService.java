@@ -28,7 +28,7 @@ public interface GolfService {
     void remove(Long reservationId);
 //    void findGolfBydelFlag(Long reservationId);
     public PageResponseDTO<GolfDTO> getNonDeletedReservations(PageRequestDTO pageRequestDTO);
-
+    public String validateReservationDetails(GolfDTO golfDTO);
     //==========사용자의 uno, 이름, phone 불러오기================
     GolfDTO findDataByUno(Long uno); //list<GolfDTO> 에서 Golf로 변경
 

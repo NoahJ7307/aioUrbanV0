@@ -28,6 +28,7 @@ const ListPage = () => {
     const { checkedUno, setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
     const [searchData, setSearchData] = useState(initStateSearchData)
     const [pageServerData, setPageServerData] = useState(initStateServerData)
+    const [inputTitle, setInputTitle] = useState('')
     const location = useLocation()
 
     const handleClickModify = useCallback(() => {
@@ -54,6 +55,8 @@ const ListPage = () => {
         setSearchData(prevData => ({ ...prevData, searchValue: e.target.value }))
     }
     const handleChangeSearchCategory = (e) => {
+        // select option(category) title 가져와서 input(value) placeholder 에 설정
+        setInputTitle(e.target.options[e.target.selectedIndex].getAttribute('title'))
         setSearchData(prevData => ({ ...prevData, searchCategory: e.target.value }))
     }
     const handleClickSearch = () => {
@@ -105,7 +108,8 @@ const ListPage = () => {
     }, [location.search])
 
     const handleClickClear = () => {
-        setPageServerData(initStateServerData)
+        navigate({ pathname: '/user/list' })
+        window.location.reload()
     }
     // --------------------
 
@@ -128,18 +132,34 @@ const ListPage = () => {
                         name='searchCategory'
                         onChange={handleChangeSearchCategory}>
                         <option value=''>검색 필터</option>
-                        <option value="dong-ho">동-호</option>
-                        <option value="dong">동</option>
-                        <option value="ho">호</option>
-                        <option value="name">이름</option>
-                        <option value="phone">전화번호</option>
+                        <option value='dong-ho' title='예시) 101-101'>동-호</option>
+                        <option value='dong' title='예시) 101'>동</option>
+                        <option value='ho' title='예시) 101'>호</option>
+                        <option value="name" title='예시) 김어반'>이름</option>
+                        <option value="phone" title='예시) 01012345678'>전화번호</option>
+                        <option value="role">권한</option>
                     </select>
                 </li>
                 <li>
-                    <input className=''
-                        name='searchValue'
-                        onChange={handleChangeSearchValue}
-                    />
+                    {searchData.searchCategory === 'role' ?
+                        <div>
+                            <select className=''
+                                name='searchValue'
+                                onChange={handleChangeSearchValue}>
+                                <option value=''>권한선택</option>
+                                <option value='PENDING'>승인대기</option>
+                                <option value='USER'>입주민</option>
+                                <option value='ADMIN'>관리자</option>
+                                <option value='ROOT'>ROOT</option>
+                            </select>
+                        </div>
+                        :
+                        <input className=''
+                            name='searchValue'
+                            placeholder={inputTitle}
+                            onChange={handleChangeSearchValue}
+                        />
+                    }
                 </li>
                 <li>
                     <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>

@@ -16,8 +16,10 @@ public interface UserService {
     UserDTO getOne(Long uno);
     void putOne(UserDTO userDTO);
     void remove(Long uno);
+    void hardRemove(Long uno);
     boolean approvalStatus(Long uno);
     Long addRole(Long uno, UserRole role);
     void clearRole(Long uno);
     PageResponseDTO<UserDTO> getSearchList(PageRequestDTO pageRequestDTO, UserSearchDataDTO userSearchData);
+    PageResponseDTO<UserDTO> getAllSearchList(PageRequestDTO pageRequestDTO, UserSearchDataDTO userSearchData);
 }

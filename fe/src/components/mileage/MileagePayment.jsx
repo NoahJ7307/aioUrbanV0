@@ -15,25 +15,46 @@ const MileagePayment = () => {
     const [click, setClick] = useState(true);
     const [money, setMoney] = useState(0);
     const [mileage, setMileage] = useState({});
+    const [isAutopay, setIsAutopay] = useState(mileage && mileage.autopay ? mileage.autopay : false);
     useEffect(() => {
-        const dong = JSON.parse(localStorage.getItem("dong"));
-        const ho = JSON.parse(localStorage.getItem("ho"));
+        const dong = localStorage.getItem("dong");
+        const ho = localStorage.getItem("ho");
 
-        const params = { dong, ho };
+        // JSON 형식인지 확인한 후 JSON 파싱 시도
+        const isJSON = (str) => {
+            try {
+                JSON.parse(str);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        };
 
-        apiCall('/mileage/getmileage', 'GET', params)
-            .then(response => {
-                console.log(response.data);
-                if (response.data != null && !isNaN(response.data.price)) {
-                    setMoney(Number(response.data.price)); // 숫자로 변환
-                    setMileage(response.data);
-                } else {
-                    setMoney(0);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        const parsedDong = dong && dong !== "undefined" && isJSON(dong) ? JSON.parse(dong) : dong;
+        const parsedHo = ho && ho !== "undefined" && isJSON(ho) ? JSON.parse(ho) : ho;
+
+
+        if (parsedDong && parsedHo) {
+            const params = { dong: parsedDong, ho: parsedHo };
+
+            apiCall('/mileage/getmileage', 'GET', params)
+                .then(response => {
+                    console.log(response.data);
+                    if (response.data != null && !isNaN(response.data.price)) {
+                        setMoney(Number(response.data.price)); // 숫자로 변환
+                        setMileage(response.data);
+                        setIsAutopay(response.data.autopay);
+                    } else {
+                        setMoney(0);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        } else {
+            setMoney(0);
+        }
+
     }, []);
 
     console.log(`money`, money);
@@ -58,6 +79,7 @@ const MileagePayment = () => {
             <div className='balace'>
                 현재 잔액 : <span className='redpoint'>{formatNumber(+money)}</span> 원
             </div>
+            <div className='balace'>{isAutopay ? `현재 자동 결제 시스템이 활성화된 상태입니다.` : `현재 자동 결제 시스템이 비활성화된 상태입니다.`} </div>
             <nav className='mileageLink'>
                 <NavLink to="manual"
                     onClick={() => setClick(true)}>
@@ -74,8 +96,8 @@ const MileagePayment = () => {
 
 
             <Routes>
-                <Route path="manual" element={<ManualPayment setMoney={setMoney} />} />
-                <Route path="auto" element={<AutomaticPayment setMoney={setMoney} />} />
+                <Route path="manual" element={<ManualPayment setMoney={setMoney} sendMileage={mileage} />} />
+                <Route path="auto" element={<AutomaticPayment sendMileage={mileage} isAutopay={isAutopay} setIsAutopay={setIsAutopay} />} />
             </Routes>
         </div>
     )

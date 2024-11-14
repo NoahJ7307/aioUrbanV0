@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
                 pageRequestDTO.getSize(),
                 Sort.by("uno").descending());
 
-        Page<User> result = userRepository.notPendingList(UserRole.PENDING, pageable);// PENDING 이 아닌 유저만 필터링
+        Page<User> result = userRepository.findByUserRoleListNotContainingAndDelFlagFalse(UserRole.PENDING, pageable);// PENDING 이 아닌 유저만 필터링
 
         // entityToDto를 사용하여 엔티티 -> DTO 변환
         List<UserDTO> dtoList = result.getContent().stream()
@@ -97,12 +97,73 @@ public class UserServiceImpl implements UserService {
                 String[] value = userSearchDataDTO.getSearchValue().split("-");
                 String dong = value[0];
                 String ho = value[1];
-                result = userRepository.findByDongHo(dong, ho, pageable);
+                result = userRepository.findByDongContainingAndHoContainingAndDelFlagFalse(dong, ho, pageable);
             } break;
-            case "dong": result = userRepository.findByDong(userSearchDataDTO.getSearchValue(), pageable); break;
-            case "ho": result = userRepository.findByHo(userSearchDataDTO.getSearchValue(), pageable); break;
-            case "name": result = userRepository.findByName(userSearchDataDTO.getSearchValue(), pageable); break;
-            case "phone": result = userRepository.findByPhone(userSearchDataDTO.getSearchValue(), pageable); break;
+            case "dong": result = userRepository.findByDongContainingAndDelFlagFalse(userSearchDataDTO.getSearchValue(), pageable); break;
+            case "ho": result = userRepository.findByHoContainingAndDelFlagFalse(userSearchDataDTO.getSearchValue(), pageable); break;
+            case "name": result = userRepository.findByUserNameContainingAndDelFlagFalse(userSearchDataDTO.getSearchValue(), pageable); break;
+            case "phone": result = userRepository.findByPhoneContainingAndDelFlagFalse(userSearchDataDTO.getSearchValue(), pageable); break;
+            case "role": {
+                UserRole userRole = switch (userSearchDataDTO.getSearchValue()) {
+                    case "PENDING" -> UserRole.PENDING;
+                    case "USER" -> UserRole.USER;
+                    case "ADMIN" -> UserRole.ADMIN;
+                    case "ROOT" -> UserRole.ROOT;
+                    default -> null;
+                };
+                result = userRepository.findByUserRoleListContainingAndDelFlagFalse(userRole, pageable); break;
+            }
+            default: result = Page.empty(pageable);
+        }
+
+        // entityToDto를 사용하여 엔티티 -> DTO 변환
+        List<UserDTO> dtoList = result.getContent().stream()
+                .map(this::entityToDto)  // entityToDto 메서드를 사용하여 변환
+                .collect(Collectors.toList());
+
+        long totalCount = result.getTotalElements();
+        return PageResponseDTO.<UserDTO>withAll()
+                .dtoList(dtoList)
+                .pageRequestDTO(pageRequestDTO)
+                .totalCount(totalCount)
+                .build();
+    }
+
+    @Override
+    public PageResponseDTO<UserDTO> getAllSearchList(PageRequestDTO pageRequestDTO, UserSearchDataDTO userSearchDataDTO) {
+        System.out.println("getSearchList service");
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("uno").descending());
+
+        // 검색 필터
+        Page<User> result;
+        switch (userSearchDataDTO.getSearchCategory()){
+            case "dong-ho": {
+                String[] value = userSearchDataDTO.getSearchValue().split("-");
+                String dong = value[0];
+                String ho = value[1];
+                result = userRepository.findByDongContainingAndHoContaining(dong, ho, pageable);
+            } break;
+            case "dong": result = userRepository.findByDongContaining(userSearchDataDTO.getSearchValue(), pageable); break;
+            case "ho": result = userRepository.findByHoContaining(userSearchDataDTO.getSearchValue(), pageable); break;
+            case "name": result = userRepository.findByUserNameContaining(userSearchDataDTO.getSearchValue(), pageable); break;
+            case "phone": result = userRepository.findByPhoneContaining(userSearchDataDTO.getSearchValue(), pageable); break;
+            case "delFlag": {
+                boolean delFlag = userSearchDataDTO.getSearchValue().equals("true");
+                result = userRepository.findByDelFlag(delFlag, pageable);
+            } break;
+            case "role": {
+                UserRole userRole = switch (userSearchDataDTO.getSearchValue()) {
+                    case "PENDING" -> UserRole.PENDING;
+                    case "USER" -> UserRole.USER;
+                    case "ADMIN" -> UserRole.ADMIN;
+                    case "ROOT" -> UserRole.ROOT;
+                    default -> null;
+                };
+                result = userRepository.findByUserRoleListContaining(userRole, pageable); break;
+            }
             default: result = Page.empty(pageable);
         }
 
@@ -127,7 +188,7 @@ public class UserServiceImpl implements UserService {
                 pageRequestDTO.getSize(),
                 Sort.by("uno").descending());
 
-        Page<User> result = userRepository.pendingList(UserRole.PENDING, pageable); // PENDING 유저만 필터링
+        Page<User> result = userRepository.findByUserRoleListContainingAndDelFlagFalse(UserRole.PENDING, pageable); // PENDING 유저만 필터링
 
         // entityToDto를 사용하여 엔티티 -> DTO 변환
         List<UserDTO> dtoList = result.getContent().stream()
@@ -164,6 +225,12 @@ public class UserServiceImpl implements UserService {
     public void remove(Long uno) {
         System.out.println("remove service : "+uno);
         userRepository.updateToDelete(uno, true);
+    }
+
+    @Override
+    public void hardRemove(Long uno) {
+        System.out.println("hard remove service : "+uno);
+        userRepository.deleteById(uno);
     }
 
     @Override

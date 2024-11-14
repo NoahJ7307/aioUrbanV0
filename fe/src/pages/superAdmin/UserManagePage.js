@@ -26,6 +26,7 @@ const UserManagePage = () => {
     const { checkedUno, setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
     const [searchData, setSearchData] = useState(initStateSearchData)
     const [pageServerData, setPageServerData] = useState(initStateServerData)
+    const [inputTitle, setInputTitle] = useState('')
     const location = useLocation()
 
     const handleClickAddRole = useCallback(() => {
@@ -38,23 +39,13 @@ const UserManagePage = () => {
         }
     }, [checkedUno, navigate])
 
-    // const handleClickRecovery = async () => {
-    //     if (checkedUno.length > 0) {
-    //         await superAdminRecovery(checkedUno)
-    //         navigate({ pathname: '/superAdmin/userManage' }) // 삭제 후 새로고침 기능 수행
-    //     } else {
-    //         alert("선택된 항목이 없습니다")
-    //         navigate({ pathname: '/superAdmin/userManage' })
-    //     }
-    // }
-
     const handleClickHardDelete = async () => {
         if (checkedUno.length > 0) {
             await superAdminHardDelete(checkedUno)
-            navigate({ pathname: '/superAdmin/userManage' }) // 삭제 후 새로고침 기능 수행
+            navigate({ pathname: '/superAdmin' }) // 삭제 후 새로고침 기능 수행
         } else {
             alert("선택된 항목이 없습니다")
-            navigate({ pathname: '/superAdmin/userManage' })
+            navigate({ pathname: '/superAdmin' })
         }
     }
 
@@ -63,6 +54,8 @@ const UserManagePage = () => {
         setSearchData(prevData => ({ ...prevData, searchValue: e.target.value }))
     }
     const handleChangeSearchCategory = (e) => {
+        // select option(category) title 가져와서 input(value) placeholder 에 설정
+        setInputTitle(e.target.options[e.target.selectedIndex].getAttribute('title'))
         setSearchData(prevData => ({ ...prevData, searchCategory: e.target.value }))
     }
     const handleClickSearch = () => {
@@ -80,7 +73,7 @@ const UserManagePage = () => {
         }
 
         // queryParameter 경로 설정
-        navigate(`/user/list?${searchParams.toString()}`)
+        navigate(`/superAdmin/userManage?${searchParams.toString()}`)
     }
 
     useEffect(() => {
@@ -114,7 +107,8 @@ const UserManagePage = () => {
     }, [location.search])
 
     const handleClickClear = () => {
-        setPageServerData(initStateServerData)
+        navigate({ pathname: '/superAdmin/userManage' })
+        window.location.reload()
     }
     // --------------------
 
@@ -138,18 +132,51 @@ const UserManagePage = () => {
                         name='searchCategory'
                         onChange={handleChangeSearchCategory}>
                         <option value=''>검색 필터</option>
-                        <option value="dong-ho">동-호</option>
-                        <option value="dong">동</option>
-                        <option value="ho">호</option>
-                        <option value="name">이름</option>
-                        <option value="phone">전화번호</option>
+                        <option value='dong-ho' title='예시) 101-101'>동-호</option>
+                        <option value='dong' title='예시) 101'>동</option>
+                        <option value='ho' title='예시) 101'>호</option>
+                        <option value="name" title='예시) 김어반'>이름</option>
+                        <option value="phone" title='예시) 01012345678'>전화번호</option>
+                        <option value="delFlag">삭제여부</option>
+                        <option value="role">권한</option>
                     </select>
                 </li>
                 <li>
-                    <input className=''
-                        name='searchValue'
-                        onChange={handleChangeSearchValue}
-                    />
+                    {(() => {
+                        if (searchData.searchCategory === 'role') {
+                            return (
+                                <div>
+                                    <select className=''
+                                        name='searchValue'
+                                        onChange={handleChangeSearchValue}>
+                                        <option value=''>권한선택</option>
+                                        <option value='PENDING'>승인대기</option>
+                                        <option value='USER'>입주민</option>
+                                        <option value='ADMIN'>관리자</option>
+                                        <option value='ROOT'>ROOT</option>
+                                    </select>
+                                </div>
+                            )
+                        } else if (searchData.searchCategory === 'delFlag') {
+                            return (
+                                <select className=''
+                                    name='searchValue'
+                                    onChange={handleChangeSearchValue}>
+                                    <option value=''>삭제여부</option>
+                                    <option value='false'>삭제되지 않음</option>
+                                    <option value='true'>삭제됨</option>
+                                </select>
+                            )
+                        } else {
+                            return (
+                                <input className=''
+                                    name='searchValue'
+                                    placeholder={inputTitle}
+                                    onChange={handleChangeSearchValue}
+                                />
+                            )
+                        }
+                    })()}
                 </li>
                 <li>
                     <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>

@@ -8,6 +8,7 @@ import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Gym;
 import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.service.facilities.GymService;
+import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -28,6 +29,9 @@ public class GymController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PaymentService paymentService;
+
     //등록
     @PostMapping("/add")
     public ResponseEntity<GymDTO> newProgramPost (@RequestBody Gym gym) {
@@ -46,13 +50,6 @@ public class GymController {
         return  list;
     }
 
-//    @GetMapping("/list")
-//    public PageResponseDTO<GymDTO> getList(PageRequestDTO pageRequestDTO) {
-//        System.out.println("get list controller: " + pageRequestDTO);
-//        PageResponseDTO<GymDTO> list = service.getNonDeletedPrograms(pageRequestDTO);
-//        System.out.println("after service list 120) : " +list);
-//        return  list;
-//    }
 
     //검색
     @GetMapping("/list/search")
@@ -82,15 +79,6 @@ public class GymController {
         // 결과 반환
         return ResponseEntity.ok(pageResponseDTO);
     }
-
-//    @GetMapping("/list/search")
-//    public ResponseEntity<SearchPageResponseDTO<GymDTO>> searchGymPrograms(@ModelAttribute SearchPageRequestDTO searchPageRequestDTO) {
-//        System.out.println("searchpage 1) : " + searchPageRequestDTO);
-//        Pageable pageable = PageRequest.of(searchPageRequestDTO.getPage() -1 , searchPageRequestDTO.getSize(), Sort.by("programId").ascending());
-//        SearchPageResponseDTO<GymDTO> pageResponseDTO = service.searchList(searchPageRequestDTO);
-//        System.out.println("searchpage 2)  : " +pageResponseDTO);
-//        return ResponseEntity.ok(pageResponseDTO);
-//    }
 
 
     //특정 게시물 조회 메서드
@@ -139,6 +127,7 @@ public class GymController {
         else if(response.equals("Done"))   return new ResponseEntity<>("A002",HttpStatus.OK);
         else return new ResponseEntity<>("A003",HttpStatus.OK);
     }
+
     // 대기자 등록
     @PostMapping("/detail/waitlist/{programId}")
     public ResponseEntity<String> registerWaitlist(@PathVariable Long programId, @RequestBody User user) {

@@ -40,10 +40,10 @@ public class GolfServiceImpl implements GolfService {
     public Long register(GolfDTO golfDTO) {
 
 //        // 예약 유효성 검증
-//        String validationMessage = validateReservation(golfDTO.getDate(), golfDTO.getStartTime(), golfDTO.getEndTime(), golfDTO.getTeeBox());
-//        if(!validationMessage.equals("예약가능합니다")) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validationMessage); // 예약이 유효하지 않으면 예외 발생
-//        } //까지 추가됨
+        String validationMessage = validateReservationDetails(golfDTO);
+        if(!"valid".equals(validationMessage)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validationMessage);
+        }
 
 
         Golf golf = dtoToEntity(golfDTO);
@@ -88,7 +88,6 @@ public class GolfServiceImpl implements GolfService {
 //        }
 //        return "예약 가능합니다.";
 //    }
-//
     //중복 예약 확인 메서드 구현
     @Override
     public boolean isTimeAvailable(LocalDate date, LocalTime startTime, LocalTime endTime, int teeBox) {
@@ -97,24 +96,25 @@ public class GolfServiceImpl implements GolfService {
         return existingReservations.isEmpty(); //예약이 없다면 true 반환
     }
     //시간 유효성 체크 로직
-//    @Override
-//    public String  isValidReservation(LocalDate date, LocalTime startTime, LocalTime endTime) {
-//        LocalDate today = LocalDate.now();
-//        LocalTime now = LocalTime.now();
-//
-//        //과거 날짜인지 확인
-//        if(date.isBefore(today)) {
-//            return "과거 날짜는 예약할 수 없습니다.";
-//        }
-//        if(date.equals(today)&& startTime.isBefore(now)) {
-//            return "오늘은 현재 시간 이후에만 예약 가능합니다.";
-//        }
-//        //시작시간이 종료시간과 같거나 이후일 수 없는 로직
-//        if(startTime.isAfter(endTime)||startTime.equals(endTime)) {
-//            return "시작 시간이 종료 시간보다 늦거나 같을 수 없습니다."; // 시간 오류 메시지
-//        }
-//        return "valid"; // 유효한 시간
-//    }
+    @Override
+    public String validateReservationDetails(GolfDTO golfDTO) {
+        LocalDate today = LocalDate.now();
+
+        if(golfDTO.getDate().isBefore(today)) {
+            return "예약 날짜는 오늘 이후여야 합니다. ";
+        }
+        //시작시간이 현재보다 이전인 경우 검사 (오늘 예약에 한해서)
+        if(golfDTO.getDate().isEqual(today)&& golfDTO.getStartTime().isBefore(LocalTime.now())){
+            return  "예약 시작 시간은 현재 시간 이후여야 합니다.";
+        }
+
+        //시작시간이 종료시간보다 이후인 경우검사
+        if(golfDTO.getStartTime().isAfter(golfDTO.getEndTime())) {
+            return "예약 시작 시간은 종료 시간보다 이전이어야 합니다.";
+        }
+        return "valid";
+
+    }
 
 
 

@@ -1,10 +1,10 @@
-// import GymList from '../../components/facilities/gym/GymList';
 import GymProgramAdd from '../../components/facilities/gym/GymProgramAdd';
 import GymModify from '../../components/facilities/gym/GymModify';
-// import GymCancel from '../../components/facilities/gym/GymCancel';
 import GymPage from '../../pages/facilities/gym/GymPage';
 import { Suspense, lazy } from 'react';
-// import GymDetailListPage from '../../pages/facilities/gym/GymDetailListPage';
+import GymSignUpPage from '../../pages/facilities/gym/membership/GymSignUpPage';
+import DayPassPurchasePage from '../../pages/facilities/gym/membership/DayPassPurchasePage';
+import MembershipPurchasePage from '../../pages/facilities/gym/membership/MembershipPurchasePage';
 
 const Loading = <div>....</div>
 const GymList = lazy(() => import("../../pages/facilities/gym/GymListPage"))
@@ -31,11 +31,25 @@ const gymRouter = [
             },
             {
                 path: "detail/modify/:programId",
-                element:  <Suspense fallback={Loading}><GymModify /></Suspense>
+                element: <Suspense fallback={Loading}><GymModify /></Suspense>
+            },
+            {
+                path: "signup",
+                element: <GymSignUpPage />,
+                children: [
+                    {
+                        path: "day-pass",
+                        element: <DayPassPurchasePage />
+                    },
+                    {
+                        path: "membership",
+                        element: <MembershipPurchasePage />
+                    },
+                ]
             },
             // {
-            //     path: "cancel",
-            //     element: <GymCancel />
+            //     path: "membership/state",
+            //     element: <GymMembershipState />
             // },
         ]
     },

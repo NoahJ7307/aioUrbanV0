@@ -1,16 +1,21 @@
-import { useRef, useState } from "react";
-import { formatNumber, apiCall } from "../api/utils";
+import { useEffect, useRef, useState } from "react";
+import { formatNumber, apiCall ,getParsedItem } from "../api/utils";
 
 
 
 
-const ManualPayment = ({ setMoney }) => {
+const ManualPayment = ({ sendMileage, setMoney }) => {
     const [selectPrice, setSelectPrice] = useState(0);
     const cardNumberRef = [useRef(), useRef(), useRef(), useRef()];
     const cvcRef = useRef();
-    const dong = JSON.parse(localStorage.getItem("dong"));
-    const ho = JSON.parse(localStorage.getItem("ho"));
 
+    const [mileage, setMileage] = useState({});
+
+    useEffect(() => {
+        if (sendMileage) {
+            setMileage(sendMileage);
+        }
+    }, [])
 
     const changePayment = (e) => {
         const value = parseInt(e.target.value, 10);
@@ -20,6 +25,7 @@ const ManualPayment = ({ setMoney }) => {
 
     const changeCard = (e, index) => {
         const { value } = e.target;
+
 
         if (!/^\d*$/.test(value)) {
             e.target.value = value.replace(/\D/g, ''); // 숫자 외 문자를 제거
@@ -57,6 +63,16 @@ const ManualPayment = ({ setMoney }) => {
 
 
     const setPayment = async () => {
+
+        const dong = getParsedItem("dong");
+        const ho = getParsedItem("ho");
+
+
+        if (!dong || !ho) {
+            alert(`동과 호수 정보가 누락되었습니다. 설정을 확인해 주세요.`)
+            return;
+        }
+
         const pass = cardNumberRef.every(ref => ref.current && ref.current.value.length === 4);
         if (!pass) {
             alert('카드번호를 제대로 입력해 주세요');
@@ -83,9 +99,10 @@ const ManualPayment = ({ setMoney }) => {
                 cardExpiry: cvc,
             },
             mileage: {
+                mileageId: mileage.mileageId ? mileage.mileageId : null,
                 dong: dong,
                 ho: ho,
-                autopay: false,
+                autopay: mileage.autopay,
                 state: true,
 
             },
@@ -100,6 +117,7 @@ const ManualPayment = ({ setMoney }) => {
                 if (response.data != null && !isNaN(response.data.price)) {
                     setMoney(Number(response.data.price));
                     setSelectPrice(0);
+                    setMileage(response.data);
                     clearCardInput();
                 }
             } else {
@@ -125,11 +143,11 @@ const ManualPayment = ({ setMoney }) => {
                     hidden />
                 <input type="radio" name="payment" id="30000" value={30000}
                     onChange={changePayment}
-                    checked={selectPrice === 30000} 
+                    checked={selectPrice === 30000}
                     hidden />
                 <input type="radio" name="payment" id="50000" value={50000}
                     onChange={changePayment}
-                    checked={selectPrice === 50000} 
+                    checked={selectPrice === 50000}
                     hidden />
                 <label htmlFor="10000">{formatNumber(10000)}원</label>
                 <label htmlFor="30000">{formatNumber(30000)}원</label>

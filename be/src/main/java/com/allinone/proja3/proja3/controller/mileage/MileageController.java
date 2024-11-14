@@ -3,13 +3,18 @@ package com.allinone.proja3.proja3.controller.mileage;
 
 import com.allinone.proja3.proja3.dto.mileage.ManualRequestDTO;
 import com.allinone.proja3.proja3.dto.mileage.MileageDTO;
+import com.allinone.proja3.proja3.dto.mileage.MileageHistoryDTO;
 import com.allinone.proja3.proja3.model.mileage.Mileage;
+import com.allinone.proja3.proja3.model.mileage.MileageHistory;
 import com.allinone.proja3.proja3.service.mileage.MileageService;
+import com.allinone.proja3.proja3.service.mileage.MileagehistoryService;
 import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -19,9 +24,10 @@ public class MileageController {
 
     private final MileageService mileageService;
     private final PaymentService paymentService;
+    private final MileagehistoryService mileagehistoryService;
 
     @GetMapping("/getmileage")
-    public ResponseEntity<?> getMileage(@RequestParam("dong") int dong , @RequestParam("ho") int ho) {
+    public ResponseEntity<?> getMileage(@RequestParam("dong") String dong , @RequestParam("ho") String ho) {
 
         MileageDTO dto = mileageService.findByDongHoDTO(dong, ho);
 
@@ -45,6 +51,39 @@ public class MileageController {
 
     }
 
+    @PutMapping("/autopay")
+    public ResponseEntity<?> fatchAutoPayTure(@RequestBody ManualRequestDTO dto) {
+        try {
+            MileageDTO mileageDTO = paymentService.processRegisterAutoPay(dto);
+            return ResponseEntity.ok(mileageDTO);
+        } catch (Exception e) {
+            log.error(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
+    @PatchMapping("/autopay")
+    public ResponseEntity<?> fatchAutoPayFalse(@RequestBody MileageDTO dto) {
+        try {
+            MileageDTO mileageDTO = mileageService.fatchAutoPay(dto);
+            return ResponseEntity.ok(mileageDTO);
+        } catch (Exception e) {
+            log.error(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getlist")
+    public ResponseEntity<?> getList(@RequestParam("dong") String dong , @RequestParam("ho") String ho) {
+        try {
+            List<MileageHistoryDTO> list = mileagehistoryService.getMileageHistoryList(dong,ho);
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            log.error(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 
 
