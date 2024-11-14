@@ -74,7 +74,7 @@ public class MileageController {
         }
     }
 
-    @GetMapping("/getList")
+    @GetMapping("/getlist")
     public ResponseEntity<?> getList(@RequestParam("dong") String dong , @RequestParam("ho") String ho) {
         try {
             List<MileageHistoryDTO> list = mileagehistoryService.getMileageHistoryList(dong,ho);

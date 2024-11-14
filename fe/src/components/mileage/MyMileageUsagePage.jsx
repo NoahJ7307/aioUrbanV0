@@ -22,7 +22,7 @@ const MyMileageUsagePage = () => {
         if (dong && ho) {
             const params = { dong: dong, ho: ho };
 
-            apiCall('/mileage/getList', 'GET', params)
+            apiCall('/mileage/getlist', 'GET', params)
                 .then(response => {
                     console.log(response.data);
                     if (response.data != null) {
