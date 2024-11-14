@@ -2,10 +2,12 @@ package com.allinone.proja3.proja3.service.mileage;
 
 import com.allinone.proja3.proja3.dto.mileage.MileageDTO;
 import com.allinone.proja3.proja3.dto.mileage.MileageHistoryDTO;
+import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.mileage.CardInfo;
 import com.allinone.proja3.proja3.model.mileage.Mileage;
 import com.allinone.proja3.proja3.model.mileage.MileageHistory;
 import com.allinone.proja3.proja3.model.mileage.MileageHistoryId;
+import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.repository.mileage.MileageHistoryRepository;
 import com.allinone.proja3.proja3.repository.mileage.MileageRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,7 @@ public class MileagehistoryServiceImpl implements MileagehistoryService {
 
     private final MileageHistoryRepository mileageHistoryRepository;
     private final MileageRepository mileageRepository;
-
+    private final UserRepository userRepository;
 
     private MileageHistoryId makehistoryID(Mileage mileage) {
         return MileageHistoryId.builder()
@@ -33,10 +35,12 @@ public class MileagehistoryServiceImpl implements MileagehistoryService {
                 .build();
     }
     private MileageHistoryDTO getDTO(MileageHistory entity) {
+        Optional<User> user = userRepository.findById(entity.getUno());
         return MileageHistoryDTO.builder()
                 .uno(entity.getUno())
                 .mileageId(entity.getMileage().getMileageId())
                 .type(entity.getType())
+                .name(user.isPresent()?user.get().getUserName() : null)
                 .amount(entity.getAmount())
                 .description(entity.getDescription())
                 .timestamp(entity.getId().getTimestamp())
@@ -78,7 +82,9 @@ public class MileagehistoryServiceImpl implements MileagehistoryService {
 
 
     @Override
-    public List<MileageHistoryDTO> getMileageHistoryList(Long mileageId) {
+    public List<MileageHistoryDTO> getMileageHistoryList(String dong, String ho) {
+
+        Long mileageId = mileageRepository.findByDongAndHoAndStateTrue(dong,ho).get().getMileageId();
         return mileageHistoryRepository.findByMileage_MileageId(mileageId).stream()
                 .map(this::getDTO) // MileageHistory 엔터티를 DTO로 변환
                 .collect(Collectors.toList());

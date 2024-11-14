@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import BasicLayout from '../../layout/BasicLayout'
 import { Outlet, useNavigate } from 'react-router-dom'
+import '../../css/_modules/myPage.css'
 
 const MyPage = () => {
     const navigate = useNavigate()
@@ -13,25 +14,27 @@ const MyPage = () => {
 
     return (
         <BasicLayout>
-            <div className='flex'>
-                <ul className='flex-col p-2'>
-                    <li>
-                        <button className='p-2' onClick={handleClickRegularList}>
-                            내정보
-                        </button>
-                    </li>
-                    <li>
-                        <button className='p-2' onClick={handleClickVisitList}>
-                            마일리지
-                        </button>
-                    </li>
-                    <li>
-                        <button className='p-2' onClick={handleClickEEList}>
-                            예약현황
-                        </button>
-                    </li>
-                </ul>
-                <div>
+            <div className="myPageContainer">
+                <div className="sidebarMenu">
+                    <ul className="sidebarList">
+                        <li>
+                            <button className="sidebarButton" onClick={handleClickRegularList}>
+                                내정보
+                            </button>
+                        </li>
+                        <li>
+                            <button className="sidebarButton" onClick={handleClickVisitList}>
+                                마일리지
+                            </button>
+                        </li>
+                        <li>
+                            <button className="sidebarButton" onClick={handleClickEEList}>
+                                예약현황
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div className="contentArea">
                     <Outlet />
                 </div>
             </div>

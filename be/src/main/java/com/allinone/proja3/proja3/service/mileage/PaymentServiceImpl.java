@@ -99,9 +99,9 @@ public class PaymentServiceImpl implements PaymentService {
     //마일리지 사용 시스템
     @Override
     @Transactional
-    public MileageDTO processUseMileage(MileageDTO requestDTO ,Long userId, int amount , String description ) {
+    public MileageDTO processUseMileage(String dong , String ho ,Long uno, int amount , String description ) {
         //1. 마일리지 존재 조회
-        Mileage mileage = mileageService.findByDongHoentity(requestDTO.getDong(),requestDTO.getHo());
+        Mileage mileage = mileageService.findByDongHoentity(dong,ho);
         if (mileage == null) {
             log.error("결제 도중 마일리지가 없음 = 마일리지 부족과 같은 상태");
             throw new RuntimeException("마일리지가 없습니다.");
@@ -130,11 +130,12 @@ public class PaymentServiceImpl implements PaymentService {
                 // -> 20000 / 10000 = 2
                 // -> 2 * 10000 = 20000
                 // -> topUpAmount = 20000
+                MileageDTO requestDTO = mileageService.getDTO(mileage);
 
                 //2-2-2. Mileage 금액 증가 업데이트
                 mileage = mileageService.duplicate(requestDTO, topUpAmount); //금액 충전 후 저장
                 //2-2-3. MileageHistory 내역 저장
-                mileagehistoryService.savehistory(mileage,userId, topUpAmount,
+                mileagehistoryService.savehistory(mileage,uno, topUpAmount,
                         "+","자동결제 결제로 인한 마일리지 충전: " + topUpAmount + "원");
                 //2-2-4.PaymentHistory 저장
                 PaymentHistory pay = PaymentHistory.builder()
@@ -159,7 +160,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         //4. 마일리지 사용 내역 : MileageHistory 내역 저장
         //인자로의 사용한 유저 및 금액 , 이력을 위한 문구 , 마일리지 entity를 활용하여
-        mileagehistoryService.savehistory(mileage,userId,amount,"-",description);
+        mileagehistoryService.savehistory(mileage,uno,amount,"-",description);
 
         return mileageService.getDTO(mileage);
     }
