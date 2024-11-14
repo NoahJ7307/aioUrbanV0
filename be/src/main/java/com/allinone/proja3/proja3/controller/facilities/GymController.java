@@ -8,6 +8,7 @@ import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Gym;
 import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.service.facilities.GymService;
+import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -27,6 +28,9 @@ public class GymController {
     private GymService service;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PaymentService paymentService;
 
     //등록
     @PostMapping("/add")

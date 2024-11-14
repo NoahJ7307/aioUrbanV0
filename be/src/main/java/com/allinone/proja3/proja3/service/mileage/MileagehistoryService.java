@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface MileagehistoryService {
 
-    List<MileageHistoryDTO> getMileageHistoryList(Long MileageId);
+    List<MileageHistoryDTO> getMileageHistoryList(String dong, String ho);
 
 
 
