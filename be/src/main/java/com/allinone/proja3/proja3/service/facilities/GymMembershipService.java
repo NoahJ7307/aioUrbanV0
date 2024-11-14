@@ -4,5 +4,5 @@ import com.allinone.proja3.proja3.dto.mileage.MileageDTO;
 import com.allinone.proja3.proja3.model.facilities.MembershipType;
 
 public interface GymMembershipService {
-    void purchaseMembership(Long membershipType, Long uno, String dong, String ho);
+//    void purchaseMembership(Long membershipType, Long uno, String dong, String ho);
 }

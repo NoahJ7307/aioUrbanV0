@@ -38,7 +38,7 @@ export const listGym = async (pageParam) => {
     return res.data;
 }
 
-export const searchListGym = async ({ page, size } , searchType, searchKeyWord) => {
+export const searchListGym = async ({ page, size }, searchType, searchKeyWord) => {
     console.log("gymsearch 777", searchKeyWord);
     console.log("gymsearch 777", searchType);
 
@@ -93,18 +93,6 @@ export const getGymListByProgramId = async ({ programId, page, size }) => {
     return res.data
 }
 
-
-// export const getGymListByProgramId = async ({ programId,page,size}) => {
-//     console.log("Fetching program gym by programId : ", programId,page,size)
-//     const config = {
-//         ...getConfig(),
-//         params: { page, size },  // page와 size를 쿼리 파라미터로 설정
-//     };
-//     console.log("config: ", config)
-//     const res = await axios.get(`${host}/detail/modify/${programId}`, config);
-//     // console.log(res)
-//     return res.data
-// }
 export const modifyPost = async (programId, programData) => {
     const config = getConfig();
     const response = await axios.put(`${host}/detail/modify/${programId}`, JSON.stringify(programData), config);
@@ -199,6 +187,42 @@ export const cancelWaitlist = async (programId, user) => {
     }
 }
 
+//헬스장 이용권 구매 api 
+// export const purchaseMembership = async (membershipType, uno) => {
+//     console.log("헬스장 이용권 구매 요청: ", membershipType, uno);
+//     const config = getConfig();
+//     try {
+//         const response = await axios.post(`${host}/signup/membership`, {
+//             membershipType,
+//             uno,
+//         }, config);
+
+//         console.log("헬스장 이용권 구매 성공 : ", response.data);
+//         return response.data;
+//     } catch (error) {
+//         console.error("헬스장 이용권 구매 중 오류 발생: ", error);
+//         throw error;
+//     }
+// };
+export const purchaseMembership = async (membershipType, uno) => {
+    console.log("헬스장 이용권 구매 요청: ", membershipType, uno);
+    const config = getConfig();
+    try {
+        const response = await axios.post(`${host}/signup/membership`, {
+            params: {
+                membershipType,
+                uno,
+            },
+            ...config,
+        });
+        console.log("헬스장 이용권 구매 성공 : ", response.data);
+        return response.data;
+
+    } catch (error) {
+        console.error("헬스장 이용권 구매 중 오류 발생: ", error);
+        throw error
+    }
+}
 
 
 
