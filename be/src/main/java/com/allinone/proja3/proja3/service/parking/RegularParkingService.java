@@ -16,6 +16,10 @@ public interface RegularParkingService {
     Long register(RegularParkingDTO regularParkingDTO);
     PageResponseDTO<RegularParkingDTO> getList(PageRequestDTO pageRequestDTO);
     PageResponseDTO<RegularParkingDTO> getUserList(PageRequestDTO pageRequestDTO, HouseholdDTO householdDTO);
+
+    // 정기권 차량 마일리지 차감
+    void monthlyRegularPayment();
+
     void remove(Long rpno);
     RegularParkingDTO getOne(Long rpno);
     void putOne(RegularParkingDTO regularParkingDTO, Long rpno);
