@@ -26,7 +26,7 @@ public class GymMembershipDTO {
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalDate dayPassDate;
-    private boolean isOnHold; // 홀딩 상태
-    private long remainingDaysBeforeHold;
+//    private boolean isOnHold; // 홀딩 상태
+//    private long remainingDaysBeforeHold;
 
 }

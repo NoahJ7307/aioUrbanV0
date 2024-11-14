@@ -2,9 +2,13 @@ package com.allinone.proja3.proja3.controller.parking;
 
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
+import com.allinone.proja3.proja3.dto.mileage.MileageHistoryDTO;
 import com.allinone.proja3.proja3.dto.parking.*;
 import com.allinone.proja3.proja3.model.parking.Household;
 import com.allinone.proja3.proja3.model.parking.HouseholdPK;
+import com.allinone.proja3.proja3.service.community.MarketService;
+import com.allinone.proja3.proja3.service.mileage.MileageService;
+import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import com.allinone.proja3.proja3.service.parking.RegularParkingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

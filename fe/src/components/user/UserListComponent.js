@@ -105,6 +105,7 @@ const UserListComponent = ({ pageServerData, searchData }) => {
             {serverData.dtoList.map((user, index) => (
                 <div key={index} className="grid grid-cols-6">
                     <div>
+                        
                         <input
                             type='checkbox'
                             checked={checked.includes(user.uno)} // 페이지 이동 시 체크항목 유지

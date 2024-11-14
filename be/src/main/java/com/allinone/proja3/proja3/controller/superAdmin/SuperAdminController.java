@@ -8,6 +8,7 @@ import com.allinone.proja3.proja3.dto.user.UserSearchDataDTO;
 import com.allinone.proja3.proja3.dto.user.UserSearchReqDTO;
 import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.service.UserService;
+import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import java.util.Map;
 @RequestMapping("/api/superAdmin")
 public class SuperAdminController {
     private final UserService userService;
+    private final PaymentService paymentService;
 
     @GetMapping("/list")
     public PageResponseDTO<UserDTO> getAllList(PageRequestDTO pageRequestDTO){
