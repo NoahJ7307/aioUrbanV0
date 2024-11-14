@@ -7,6 +7,8 @@ import lombok.*;
 
 import java.time.LocalDate;
 
+import static com.allinone.proja3.proja3.model.facilities.QGymMembership.gymMembership;
+
 @Entity
 @Table(name = "tbl_gym_membership")
 @Data
@@ -35,8 +37,10 @@ public class GymMembership {
     @Column(nullable = true)
     private LocalDate dayPassDate;
 
-    private boolean isOnHold = false; // 홀딩상태 관리하는 변수
-    private long remainingDaysBeforeHold = 0;
+
+
+//    private boolean isOnHold = false; // 홀딩상태 관리하는 변수
+//    private long remainingDaysBeforeHold = 0;
 
 
 
