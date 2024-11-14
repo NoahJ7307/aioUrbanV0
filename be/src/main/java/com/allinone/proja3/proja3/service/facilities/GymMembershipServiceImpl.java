@@ -13,6 +13,7 @@ import com.allinone.proja3.proja3.service.mileage.MileagehistoryService;
 import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,38 +27,31 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     private final MileageService mileageService;
     private final PaymentService paymentService;
     private final MileagehistoryService mileagehistoryService;
+    private final UserService userService;
 
     @Transactional
-    public void purchaseMembership(Long membershipType, Long uno, String dong, String ho) {
-        MileageDTO mileageDTO = new MileageDTO();
-        mileageDTO.setDong(dong);
-        mileageDTO.setHo(ho);
-
-        int amount;
-        String description;
-
-        switch (membershipType.intValue()) {
-            case 0:
-                amount = 3000;
-                description = "일일권";
-                break;
-            case 1:
-                amount = 30000;
-                description = "한달권";
-                break;
-            case 2:
-                amount = 150000;
-                description = "육개월권";
-                break;
-            case 3:
-                amount = 200000;
-                description = "일년권";
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid membership type");
+    public void purchaseDailyMembership(Long uno, String dong, String ho, int amount){
+        //1.마일리지 조회
+        Mileage mileage = mileageService.findByDongHoentity(dong, ho);
+        //2.잔액 부족 시 처리
+        if(mileage.getPrice()< amount) {
+            throw new RuntimeException("잔액이 부족합니다. 충전이 필요합니다.");
         }
+        //3. 마일리지 차감 및 저장
+        mileage.setPrice(mileage.getPrice()-amount);
+        mileageService.saveEntity(mileage);
 
-        paymentService.processUseMileage(dong,ho, uno, amount, description);
+        //4. 이용권 생성
+        GymMembership gymMembership = GymMembership.builder()
+                .user.getUno()
+                .membershipType(MembershipType.ONE_DAY)
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now())
+                .isOnHold(false)
+                .build();
+        gymMembershipRepository.save(gymMembership);
+
+        mileagehistoryService.savehistory(mileage, uno, amount, "-", "헬스장 일일 이용권 구매");
     }
 
 }
