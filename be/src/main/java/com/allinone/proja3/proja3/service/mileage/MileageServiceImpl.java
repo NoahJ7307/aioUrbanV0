@@ -5,7 +5,6 @@ import com.allinone.proja3.proja3.model.mileage.CardInfo;
 import com.allinone.proja3.proja3.model.mileage.Mileage;
 import com.allinone.proja3.proja3.repository.mileage.CardInfoRepository;
 import com.allinone.proja3.proja3.repository.mileage.MileageRepository;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ public class MileageServiceImpl implements MileageService {
 
     private final MileageRepository mileageRepository;
     private final CardInfoRepository cardInfoRepository;
-    private  final EntityManager entityManager;
     @Override
     public MileageDTO getDTO(Mileage entity) {
         return  MileageDTO.builder()

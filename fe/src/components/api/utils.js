@@ -39,40 +39,28 @@ export const API_BASE_URL = backendHost;
 
 // =================== axios call 함수
 export async function apiCall(url, method, requestData) {
-    // 최신 토큰을 localStorage에서 가져오기
     const token = localStorage.getItem('token');
 
-    let headers = '';
-    if (token) { // 토큰이 있을 때만 Authorization 설정
-        headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-        };
-    } else {
-        headers = { 'Content-Type': 'application/json' };
-    }
+    const headers = {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': 'Bearer ' + token })
+    };
 
-    let options = {
+    const options = {
         url: API_BASE_URL + url,
         method: method,
         headers: headers,
+        ...(requestData && method === 'GET' ? { params: requestData } : { data: requestData })
     };
 
-    // GET 요청일 때는 params, 그 외에는 data로 설정
-    if (requestData) {
-        if (method === 'GET') {
-            options.params = requestData;  // GET 요청의 경우 params에 할당
-        } else {
-            options.data = requestData;    // POST, PUT 등의 요청의 경우 data에 할당
-        }
-    }
-
     return axios(options)
-        .then(response => {
-            return response;
-        }).catch(err => {
-            console.error(`** apiCall Error status=${err.response?.status}, message=${err.message}`);
-            return Promise.reject(err.response);
+        .then(response => response)
+        .catch(err => {
+            console.error(`** apiCall Error message=${err.message}`);
+            if (err.response) {
+                console.error(`** Error status=${err.response.status}`);
+            }
+            return Promise.reject(err.response || err);
         });
 }
 

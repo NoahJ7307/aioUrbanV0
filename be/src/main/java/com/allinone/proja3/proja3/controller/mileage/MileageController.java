@@ -1,9 +1,7 @@
 package com.allinone.proja3.proja3.controller.mileage;
 
 
-import com.allinone.proja3.proja3.dto.mileage.ManualRequestDTO;
-import com.allinone.proja3.proja3.dto.mileage.MileageDTO;
-import com.allinone.proja3.proja3.dto.mileage.MileageHistoryDTO;
+import com.allinone.proja3.proja3.dto.mileage.*;
 import com.allinone.proja3.proja3.model.mileage.Mileage;
 import com.allinone.proja3.proja3.model.mileage.MileageHistory;
 import com.allinone.proja3.proja3.service.mileage.MileageService;
@@ -11,10 +9,13 @@ import com.allinone.proja3.proja3.service.mileage.MileagehistoryService;
 import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -75,15 +76,21 @@ public class MileageController {
     }
 
     @GetMapping("/getlist")
-    public ResponseEntity<?> getList(@RequestParam("dong") String dong , @RequestParam("ho") String ho) {
+    public ResponseEntity<?> getList(@RequestParam("dong") String dong, @RequestParam("ho") String ho, MileagePageRequestDTO pageRequestDTO) {
         try {
-            List<MileageHistoryDTO> list = mileagehistoryService.getMileageHistoryList(dong,ho);
-            return ResponseEntity.ok(list);
+            MileagePageResultDTO<MileageHistoryDTO, MileageHistory> resultDTO = mileagehistoryService.getMileageHistoryList(dong, ho, pageRequestDTO);
+            Map<String, Object> response = new HashMap<>();
+            List<MileageHistoryDTO> list = resultDTO.getDtoList();
+            response.put("list", list);
+            response.put("pageMaker", resultDTO);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error(e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 
 
 
