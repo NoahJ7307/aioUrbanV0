@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const MyMileageUsagePage = () => {
 
     const navi = useNavigate();
-    const [mileageList,setMileageList] = useState([]);
+    const [mileageList, setMileageList] = useState([]);
 
     useEffect(() => {
         const dong = getParsedItem("dong");
@@ -41,14 +41,32 @@ const MyMileageUsagePage = () => {
     }, []);
 
 
-    if(mileageList.length===0){
+    if (mileageList.length === 0) {
         return <div>
             사용 내역이 없습니다.
         </div>
-    }else{
-    return <div>
-
-    </div>;
+    } else {
+        return <div>
+            <div className="mileage-history-list">
+                {mileageList.map((item) => (
+                    <div key={item.mileageId} className="mileage-card">
+                        <div className="mileage-header">
+                            <h2 className="mileage-name">{item.name}</h2>
+                            <span className={`mileage-type ${item.type === '+' ? 'positive' : 'negative'}`}>
+                                {item.type === '+' ? '적립' : '사용'}
+                            </span>
+                        </div>
+                        <div className="mileage-details">
+                            <p className="mileage-amount">변경 금액: {item.amount}원</p>
+                            <p className="mileage-description">설명: {item.description}</p>
+                            <p className="mileage-timestamp">
+                                {new Date(item.timestamp).toLocaleDateString()} {new Date(item.timestamp).toLocaleTimeString()}
+                            </p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>;
     }
 
 };

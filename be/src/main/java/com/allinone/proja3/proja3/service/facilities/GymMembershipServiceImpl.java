@@ -47,7 +47,7 @@ public class GymMembershipServiceImpl implements GymMembershipService{
                 throw new IllegalArgumentException("Invalid membership type");
         }
 
-        paymentService.processUseMileage(mileageDTO, uno, amount, description);
+        paymentService.processUseMileage(dong,ho, uno, amount, description);
     }
 
 
