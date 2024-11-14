@@ -21,14 +21,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class UrbanSecurityConfig {
-    private final UrbanUserDetailsService urbanUserDetailsService; // 주입된 UrbanUserDetailsService
+    private final UrbanUserDetailsService urbanUserDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -46,27 +45,30 @@ public class UrbanSecurityConfig {
         // 권한 설정 및 인증
         //--------------------------------------------------------------
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/user/login").permitAll()  // 인증 없이 접근 허용
-                        .requestMatchers("/api/main/join").permitAll()
-                        .requestMatchers("/uploads/**").permitAll() // 이미지인증추가
-                        .requestMatchers("/ws/chat").permitAll()// 웹소켓 허용
-                        .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "ROOT") // 접근 권한 설정
-                        .requestMatchers("/api/parking/**").hasAnyRole("USER", "ADMIN", "ROOT") // 접근 권한 설정
-                        .requestMatchers("/api/superAdmin/**").hasRole("ROOT") // 접근 권한 설정
-                        .anyRequest().authenticated()  // 그 외의 요청은 인증 필요
-                )
+                .requestMatchers("/api/user/login").permitAll()
+                .requestMatchers("/api/main/join").permitAll()
+                .requestMatchers("/uploads/**").permitAll()
+                .requestMatchers("/ws/chat").permitAll()
+                .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "ROOT")
+                .requestMatchers("/api/communities/info/jobs/search/**").permitAll()
+                .requestMatchers("/api/parking/**").hasAnyRole("USER", "ADMIN", "ROOT")
+                .requestMatchers("/api/superAdmin/**").hasRole("ROOT")
+                .requestMatchers("/api/communities/**").permitAll()
+                .requestMatchers("/api/communities/info/coordinates").authenticated()
+                .anyRequest().authenticated()  // Require authentication for all other requests
+        );
 
-                .addFilterAt(customAuthenticationFilter(),
-                        UsernamePasswordAuthenticationFilter.class) // JWT 인증
+        http.addFilterAt(customAuthenticationFilter(),
+                        UsernamePasswordAuthenticationFilter.class) // Custom Username/Password authentication filter
                 .addFilterAfter(new JWTCheckFilter(),
-                        UsernamePasswordAuthenticationFilter.class);  // 비밀번호 인증
+                        UsernamePasswordAuthenticationFilter.class); // JWT check filter
+
         //--------------------------------------------------------------
 
         http.exceptionHandling(exceptionHandling -> {
             exceptionHandling.accessDeniedHandler(new UrbanAccessDeniedHandler())  // 권한 부족 사용자 처리
                     .authenticationEntryPoint(new UrbanAuthenticationEntryPoint()); // 인증되지 않은 사용자 처리
         });
-
 
         return http.build();
     }
@@ -77,7 +79,7 @@ public class UrbanSecurityConfig {
     public UrbanUsernamePasswordAuthenticationFilter customAuthenticationFilter() throws Exception {
         UrbanUsernamePasswordAuthenticationFilter filter = new UrbanUsernamePasswordAuthenticationFilter();
         filter.setAuthenticationManager(authenticationManager());
-        filter.setFilterProcessesUrl("/api/user/login"); // 로그인 경로 설정
+        filter.setFilterProcessesUrl("/api/user/login");
         filter.setAuthenticationSuccessHandler(new APILoginSuccessHandler());
         return filter;
     }
@@ -85,7 +87,7 @@ public class UrbanSecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager() {
         return authentication -> {
-            UserDetails user = urbanUserDetailsService.loadUserByUsername(authentication.getName());  // 필드 사용
+            UserDetails user = urbanUserDetailsService.loadUserByUsername(authentication.getName());
             if (user == null || !passwordEncoder().matches(authentication.getCredentials().toString(), user.getPassword())) {
                 throw new BadCredentialsException("Invalid credentials");
             }
@@ -97,15 +99,10 @@ public class UrbanSecurityConfig {
     @Bean
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // 인증 정보 허용(쿠키, 세션 ID, Authorization 헤더...)
         configuration.setAllowCredentials(true);
-        // 출처 패턴 : 전부 허용
         configuration.setAllowedOriginPatterns(List.of("*"));
-        // CORS 요청 시 허용 출처
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-        // CORS 요청 시 허용 메서드
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
-        // CORS 요청 시 허용 헤더
         configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -114,6 +111,6 @@ public class UrbanSecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // 암호 알고리즘
+        return new BCryptPasswordEncoder();
     }
 }

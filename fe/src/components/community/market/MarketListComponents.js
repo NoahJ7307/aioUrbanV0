@@ -117,13 +117,13 @@ const MarketListComponents = () => {
                                 <h2 className="text-xl font-semibold mb-2">상품명: {item.title}</h2>
                                 <p className="text-gray-600">가격: {item.price} 원</p>
                                 <p className="text-gray-500">판매자: {item.userName}</p>
+                                <div className="flex justify-between mt-2">
                                 <button
                                     onClick={() => openModal(item)}
                                     className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
                                 >
                                     상세보기
                                 </button>
-                                <div className="flex justify-between mt-2">
                                     <button
                                         onClick={() => { navigate(`/communities/market/modify/${item.mno}`); }}
                                         disabled={uno !== item.userId}
@@ -138,12 +138,12 @@ const MarketListComponents = () => {
                                     >
                                         {uno !== item.userId ? '본인확인' : '삭제'}
                                     </button>
-                                    <button
+                                    {/* <button
                                         onClick={() => { navigate(`/communities/market/chat/${item.mno}`); }}
                                         className="bg-green-500 text-white py-1 px-3 rounded-lg hover:bg-green-600 transition duration-200"
                                     >
                                         1:1 대화
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
                         </div>

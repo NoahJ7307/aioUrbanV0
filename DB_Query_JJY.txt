@@ -12,7 +12,9 @@ select * from tbl_market;
 select * from tbl_user;
 select * from tbl_market_images;
 select * from tbl_Chat;
-select * from tbl_job;
+select * from tbl_job ;
+select * from tbl_job where company_name;
+desc tbl_job;
 
 
 drop tables tbl_community;
@@ -24,7 +26,7 @@ drop tables tbl_job;
 desc tbl_community;
 desc tbl_Announce;
 desc tbl_market;
-
+desc tbl_job;
 
 drop tables tbl_gym;
 
