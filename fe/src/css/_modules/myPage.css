@@ -1,42 +1,52 @@
 .myPageContainer {
-    display: flex;
+    /* display: flex; */
     min-height: 80vh;
     font-family: 'GmarketSansMedium', sans-serif;
 }
 
 .sidebarMenu {
-    padding: 16px; 
-    width: 15rem;
+    padding: 0.5rem; 
+    /* width: 15rem; */
     display: flex;
-    justify-content: center;
-    /* background-color: #DEE5D4; */
-    /* background-color: #749fcd; */
+    justify-content: flex-start;
+    /* background-color: #749fcddb; */
+    background-color: #749fcd;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .sidebarList {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem; 
+    justify-content: center;
     width: 100%;
-    margin: 10rem 0;
+    height: 100%;
     
 }
 
 .sidebarButton {
+    height: 100%;
     width: 100%;
-    padding: 8px 16px; 
-    background-color: #749fcd;
+    padding: 0.6rem 2rem; 
+    /* background-color: #749fcd; */
     color: white; 
     border-radius: 2px; 
     cursor: pointer;
     border: none;
     transition: transform 0.2s ease;
     text-shadow: 1px 1px 0  #273a4e;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    
 }
 
 .sidebarButton:hover {
     transform: scale(1.05);
+}
+.sidebarButton.active {
+     /* background-color: #749fcd;활성화된 링크의 배경색 */
+    background-color: #749fcddb;
+    font-weight: bold;
+    font-size: 1.2rem;
 }
 
 .contentArea {

@@ -33,6 +33,9 @@ public class MileageHistory {
     @Column(nullable = false)
     private int amount;
 
+    @Column(nullable = true)//가데이터 오류발생을 방지
+    private int balance;
+
     private String description;
 
     public boolean isAddition() {

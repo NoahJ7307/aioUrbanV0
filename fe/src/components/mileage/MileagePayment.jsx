@@ -3,7 +3,7 @@ import ManualPayment from './ManualPayment';
 import AutomaticPayment from './AutomaticPayment';
 import '../../css/mileageManagement/mileagePayment.css'
 import { useEffect, useState } from 'react';
-import { formatNumber, apiCall } from '../api/utils';
+import { formatNumber, apiCall , getParsedItem } from '../api/utils';
 
 
 
@@ -17,25 +17,13 @@ const MileagePayment = () => {
     const [mileage, setMileage] = useState({});
     const [isAutopay, setIsAutopay] = useState(mileage && mileage.autopay ? mileage.autopay : false);
     useEffect(() => {
-        const dong = localStorage.getItem("dong");
-        const ho = localStorage.getItem("ho");
-
-        // JSON 형식인지 확인한 후 JSON 파싱 시도
-        const isJSON = (str) => {
-            try {
-                JSON.parse(str);
-                return true;
-            } catch (e) {
-                return false;
-            }
-        };
-
-        const parsedDong = dong && dong !== "undefined" && isJSON(dong) ? JSON.parse(dong) : dong;
-        const parsedHo = ho && ho !== "undefined" && isJSON(ho) ? JSON.parse(ho) : ho;
+  
+        const dong = getParsedItem("dong");
+        const ho = getParsedItem("ho");
 
 
-        if (parsedDong && parsedHo) {
-            const params = { dong: parsedDong, ho: parsedHo };
+        if (dong && ho) {
+            const params = { dong: dong, ho: ho };
 
             apiCall('/mileage/getmileage', 'GET', params)
                 .then(response => {
