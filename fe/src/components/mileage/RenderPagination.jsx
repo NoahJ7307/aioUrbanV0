@@ -12,7 +12,7 @@ const RenderPagination = ({ pageMaker, page, setPage }) => {
                 key={i}
                 onClick={() => setPage(i)}
                 style={{
-                    boxShadow: page === i ? 'inset 0px -5px 0px rgba(166, 255, 0, 0.233)' : '',
+                    boxShadow: page === i ? 'inset 0px -1px 0px  #DEE5D4' : '',
                     color: page === i ? 'red' : '',
                     fontSize: page === i ? '18px' : '',
                     fontWeight: page === i ? '700' : '',

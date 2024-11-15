@@ -3,7 +3,7 @@ import ManualPayment from './ManualPayment';
 import AutomaticPayment from './AutomaticPayment';
 import '../../css/mileageManagement/mileagePayment.css'
 import { useEffect, useState } from 'react';
-import { formatNumber, apiCall , getParsedItem } from '../api/utils';
+import { formatNumber, apiCall, getParsedItem } from '../api/utils';
 
 
 
@@ -16,22 +16,26 @@ const MileagePayment = () => {
     const [money, setMoney] = useState(0);
     const [mileage, setMileage] = useState({});
     const [isAutopay, setIsAutopay] = useState(mileage && mileage.autopay ? mileage.autopay : false);
+    const [cardName, setCardName] = useState('');
     useEffect(() => {
-  
+
         const dong = getParsedItem("dong");
         const ho = getParsedItem("ho");
+        const uno = getParsedItem("uno");
 
 
         if (dong && ho) {
-            const params = { dong: dong, ho: ho };
+            const params = { dong: dong, ho: ho, uno: uno };
 
             apiCall('/mileage/getmileage', 'GET', params)
                 .then(response => {
                     console.log(response.data);
-                    if (response.data != null && !isNaN(response.data.price)) {
-                        setMoney(Number(response.data.price)); // 숫자로 변환
-                        setMileage(response.data);
-                        setIsAutopay(response.data.autopay);
+                    const { mileage, usedCardName } = response.data;
+                    setCardName(usedCardName);
+                    if (mileage != null && !isNaN(mileage.price)) {
+                        setMoney(Number(mileage.price)); // 숫자로 변환
+                        setMileage(mileage);
+                        setIsAutopay(mileage.autopay);
                     } else {
                         setMoney(0);
                     }
@@ -43,9 +47,9 @@ const MileagePayment = () => {
             setMoney(0);
         }
 
-    }, []);
+    }, [isAutopay]);
 
-    console.log(`money`, money);
+    console.log(`usename`, cardName);
     console.log(`mileage`, mileage);
 
 
@@ -67,7 +71,10 @@ const MileagePayment = () => {
             <div className='balace'>
                 현재 잔액 : <span className='redpoint'>{formatNumber(+money)}</span> 원
             </div>
-            <div className='balace'>{isAutopay ? `현재 자동 결제 시스템이 활성화된 상태입니다.` : `현재 자동 결제 시스템이 비활성화된 상태입니다.`} </div>
+            <div className='balace'>{isAutopay ? `${cardName} 님이 자동 결제 시스템을 활성화 한 상태입니다.` : `현재 자동 결제 시스템이 비활성화된 상태입니다.`} </div>
+            <div className='balance'>
+                
+            </div>
             <nav className='mileageLink'>
                 <NavLink to="manual"
                     onClick={() => setClick(true)}>

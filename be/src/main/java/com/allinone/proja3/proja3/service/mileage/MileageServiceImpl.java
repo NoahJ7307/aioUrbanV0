@@ -70,7 +70,7 @@ public class MileageServiceImpl implements MileageService {
         if(card.isPresent()) {
             responseEntity.setCardInfo(card.get());
         }
-        return responseEntity;
+        return saveEntity(responseEntity);
     }
 
 
@@ -139,7 +139,7 @@ public class MileageServiceImpl implements MileageService {
 
 
         // 기존의 CardInfo 관계 해제
-        if (entity.getCardInfo() != null && !entity.getCardInfo().equals(card)) {
+        if (entity.getCardInfo() != null) {
             entity.setCardInfo(null); // 기존 카드 정보 제거
         }
             entity.setCardInfo(card);//카드 변경

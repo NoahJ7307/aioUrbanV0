@@ -43,7 +43,7 @@ public class GymMembershipServiceImpl implements GymMembershipService {
 
         //4. 이용권 생성
         GymMembership gymMembership = GymMembership.builder()
-                .user.getUno()
+                //.user.getUno()
                 .membershipType(MembershipType.ONE_DAY)
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now())
