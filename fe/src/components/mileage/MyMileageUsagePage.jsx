@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { apiCall, getParsedItem } from "../api/utils";
+import { apiCall, getParsedItem, formatNumber } from "../api/utils";
 import { useNavigate } from "react-router-dom";
 import moment from 'moment';
 import RenderPagination from "./RenderPagination";
@@ -9,14 +9,13 @@ const MyMileageUsagePage = () => {
     const navi = useNavigate();
     const [mileageList, setMileageList] = useState([]);
     const [page, setPage] = useState(1);
-    const [size, setSize] = useState(4);
     const [pageMaker, setPageMaker] = useState({});
 
     const fistPageRequest = {
         size: 4,
         page: 1,
-        ascending: "true",
-        sortingColumn: "timestamp",
+        ascending: "false",
+        sortingColumn: "id.timestamp",
         keyword: '',
         startDate: '',
         endDate: '',
@@ -26,7 +25,7 @@ const MyMileageUsagePage = () => {
     useEffect(() => {
         callAPI();
 
-    }, [page, pageRequest.size]);
+    }, [page]);
 
     const callAPI = async () => {
         const dong = getParsedItem("dong");
@@ -35,7 +34,7 @@ const MyMileageUsagePage = () => {
 
         if (!dong || !ho) {
             alert("동과 호수 정보가 누락되었습니다. 설정을 확인해 주세요.");
-            navi("/");
+            navi("/myPage/myInfo");
             return;
         }
 
@@ -47,9 +46,10 @@ const MyMileageUsagePage = () => {
                 page: page,
                 size: pageRequest.size,
                 ascending: pageRequest.ascending,
+                sortingColumn: pageRequest.sortingColumn,
                 keyword: pageRequest.keyword,
-                startDate: pageRequest.startDate,
-                endDate: pageRequest.endDate,
+                startDate: pageRequest.startDate ? new Date(pageRequest.startDate).toISOString().split('.')[0] : '',
+                endDate: pageRequest.endDate ? new Date(pageRequest.endDate).toISOString().split('.')[0] : '',
 
             };
             console.log('params', params)
@@ -89,20 +89,20 @@ const MyMileageUsagePage = () => {
         let start, end;
         switch (value) {
             case '오늘':
-                start = moment().format('YYYY-MM-DD');
-                end = start;
+                start = moment().startOf('day').format('YYYY-MM-DDTHH:mm:ss');
+                end = moment().endOf('day').format('YYYY-MM-DDTHH:mm:ss');
                 break;
             case '어제':
-                start = moment().subtract(1, 'days').format('YYYY-MM-DD');
-                end = start;
+                start = moment().subtract(1, 'days').startOf('day').format('YYYY-MM-DDTHH:mm:ss');
+                end = moment().subtract(1, 'days').endOf('day').format('YYYY-MM-DDTHH:mm:ss');
                 break;
             case '일주일':
-                end = moment().format('YYYY-MM-DD');
-                start = moment().subtract(7, 'days').format('YYYY-MM-DD');
+                end = moment().endOf('day').format('YYYY-MM-DDTHH:mm:ss');
+                start = moment().subtract(7, 'days').startOf('day').format('YYYY-MM-DDTHH:mm:ss');
                 break;
             case '한달':
-                end = moment().format('YYYY-MM-DD');
-                start = moment().subtract(1, 'months').format('YYYY-MM-DD');
+                end = moment().endOf('day').format('YYYY-MM-DDTHH:mm:ss');
+                start = moment().subtract(1, 'months').startOf('day').format('YYYY-MM-DDTHH:mm:ss');
                 break;
             case '전체':
                 start = '';
@@ -111,12 +111,13 @@ const MyMileageUsagePage = () => {
             default:
                 return;
         }
+
         setPageRequest((it) => ({
             ...it,
             startDate: start,
             endDate: end
-        }))
-    }
+        }));
+    };
     const onChangeDateInput = (e) => {
         const { name, value } = e.target;
         setPageRequest((it) => ({
@@ -151,98 +152,98 @@ const MyMileageUsagePage = () => {
     }, [searchRequest])
 
     console.log("pageRequest", pageRequest)
-    if (mileageList.length === 0) {
-        return <div>
-            사용 내역이 없습니다.
-        </div>
-    } else {
-        return <div>
-            <form className="searchgrid" onSubmit={callAPI}>
-                <table className="searchMileageBar">
-                    <tr>
-                        <th>기간검색</th>
-                        <td className="dateBox">
-                            <div>
-                                <input type="date" name="startDate" value={pageRequest.startDate}
-                                    onChange={onChangeDateInput} />
-                                ~
-                                <input type="date" name="endDate" value={pageRequest.endDate}
-                                    onChange={onChangeDateInput} />
-                            </div>
-                            <div>
-                                <input type="button" value="전체" onClick={() => onClickDate("전체")} />
-                                <input type="button" value="오늘" onClick={() => onClickDate("오늘")} />
-                                <input type="button" value="어제" onClick={() => onClickDate("어제")} />
-                                <input type="button" value="일주일" onClick={() => onClickDate("일주일")} />
-                                <input type="button" value="한달" onClick={() => onClickDate("한달")} />
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>날짜 정렬</th>
-                        <td>
-                            <label htmlFor="ascending">
-                                <input type="radio" id="ascending" name="ascending"
-                                    value="true" onChange={(e) => onChaneAsc(e.target.value)}
-                                    checked={pageRequest.ascending == 'true'} />
-                                오름 차순</label>
-                            <label htmlFor="descending">
-                                <input type="radio" id="descending" name="ascending" value="false"
-                                    checked={pageRequest.ascending == 'false'}
-                                    onChange={(e) => onChaneAsc(e.target.value)} />
-                                내림 차순</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>보기</th>
-                        <td>
-
-                            {sizeArr.map((item, index) => (
-                                <label key={index} htmlFor={`size_${item.name}`}>
-                                    <input
-                                        type="radio"
-                                        name="size"
-                                        value={item.name}
-                                        id={`size_${item.name}`}
-                                        checked={pageRequest.size == item.name}
-                                        onChange={(e) => onchangeRequest(e)}
-                                    />
-                                    {item.description}
-                                </label>
-                            ))}
-                        </td>
-                    </tr>
-
-                </table>
-                <div className="buttonwrapper">
-                    <button type="button" onClick={callAPI}>검색</button>
-                    <button type="button" onClick={resetPageRequest}>초기화</button>
-
-                </div>
-            </form>
-            <div className="mileage-history-list">
-                {mileageList.map((item) => (
-                    <div key={item.mileageId} className="mileage-card">
-                        <div className="mileage-header">
-                            <h2 className="mileage-name">{item.name}</h2>
-                            <span className={`mileage-type ${item.type === '+' ? 'positive' : 'negative'}`}>
-                                {item.type === '+' ? '적립' : '사용'}
-                            </span>
+    return <div>
+        <form className="searchgrid" onSubmit={callAPI}>
+            <table className="searchMileageBar">
+                <tr>
+                    <th>기간검색</th>
+                    <td className="dateBox">
+                        <div>
+                            <input type="date" name="startDate" value={pageRequest.startDate}
+                                onChange={onChangeDateInput} />
+                            ~
+                            <input type="date" name="endDate" value={pageRequest.endDate}
+                                onChange={onChangeDateInput} />
                         </div>
-                        <div className="mileage-details">
-                            <p className="mileage-amount">변경 금액: {item.type}{item.amount}원</p>
-                            <p className="mileage-description">설명: {item.description}</p>
-                            <p> 잔액 : {item.balance}</p>
-                            <p className="mileage-timestamp">
-                                {new Date(item.timestamp).toLocaleDateString()} {new Date(item.timestamp).toLocaleTimeString()}
-                            </p>
+                        <div>
+                            <input type="button" value="전체" onClick={() => onClickDate("전체")} />
+                            <input type="button" value="오늘" onClick={() => onClickDate("오늘")} />
+                            <input type="button" value="어제" onClick={() => onClickDate("어제")} />
+                            <input type="button" value="일주일" onClick={() => onClickDate("일주일")} />
+                            <input type="button" value="한달" onClick={() => onClickDate("한달")} />
                         </div>
-                    </div>
-                ))}
+                    </td>
+                </tr>
+                <tr>
+                    <th>날짜 정렬</th>
+                    <td>
+                        <label htmlFor="ascending">
+                            <input type="radio" id="ascending" name="ascending"
+                                value="true" onChange={(e) => onChaneAsc(e.target.value)}
+                                checked={pageRequest.ascending == 'true'} />
+                            오름 차순</label>
+                        <label htmlFor="descending">
+                            <input type="radio" id="descending" name="ascending" value="false"
+                                checked={pageRequest.ascending == 'false'}
+                                onChange={(e) => onChaneAsc(e.target.value)} />
+                            내림 차순</label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>보기</th>
+                    <td>
+
+                        {sizeArr.map((item, index) => (
+                            <label key={index} htmlFor={`size_${item.name}`}>
+                                <input
+                                    type="radio"
+                                    name="size"
+                                    value={item.name}
+                                    id={`size_${item.name}`}
+                                    checked={pageRequest.size == item.name}
+                                    onChange={(e) => onchangeRequest(e)}
+                                />
+                                {item.description}
+                            </label>
+                        ))}
+                    </td>
+                </tr>
+
+            </table>
+            <div className="buttonwrapper">
+                <button type="button" onClick={callAPI}>검색</button>
+                <button type="button" onClick={resetPageRequest}>초기화</button>
+
             </div>
-            <RenderPagination pageMaker={pageMaker} page={page} setPage={setPage} />
-        </div>;
-    }
+        </form>
+        {
+            mileageList.length === 0 ?
+                <div className="mileage-history-list">
+                    data 가 없습니다.
+                </div> :
+                <div className="mileage-history-list">
+                    {mileageList.map((item) => (
+                        <div key={item.mileageId} className="mileage-card">
+                            <div className="mileage-header">
+                                <h2 className="mileage-name">{item.name}</h2>
+                                <span className={`mileage-type ${item.type === '+' ? 'positive' : 'negative'}`}>
+                                    {item.type === '+' ? '적립' : '사용'}
+                                </span>
+                            </div>
+                            <div className="mileage-details">
+                                <p className="mileage-description"> {item.description}</p>
+                                <p className="mileage-amount">변경 금액: {item.type}{formatNumber(+item.amount)} 원</p>
+                                <p> 잔액 : {formatNumber(+item.balance)} 원</p>
+                                <p className="mileage-timestamp">
+                                    {new Date(item.timestamp).toLocaleDateString()} {new Date(item.timestamp).toLocaleTimeString()}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+        }
+        <RenderPagination pageMaker={pageMaker} page={page} setPage={setPage} />
+    </div>;
 
 };
 

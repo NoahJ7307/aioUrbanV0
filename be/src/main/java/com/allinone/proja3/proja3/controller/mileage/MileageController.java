@@ -4,8 +4,10 @@ package com.allinone.proja3.proja3.controller.mileage;
 import com.allinone.proja3.proja3.dto.mileage.*;
 import com.allinone.proja3.proja3.model.mileage.Mileage;
 import com.allinone.proja3.proja3.model.mileage.MileageHistory;
+import com.allinone.proja3.proja3.model.mileage.PaymentHistory;
 import com.allinone.proja3.proja3.service.mileage.MileageService;
 import com.allinone.proja3.proja3.service.mileage.MileagehistoryService;
+import com.allinone.proja3.proja3.service.mileage.PaymentHistoryService;
 import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -26,6 +28,7 @@ public class MileageController {
     private final MileageService mileageService;
     private final PaymentService paymentService;
     private final MileagehistoryService mileagehistoryService;
+    private final PaymentHistoryService paymentHistoryService;
 
     @GetMapping("/getmileage")
     public ResponseEntity<?> getMileage(@RequestParam("dong") String dong , @RequestParam("ho") String ho) {
@@ -84,6 +87,21 @@ public class MileageController {
             response.put("list", list);
             response.put("pageMaker", resultDTO);
 
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getpaylist")
+    public ResponseEntity<?> getpaylist(@RequestParam("uno") Long uno, MileagePageRequestDTO pageRequestDTO) {
+        try {
+            MileagePageResultDTO<PaymentHistoryDTO, PaymentHistory> resultDTO = paymentHistoryService.getPaymentList(uno,pageRequestDTO);
+            Map<String, Object> response = new HashMap<>();
+            List<PaymentHistoryDTO> list = resultDTO.getDtoList();
+            response.put("list", list);
+            response.put("pageMaker", resultDTO);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error(e);

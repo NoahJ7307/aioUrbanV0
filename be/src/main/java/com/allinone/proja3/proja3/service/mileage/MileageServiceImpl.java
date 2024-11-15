@@ -103,7 +103,7 @@ public class MileageServiceImpl implements MileageService {
         return mileageRepository.save(entity);
     }
 
-    //수동 충전 로직 사용 , 결제시 자동결제될때 추가적으로 사용됨.
+    //-수동 충전 로직 사용 ,- 결제시 자동결제될때 추가적으로 사용됨.
     public Mileage duplicate(MileageDTO dto , int paymetAmount ) {
         Mileage entity =findByDongHoentity(dto.getDong(), dto.getHo());
         CardInfo cardInfo = cardInfoRepository.findById(dto.getCardId()).orElse(null);

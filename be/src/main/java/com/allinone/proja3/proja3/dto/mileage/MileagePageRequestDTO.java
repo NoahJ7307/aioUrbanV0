@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.PageRequest;
 
+import java.time.LocalDateTime;
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -20,6 +22,8 @@ public class MileagePageRequestDTO {
     private String keyword;
     private String sortingColumn;
     private boolean ascending;
+    private LocalDateTime startDate; // 검색 시작 날짜
+    private LocalDateTime endDate; // 검색 종료 날짜
 
     public Pageable getPageable() {
 

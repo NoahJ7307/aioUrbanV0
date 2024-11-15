@@ -92,8 +92,9 @@ public class MileagehistoryServiceImpl implements MileagehistoryService {
     public MileagePageResultDTO<MileageHistoryDTO,MileageHistory> getMileageHistoryList(String dong, String ho , MileagePageRequestDTO pageRequestDTO) {
 
         Long mileageId = mileageRepository.findByDongAndHoAndStateTrue(dong,ho).get().getMileageId();
-        Page result = mileageHistoryRepository.findByMileage_MileageId(mileageId ,pageRequestDTO.getPageable());
-        return new MileagePageResultDTO<>(result,  this::getDTO);
+        Page newResult = mileageHistoryRepository.complexmileageSearch(mileageId,pageRequestDTO.getKeyword(),pageRequestDTO.getStartDate(),pageRequestDTO.getEndDate(),pageRequestDTO.getPageable());
+        //Page result = mileageHistoryRepository.findByMileage_MileageId(mileageId ,pageRequestDTO.getPageable());
+        return new MileagePageResultDTO<>(newResult,  this::getDTO);
 
     }
 
