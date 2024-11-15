@@ -80,5 +80,6 @@ public class PaymentServiceTests {
                 .description("TEST")
                 .build();
         //paymentService.processUseMileage(mileageService.getDTO(mileage), 81L, amount, mileageHistoryDTO.getDescription());
+//        paymentService.processUseMileage(mileageService.getDTO(mileage), 81L, amount, mileageHistoryDTO.getDescription());
     }
 }

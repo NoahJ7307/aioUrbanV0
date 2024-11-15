@@ -1,6 +1,5 @@
 package com.allinone.proja3.proja3.dto.facilities;
 
-import com.allinone.proja3.proja3.model.facilities.MembershipType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,19 +13,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class GymMembershipDTO {
     private Long membershipId;
-
-    // User 정보
-    private Long uno;
-    private String dong;
-    private String ho;
-
-
-    private Long mileageId; // Mileage 정보는 mileageId로만 전달
-    private MembershipType membershipType;
+    private Long uno;  // Instead of embedding the full User object
+    private Long mileageId;  // Instead of embedding the full Mileage object
     private LocalDate startDate;
     private LocalDate endDate;
-    private LocalDate dayPassDate;
-//    private boolean isOnHold; // 홀딩 상태
-//    private long remainingDaysBeforeHold;
+    private boolean isOnHold;
+    private Long membershipPlanId;
+    private String membershipType;
 
 }

@@ -18,6 +18,7 @@ import static com.allinone.proja3.proja3.model.facilities.QGymMembership.gymMemb
 @NoArgsConstructor
 
 public class GymMembership {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long membershipId;
@@ -30,16 +31,15 @@ public class GymMembership {
     @JoinColumn(name ="mileageId" , referencedColumnName ="mileageId") // 마일리지와 연관
     private Mileage mileage;
 
-    private MembershipType membershipType;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "membership_plan_id", referencedColumnName = "membershipPlanId") // 사용자가 선택한 이용권 계획
+    private MembershipPlan membershipPlan;
+
     private LocalDate startDate;
     private LocalDate endDate;
 
-//    @Column(nullable = true)
-//    private LocalDate dayPassDate;
-
+    @Builder.Default
     private boolean isOnHold = false; // 홀딩상태 관리하는 변수
-//    private long remainingDaysBeforeHold = 0;
-
 
 
 }

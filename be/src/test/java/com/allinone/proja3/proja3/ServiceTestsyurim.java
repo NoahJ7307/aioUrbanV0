@@ -10,7 +10,6 @@ import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.model.facilities.Golf;
 import com.allinone.proja3.proja3.model.facilities.Gym;
-import com.allinone.proja3.proja3.model.facilities.MembershipType;
 import com.allinone.proja3.proja3.model.facilities.ProgramState;
 import com.allinone.proja3.proja3.model.mileage.Mileage;
 import com.allinone.proja3.proja3.repository.UserRepository;
@@ -184,13 +183,13 @@ public class ServiceTestsyurim {
         int amount= 8500;
         CardInfoDTO cardInfoDTO = CardInfoDTO.builder()
                 .cardExpiry("123")
-                .uno(52L)
+                .uno(54L)
                 .encryptedCardNumber("1233456778941234")
                 .build();
         Mileage mileage = Mileage.builder()
                 .autopay(false)
-                .ho("1")
-                .dong("1")
+                .ho("102")
+                .dong("101")
                 .price(amount)
                 .build();
         ManualRequestDTO manualRequestDTO = ManualRequestDTO.builder()
@@ -200,12 +199,12 @@ public class ServiceTestsyurim {
                 .build();
         paymentService.processManualPayment(manualRequestDTO);
         MileageHistoryDTO mileageHistoryDTO = MileageHistoryDTO.builder()
-                .uno(52L)
+                .uno(54L)
                 .timestamp(LocalDateTime.now())
                 .amount(amount)
                 .description("헬스장 일일이용권이 결제되었습니다.")
                 .build();
-        paymentService.processUseMileage("1","1", 52L, amount, "헬스장 일일이용권이 결제되었습니다." );
+        paymentService.processUseMileage("101","102", 54L, amount, "헬스장 일일이용권이 결제되었습니다." );
     }
 
 
