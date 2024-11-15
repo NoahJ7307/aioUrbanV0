@@ -36,15 +36,15 @@ public class MileageController {
     public ResponseEntity<?> getMileage(@RequestParam("dong") String dong , @RequestParam("ho") String ho,@RequestParam("uno") Long uno) {
 
         try {
+            log.info("dong : {} , ho : {}",dong,ho);
             Map<String, Object> response = new HashMap<>();
             MileageDTO dto = mileageService.findByDongHoDTO(dong, ho);
+            log.info("현재 마일리지 정보 : {}",dto);
             response.put("mileage", dto);
             //CardInfoDTO logincard = cardInfoService.findByUno(uno);// 로그인 유저 카드
             if (dto.isAutopay()==true){
-                CardInfoDTO mileageCard = cardInfoService.findByUno(dto.getCardId());//마일리지 카드의 유저 찾기 1
-                UserDTO user = userService.getOne(mileageCard.getUno());// 마일리지 카드의 유저찾기 2
-                response.put("usedCardName", user.getUserName());
-                log.info("현재 마일리지 카드는 자동결제중");
+                    String userName = cardInfoService.getCardName(dto.getCardId());
+                    response.put("usedCardName",userName);
             }
             log.info(dto);
             return ResponseEntity.ok(response);
