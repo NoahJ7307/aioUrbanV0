@@ -14,6 +14,11 @@ const GymSignUpPage = () => {
   const handleMembershipClick = useCallback(() => {
     setActiveTab('membership'); // 회원권 클릭 시 activeTab을 'membership'으로 설정
     navigate('/facilities/gym/signup/membership');  // 절대 경로로 이동
+  }, [navigate]); 
+  
+  const handleAdminCreateMembership= useCallback(() => {
+    setActiveTab('membership'); // 회원권 클릭 시 activeTab을 'membership'으로 설정
+    navigate('/facilities/gym/signup/create');  // 절대 경로로 이동
   }, [navigate]);
 
   return (
@@ -33,6 +38,12 @@ const GymSignUpPage = () => {
           onClick={handleMembershipClick}
         >
           회원권 구매
+        </li>
+        <li 
+          className={`button-item` } 
+          onClick={handleAdminCreateMembership}
+        >
+          입주민 회원권 생성
         </li>
       </ul>
       {/* <Outlet />를 통해 하위 컴포넌트를 렌더링 */}

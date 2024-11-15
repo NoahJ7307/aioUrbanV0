@@ -5,6 +5,7 @@ import { Suspense, lazy } from 'react';
 import GymSignUpPage from '../../pages/facilities/gym/membership/GymSignUpPage';
 import DayPassPurchasePage from '../../pages/facilities/gym/membership/DayPassPurchasePage';
 import MembershipPurchasePage from '../../pages/facilities/gym/membership/MembershipPurchasePage';
+import AdminCreateMembershipPage from '../../pages/facilities/gym/membership/AdminCreateMembershipPage';
 
 const Loading = <div>....</div>
 const GymList = lazy(() => import("../../pages/facilities/gym/GymListPage"))
@@ -44,6 +45,10 @@ const gymRouter = [
                     {
                         path: "membership",
                         element: <MembershipPurchasePage />
+                    },
+                    {
+                        path: "create",
+                        element: <AdminCreateMembershipPage />
                     },
                 ]
             },
