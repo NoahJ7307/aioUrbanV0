@@ -19,14 +19,13 @@ public class JWTCheckFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         // preflight 요청 허용 (OPTIONS method)
-        if (request.getMethod().equals("OPTIONS")) return true;
 
         String path = request.getRequestURI();
-        System.out.println("URI : " + path);
+
         // login 경로 허용
         if (path.startsWith("/api/user/login")) return true;
         if (path.startsWith("/api/main/join")) return true;
-        if (path.startsWith("/uploads")) return  true; // 이미지 인증 추가
+        if (path.startsWith("/upload")) return  true; // 이미지 인증 추가
         if (path.startsWith("/ws/chat")) return true; // WebSocket 경로 허용
 
         return false;

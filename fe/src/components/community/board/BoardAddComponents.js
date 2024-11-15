@@ -29,13 +29,13 @@ const BoardAddComponents = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const postData = { title, content }; // uno를 포함하지 않음
-      await post(postData, uno); // uno를 쿼리 파라미터로 전달
+      const postData = { title, content }; 
+      await post(postData, uno); 
       setTitle('');
       setContent('');
-      // 추가: 새 데이터 가져오기 로직 추가 필요할 수 있음
+    
       window.alert('성공!');
-      navigate('/communities/board/list'); // 업데이트 후 목록 페이지로 이동
+      navigate('/communities/board/list'); 
     } catch (err) {
       console.error('게시물 등록 실패:', err);
     }

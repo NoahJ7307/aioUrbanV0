@@ -11,7 +11,10 @@ import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.service.UserService;
 import com.allinone.proja3.proja3.service.community.AnnounceService;
 import com.allinone.proja3.proja3.service.community.MarketService;
+import com.allinone.proja3.proja3.util.CustomFileUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +31,13 @@ import java.util.List;
 public class MarketController {
     @Autowired
     private MarketService service;
+
+    @Autowired
     private UserService userService;
+
     @Autowired
     private UserRepository repository;
+
     @GetMapping("/modify/{mno}")
     public ResponseEntity<MarketDTO> getModify(@PathVariable Long mno) {
         MarketDTO marketDTO = service.findByMno(mno); // 서비스에서 Mno로 데이터 조회

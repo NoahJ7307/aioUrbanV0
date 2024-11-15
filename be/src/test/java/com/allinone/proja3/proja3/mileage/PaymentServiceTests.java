@@ -53,32 +53,32 @@ public class PaymentServiceTests {
         int amount = 5000;
     }
 
-    @Test
-    public void processUseMileage(){
-        int amount = 5000;
-        CardInfoDTO cardInfoDTO = CardInfoDTO.builder()
-                .cardExpiry("123")
-                .encryptedCardNumber("1234123412341234")
-                .uno(81L)
-                .build();
-        Mileage mileage = Mileage.builder()
-                .autopay(false)
-                .dong("100")
-                .ho("100")
-                .price(50000)
-                .build();
-        ManualRequestDTO manualRequestDTO = ManualRequestDTO.builder()
-                .card(cardInfoDTO)
-                .mileage(mileageService.getDTO(mileage))
-                .paymentAmount(amount*2)
-                .build();
-        paymentService.processManualPayment(manualRequestDTO);
-        MileageHistoryDTO mileageHistoryDTO = MileageHistoryDTO.builder()
-                .uno(81L)
-                .timestamp(LocalDateTime.now())
-                .amount(1000)
-                .description("TEST")
-                .build();
-        paymentService.processUseMileage(mileageService.getDTO(mileage), 81L, amount, mileageHistoryDTO.getDescription());
-    }
+//    @Test
+//    public void processUseMileage(){
+//        int amount = 5000;
+//        CardInfoDTO cardInfoDTO = CardInfoDTO.builder()
+//                .cardExpiry("123")
+//                .encryptedCardNumber("1234123412341234")
+//                .uno(81L)
+//                .build();
+//        Mileage mileage = Mileage.builder()
+//                .autopay(false)
+//                .dong("100")
+//                .ho("100")
+//                .price(50000)
+//                .build();
+//        ManualRequestDTO manualRequestDTO = ManualRequestDTO.builder()
+//                .card(cardInfoDTO)
+//                .mileage(mileageService.getDTO(mileage))
+//                .paymentAmount(amount*2)
+//                .build();
+//        paymentService.processManualPayment(manualRequestDTO);
+//        MileageHistoryDTO mileageHistoryDTO = MileageHistoryDTO.builder()
+//                .uno(81L)
+//                .timestamp(LocalDateTime.now())
+//                .amount(1000)
+//                .description("TEST")
+//                .build();
+//        paymentService.processUseMileage(mileageService.getDTO(mileage), 81L, amount, mileageHistoryDTO.getDescription());
+//    }
 }

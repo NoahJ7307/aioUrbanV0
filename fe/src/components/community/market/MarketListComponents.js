@@ -40,6 +40,7 @@ const MarketListComponents = () => {
     useEffect(() => {
         get({ page, size })
             .then(data => {
+                console.log("serverData:", data.dtoList)
                 setServerData(data);
                 setLoading(false);
             })
@@ -54,6 +55,7 @@ const MarketListComponents = () => {
             const result = await deleteChecked(mno, uno);
             if (result) {
                 const updatedList = serverData.dtoList.filter(item => item.mno !== mno);
+
                 setServerData(prevData => ({
                     ...prevData,
                     dtoList: updatedList
@@ -118,12 +120,12 @@ const MarketListComponents = () => {
                                 <p className="text-gray-600">가격: {item.price} 원</p>
                                 <p className="text-gray-500">판매자: {item.userName}</p>
                                 <div className="flex justify-between mt-2">
-                                <button
-                                    onClick={() => openModal(item)}
-                                    className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
-                                >
-                                    상세보기
-                                </button>
+                                    <button
+                                        onClick={() => openModal(item)}
+                                        className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
+                                    >
+                                        상세보기
+                                    </button>
                                     <button
                                         onClick={() => { navigate(`/communities/market/modify/${item.mno}`); }}
                                         disabled={uno !== item.userId}

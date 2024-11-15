@@ -48,7 +48,7 @@ public class UrbanSecurityConfig {
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/user/login").permitAll()  // 인증 없이 접근 허용
                         .requestMatchers("/api/main/join").permitAll()
-                        .requestMatchers("/uploads/**").permitAll() // 이미지인증추가
+                        .requestMatchers("/upload/**").permitAll() // 이미지 인증 없이 접근 허용
                         .requestMatchers("/ws/chat").permitAll()// 웹소켓 허용
                         .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "ROOT") // 접근 권한 설정
                         .requestMatchers("/api/parking/**").hasAnyRole("USER", "ADMIN", "ROOT") // 접근 권한 설정
