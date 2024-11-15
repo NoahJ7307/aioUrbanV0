@@ -29,4 +29,5 @@ public class RegularParking {
     private String name;
     private String phone;
     private LocalDate regDate;
+    private LocalDate lastPaymentDate;
 }

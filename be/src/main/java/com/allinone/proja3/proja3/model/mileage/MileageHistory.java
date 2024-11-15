@@ -20,9 +20,6 @@ public class MileageHistory {
     @JoinColumn(name = "mileageId", insertable = false, updatable = false)
     private Mileage mileage; // Mileage 테이블 참조
 
-//    @ManyToOne
-//    @JoinColumn(name = "uno", nullable = true) // 회원 삭제 시 `NULL` 설정 가능
-//    private User user;
 // 탈퇴후에도 이력을 남기기 위함.
     private Long uno; // 회원의 고유 ID를 직접 저장
 
@@ -32,6 +29,9 @@ public class MileageHistory {
 
     @Column(nullable = false)
     private int amount;
+
+    @Column(nullable = true)//가데이터 오류발생을 방지
+    private int balance;
 
     private String description;
 

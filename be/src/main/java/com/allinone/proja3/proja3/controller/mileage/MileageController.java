@@ -1,20 +1,23 @@
 package com.allinone.proja3.proja3.controller.mileage;
 
 
-import com.allinone.proja3.proja3.dto.mileage.ManualRequestDTO;
-import com.allinone.proja3.proja3.dto.mileage.MileageDTO;
-import com.allinone.proja3.proja3.dto.mileage.MileageHistoryDTO;
+import com.allinone.proja3.proja3.dto.mileage.*;
+import com.allinone.proja3.proja3.dto.user.UserDTO;
+import com.allinone.proja3.proja3.model.mileage.CardInfo;
 import com.allinone.proja3.proja3.model.mileage.Mileage;
 import com.allinone.proja3.proja3.model.mileage.MileageHistory;
-import com.allinone.proja3.proja3.service.mileage.MileageService;
-import com.allinone.proja3.proja3.service.mileage.MileagehistoryService;
-import com.allinone.proja3.proja3.service.mileage.PaymentService;
+import com.allinone.proja3.proja3.model.mileage.PaymentHistory;
+import com.allinone.proja3.proja3.service.UserService;
+import com.allinone.proja3.proja3.service.mileage.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -25,15 +28,31 @@ public class MileageController {
     private final MileageService mileageService;
     private final PaymentService paymentService;
     private final MileagehistoryService mileagehistoryService;
+    private final PaymentHistoryService paymentHistoryService;
+    private final CardInfoService cardInfoService;
+    private final UserService userService;
 
     @GetMapping("/getmileage")
-    public ResponseEntity<?> getMileage(@RequestParam("dong") String dong , @RequestParam("ho") String ho) {
+    public ResponseEntity<?> getMileage(@RequestParam("dong") String dong , @RequestParam("ho") String ho,@RequestParam("uno") Long uno) {
 
-        MileageDTO dto = mileageService.findByDongHoDTO(dong, ho);
+        try {
+            Map<String, Object> response = new HashMap<>();
+            MileageDTO dto = mileageService.findByDongHoDTO(dong, ho);
+            response.put("mileage", dto);
+            //CardInfoDTO logincard = cardInfoService.findByUno(uno);// 로그인 유저 카드
+            if (dto.isAutopay()==true){
+                CardInfoDTO mileageCard = cardInfoService.findByUno(dto.getCardId());//마일리지 카드의 유저 찾기 1
+                UserDTO user = userService.getOne(mileageCard.getUno());// 마일리지 카드의 유저찾기 2
+                response.put("usedCardName", user.getUserName());
+                log.info("현재 마일리지 카드는 자동결제중");
+            }
+            log.info(dto);
+            return ResponseEntity.ok(response);
+        }catch (Exception e){
+            log.error(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
-        log.info(dto);
-
-    return ResponseEntity.ok(dto);
     }
 
     @PostMapping("/manualPayment")
@@ -75,15 +94,36 @@ public class MileageController {
     }
 
     @GetMapping("/getlist")
-    public ResponseEntity<?> getList(@RequestParam("dong") String dong , @RequestParam("ho") String ho) {
+    public ResponseEntity<?> getList(@RequestParam("dong") String dong, @RequestParam("ho") String ho, MileagePageRequestDTO pageRequestDTO) {
         try {
-            List<MileageHistoryDTO> list = mileagehistoryService.getMileageHistoryList(dong,ho);
-            return ResponseEntity.ok(list);
+            MileagePageResultDTO<MileageHistoryDTO, MileageHistory> resultDTO = mileagehistoryService.getMileageHistoryList(dong, ho, pageRequestDTO);
+            Map<String, Object> response = new HashMap<>();
+            List<MileageHistoryDTO> list = resultDTO.getDtoList();
+            response.put("list", list);
+            response.put("pageMaker", resultDTO);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error(e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/getpaylist")
+    public ResponseEntity<?> getpaylist(@RequestParam("uno") Long uno, MileagePageRequestDTO pageRequestDTO) {
+        try {
+            MileagePageResultDTO<PaymentHistoryDTO, PaymentHistory> resultDTO = paymentHistoryService.getPaymentList(uno,pageRequestDTO);
+            Map<String, Object> response = new HashMap<>();
+            List<PaymentHistoryDTO> list = resultDTO.getDtoList();
+            response.put("list", list);
+            response.put("pageMaker", resultDTO);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 
 
 

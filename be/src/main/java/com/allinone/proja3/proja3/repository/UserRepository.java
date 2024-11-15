@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface UserRepository extends JpaRepository<User, Long> {
     // delFlag
     Page<User> findByDelFlag(boolean delFlag, Pageable pageable);
@@ -29,6 +31,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // phone 으로 조회 (즉시 with role)
     @EntityGraph(attributePaths = {"userRoleList"})
     User findByPhone(String phone);
+    // dong ho 로 조회
+    @EntityGraph(attributePaths = {"userRoleList"})
+    List<User> findAllByDongAndHo(String dong, String ho);
 
     // search method
     @EntityGraph(attributePaths = {"userRoleList"})
