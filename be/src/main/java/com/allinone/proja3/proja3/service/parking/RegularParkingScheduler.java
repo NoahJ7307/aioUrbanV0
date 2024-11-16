@@ -14,6 +14,6 @@ public class RegularParkingScheduler {
     @Scheduled(cron = "0 0 0 * * *") // 매일 자정 실행
     public void startRegularPayment(){
         log.info("startRegularPayment");
-//        regularParkingService
+        regularParkingService.monthlyRegularPayment();
     }
 }

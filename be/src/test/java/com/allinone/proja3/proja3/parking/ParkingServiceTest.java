@@ -2,11 +2,16 @@ package com.allinone.proja3.proja3.parking;
 
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
+import com.allinone.proja3.proja3.dto.mileage.MileageDTO;
 import com.allinone.proja3.proja3.dto.parking.*;
 import com.allinone.proja3.proja3.model.parking.Household;
 import com.allinone.proja3.proja3.model.parking.HouseholdPK;
+import com.allinone.proja3.proja3.service.mileage.MileageService;
+import com.allinone.proja3.proja3.service.mileage.PaymentService;
+import com.allinone.proja3.proja3.service.parking.RegularParkingScheduler;
 import com.allinone.proja3.proja3.service.parking.RegularParkingService;
 import com.allinone.proja3.proja3.service.parking.VisitParkingService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +25,15 @@ public class ParkingServiceTest {
 
     @Autowired
     private VisitParkingService visitParkingService;
+
+    @Autowired
+    private RegularParkingScheduler regularParkingScheduler;
+
+    @Autowired
+    private MileageService mileageService;
+
+    @Autowired
+    private PaymentService paymentService;
 
     @Test
     public void insertRP(){
