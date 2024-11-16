@@ -78,20 +78,12 @@ public class CommunityController {
             @PathVariable(name = "pno") Long pno,
             @RequestParam(name = "uno") Long uno,
             @RequestBody CommunityDTO communityDTO) {
-
-        // 입력된 값 출력 (디버깅용)
-        System.out.println("Received pno: " + pno);
-        System.out.println("Received uno: " + uno);
-        System.out.println("CommunityDTO: " + communityDTO);
-
         // CommunityDTO에 pno와 uno 값 설정
         communityDTO.setUserId(uno);
         communityDTO.setPno(pno);
-
         try {
             // 서비스 레이어 호출 (수정 로직 처리)
             boolean isModified = service.modify(communityDTO);
-
             if (isModified) {
                 // 성공적으로 수정되었을 경우 200 OK 응답
                 return ResponseEntity.ok("업데이트 성공!");

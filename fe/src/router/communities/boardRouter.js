@@ -4,7 +4,7 @@ import BoardModifyPage from "../../pages/community/board/BoardModifyPage";
 import BoardPage from "../../pages/community/board/BoardPage";
 
 
-const golfRouter = [
+const boardRouter = [
     {
         path: "board",
         element: <BoardPage/>,
@@ -27,4 +27,4 @@ const golfRouter = [
 ];
 
 
-export default golfRouter
+export default boardRouter;

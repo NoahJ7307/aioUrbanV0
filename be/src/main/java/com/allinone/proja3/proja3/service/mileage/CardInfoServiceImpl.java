@@ -1,6 +1,7 @@
 package com.allinone.proja3.proja3.service.mileage;
 
 import com.allinone.proja3.proja3.dto.mileage.CardInfoDTO;
+import com.allinone.proja3.proja3.dto.user.UserDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.mileage.CardInfo;
 import com.allinone.proja3.proja3.repository.UserRepository;
@@ -23,6 +24,15 @@ public class CardInfoServiceImpl implements CardInfoService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+
+    public CardInfoDTO getCardInfo(Long cardId) {
+        Optional<CardInfo> card = cardInfoRepository.findById(cardId);
+        if (card.isPresent()) {
+            return getDTO(card.get());
+        }else{
+            return null;
+        }
+    }
 
     private CardInfoDTO getDTO(CardInfo entity) {
         CardInfoDTO dto = CardInfoDTO.builder()
@@ -88,6 +98,22 @@ public class CardInfoServiceImpl implements CardInfoService {
             return "Card 가 존재 deleted 완료";
         }else{
             return "Card 가 존재하지않아 , 삭제되지 않았습니다.";
+        }
+    }
+
+    public String getCardName (Long cardId){
+        CardInfoDTO mileageCard = getCardInfo(cardId);
+        if (mileageCard != null) {
+            log.info("mileage card 찾음 : {}",mileageCard);
+            Optional<User> user = userRepository.findById(mileageCard.getUno());
+            if(user.isPresent()) {
+                log.info("카드 사용자: {}",user.get().getUserName());
+                return user.get().getUserName();
+            }else{
+                return null;
+            }
+        }else{
+            return null;
         }
     }
 }

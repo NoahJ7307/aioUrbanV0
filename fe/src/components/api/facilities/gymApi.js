@@ -186,43 +186,59 @@ export const cancelWaitlist = async (programId, user) => {
         throw error;
     }
 }
+export const membershipAdd = async (program) => {
 
-//헬스장 이용권 구매 api 
-// export const purchaseMembership = async (membershipType, uno) => {
-//     console.log("헬스장 이용권 구매 요청: ", membershipType, uno);
-//     const config = getConfig();
-//     try {
-//         const response = await axios.post(`${host}/signup/membership`, {
-//             membershipType,
-//             uno,
-//         }, config);
-
-//         console.log("헬스장 이용권 구매 성공 : ", response.data);
-//         return response.data;
-//     } catch (error) {
-//         console.error("헬스장 이용권 구매 중 오류 발생: ", error);
-//         throw error;
-//     }
-// };
-export const purchaseMembership = async (membershipType, uno) => {
-    console.log("헬스장 이용권 구매 요청: ", membershipType, uno);
+    console.log("게시글 작성 눌렸다", program);
     const config = getConfig();
+    const res = await axios.post(`${host}/add`, program, config);
+    return res.data;
+};
+
+// 헬스장 이용권 구매 api
+export const purchaseMembership = async (membershipData) => {
+    console.log("헬스장 이용권 구매 요청: ", membershipData);
+    const config = getConfig(); // 인증 헤더 등을 설정
     try {
-        const response = await axios.post(`${host}/signup/membership`, {
-            params: {
-                membershipType,
-                uno,
-            },
-            ...config,
-        });
+        const response = await axios.post(`${host}/membership/purchase`, membershipData, config);
         console.log("헬스장 이용권 구매 성공 : ", response.data);
         return response.data;
-
     } catch (error) {
         console.error("헬스장 이용권 구매 중 오류 발생: ", error);
-        throw error
+        throw error;
     }
-}
+};
+//관리자가 이용권등록 
+export const createGymMembership = async (membershipData) => {
+    const { membershipPlanName, durationMonths, price } = membershipData;
+    console.log("헬스장 이용권 등록 요청(관리자): ", membershipData);
+    const config = getConfig(); // 인증 헤더 등을 설정
+    try {
+        const response = await axios.post(`${host}/membership/create/admin`, {
+            membershipPlanName,
+            durationMonths,
+            price,
+        },
+            config
+        );
+        console.log("헬스장 이용권 등록 성공 : ", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("헬스장 이용권 등록 중 오류 발생: ", error);
+        throw error;
+    }
+};
 
+//관리자가 등록한 이용권 목록 가져오기
+export const fetchAllMembershipPlans = async () => {
+    const config = getConfig();  // 인증 헤더 설정
+    try {
+        const response = await axios.get(`${host}/membership/plans`, config);
+        console.log("헬스장 이용권 목록 조회 성공: ", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("헬스장 이용권 목록 조회 중 오류 발생: ", error);
+        throw error;
+    }
+};
 
 
