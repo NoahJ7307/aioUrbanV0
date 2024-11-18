@@ -45,87 +45,78 @@ const RegularModifyComponent = () => {
         })
     }
     return (
-        <div className='flex p-2'>
-            <div className='p-2'>
-                <div>
-                    <div>
-                        차량번호
-                    </div>
-                    <div>
-                        이름
-                    </div>
-                    <div>
-                        전화번호
-                    </div>
-                    <div>
-                        동
-                    </div>
-                    <div>
-                        호
-                    </div>
-                </div>
+        <div className="formContainer">
+            <div className="formGroup">
+                <label className="formLabel">차량번호</label>
+                <input
+                    className="inputBox"
+                    name="carNum"
+                    value={serverData.carNum}
+                    onChange={handleChange}
+                />
             </div>
-            <div>
-                <div className='p-2'>
-                    <div>
-                        <input className='border'
-                            name='carNum'
-                            value={serverData.carNum}
-                            onChange={handleChange} />
+            <div className="formGroup">
+                <label className="formLabel">이름</label>
+                <input
+                    className="inputBox"
+                    name="name"
+                    value={serverData.name}
+                    onChange={handleChange}
+                />
+            </div>
+            <div className="formGroup">
+                <label className="formLabel">전화번호</label>
+                <input
+                    className="inputBox"
+                    name="phone"
+                    value={serverData.phone}
+                    onChange={handleChange}
+                />
+            </div>
+            {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ? (
+                <>
+                    <div className="formGroup">
+                        <label className="formLabel">동</label>
+                        <input className="inputBox" value={loadLoginData().dong} readOnly />
                     </div>
-                    <div>
-                        <input className='border'
-                            name='name'
-                            value={serverData.name}
-                            onChange={handleChange} />
+                    <div className="formGroup">
+                        <label className="formLabel">호</label>
+                        <input className="inputBox" value={loadLoginData().ho} readOnly />
                     </div>
-                    <div>
-                        <input className='border'
-                            name='phone'
-                            value={serverData.phone}
-                            onChange={handleChange} />
+                </>
+            ) : (
+                <>
+                    <div className="formGroup">
+                        <label className="formLabel">동</label>
+                        <input
+                            className="inputBox"
+                            name="dong"
+                            value={serverData.dong}
+                            onChange={handleChange}
+                        />
                     </div>
-                    {/* 권한 별 분기 - 동/호 선택 여부 */}
-                    {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
-                        <>
-                            <div>
-                                <input className='border'
-                                    name='dong'
-                                    value={loadLoginData().dong}
-                                    readOnly
-                                    onChange={handleChange} />
-                            </div>
-                            <div>
-                                <input className='border'
-                                    name='ho'
-                                    value={loadLoginData().ho}
-                                    readOnly
-                                    onChange={handleChange} />
-                            </div>
-                        </>
-                        :
-                        <>
-                            <div>
-                                <input className='border'
-                                    name='dong'
-                                    value={serverData.dong}
-                                    onChange={handleChange} />
-                            </div>
-                            <div>
-                                <input className='border'
-                                    name='ho'
-                                    value={serverData.ho}
-                                    onChange={handleChange} />
-                            </div>
-                        </>
-                    }
-                </div>
-                <div>
-                    <button type='button' className='bg-blue-400 p-2'
-                        onClick={handleClick}>수정</button>
-                    <button type='button' className='bg-red-400 p-2'
-                        onClick={(pageParam) => moveToPath('/parking/regular', pageParam)}>취소</button>
-                </div>
+                    <div className="formGroup">
+                        <label className="formLabel">호</label>
+                        <input
+                            className="inputBox"
+                            name="ho"
+                            value={serverData.ho}
+                            onChange={handleChange}
+                        />
+                    </div>
+                </>
+            )}
+            <div className="buttonGroup">
+                <button type="button" className="formButton add" onClick={handleClick}>
+                    수정
+                </button>
+                <button
+                    type="button"
+                    className="formButton cancel"
+                    onClick={() => moveToPath('/parking/regular', { page, size })}
+                >
+                    취소
+                </button>
             </div>
         </div>
     )

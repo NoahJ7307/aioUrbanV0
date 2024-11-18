@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import PageComponent from '../common/PageComponent'
 import useCustomLogin from '../hook/useCustomLogin'
 import { regularGetList, regularGetUserList } from '../api/parking/regularApi'
+import '../../css/public/public.css'
 
 const initState = {
     dtoList: [],
@@ -102,8 +103,8 @@ const RegularListComponent = ({ pageServerData, searchData }) => {
         })
     }
     return (
-        <div>
-            <div className="grid grid-cols-7">
+        <div className="tableRowContainer">
+            <div className="tableHeader">
                 <div>No</div>
                 <div>차량번호</div>
                 <div>이름</div>
@@ -115,21 +116,25 @@ const RegularListComponent = ({ pageServerData, searchData }) => {
 
             {/* Data Rendering */}
             {serverData.dtoList.map((regular, index) => (
-                <div key={index} className="grid grid-cols-7">
-                    <div>
-                        <input
-                            type='checkbox'
-                            checked={checked.includes(regular.rpno)} // 페이지 이동 시 체크항목 유지
-                            onChange={() => handleCheckChange(regular.rpno)}
-                        />
-                    </div>
+                <label
+                    key={index}
+                    className={`tableRow ${checked.includes(regular.rpno) ? "checked" : ""}`}
+                    htmlFor={`checkbox-${regular.rpno}`}
+                >
+                    <input
+                        type="checkbox"
+                        id={`checkbox-${regular.rpno}`}
+                        checked={checked.includes(regular.rpno)}
+                        onChange={() => handleCheckChange(regular.rpno)}
+                    // 체크박스를 숨김
+                    />
                     <div>{regular.carNum}</div>
                     <div>{regular.name}</div>
                     <div>{regular.household ? regular.household.householdPK.dong : ''}</div>
                     <div>{regular.household ? regular.household.householdPK.ho : ''}</div>
                     <div>{regular.phone}</div>
                     <div>{regular.regDate}</div>
-                </div>
+                </label>
             ))}
             <PageComponent serverData={serverData} movePage={movePage} />
         </div>

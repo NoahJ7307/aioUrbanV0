@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import BasicLayout from '../../layout/BasicLayout'
 import { Outlet, useNavigate } from 'react-router-dom'
+import '../../css/public/public.css'
 
 const ParkingPage = () => {
     const navigate = useNavigate()
@@ -13,19 +14,19 @@ const ParkingPage = () => {
 
     return (
         <BasicLayout>
-            <ul className='flex justify-center'>
+            <ul className='topMenu flex justify-center'>
                 <li>
-                    <button className='bg-gray-300 p-2' onClick={handleClickRegularList}>
+                    <button className='topMenuBtn' onClick={handleClickRegularList}>
                         정기권 차량
                     </button>
                 </li>
                 <li>
-                    <button className='bg-gray-300 p-2 mr' onClick={handleClickVisitList}>
+                    <button className='topMenuBtn' onClick={handleClickVisitList}>
                         방문 예약 차량
                     </button>
                 </li>
                 <li>
-                    <button className='bg-gray-300 p-2' onClick={handleClickEEList}>
+                    <button className='topMenuBtn' onClick={handleClickEEList}>
                         입출차 기록
                     </button>
                 </li>
