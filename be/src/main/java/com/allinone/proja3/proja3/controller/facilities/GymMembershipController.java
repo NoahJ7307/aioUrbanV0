@@ -58,6 +58,21 @@ public class GymMembershipController {
             return ResponseEntity.status(500).body(null);
         }
     }
+    //관리자가 등록한 이용권 삭제
+//    @PostMapping("/membership/delete/{membershipPlanId}")
+    @DeleteMapping("/membership/delete/{membershipPlanId}")
+    public ResponseEntity<String> deleteMembership(@PathVariable Long membershipPlanId) {
+        try {
+            gymMembershipService.deleteMembership(membershipPlanId); // 서비스 호출
+            return ResponseEntity.ok("이용권이 삭제되었습니다.");
+        } catch (Exception e) {
+            System.out.println("121212:"+ e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 중 오류가 발생했습니다.");
+        }
+//    public void deleteMembershipType(@RequestBody Long membershipPlanId) {
+//        System.out.println("programId" + membershipPlanId);
+//        gymMembershipService.deleteMembership(membershipPlanId);
+    }
 //    @PreAuthorize("hasRole('ADMIN')")
 //    @PostMapping("/membership/create/admin")
 //    public ResponseEntity<MembershipPlan> createGymMembership (
@@ -87,12 +102,18 @@ public class GymMembershipController {
             return ResponseEntity.status(500).body(null);
         }
     }
-    //등록한 이용권 반환하기
+    //등록한 이용권 반환하기(조회)
     @GetMapping("/membership/plans")
     public ResponseEntity<List<MembershipPlan>> getAllMembershipPlans() {
         List<MembershipPlan> plans = gymMembershipService.getAllMembershipPlans(); // 모든 이용권 가져오기
         return ResponseEntity.ok(plans); // JSON 응답 반환
     }
+    //삭제한 이용권 반환 (조회) 관리자용 필요시 사용
+//    @GetMapping("/membership/plans/admin")
+//    public ResponseEntity<List<MembershipPlan>> getAllMembershipPlansForAdmin(@RequestParam(defaultValue = "false") boolean includeDeleted) {
+//        List<MembershipPlan> plans = gymMembershipService.getAllMembershipPlans(includeDeleted);
+//        return ResponseEntity.ok(plans);
+//    }
 
 
 //    public ResponseEntity<String> add(@RequestBody GymMembershipDTO dto) {

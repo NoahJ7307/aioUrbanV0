@@ -17,6 +17,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+//관리자 헬스장 프로그램 등록(헬스장과 별도)
 public class Gym {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

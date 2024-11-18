@@ -56,13 +56,13 @@ const GymProgramDetail = () => {
                 .then((data) => {
                     console.log("기존예약데이터:", data)
                 }).catch((error) => {
-                    console.error("Failed to fetch gym list:",error);
+                    console.error("Failed to fetch gym list:", error);
                 });
             // 프로그램 ID가 있을 때 참가자 목록 가져오기
             if (gym.programId) {
                 fetchRegisteredUsers(gym.programId)
                     .then((users) => {
-                        console.log("참가자목록 :" , users);
+                        console.log("참가자목록 :", users);
                         setParticipants(users);
                         // 로그인한 사용자가 참가자 목록에 포함되어 있는지 확인
                         setIsParticipant(users.some(user => user.uno === Number(getUno)));
@@ -80,7 +80,7 @@ const GymProgramDetail = () => {
 
         }
     }
-    , [gym.programId, page, size]);
+        , [gym.programId, page, size]);
 
     const handleModify = () => {
         console.log("수정버튼 눌림")
@@ -227,7 +227,7 @@ const GymProgramDetail = () => {
         }
 
     };
-    
+
 
     //대기 취소 !!!
     const handleWaitingCancel = async () => {
@@ -264,71 +264,104 @@ const GymProgramDetail = () => {
         navigate(`/facilities/gym/list?type=${type}&keyword=${keyword}&page=${page}&size=${size}`, { state: { gym } });
     };
     return (
-        <>
-            <div>
-                <h2>프로그램 세부정보</h2>
-                <h3>프로그램 명: {gym.title}</h3>
-                <p>세부내용: {gym.content}</p>
-                <p>대상: {gym.target}</p>
-                <p>모집 인원: {gym.participantLimit}명</p>
-                <p>진행 기간: {gym.programStartDate} ~ {gym.programEndDate} </p>
-                <p>진행 시간 : {gym.programStartTime} ~ {gym.programEndTime}</p>
-                <p>접수 기간: {gym.applicationStartDate} ~ {gym.applicationEndDate}</p>
-                <p>금액(마일리지,포인트중에 결정하고 마저 구현할것) : {gym.price}</p>
-                <p>현재 모집 현황 : {gym.currentParticipants}/{gym.participantLimit}</p>
+        <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+            {/* 프로그램 세부정보 */}
+            <div className="mb-6">
+                <h2 className="text-2xl font-semibold text-center mb-4">프로그램 세부정보</h2>
+                <div className="space-y-4">
+                    <p><strong>프로그램 명:</strong> {gym.title}</p>
+                    <p><strong>세부내용:</strong> {gym.content}</p>
+                    <p><strong>대상:</strong> {gym.target}</p>
+                    <p><strong>모집 인원:</strong> {gym.currentParticipants}/{gym.participantLimit}명</p>
+                    <p><strong>진행 기간:</strong> {gym.programStartDate} ~ {gym.programEndDate}</p>
+                    <p><strong>진행 시간:</strong> {gym.programStartTime} ~ {gym.programEndTime}</p>
+                    {/* <p><strong>접수 기간:</strong> {gym.applicationStartDate.replace('T', ' ')} ~ {gym.applicationEndDate.replace('T', ' ')}</p> */}
+                    <p><strong>접수 기간:</strong> {gym.applicationStartDate.split('T')[0]} {gym.applicationStartDate.split('T')[1].slice(0, 5)} ~ {gym.applicationEndDate.split('T')[0]} {gym.applicationEndDate.split('T')[1].slice(0, 5)}</p>
+                    <p><strong>금액:</strong> {gym.price} (마일리지, 포인트 중에 결정 예정)</p>
+                </div>
             </div>
 
-
-            <div>
-                <h2>----------------참가자 명단--------------------</h2>
-                <ul>
+            {/* 참가자 및 대기자 명단 */}
+            <div className="mb-6">
+                <h3 className="text-xl font-semibold mb-2">참가자 명단</h3>
+                <ul className="list-disc pl-5 space-y-2">
                     {participants && participants.length > 0 ? (
                         participants.map((user, index) => (
-                            <li key={`participant-${user.uno}-${index}`}>
-                                {user.userName} - {user.phone}
-                            </li>
+                            <li key={`participant-${user.uno}-${index}`} className="text-lg">{user.userName} - {user.phone}</li>
                         ))
                     ) : (
-                        <li>등록된 참가자가 없습니다.</li>
+                        <li className="text-gray-500">등록된 참가자가 없습니다.</li>
                     )}
                 </ul>
-                <h2>---------------대기자 명단-------------------</h2>
-                <ul>
+
+                <h3 className="text-xl font-semibold mt-6 mb-2">대기자 명단</h3>
+                <ul className="list-disc pl-5 space-y-2">
                     {waitlist && waitlist.length > 0 ? (
                         waitlist.map((user, index) => (
-                            <li key={`waitlist-${user.uno}-${index}`}>
-                                {user.userName} - {user.phone}
-                            </li>
+                            <li key={`waitlist-${user.uno}-${index}`} className="text-lg">{user.userName} - {user.phone}</li>
                         ))
                     ) : (
-                        <li>등록된 대기자가 없습니다.</li>
+                        <li className="text-gray-500">등록된 대기자가 없습니다.</li>
                     )}
-
                 </ul>
             </div>
 
-            <div>
-                <button type="button" onClick={handleModify}> 수정 </button>
-                <button type="button" onClick={handleDelete}> 삭제 </button>
-                <button type="button" onClick={buttonState.onClick} disabled={buttonState.disabled} style={{ backgroundColor: 'orange' }}>
+            {/* 버튼 영역 */}
+            <div className="flex justify-center space-x-4 mt-6">
+                <button
+                    type="button"
+                    onClick={handleModify}
+                    className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                >
+                    수정
+                </button>
+                <button
+                    type="button"
+                    onClick={handleDelete}
+                    className="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                >
+                    삭제
+                </button>
+                <button
+                    type="button"
+                    onClick={buttonState.onClick}
+                    disabled={buttonState.disabled}
+                    className={`px-6 py-2 ${buttonState.disabled ? 'bg-gray-400' : 'bg-orange-500'} text-white rounded hover:bg-orange-600 transition`}
+                >
                     {buttonState.text}
                 </button>
-                <button type="button" onClick={handleBackToList}>목록</button>
-                {/* <button type="button"
-                    onClick={isParticipant ? handleUserCancel : (isWaitList ? handleWaitingCancel : null)}
-                    disabled={!(isParticipant || isWaitList)}>
-                    {isParticipant ? '참가 취소' : (isWaitList ? '대기 취소' : '')}
-                </button> */}
-                {isParticipant && (
-                    <button type="button" onClick={handleUserCancel}>참가 취소</button>
-                )}
-                {isWaitList && (
-                    <button type="button" onClick={handleWaitingCancel}>대기 취소</button>
-                )}
+                <button
+                    type="button"
+                    onClick={handleBackToList}
+                    className="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+                >
+                    목록
+                </button>
             </div>
 
-        </>
-    )
+            {/* 참가자 취소 및 대기자 취소 버튼 */}
+            <div className="flex justify-center space-x-4 mt-4">
+                {isParticipant && (
+                    <button
+                        type="button"
+                        onClick={handleUserCancel}
+                        className="px-6 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+                    >
+                        참가 취소
+                    </button>
+                )}
+                {isWaitList && (
+                    <button
+                        type="button"
+                        onClick={handleWaitingCancel}
+                        className="px-6 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+                    >
+                        대기 취소
+                    </button>
+                )}
+            </div>
+        </div>
+    );
 }
 
 export default GymProgramDetail

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Entity
-
+//사용자(주민) 헬스장 이용권 구매
 public class GymParticipant {
 
     @Id

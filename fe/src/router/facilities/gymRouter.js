@@ -2,8 +2,6 @@ import GymProgramAdd from '../../components/facilities/gym/GymProgramAdd';
 import GymModify from '../../components/facilities/gym/GymModify';
 import GymPage from '../../pages/facilities/gym/GymPage';
 import { Suspense, lazy } from 'react';
-import GymSignUpPage from '../../pages/facilities/gym/membership/GymSignUpPage';
-import DayPassPurchasePage from '../../pages/facilities/gym/membership/DayPassPurchasePage';
 import MembershipPurchasePage from '../../pages/facilities/gym/membership/MembershipPurchasePage';
 import AdminCreateMembershipPage from '../../pages/facilities/gym/membership/AdminCreateMembershipPage';
 
@@ -35,23 +33,35 @@ const gymRouter = [
                 element: <Suspense fallback={Loading}><GymModify /></Suspense>
             },
             {
-                path: "signup",
-                element: <GymSignUpPage />,
-                children: [
-                    {
-                        path: "day-pass",
-                        element: <DayPassPurchasePage />
-                    },
-                    {
-                        path: "membership",
-                        element: <MembershipPurchasePage />
-                    },
-                    {
-                        path: "create",
-                        element: <AdminCreateMembershipPage />
-                    },
-                ]
+                path: "membership",
+                element: <MembershipPurchasePage/>
             },
+            // {
+            //     path: "membership/holding",
+            //     element: <GymMembershipStat/>
+            // },
+            {
+                path: "membership/create",
+                element: <AdminCreateMembershipPage/>
+            }
+            // {
+            //     path: "signup",
+            //     element: <GymSignUpPage />,
+            //     children: [
+            //         {
+            //             path: "day-pass",
+            //             element: <DayPassPurchasePage />
+            //         },
+            //         {
+            //             path: "membership",
+            //             element: <MembershipPurchasePage />
+            //         },
+            //         {
+            //             path: "create",
+            //             element: <AdminCreateMembershipPage />
+            //         },
+            //     ]
+            // },
             // {
             //     path: "membership/state",
             //     element: <GymMembershipState />
