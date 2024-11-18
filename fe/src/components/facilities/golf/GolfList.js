@@ -65,7 +65,7 @@ const GolfList = ({ page, size }) => {
         });
     };
 
-    
+
     const fetchGolfReservations = async () => {
         try {
             const data = await listGolf({ page, size });
@@ -100,18 +100,22 @@ const GolfList = ({ page, size }) => {
 
 
     return (
-        <div>
-            <h2>골프장 예약 현황</h2>
-            <div className='flex justify-between mb-4'>
+        <div className="p-6">
+            <h2 className="text-2xl font-semibold mb-6">골프장 예약 현황</h2>
+            <div className="flex justify-between mb-4">
                 {role === 'ADMIN' && (
                     <div>
-                        <button onClick={handleDelete}> 선택 삭제 </button>
+                        <button
+                            onClick={handleDelete}
+                            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+                        >
+                            선택 삭제
+                        </button>
                     </div>
                 )}
             </div>
 
-            <div className='grid grid-cols-9'>
-
+            <div className="grid grid-cols-9 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
                 <div>예약번호</div>
                 <div>날짜</div>
                 <div>사용시작</div>
@@ -122,43 +126,50 @@ const GolfList = ({ page, size }) => {
                 {role === 'ADMIN' && <div>예약 변경</div>}
                 {role === 'ADMIN' && <div>선택</div>}
             </div>
+
             {serverData.dtoList && serverData.dtoList.length > 0 ? (
                 serverData.dtoList.map((golf) => (
-                    <div key={golf.reservationId} className="grid grid-cols-9">
-
-                        <div>{golf.reservationId}</div>
-                        <div>{golf.date}</div>
-                        <div>{golf.startTime}</div>
-                        <div>{golf.endTime}</div>
-                        <div>{golf.teeBox}</div>
-                        <div>{golf.userName}</div> {/* userName 값을 확인 */}
-                        <div>{golf.phone}</div> {/* phone 값을 확인 */}
+                    <div key={golf.reservationId} className="grid grid-cols-9 gap-4 items-center border-t py-4">
+                        <div className="text-sm">{golf.reservationId}</div>
+                        <div className="text-sm">{golf.date}</div>
+                        <div className="text-sm">{golf.startTime}</div>
+                        <div className="text-sm">{golf.endTime}</div>
+                        <div className="text-sm">{golf.teeBox}</div>
+                        <div className="text-sm">{golf.userName}</div> {/* userName 값을 확인 */}
+                        <div className="text-sm">{golf.phone}</div> {/* phone 값을 확인 */}
                         <div>
                             {role === 'ADMIN' && (
-                                <div>
-                                    <button onClick={() => handleModify(golf.reservationId)}>수정</button>
-                                </div>
+                                <button
+                                    onClick={() => handleModify(golf.reservationId)}
+                                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                                >
+                                    수정
+                                </button>
                             )}
                         </div>
                         <div>
                             {role === 'ADMIN' && (
                                 <input
-                                    type='checkbox'
+                                    type="checkbox"
                                     checked={checked.includes(golf.reservationId)}
                                     onChange={() => handleCheckChange(golf.reservationId)}
+                                    className="w-5 h-5"
                                 />
                             )}
                         </div>
                     </div>
                 ))
             ) : (
-                <div>정보없음</div>
+                <div className="text-center text-gray-500 col-span-9">정보없음</div>
             )}
+
             {serverData && serverData.dtoList && serverData.dtoList.length > 0 && (
                 <PageComponent
                     serverData={serverData}
-                    movePage={(pageParam) => moveToList(pageParam, '/facilities/golf/list')} />
+                    movePage={(pageParam) => moveToList(pageParam, '/facilities/golf/list')}
+                />
             )}
+
             {/* 모달 렌더링 */}
             {isModalOpen && (
                 <GolfDetailModifyModal
@@ -167,7 +178,6 @@ const GolfList = ({ page, size }) => {
                     refreshList={fetchGolfReservations}
                 />
             )}
-
         </div>
 
     );

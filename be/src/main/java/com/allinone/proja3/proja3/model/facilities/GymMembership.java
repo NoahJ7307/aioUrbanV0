@@ -10,13 +10,13 @@ import java.time.LocalDate;
 import static com.allinone.proja3.proja3.model.facilities.QGymMembership.gymMembership;
 
 @Entity
-@Table(name = "tbl_gym_membership")
+@Table(name = "tbl_user_gym_membership")
 @Data
 @ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
+//사용자 (주민)가 구매한 헬스장 이용권
 public class GymMembership {
 
     @Id

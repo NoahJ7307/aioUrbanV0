@@ -84,63 +84,73 @@ const GolfReserve = () => {
 
 
     return (
-        <div>
-            <h2> Reserve Golf</h2>
-
-
-            <input
-                type="date"
-                name="date"
-                placeholder="예약날짜"
-                value={formData.date}
-                onChange={handleFieldChange}
-            />
-            <input
-                type="time"
-                name="startTime"
-                placeholder="사용시작시간"
-                value={formData.startTime}
-                onChange={handleFieldChange}
-            />
-            <input
-                type="time"
-                name="endTime"
-                placeholder="사용종료시간"
-                value={formData.endTime}
-                onChange={handleFieldChange}
-            />
-            {/* <input
-                type="number"
-                name="teeBox"
-                placeholder="예약구역"
-                value={formData.teeBox}
-                onChange={handleFieldChange}
-            /> */}
-            <div className="sm:col-span-3">
-                <label htmlFor="teeBox" className="block text-sm font-medium text-gray-900">
-                    예약구역
-                </label>
-                <div className="mt-2">
-                    <select
-                        id="teeBox"
-                        name="teeBox"
-                        value={formData.teeBox}
-                        onChange={handleFieldChange}
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm"
-                        style={{ maxHeight: '120px', overflowY: 'auto' }} 
-                    >
-
-                        <option value="">구역을 선택하세요</option>
-                        {Array.from({ length: 10 }, (_, index) => (
-                            <option key={index + 1} value={index + 1}>
-                                {index + 1}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+        <div className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto">
+            <h2 className="text-2xl font-bold text-center mb-6">Reserve Golf</h2>
+    
+            <div className="mb-4">
+                <label htmlFor="date" className="block text-sm font-medium text-gray-700">예약 날짜</label>
+                <input
+                    type="date"
+                    name="date"
+                    placeholder="예약날짜"
+                    value={formData.date}
+                    onChange={handleFieldChange}
+                    className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                />
             </div>
-
-            <button onClick={handleReserve}>Reserve</button>
+    
+            <div className="mb-4">
+                <label htmlFor="startTime" className="block text-sm font-medium text-gray-700">사용 시작 시간</label>
+                <input
+                    type="time"
+                    name="startTime"
+                    placeholder="사용시작시간"
+                    value={formData.startTime}
+                    onChange={handleFieldChange}
+                    className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                />
+            </div>
+    
+            <div className="mb-6">
+                <label htmlFor="endTime" className="block text-sm font-medium text-gray-700">사용 종료 시간</label>
+                <input
+                    type="time"
+                    name="endTime"
+                    placeholder="사용종료시간"
+                    value={formData.endTime}
+                    onChange={handleFieldChange}
+                    className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                />
+            </div>
+    
+            {/* 예약구역 선택 */}
+            <div className="mb-4">
+                <label htmlFor="teeBox" className="block text-sm font-medium text-gray-700">예약 구역</label>
+                <select
+                    id="teeBox"
+                    name="teeBox"
+                    value={formData.teeBox}
+                    onChange={handleFieldChange}
+                    className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                >
+                    <option value="">구역을 선택하세요</option>
+                    {Array.from({ length: 10 }, (_, index) => (
+                        <option key={index + 1} value={index + 1}>
+                            {index + 1}
+                        </option>
+                    ))}
+                </select>
+            </div>
+    
+            {/* 예약 버튼 */}
+            <div className="mt-6 flex justify-center">
+                <button
+                    onClick={handleReserve}
+                    className="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                >
+                    예약하기
+                </button>
+            </div>
         </div>
     );
 };

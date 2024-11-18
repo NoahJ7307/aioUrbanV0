@@ -10,6 +10,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+//관리자 헬스장 이용권 등록시
 public class MembershipPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,4 +20,6 @@ public class MembershipPlan {
     private int price; // 가격
     private int durationMonths; // 기간(개월)
 
+//    @Builder.Default
+    private boolean delFlag = false; // 삭제 여부 플래그 (기본값: false)
 }

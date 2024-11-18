@@ -2,6 +2,7 @@ package com.allinone.proja3.proja3.service.facilities;
 
 
 import com.allinone.proja3.proja3.dto.facilities.GymMembershipDTO;
+import com.allinone.proja3.proja3.dto.facilities.MembershipPlanDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.GymMembership;
 
@@ -13,6 +14,7 @@ import com.allinone.proja3.proja3.repository.facilities.GymMembershipRepository;
 import com.allinone.proja3.proja3.repository.facilities.MembershipPlanRepository;
 import com.allinone.proja3.proja3.repository.mileage.MileageRepository;
 import com.allinone.proja3.proja3.service.mileage.PaymentService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -112,9 +114,50 @@ public class GymMembershipServiceImpl implements GymMembershipService {
 
         return gymMembership;
     }
+    //삭제된 이용권 제외하고 조회
     @Override
     public List<MembershipPlan> getAllMembershipPlans() {
         // 모든 이용권 목록을 가져와서 반환
-        return membershipPlanRepository.findAll();
+        return membershipPlanRepository.findByDelFlagFalse();
     }
+
+
+
+    @Override
+    public void deleteMembership(Long membershipPlanId) {
+        MembershipPlan plan = membershipPlanRepository.findById(membershipPlanId)
+                .orElseThrow(()-> new EntityNotFoundException("Membership plan not found"));
+        plan.setDelFlag(true);
+        membershipPlanRepository.save(plan);
+        // 로그 추가
+        log.info("Membership plan with ID {} has been logically deleted.", membershipPlanId);
+    }
+
+
+    @Override
+    public MembershipPlan toEntityMembership(MembershipPlanDTO membershipPlanDTO) {
+        MembershipPlan membershipPlan = membershipPlanRepository.findById(membershipPlanDTO.getMembershipPlanId())
+                .orElseThrow(() -> new EntityNotFoundException("Membership Plan not found"));
+
+        membershipPlan.setDelFlag(membershipPlanDTO.isDelFlag()); // 논리적 삭제 플래그 설정
+        membershipPlan.setMembershipType(membershipPlanDTO.getMembershipType());
+        membershipPlan.setDurationMonths(membershipPlanDTO.getDurationMonths());
+        membershipPlan.setPrice(membershipPlanDTO.getPrice());
+
+        return membershipPlan;
+    }
+
+
+
+    //관리자 삭제된 데이터도 확인 조회 필요시 사용
+//    @Override
+//    public List<MembershipPlan> getAllMembershipPlans(boolean includeDeleted) {
+//        if (includeDeleted) {
+//            return membershipPlanRepository.findAll();
+//        } else {
+//            return membershipPlanRepository.findByIsDeletedFalse();
+//        }
+//    }
+
+
 }
