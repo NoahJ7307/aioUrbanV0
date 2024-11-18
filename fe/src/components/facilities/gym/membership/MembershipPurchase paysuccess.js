@@ -1,25 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { deleteGymMembership, fetchAllMembershipPlans, purchaseMembership } from '../../../api/facilities/gymApi';
-// import { apiCall, formatNumber } from '../../../api/utils';
-import useMileage from '../../../hook/useCustomMileage';
+import { apiCall, formatNumber } from '../../../api/utils';
 
 const MembershipPurchase = () => {
   const [membershipPlans, setMembershipPlans] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [message, setMessage] = useState('');
-  // const [money, setMoney] = useState();
-  // const [mileageId, setMileageId] = useState(null);
-  const { money, mileageId } = useMileage();
+  const [money, setMoney] = useState();
+  const [mileageId, setMileageId] = useState(null);
   // const [uno, setUno] = useState(); // 예시로 사용자 uno 설정
 
   const role = localStorage.getItem("role");
   const uno = localStorage.getItem("uno");
-  // const dong = localStorage.getItem("dong");
-  // const ho = localStorage.getItem("ho");
-
+  const dong = localStorage.getItem("dong");
+  const ho = localStorage.getItem("ho");
+  
   //현재 마일리지 &마일리지 아이디 조회 혜미님꺼 참고 
+  if (dong && ho) {
+    const params = { dong, ho, uno };
 
-
+    apiCall('/mileage/getmileage', 'GET', params)
+        .then(response => {
+            const { mileage } = response.data;
+            if (mileage && !isNaN(mileage.price)) {
+              setMoney(Number(mileage.price)); // 숫자로 변환
+              setMileageId(mileage.mileageId);
+            } else {
+              setMoney(0);
+              setMileageId(null);
+            }
+        })
+        .catch(error => {
+            console.error(error);
+          setMoney(0); // 오류가 발생한 경우 마일리지 0으로 설정
+          setMileageId(null); 
+        });
+} else {
+    setMoney(0); // dong이나 ho가 없으면 마일리지 0으로 설정
+    setMileageId(null); // 마일리지 ID를 null로 설정
+}
+  
 
   useEffect(() => {
     // 헬스장 이용권 목록을 가져옵니다.
@@ -36,8 +56,8 @@ const MembershipPurchase = () => {
 
 
   const handlePurchase = async () => {
-    console.log("1212", selectedPlan)
-
+    console.log("1212" ,selectedPlan)
+   
     const membershipData = {
       uno,
       membershipPlanId: selectedPlan.membershipPlanId,
@@ -46,7 +66,7 @@ const MembershipPurchase = () => {
       startDate: new Date().toISOString().split('T')[0], // 'YYYY-MM-DD' 형식
       endDate: new Date(new Date().setMonth(new Date().getMonth() + selectedPlan.durationMonths)).toISOString().split('T')[0],
     };
-
+   
 
     console.log("구매 요청 데이터:", membershipData);
 
@@ -81,22 +101,12 @@ const MembershipPurchase = () => {
     }
   };
 
-  //종료 날짜 계산 (오늘 날짜 기준)
+  // 종료 날짜 계산 (오늘 날짜 기준)
   const calculateEndDate = (durationMonths) => {
     const endDate = new Date();
     endDate.setMonth(endDate.getMonth() + durationMonths);
     return endDate.toLocaleDateString(); // 날짜를 YYYY/MM/DD 형식으로 반환
   };
-
-  // function calculateStartDate() {
-  //   return new Date().toISOString().split('T')[0]; // 현재 날짜
-  // }
-  
-  // function calculateEndDate(durationMonths) {
-  //   const endDate = new Date();
-  //   endDate.setMonth(endDate.getMonth() + durationMonths);
-  //   return endDate.toISOString().split('T')[0];
-  // }
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow rounded-lg">
@@ -139,17 +149,11 @@ const MembershipPurchase = () => {
       </div>
 
       {selectedPlan && (
-
+        
         <div className="mb-6">
-          <div className="balance" style={{ textAlign: 'center' }}>
-
-            현재 잔액 : <span style={{ color: 'red', fontWeight: 'bold' }}>
-              {money.toLocaleString()}
-            </span> 원<br />
-            구매 후 잔액: <span style={{ color: 'red', fontWeight: 'bold' }}>
-              {(money - selectedPlan.price).toLocaleString()}
-            </span> 원
-          </div>
+            <div className='balace'>
+                현재 잔액 : <span className='redpoint'>{formatNumber(+money)}</span> 원
+            </div>
           <h3 className="text-xl font-semibold mb-3">선택된 이용권</h3>
           <div className="p-4 border rounded bg-gray-50">
             <p className="font-medium text-lg">{selectedPlan.membershipType}</p>
@@ -158,9 +162,6 @@ const MembershipPurchase = () => {
             <p className="text-sm text-gray-600">
               이용 종료일: {new Date().toISOString().split('T')[0]} ~ {calculateEndDate(selectedPlan.durationMonths)}
             </p>
-            {/* <p className="text-sm text-gray-600">
-              이용 종료일: {calculateStartDate()} ~ {calculateEndDate(selectedPlan.durationMonths)}
-            </p> */}
           </div>
           <button
             onClick={handlePurchase}

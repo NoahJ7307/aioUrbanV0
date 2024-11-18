@@ -42,4 +42,18 @@ public class GymMembership {
     private boolean isOnHold = false; // 홀딩상태 관리하는 변수
 
 
+//    //이용권 시작기간과 만료기간 설정
+//    @PrePersist
+//    public void initializeDates() {
+//        if (startDate == null) {
+//            startDate = LocalDate.now();
+//        }
+//        if (membershipPlan != null) {
+//            endDate = startDate.plusMonths(membershipPlan.getDurationMonths());
+//        } else {
+//            throw new IllegalStateException("MembershipPlan is required to calculate endDate.");
+//        }
+//    }
+
+
 }
