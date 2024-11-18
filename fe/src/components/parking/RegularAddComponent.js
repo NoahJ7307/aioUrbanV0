@@ -24,60 +24,63 @@ const RegularAddComponent = () => {
     })
   }
   return (
-    <div className='flex p-2'>
-      <div className='p-2'>
-        <div>
-          <div>
-            차량번호
-          </div>
-          <div>
-            이름
-          </div>
-          <div>
-            전화번호
-          </div>
-          <div>
-            동
-          </div>
-          <div>
-            호
-          </div>
-        </div>
+    <div className="formContainer">
+      <div className="formGroup">
+        <label className="formLabel">차량번호</label>
+        <input
+          className="inputBox"
+          name="carNum"
+          placeholder="차량번호 입력"
+          onChange={handleChange}
+        />
       </div>
-      <div>
-        <div className='p-2'>
-          <div>
-            <input className='border'
-              name='carNum'
-              onChange={handleChange} />
-          </div>
-          <div>
-            <input className='border'
-              name='name'
-              onChange={handleChange} />
-          </div>
-          <div>
-            <input className='border'
-              name='phone'
-              onChange={handleChange} />
-          </div>
-          <div>
-            <input className='border'
-              name='dong'
-              onChange={handleChange} />
-          </div>
-          <div>
-            <input className='border'
-              name='ho'
-              onChange={handleChange} />
-          </div>
-        </div>
-        <div>
-          <button type='button' className='bg-blue-400 p-2'
-            onClick={handleClick}>추가</button>
-          <button type='button' className='bg-red-400 p-2'
-            onClick={(pageParam) => moveToPath('/parking/regular', pageParam)}>취소</button>
-        </div>
+      <div className="formGroup">
+        <label className="formLabel">이름</label>
+        <input
+          className="inputBox"
+          name="name"
+          placeholder="이름 입력"
+          onChange={handleChange}
+        />
+      </div>
+      <div className="formGroup">
+        <label className="formLabel">전화번호</label>
+        <input
+          className="inputBox"
+          name="phone"
+          placeholder="전화번호 입력"
+          onChange={handleChange}
+        />
+      </div>
+      <div className="formGroup">
+        <label className="formLabel">동</label>
+        <input
+          className="inputBox"
+          name="dong"
+          placeholder="동 입력"
+          onChange={handleChange}
+        />
+      </div>
+      <div className="formGroup">
+        <label className="formLabel">호</label>
+        <input
+          className="inputBox"
+          name="ho"
+          placeholder="호 입력"
+          onChange={handleChange}
+        />
+      </div>
+      <div className="buttonGroup">
+        <button type="button" className="formButton add" onClick={handleClick}>
+          추가
+        </button>
+        <button
+          type="button"
+          className="formButton cancel"
+          onClick={() => moveToPath('/parking/regular', { page, size })}
+        >
+          취소
+        </button>
       </div>
     </div>
   )

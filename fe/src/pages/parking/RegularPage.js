@@ -4,6 +4,7 @@ import useCustomLogin from '../../components/hook/useCustomLogin'
 import RegularListComponent from '../../components/parking/RegularListComponent'
 import { regularGetList, regularGetSearchList, regularParkingDeleteChecked } from '../../components/api/parking/regularApi'
 import useCustom from '../../components/hook/useCustom'
+import '../../css/public/public.css'
 
 const initStateSearchData = {
   searchCategory: '',
@@ -164,25 +165,25 @@ const RegularPage = () => {
     <div>
       {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
         <></> :
-        <ul className='flex justify-center'>
+        <ul className='topMenu'>
           <li>
-            <button className='bg-gray-300 p-2 mr' onClick={handleClickAdd}>
+            <button className='topMenuBtn' onClick={handleClickAdd}>
               등록
             </button>
           </li>
           <li>
-            <button className='bg-gray-300 p-2 mr' onClick={handleClickModify}>
+            <button className='topMenuBtn' onClick={handleClickModify}>
               수정
             </button>
           </li>
           <li>
-            <button className='bg-gray-300 p-2 mr' onClick={handleClickDelete}>
+            <button className='topMenuBtn' onClick={handleClickDelete}>
               삭제
             </button>
           </li>
           {/* // ------- 검색 ------- */}
           <li>
-            <select className=''
+            <select className='inputBox'
               name='searchCategory'
               onChange={handleChangeSearchCategory}>
               <option value=''>검색 필터</option>
@@ -197,14 +198,14 @@ const RegularPage = () => {
           </li>
           {searchData.searchCategory === 'regDate' ?
             <li>
-              <input className=''
+              <input className='inputBox'
                 type='date'
                 name='regDateStart'
                 value={searchData.regDateStart}
                 onChange={handleChangeSearchDate}
               />
               ~
-              <input className=''
+              <input className='inputBox'
                 type='date'
                 name='regDateEnd'
                 value={searchData.regDateEnd}
@@ -213,7 +214,7 @@ const RegularPage = () => {
             </li>
             :
             <li>
-              <input className=''
+              <input className='inputBox'
                 name='searchValue'
                 value={searchData.searchValue}
                 placeholder={inputTitle}
@@ -222,12 +223,12 @@ const RegularPage = () => {
             </li>
           }
           <li>
-            <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>
+            <button className='topMenuBtn' onClick={handleClickSearch}>
               검색
             </button>
           </li>
           <li>
-            <button className='bg-gray-300 p-2 mr' onClick={handleClickClear}>
+            <button className='topMenuBtn' onClick={handleClickClear}>
               검색 초기화
             </button>
           </li>
