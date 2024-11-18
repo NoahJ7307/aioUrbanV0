@@ -98,28 +98,13 @@ public class PaymentServiceTests {
     @Transactional
     public void insertRegularAndPaymentTest(){
 
-        CardInfoDTO cardInfoDTO = CardInfoDTO.builder()
-                .cardExpiry("123")
-                .encryptedCardNumber("1234123412341234")
-                .uno(81L)
-                .build();
-        Mileage mileage = Mileage.builder()
-                .autopay(false)
-                .dong("100")
-                .ho("100")
-                .price(50000)
-                .build();
-        ManualRequestDTO manualRequestDTO = ManualRequestDTO.builder()
-                .card(cardInfoDTO)
-                .mileage(mileageService.getDTO(mileage))
-                .build();
-
-        paymentService.processManualPayment(manualRequestDTO);
-
         HouseholdDTO householdDTO = HouseholdDTO.builder()
                 .dong("100")
                 .ho("100")
                 .build();
+
+        MileageDTO mileageDTO = mileageService.findByDongHoDTO("100", "100");
+        System.out.println("------------------"+mileageDTO.getPrice());
 
         RegularParkingDTO regularParkingDTO = RegularParkingDTO.builder()
                 .householdDTO(householdDTO)

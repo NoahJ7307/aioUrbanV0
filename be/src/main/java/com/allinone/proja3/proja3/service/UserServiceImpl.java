@@ -2,11 +2,14 @@ package com.allinone.proja3.proja3.service;
 
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
+import com.allinone.proja3.proja3.dto.mileage.CardInfoDTO;
 import com.allinone.proja3.proja3.dto.user.UserDTO;
 import com.allinone.proja3.proja3.dto.user.UserSearchDataDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.repository.UserRepository;
+import com.allinone.proja3.proja3.repository.mileage.CardInfoRepository;
+import com.allinone.proja3.proja3.service.mileage.CardInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CardInfoService cardInfoService;
 
     @Override
     public Long register(UserDTO userDTO) {
@@ -230,6 +234,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void hardRemove(Long uno) {
         System.out.println("hard remove service : "+uno);
+        cardInfoService.deleteCardByUserId(uno);
         userRepository.deleteById(uno);
     }
 
