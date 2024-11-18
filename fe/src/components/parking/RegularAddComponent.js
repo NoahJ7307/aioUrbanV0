@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import useCustom from '../hook/useCustom'
 import { regularPostAdd } from '../api/parking/regularApi'
+import '../../css/public/public.css'
 
 const initState = {
   carNum: '',

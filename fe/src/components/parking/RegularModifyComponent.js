@@ -3,6 +3,7 @@ import useCustom from '../hook/useCustom'
 import { regularGetOne, regularPutOne } from '../api/parking/regularApi'
 import { useOutletContext } from 'react-router-dom'
 import useCustomLogin from '../hook/useCustomLogin'
+import '../../css/public/public.css'
 
 const initState = {
     carNum: '',

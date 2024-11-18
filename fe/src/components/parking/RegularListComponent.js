@@ -126,7 +126,6 @@ const RegularListComponent = ({ pageServerData, searchData }) => {
                         id={`checkbox-${regular.rpno}`}
                         checked={checked.includes(regular.rpno)}
                         onChange={() => handleCheckChange(regular.rpno)}
-                    // 체크박스를 숨김
                     />
                     <div>{regular.carNum}</div>
                     <div>{regular.name}</div>
