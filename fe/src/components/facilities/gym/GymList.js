@@ -105,64 +105,93 @@ const GymList = () => {
 
 
   return (
-    <div>
-      <h2>프로그램 신청 목록</h2>
-
-      <div>
-        <select value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="title">프로그램 제목</option>
-          <option value="content">내용</option>
-          <option value="target">대상</option>
-          <option value="titleAndContent">제목+내용</option>
-        </select>
-
-        <input
-          type="text"
-          value={keyword}
-          onChange={handleSearchInputChange}
-          placeholder='검색어를 입력해 주세요'
-        />
-        <button onClick={handleSearch}>검색</button>
+    <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+      {/* 프로그램 신청 목록 헤더 */}
+      <div className="mb-6 text-center">
+        <h2 className="text-3xl font-semibold">프로그램 신청 목록</h2>
       </div>
-
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-
-            <th style={{ border: '1px solid black', padding: '10px' }}>no</th>
-            <th style={{ border: '1px solid black', padding: '10px' }}>프로그램</th>
-            <th style={{ border: '1px solid black', padding: '10px' }}>모집현황</th>
-            <th style={{ border: '1px solid black', padding: '10px' }}>접수 버튼</th>
-          </tr>
-
-        </thead>
-        <tbody>
-          {serverData.dtoList.map((gym) => (
-            <tr key={gym.programId}>
-              <td style={{ border: '1px solid black', padding: '10px' }}>{gym.programId}</td>
-              <td style={{ border: '1px solid black', padding: '10px' }} onClick={() => handleProgramClick(gym)}>
-                <h1 style={{ cursor: 'pointer' }}>{gym.title}</h1>
-                <p>{gym.content}</p>
-                <p>프로그램 진행 기간 : {gym.programStartDate}~{gym.programEndDate}</p>
-              </td>
-              <td style={{ border: '1px solid black', padding: '10px' }}>{gym.currentParticipants}/{gym.participantLimit}</td>
-              <td style={{ border: '1px solid black', padding: '10px' }}>
-                {determineButtonState(gym)}
-              </td>
+  
+      {/* 검색 필터 */}
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex space-x-4">
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="title">프로그램 제목</option>
+            <option value="content">내용</option>
+            <option value="target">대상</option>
+            <option value="titleAndContent">제목+내용</option>
+          </select>
+  
+          <input
+            type="text"
+            value={keyword}
+            onChange={handleSearchInputChange}
+            placeholder="검색어를 입력해 주세요"
+            className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+  
+          <button
+            onClick={handleSearch}
+            className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+          >
+            검색
+          </button>
+        </div>
+      </div>
+  
+      {/* 프로그램 목록 테이블 */}
+      <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+        <table className="min-w-full border-collapse table-auto">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border px-4 py-2 text-left">no</th>
+              <th className="border px-4 py-2 text-left">프로그램</th>
+              <th className="border px-4 py-2 text-left">모집현황</th>
+              <th className="border px-4 py-2 text-left">접수 버튼</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {serverData.dtoList.map((gym) => (
+              <tr key={gym.programId} className="border-b hover:bg-gray-50">
+                <td className="border px-4 py-2">{gym.programId}</td>
+                <td className="border px-4 py-2">
+                  <div className="cursor-pointer" onClick={() => handleProgramClick(gym)}>
+                    <h1 className="text-lg font-medium text-blue-600">{gym.title}</h1>
+                    <p className="text-sm text-gray-500">{gym.content}</p>
+                    <p className="text-xs text-gray-400">프로그램 진행 기간: {gym.programStartDate} ~ {gym.programEndDate}</p>
+                  </div>
+                </td>
+                <td className="border px-4 py-2">{gym.currentParticipants}/{gym.participantLimit}</td>
+                <td className="border px-4 py-2">{determineButtonState(gym)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+  
+      {/* 관리자만 프로그램 등록 버튼 */}
       {role === 'ADMIN' && (
-        <div style={{ marginTop: '20px' }}>
-          <button onClick={() => navigate('/facilities/gym/add')}>프로그램 등록</button>
+        <div className="mt-6 flex justify-center">
+          <button
+            onClick={() => navigate('/facilities/gym/add')}
+            className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+          >
+            프로그램 등록
+          </button>
         </div>
       )}
+  
+      {/* 페이지네이션 */}
       {serverData.dtoList.length > 0 && (
-        <PageComponent
-          serverData={serverData}
-          movePage={handlePageChange}
-        />
+        <div className="mt-6 flex justify-center">
+          <PageComponent
+            serverData={serverData}
+            movePage={handlePageChange}
+          />
+        </div>
       )}
     </div>
   );

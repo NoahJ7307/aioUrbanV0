@@ -209,12 +209,12 @@ export const purchaseMembership = async (membershipData) => {
 };
 //관리자가 이용권등록 
 export const createGymMembership = async (membershipData) => {
-    const { membershipPlanName, durationMonths, price } = membershipData;
+    const { membershipType, durationMonths, price } = membershipData;
     console.log("헬스장 이용권 등록 요청(관리자): ", membershipData);
     const config = getConfig(); // 인증 헤더 등을 설정
     try {
         const response = await axios.post(`${host}/membership/create/admin`, {
-            membershipPlanName,
+            membershipType,
             durationMonths,
             price,
         },
@@ -227,6 +227,31 @@ export const createGymMembership = async (membershipData) => {
         throw error;
     }
 };
+// 관리자가 이용권 삭제
+// export const deleteGymMembership = async (membershipPlanId) => {
+//     console.log("121212",membershipPlanId)
+//     const config = getConfig();
+//     try {
+//         const response = await axios.delete(`${host}/membership/delete/${membershipPlanId}`, config);
+//         return response.data; // 삭제 후 서버 응답 처리
+//     } catch (error) {
+//         console.error('삭제실패111:', error);
+//         throw error; // 에러 처리
+//     }
+// }
+export const deleteGymMembership = async (membershipPlanId) => {
+    
+    console.log("삭제할 이용권 ID:", membershipPlanId);
+    const config = getConfig();
+    try {
+        const response = await axios.delete(`${host}/membership/delete/${membershipPlanId}`, config);
+        return response.data; // 삭제 후 서버 응답 처리
+    } catch (error) {
+        console.error('삭제 실패:', error);
+        throw error; // 에러 처리
+    }
+};
+
 
 //관리자가 등록한 이용권 목록 가져오기
 export const fetchAllMembershipPlans = async () => {

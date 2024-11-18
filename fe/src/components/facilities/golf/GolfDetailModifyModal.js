@@ -82,57 +82,68 @@ const GolfDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-            
-                <h2> 예약 수정 </h2>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                        <label>날짜</label>
+                <h2 className="modal-title">예약 수정</h2>
+                
+                <form onSubmit={handleSubmit} className="form-container">
+                    <div className="form-group">
+                        <label className="form-label">날짜</label>
                         <input
                             type="date"
                             name="date"
-                            value={formData.date || ''} //빈 문자열로 대체
+                            value={formData.date || ''}
                             onChange={handleModify}
                             required
+                            className="form-input"
                         />
                     </div>
-                    <div>
-                        <label>시작 시간</label>
+
+                    <div className="form-group">
+                        <label className="form-label">시작 시간</label>
                         <input
                             type="time"
                             name="startTime"
                             value={formData.startTime || ''}
                             onChange={handleModify}
                             required
+                            className="form-input"
                         />
                     </div>
-                    <div>
-                        <label>종료 시간</label>
+
+                    <div className="form-group">
+                        <label className="form-label">종료 시간</label>
                         <input
                             type="time"
                             name="endTime"
                             value={formData.endTime || ''}
                             onChange={handleModify}
                             required
+                            className="form-input"
                         />
                     </div>
-                    <div>
-                        <label>예약 구역</label>
+
+                    <div className="form-group">
+                        <label className="form-label">예약 구역</label>
                         <input
                             type="number"
                             name="teeBox"
                             value={formData.teeBox || ''}
                             onChange={handleModify}
                             required
+                            className="form-input"
+                            min="1"        // 최소값 1
+                            max="10"       // 최대값 10
                         />
                     </div>
-                    <button type="submit"> 저장 </button>
-                    <button type = "button" onClick={handleDelete}> 삭제 </button>
-                    <button type="button" onClick={closeModal}> 취소 </button>
+
+                    <div className="modal-buttons">
+                        <button type="submit" className="btn-save">저장</button>
+                        <button type="button" onClick={handleDelete} className="btn-delete">삭제</button>
+                        <button type="button" onClick={closeModal} className="btn-cancel">취소</button>
+                    </div>
                 </form>
             </div>
         </div>
     );
-
-}
+};
 
 export default GolfDetailModifyModal

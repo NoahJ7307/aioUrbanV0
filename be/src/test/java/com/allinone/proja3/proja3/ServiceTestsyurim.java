@@ -1,26 +1,23 @@
 package com.allinone.proja3.proja3;
-import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymDTO;
-import com.allinone.proja3.proja3.dto.facilities.StudyDTO;
 import com.allinone.proja3.proja3.dto.mileage.CardInfoDTO;
 import com.allinone.proja3.proja3.dto.mileage.ManualRequestDTO;
-import com.allinone.proja3.proja3.dto.mileage.MileageDTO;
 import com.allinone.proja3.proja3.dto.mileage.MileageHistoryDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.UserRole;
-import com.allinone.proja3.proja3.model.facilities.Golf;
 import com.allinone.proja3.proja3.model.facilities.Gym;
-import com.allinone.proja3.proja3.model.facilities.ProgramState;
+import com.allinone.proja3.proja3.model.facilities.MembershipPlan;
 import com.allinone.proja3.proja3.model.mileage.Mileage;
 import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.repository.facilities.GymRepository;
+import com.allinone.proja3.proja3.repository.facilities.MembershipPlanRepository;
 import com.allinone.proja3.proja3.service.UserService;
 import com.allinone.proja3.proja3.service.facilities.GolfService;
 import com.allinone.proja3.proja3.service.facilities.GymService;
 import com.allinone.proja3.proja3.service.facilities.StudyService;
 import com.allinone.proja3.proja3.service.mileage.MileageService;
 import com.allinone.proja3.proja3.service.mileage.PaymentService;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +28,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class ServiceTestsyurim {
@@ -45,7 +41,8 @@ public class ServiceTestsyurim {
     private GymService gymService;
     @Autowired
     private GymRepository gymRepository;
-
+    @Autowired
+    private MembershipPlanRepository membershipPlanRepository;
     @Autowired
     private UserRepository repository;
     @Autowired
@@ -205,6 +202,21 @@ public class ServiceTestsyurim {
                 .description("헬스장 일일이용권이 결제되었습니다.")
                 .build();
         paymentService.processUseMileage("101","102", 54L, amount, "헬스장 일일이용권이 결제되었습니다." );
+    }
+
+    @Test
+    public void deleteTest() {
+        // given
+        Long membershipPlanId = 1L;
+        MembershipPlan plan = membershipPlanRepository.findById(membershipPlanId)
+                .orElseThrow(() -> new EntityNotFoundException("Membership plan not found"));
+
+        // when
+        plan.setDelFlag(true); // 논리적 삭제 플래그 설정
+        membershipPlanRepository.save(plan); // 변경된 엔티티 저장
+
+//        // then
+//        assertTrue(plan.isDelFlag()); // 삭제 플래그가 true로 설정되었는지 확인
     }
 
 
