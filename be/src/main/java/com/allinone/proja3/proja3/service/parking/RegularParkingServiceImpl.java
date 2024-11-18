@@ -41,8 +41,8 @@ public class RegularParkingServiceImpl implements RegularParkingService{
     public Long register(RegularParkingDTO regularParkingDTO) {
         System.out.println("RegularParking register service" + regularParkingDTO);
         householdReg(regularParkingDTO);
-        regularParkingDTO.setRegDate(LocalDate.parse("2024-09-01")); // 등록 날짜 Test 용도
-//        regularParkingDTO.setRegDate(LocalDate.now());
+//        regularParkingDTO.setRegDate(LocalDate.parse("2024-09-01")); // 등록 날짜 Test 용도
+        regularParkingDTO.setRegDate(LocalDate.now());
         RegularParking regularParking = dtoToEntity(regularParkingDTO);
         RegularParking result = regularParkingRepository.save(regularParking);
         return result.getRpno();

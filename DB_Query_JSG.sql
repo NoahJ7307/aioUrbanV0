@@ -35,6 +35,6 @@ select * from tbl_user where del_flag= 1;
 show tables;
 
 -- 
--- delete from tbl_user where user_name = 'user';
+delete from tbl_user where user_name = 'user';
 delete from user_user_role_list where user_uno = 64;
 drop table tbl_gym;
