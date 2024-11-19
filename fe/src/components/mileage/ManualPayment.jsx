@@ -111,7 +111,7 @@ const ManualPayment = ({ sendMileage, setMoney }) => {
 
         try {
             // apiCall을 사용하여 서버로 결제 요청을 보냄
-            const response = await apiCall("/mileage/manualPayment", "POST", paymentData);
+            const response = await apiCall("/mileage/manualpayment", "POST", paymentData);
             if (response.status === 200) {
                 alert("결제가 완료되었습니다!");
                 if (response.data != null && !isNaN(response.data.price)) {

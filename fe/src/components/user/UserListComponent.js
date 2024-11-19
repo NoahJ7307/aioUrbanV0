@@ -91,8 +91,8 @@ const UserListComponent = ({ pageServerData, searchData }) => {
     }, [checked, setCheckedUno])
 
     return (
-        <div>
-            <div className="grid grid-cols-6">
+        <div className="tableRowContainer">
+            <div className="userTable tableHeader">
                 <div>No</div>
                 <div>동</div>
                 <div>호</div>
@@ -103,21 +103,23 @@ const UserListComponent = ({ pageServerData, searchData }) => {
 
             {/* 유저 데이터를 map으로 렌더링 */}
             {serverData.dtoList.map((user, index) => (
-                <div key={index} className="grid grid-cols-6">
-                    <div>
-
-                        <input
-                            type='checkbox'
-                            checked={checked.includes(user.uno)} // 페이지 이동 시 체크항목 유지
-                            onChange={() => handleCheckChange(user.uno)}
-                        />
-                    </div>
+                <label
+                    key={index}
+                    className={`userTable tableRow ${checked.includes(user.uno) ? "checked" : ""}`}
+                    htmlFor={`checkbox-${user.uno}`}
+                >
+                    <input
+                        type="checkbox"
+                        id={`checkbox-${user.uno}`}
+                        checked={checked.includes(user.uno)}
+                        onChange={() => handleCheckChange(user.uno)}
+                    />
                     <div>{user.dong}</div>
                     <div>{user.ho}</div>
                     <div>{user.userName}</div>
                     <div>{user.phone}</div>
                     <div>{user.userRoleList}</div>
-                </div>
+                </label>
             ))}
             <PageComponent serverData={serverData} movePage={movePage} />
         </div>

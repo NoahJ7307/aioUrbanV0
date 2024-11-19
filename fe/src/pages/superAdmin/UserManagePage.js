@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import UserManageComponent from '../../components/superAdmin/UserManageComponent'
 import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import { superAdminGetAllList, superAdminGetSearchList, superAdminHardDelete, superAdminRecovery } from '../../components/api/superAdmin/superAdminApi'
+import '../../css/public/public.css'
 
 const initStateSearchData = {
     searchCategory: '',
@@ -26,7 +27,7 @@ const UserManagePage = () => {
     const { checkedUno, setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
     const [searchData, setSearchData] = useState(initStateSearchData)
     const [pageServerData, setPageServerData] = useState(initStateServerData)
-    const [inputTitle, setInputTitle] = useState('')
+    const [inputTitle, setInputTitle] = useState('검색 필터를 선택해주세요')
     const location = useLocation()
 
     const handleClickAddRole = useCallback(() => {
@@ -115,23 +116,23 @@ const UserManagePage = () => {
 
     return (
         <div>
-            <ul className='flex justify-center'>
+            <ul className='topMenu'>
                 <li>
-                    <button className='bg-gray-300 p-2 mr' onClick={handleClickAddRole}>
+                    <button className='topMenuBtn' onClick={handleClickAddRole}>
                         권한부여 / 복구
                     </button>
                 </li>
                 <li>
-                    <button className='bg-gray-300 p-2 mr' onClick={handleClickHardDelete}>
+                    <button className='topMenuBtn' onClick={handleClickHardDelete}>
                         완전삭제
                     </button>
                 </li>
                 {/* // ------- 검색 ------- */}
                 <li>
-                    <select className=''
+                    <select className='inputBox'
                         name='searchCategory'
                         onChange={handleChangeSearchCategory}>
-                        <option value=''>검색 필터</option>
+                        <option value='' title='검색 필터를 선택해주세요'>검색 필터</option>
                         <option value='dong-ho' title='예시) 101-101'>동-호</option>
                         <option value='dong' title='예시) 101'>동</option>
                         <option value='ho' title='예시) 101'>호</option>
@@ -146,10 +147,10 @@ const UserManagePage = () => {
                         if (searchData.searchCategory === 'role') {
                             return (
                                 <div>
-                                    <select className=''
+                                    <select className='inputBox'
                                         name='searchValue'
                                         onChange={handleChangeSearchValue}>
-                                        <option value=''>권한선택</option>
+                                        <option value=''>권한 선택</option>
                                         <option value='PENDING'>승인대기</option>
                                         <option value='USER'>입주민</option>
                                         <option value='ADMIN'>관리자</option>
@@ -159,17 +160,17 @@ const UserManagePage = () => {
                             )
                         } else if (searchData.searchCategory === 'delFlag') {
                             return (
-                                <select className=''
+                                <select className='inputBox'
                                     name='searchValue'
                                     onChange={handleChangeSearchValue}>
-                                    <option value=''>삭제여부</option>
+                                    <option value=''>삭제여부 선택</option>
                                     <option value='false'>삭제되지 않음</option>
                                     <option value='true'>삭제됨</option>
                                 </select>
                             )
                         } else {
                             return (
-                                <input className=''
+                                <input className='inputBox'
                                     name='searchValue'
                                     placeholder={inputTitle}
                                     onChange={handleChangeSearchValue}
@@ -179,12 +180,12 @@ const UserManagePage = () => {
                     })()}
                 </li>
                 <li>
-                    <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>
+                    <button className='topMenuBtn' onClick={handleClickSearch}>
                         검색
                     </button>
                 </li>
                 <li>
-                    <button className='bg-gray-300 p-2 mr' onClick={handleClickClear}>
+                    <button className='topMenuBtn' onClick={handleClickClear}>
                         검색 초기화
                     </button>
                 </li>

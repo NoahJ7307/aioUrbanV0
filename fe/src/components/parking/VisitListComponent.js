@@ -103,8 +103,8 @@ const VisitListComponent = ({ pageServerData, searchData }) => {
   }
 
   return (
-    <div>
-      <div className='grid grid-cols-7'>
+    <div className='tableRowContainer'>
+      <div className='parkingRVTable tableHeader'>
         <div>No</div>
         <div>차량번호</div>
         <div>이름</div>
@@ -116,24 +116,28 @@ const VisitListComponent = ({ pageServerData, searchData }) => {
 
       {/* Data Rendering */}
       {serverData.dtoList.map((visit, index) => (
-        <div key={index} className='grid grid-cols-7'>
-          <div>
-            <input
-              type='checkbox'
-              checked={checked.includes(visit.vpno)} // 페이지 이동 시 체크항목 유지
-              onChange={() => handleCheckChange(visit.vpno)}
-            />
-          </div>
+        <label
+          key={index}
+          className={`parkingRVTable tableRow ${checked.includes(visit.vpno) ? "checked" : ""}`}
+          htmlFor={`checkbox-${visit.vpno}`}
+        >
+          <input
+            type='checkbox'
+            id={`checkbox-${visit.vpno}`}
+            checked={checked.includes(visit.vpno)} // 페이지 이동 시 체크항목 유지
+            onChange={() => handleCheckChange(visit.vpno)}
+          />
           <div>{visit.carNum}</div>
           <div>{visit.name}</div>
           <div>{visit.household ? visit.household.householdPK.dong : ''}</div>
           <div>{visit.household ? visit.household.householdPK.ho : ''}</div>
           <div>{visit.phone}</div>
           <div>{visit.expectedDate}</div>
-        </div>
-      ))}
+        </label>
+      ))
+      }
       <PageComponent serverData={serverData} movePage={movePage} />
-    </div>
+    </div >
   )
 }
 

@@ -2,8 +2,8 @@ import VisitListComponent from '../../components/parking/VisitListComponent'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import useCustomLogin from '../../components/hook/useCustomLogin'
-import useCustom from '../../components/hook/useCustom'
 import { visitGetList, visitGetSearchList, visitParkingDeleteChecked } from '../../components/api/parking/visitApi'
+import '../../css/public/public.css'
 
 const initStateSearchData = {
   searchCategory: '',
@@ -31,7 +31,7 @@ const VisitPage = () => {
   const { loadLoginData } = useCustomLogin()
   const [searchData, setSearchData] = useState(initStateSearchData)
   const [pageServerData, setPageServerData] = useState(initStateServerData)
-  const [inputTitle, setInputTitle] = useState('')
+  const [inputTitle, setInputTitle] = useState('검색 필터를 선택해주세요')
   const location = useLocation()
 
 
@@ -163,39 +163,39 @@ const VisitPage = () => {
   // --------------------
   return (
     <div>
-      <ul className='flex justify-center'>
+      <ul className='topMenu'>
         <li>
-          <button className='bg-gray-300 p-2 mr' onClick={handleClickAdd}>
+          <button className='topMenuBtn' onClick={handleClickAdd}>
             등록
           </button>
         </li>
         <li>
-          <button className='bg-gray-300 p-2 mr' onClick={handleClickModify}>
+          <button className='topMenuBtn' onClick={handleClickModify}>
             수정
           </button>
         </li>
         <li>
-          <button className='bg-gray-300 p-2 mr' onClick={handleClickDelete}>
+          <button className='topMenuBtn' onClick={handleClickDelete}>
             삭제
           </button>
         </li>
         {/* // ------- 검색 ------- */}
         <li>
           {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
-            <select className=''
+            <select className='inputBox'
               name='searchCategory'
               onChange={handleChangeSearchCategory}>
-              <option value=''>검색 필터</option>
+              <option value='' title='검색 필터를 선택해주세요'>검색 필터</option>
               <option value='name' title='예시) 김어반'>이름</option>
               <option value='carNum' title='예시) 00반0000'>차량번호</option>
               <option value='phone' title='예시) 01012345678'>전화번호</option>
               <option value='expectedDate'>입차 예정 날짜</option>
             </select>
             :
-            <select className=''
+            <select className='inputBox'
               name='searchCategory'
               onChange={handleChangeSearchCategory}>
-              <option value=''>검색 필터</option>
+              <option value='' title='검색 필터를 선택해주세요'>검색 필터</option>
               <option value='dong-ho' title='예시) 101-101'>동-호</option>
               <option value='dong' title='예시) 101'>동</option>
               <option value='ho' title='예시) 101'>호</option>
@@ -208,14 +208,14 @@ const VisitPage = () => {
         </li>
         {searchData.searchCategory === 'expectedDate' ?
           <li>
-            <input className=''
+            <input className='inputBox'
               type='date'
               name='expectedDateStart'
               value={searchData.expectedDateStart}
               onChange={handleChangeSearchDate}
             />
             ~
-            <input className=''
+            <input className='inputBox'
               type='date'
               name='expectedDateEnd'
               value={searchData.expectedDateEnd}
@@ -224,7 +224,7 @@ const VisitPage = () => {
           </li>
           :
           <li>
-            <input className=''
+            <input className='inputBox'
               name='searchValue'
               value={searchData.searchValue}
               placeholder={inputTitle}
@@ -233,12 +233,12 @@ const VisitPage = () => {
           </li>
         }
         <li>
-          <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>
+          <button className='topMenuBtn' onClick={handleClickSearch}>
             검색
           </button>
         </li>
         <li>
-          <button className='bg-gray-300 p-2 mr' onClick={handleClickClear}>
+          <button className='topMenuBtn' onClick={handleClickClear}>
             검색 초기화
           </button>
         </li>

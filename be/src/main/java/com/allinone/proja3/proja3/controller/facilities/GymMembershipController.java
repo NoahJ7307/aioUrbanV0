@@ -91,14 +91,16 @@ public class GymMembershipController {
 //        }
 //    }
 
-    // 사용자가 이용권을 구매하는 API
+//     사용자가 이용권을 구매하는 API
     @PostMapping("/membership/purchase")
     public ResponseEntity<GymMembership> purchaseGymMembership(
             @RequestBody GymMembershipDTO gymMembershipDTO){
         try {
-            GymMembership gymMembership = gymMembershipService.createMembership(gymMembershipDTO);
+            System.out.println("sss"+gymMembershipDTO);
+            GymMembership gymMembership = gymMembershipService.purchaseMembership(gymMembershipDTO);
             return ResponseEntity.ok(gymMembership);
         }catch (Exception e) {
+            System.out.println("sss"+gymMembershipDTO);
             return ResponseEntity.status(500).body(null);
         }
     }

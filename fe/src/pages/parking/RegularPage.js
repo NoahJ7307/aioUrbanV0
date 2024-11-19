@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import useCustomLogin from '../../components/hook/useCustomLogin'
 import RegularListComponent from '../../components/parking/RegularListComponent'
-import { regularGetList, regularGetSearchList, regularParkingDeleteChecked } from '../../components/api/parking/regularApi'
-import useCustom from '../../components/hook/useCustom'
+import { regularGetSearchList, regularParkingDeleteChecked } from '../../components/api/parking/regularApi'
 import '../../css/public/public.css'
 
 const initStateSearchData = {
@@ -33,7 +32,7 @@ const RegularPage = () => {
   const { loadLoginData } = useCustomLogin()
   const [searchData, setSearchData] = useState(initStateSearchData)
   const [pageServerData, setPageServerData] = useState(initStateServerData)
-  const [inputTitle, setInputTitle] = useState('')
+  const [inputTitle, setInputTitle] = useState('검색 필터를 선택해주세요')
   const location = useLocation()
 
   const handleClickAdd = useCallback(() => { navigate({ pathname: 'add' }) })
@@ -186,7 +185,7 @@ const RegularPage = () => {
             <select className='inputBox'
               name='searchCategory'
               onChange={handleChangeSearchCategory}>
-              <option value=''>검색 필터</option>
+              <option value='' title='검색 필터를 선택해주세요'>검색 필터</option>
               <option value='dong-ho' title='예시) 101-101'>동-호</option>
               <option value='dong' title='예시) 101'>동</option>
               <option value='ho' title='예시) 101'>호</option>

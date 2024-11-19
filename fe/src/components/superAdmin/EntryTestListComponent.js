@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import useCustom from '../hook/useCustom'
-import { useLocation, useNavigate, useOutletContext } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import PageComponent from '../common/PageComponent'
 import useCustomLogin from '../hook/useCustomLogin'
-import { entryGetList, entryGetUserList } from '../api/parking/entryApi'
+import { entryGetList } from '../api/parking/entryApi'
+import '../../css/public/public.css'
 
 const initState = {
     dtoList: [],
@@ -74,9 +75,9 @@ const EntryTestListComponent = ({ pageServerData, searchData, checkedEeno, setCh
     }
 
     return (
-        <div>
-            <div className='grid grid-cols-7'>
-                <div>No</div>
+        <div className="tableRowContainer">
+            <div className="entryListTable tableHeader">
+                <div>삭제할 항목</div>
                 <div>차량번호</div>
                 <div>동</div>
                 <div>호</div>
@@ -87,24 +88,28 @@ const EntryTestListComponent = ({ pageServerData, searchData, checkedEeno, setCh
 
             {/* Data Rendering */}
             {serverData.dtoList.map((entry, index) => (
-                <div key={index} className='grid grid-cols-7'>
-                    <div>
-                        <input
-                            type='checkbox'
-                            checked={checkedEeno.includes(entry.eeno)} // 페이지 이동 시 체크항목 유지
-                            onChange={() => handleCheckChange(entry.eeno)}
-                        />
-                    </div>
+                <label
+                    key={index}
+                    className={`entryListTable tableRow ${checkedEeno.includes(entry.eeno) ? "checked" : ""}`}
+                    htmlFor={`checkbox-${entry.eeno}`}
+                >
+                    <input
+                        type="checkbox"
+                        id={`checkbox-${entry.eeno}`}
+                        checked={checkedEeno.includes(entry.eeno)}
+                        onChange={() => handleCheckChange(entry.eeno)}
+                    />
                     <div>{entry.carNum}</div>
                     <div>{entry.dong ? entry.dong : ''}</div>
                     <div>{entry.ho ? entry.ho : ''}</div>
                     <div>{entry.entryDate}</div>
                     <div>{entry.exitDate}</div>
                     <div>{entry.exit ? '출차완료' : '미출차'}</div>
-                </div>
-            ))}
+                </label>
+            ))
+            }
             <PageComponent serverData={serverData} movePage={movePage} />
-        </div>
+        </div >
     )
 }
 
