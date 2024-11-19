@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import useCustomLogin from '../../components/hook/useCustomLogin'
-import useCustom from '../../components/hook/useCustom'
 import EntryListComponent from '../../components/parking/EntryListComponent'
 import { entryGetSearchList } from '../../components/api/parking/entryApi'
+import '../../css/public/public.css'
 
 const initStateSearchData = {
   searchCategory: '',
@@ -30,7 +30,7 @@ const EntryPage = () => {
   const { loadLoginData } = useCustomLogin()
   const [searchData, setSearchData] = useState(initStateSearchData)
   const [pageServerData, setPageServerData] = useState(initStateServerData)
-  const [inputTitle, setInputTitle] = useState('')
+  const [inputTitle, setInputTitle] = useState('검색 필터를 선택해주세요')
   const location = useLocation()
 
   // ------- 검색 -------
@@ -137,24 +137,24 @@ const EntryPage = () => {
   // --------------------
   return (
     <div>
-      <ul className='flex justify-center'>
+      <ul className='topMenu'>
         {/* // ------- 검색 ------- */}
         <li>
           {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
-            <select className=''
+            <select className='inputBox'
               name='searchCategory'
               onChange={handleChangeSearchCategory}>
-              <option value=''>검색 필터</option>
+              <option value='' title='검색 필터를 선택해주세요'>검색 필터</option>
               <option value='carNum' title='예시) 00반0000'>차량번호</option>
               <option value='isExit'>출차여부</option>
               <option value='entryDate'>입차일</option>
               <option value='exitDate'>출차일</option>
             </select>
             :
-            <select className=''
+            <select className='inputBox'
               name='searchCategory'
               onChange={handleChangeSearchCategory}>
-              <option value=''>검색 필터</option>
+              <option value='' title='검색 필터를 선택해주세요'>검색 필터</option>
               <option value='dong-ho' title='예시) 101-101'>동-호</option>
               <option value='dong' title='예시) 101'>동</option>
               <option value='ho' title='예시) 101'>호</option>
@@ -168,14 +168,14 @@ const EntryPage = () => {
         {searchData.searchCategory === 'entryDate' ||
           searchData.searchCategory === 'exitDate' ? (
           <li>
-            <input className=''
+            <input className='inputBox'
               type='date'
               name='entryExitDateStart'
               value={searchData.entryExitDateStart}
               onChange={handleChangeSearchDate}
             />
             ~
-            <input className=''
+            <input className='inputBox'
               type='date'
               name='entryExitDateEnd'
               value={searchData.entryExitDateEnd}
@@ -185,7 +185,7 @@ const EntryPage = () => {
         ) :
           searchData.searchCategory === 'isExit' ? (
             <li>
-              <select className=''
+              <select className='inputBox'
                 name='isExit'
                 onChange={handleChangeSearchValue}>
                 <option value=''>--------</option>
@@ -195,7 +195,7 @@ const EntryPage = () => {
             </li>
           ) : (
             <li>
-              <input className=''
+              <input className='inputBox'
                 name='searchValue'
                 value={searchData.searchValue}
                 placeholder={inputTitle}
@@ -204,12 +204,12 @@ const EntryPage = () => {
             </li>
           )}
         <li>
-          <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>
+          <button className='topMenuBtn' onClick={handleClickSearch}>
             검색
           </button>
         </li>
         <li>
-          <button className='bg-gray-300 p-2 mr' onClick={handleClickClear}>
+          <button className='topMenuBtn' onClick={handleClickClear}>
             검색 초기화
           </button>
         </li>

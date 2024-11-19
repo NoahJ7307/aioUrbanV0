@@ -3,6 +3,7 @@ import useCustom from '../hook/useCustom'
 import { useOutletContext } from 'react-router-dom'
 import { visitGetOne, visitPutOne } from '../api/parking/visitApi'
 import useCustomLogin from '../hook/useCustomLogin'
+import '../../css/public/public.css'
 
 const initState = {
     carNum: '',
@@ -47,98 +48,87 @@ const VisitModifyComponent = () => {
         })
     }
     return (
-        <div className='flex p-2'>
-            <div className='p-2'>
-                <div>
-                    <div>
-                        차량번호
-                    </div>
-                    <div>
-                        이름
-                    </div>
-                    <div>
-                        전화번호
-                    </div>
-                    <div>
-                        동
-                    </div>
-                    <div>
-                        호
-                    </div>
-                    <div>
-                        입차 예정 날짜
-                    </div>
-                </div>
+        <div className='formContainer'>
+            <div className="formGroup">
+                <label className="formLabel">차량번호</label>
+                <input
+                    className="inputBox"
+                    name="carNum"
+                    value={serverData.carNum}
+                    onChange={handleChange}
+                />
             </div>
-            <div>
-                <div className='p-2'>
-                    <div>
-                        <input className='border'
-                            name='carNum'
-                            value={serverData.carNum}
+            <div className="formGroup">
+                <label className="formLabel">이름</label>
+                <input
+                    className="inputBox"
+                    name="name"
+                    value={serverData.name}
+                    onChange={handleChange}
+                />
+            </div>
+            <div className="formGroup">
+                <label className="formLabel">전화번호</label>
+                <input
+                    className="inputBox"
+                    name="phone"
+                    value={serverData.phone}
+                    onChange={handleChange}
+                />
+            </div>
+            {/* 권한 별 분기 - 동/호 선택 여부 */}
+            {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
+                <>
+                    <div className="formGroup">
+                        <label className="formLabel">동</label>
+                        <input className="inputBox"
+                            name='dong'
+                            value={loadLoginData().ho}
+                            disabled
                             onChange={handleChange} />
                     </div>
-                    <div>
-                        <input className='border'
-                            name='name'
-                            value={serverData.name}
+                    <div className="formGroup">
+                        <label className="formLabel">호</label>
+                        <input className="inputBox"
+                            name='ho'
+                            value={loadLoginData().ho}
+                            disabled
                             onChange={handleChange} />
                     </div>
-                    <div>
-                        <input className='border'
-                            name='phone'
-                            value={serverData.phone}
+                </>
+                :
+                <>
+                    <div className="formGroup">
+                        <label className="formLabel">동</label>
+                        <input className="inputBox"
+                            name='dong'
+                            placeholder="동 입력"
+                            value={loadLoginData().dong}
                             onChange={handleChange} />
                     </div>
-                    {/* 권한 별 분기 - 동/호 선택 여부 */}
-                    {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
-                        <>
-                            <div>
-                                <input className='border'
-                                    name='dong'
-                                    value={loadLoginData().dong}
-                                    disabled
-                                    onChange={handleChange} />
-                            </div>
-                            <div>
-                                <input className='border'
-                                    name='ho'
-                                    value={loadLoginData().ho}
-                                    disabled
-                                    onChange={handleChange} />
-                            </div>
-                        </>
-                        :
-                        <>
-                            <div>
-                                <input className='border'
-                                    name='dong'
-                                    value={serverData.dong}
-                                    onChange={handleChange} />
-                            </div>
-                            <div>
-                                <input className='border'
-                                    name='ho'
-                                    value={serverData.ho}
-                                    onChange={handleChange} />
-                            </div>
-                        </>
-                    }
-                    {/* --------------- */}
-                    <div>
-                        <input className='border'
-                            type='date'
-                            name='expectedDate'
-                            value={serverData.expectedDate}
+                    <div className="formGroup">
+                        <label className="formLabel">호</label>
+                        <input className="inputBox"
+                            name='ho'
+                            placeholder="호 입력"
+                            value={loadLoginData().ho}
                             onChange={handleChange} />
                     </div>
-                </div>
-                <div>
-                    <button type='button' className='bg-blue-400 p-2'
-                        onClick={handleClick}>수정</button>
-                    <button type='button' className='bg-red-400 p-2'
-                        onClick={(pageParam) => moveToPath('/parking/visit', pageParam)}>취소</button>
-                </div>
+                </>
+            }
+            {/* --------------- */}
+            <div className="formGroup">
+                <label className="formLabel">입차 예상 날짜</label>
+                <input className='inputBox'
+                    type='date'
+                    name='expectedDate'
+                    onChange={handleChange} />
+            </div>
+            <div className="buttonGroup">
+                <button type='button' className='formButton add'
+                    onClick={handleClick}>수정</button>
+                <button type='button' className='formButton cancel'
+                    onClick={(pageParam) => moveToPath('/parking/visit', pageParam)}>취소</button>
             </div>
         </div>
     )

@@ -52,6 +52,7 @@ const RegularModifyComponent = () => {
                 <input
                     className="inputBox"
                     name="carNum"
+                    placeholder="차량번호 입력"
                     value={serverData.carNum}
                     onChange={handleChange}
                 />
@@ -61,6 +62,7 @@ const RegularModifyComponent = () => {
                 <input
                     className="inputBox"
                     name="name"
+                    placeholder="이름 입력"
                     value={serverData.name}
                     onChange={handleChange}
                 />
@@ -70,6 +72,7 @@ const RegularModifyComponent = () => {
                 <input
                     className="inputBox"
                     name="phone"
+                    placeholder="전화번호 입력"
                     value={serverData.phone}
                     onChange={handleChange}
                 />
@@ -78,11 +81,21 @@ const RegularModifyComponent = () => {
                 <>
                     <div className="formGroup">
                         <label className="formLabel">동</label>
-                        <input className="inputBox" value={loadLoginData().dong} readOnly />
+                        <input
+                            className="inputBox"
+                            name='dong'
+                            placeholder="동 입력"
+                            value={loadLoginData().dong}
+                            readOnly />
                     </div>
                     <div className="formGroup">
                         <label className="formLabel">호</label>
-                        <input className="inputBox" value={loadLoginData().ho} readOnly />
+                        <input
+                            className="inputBox"
+                            name='ho'
+                            placeholder="호 입력"
+                            value={loadLoginData().ho}
+                            readOnly />
                     </div>
                 </>
             ) : (
@@ -92,6 +105,7 @@ const RegularModifyComponent = () => {
                         <input
                             className="inputBox"
                             name="dong"
+                            placeholder="동 입력"
                             value={serverData.dong}
                             onChange={handleChange}
                         />
@@ -101,6 +115,7 @@ const RegularModifyComponent = () => {
                         <input
                             className="inputBox"
                             name="ho"
+                            placeholder="호 입력"
                             value={serverData.ho}
                             onChange={handleChange}
                         />

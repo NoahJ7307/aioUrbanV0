@@ -80,8 +80,8 @@ const EntryListComponent = ({ pageServerData, searchData }) => {
   }
 
   return (
-    <div>
-      <div className='grid grid-cols-7'>
+    <div className="tableRowContainer">
+      <div className="tableHeader">
         <div>No</div>
         <div>차량번호</div>
         <div>동</div>
@@ -93,7 +93,7 @@ const EntryListComponent = ({ pageServerData, searchData }) => {
 
       {/* Data Rendering */}
       {serverData.dtoList.map((entry, index) => (
-        <div key={index} className='grid grid-cols-7'>
+        <div key={index} className='tableRow'>
           <div>
             <input
               type='checkbox'

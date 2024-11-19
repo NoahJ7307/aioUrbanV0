@@ -1,4 +1,6 @@
 import React from 'react'
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import '../../css/public/public.css'
 
 const PageComponent = ({ serverData, movePage }) => {
@@ -7,7 +9,7 @@ const PageComponent = ({ serverData, movePage }) => {
             {serverData.prev ?
                 <div className='paginationButton'
                     onClick={() => movePage({ page: serverData.prevPage })}>
-                    Prev</div> : <></>
+                    <ArrowBackIosNewIcon /></div> : <></>
             }
             {serverData.pageNumList.map(pageNum =>
                 <div key={pageNum}
@@ -21,7 +23,7 @@ const PageComponent = ({ serverData, movePage }) => {
             {serverData.next ?
                 <div className='paginationButton'
                     onClick={() => movePage({ page: serverData.nextPage })}>
-                    Next</div> : <></>
+                    <ArrowForwardIosIcon /></div> : <></>
             }
         </div>
     )
