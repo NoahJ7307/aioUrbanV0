@@ -75,6 +75,14 @@ const UserModifyComponent = () => {
                     onChange={handleChange} />
             </div>
             <div className="formGroup">
+                <label className="formLabel">비밀번호 확인</label>
+                <input className='inputBox'
+                    type='password'
+                    name='pw'
+                    placeholder='비밀번호 입력'
+                    onChange={handleChange} />
+            </div>
+            <div className="formGroup">
                 <label className="formLabel">동</label>
                 <input className='inputBox'
                     name='dong'

@@ -155,12 +155,15 @@ body {
 
 /* 폼 스타일 */
 .formContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
   margin: 2rem auto;
   padding: 2rem;
   background-color: #515c8fee;
   border-radius: 1rem;
   box-shadow: 0 4px 6px rgba(231, 229, 229, 0.1);
-  width: 50%;
+  width: 80%;
 }
 
 .formContainer.superAdminAdd {
@@ -176,6 +179,7 @@ body {
 
 .formGroup {
   display: flex;
+  flex: 1 1 calc(50% - 1rem);
   flex-direction: column;
   margin-bottom: 1rem;
   padding: .2rem;
@@ -212,6 +216,7 @@ body {
 /* 버튼 스타일 */
 .buttonGroup {
   display: flex;
+  flex: 1 1 100%;
   justify-content: end;
 }
 

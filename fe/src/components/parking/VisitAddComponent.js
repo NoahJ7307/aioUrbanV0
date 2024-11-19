@@ -48,15 +48,7 @@ const VisitAddComponent = () => {
           onChange={handleChange}
         />
       </div>
-      <div className="formGroup">
-        <label className="formLabel">전화번호</label>
-        <input
-          className="inputBox"
-          name="phone"
-          placeholder="전화번호 입력"
-          onChange={handleChange}
-        />
-      </div>
+      
       {/* 권한 별 분기 - 동/호 선택 여부 */}
       {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
         <>
@@ -97,6 +89,15 @@ const VisitAddComponent = () => {
           </div>
         </>
       }
+      <div className="formGroup">
+        <label className="formLabel">전화번호</label>
+        <input
+          className="inputBox"
+          name="phone"
+          placeholder="전화번호 입력"
+          onChange={handleChange}
+        />
+      </div>
       {/* --------------- */}
       <div className="formGroup">
         <label className="formLabel">입차 예상 날짜</label>
