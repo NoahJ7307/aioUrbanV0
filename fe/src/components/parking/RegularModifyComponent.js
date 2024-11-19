@@ -58,6 +58,8 @@ const RegularModifyComponent = () => {
                 />
             </div>
             <div className="formGroup">
+            </div>
+            <div className="formGroup">
                 <label className="formLabel">이름</label>
                 <input
                     className="inputBox"

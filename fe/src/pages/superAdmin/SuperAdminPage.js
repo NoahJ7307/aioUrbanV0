@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import BasicLayout from '../../layout/BasicLayout'
 import { Outlet, useNavigate } from 'react-router-dom'
+import '../../css/public/public.css'
 
 const SuperAdminPage = () => {
     const navigate = useNavigate()
@@ -11,14 +12,14 @@ const SuperAdminPage = () => {
 
     return (
         <BasicLayout>
-            <ul className='flex justify-center'>
+            <ul className='topMenu'>
                 <li>
-                    <button className='bg-gray-300 p-2' onClick={handleClickUserManage}>
+                    <button className='topMenuBtn' onClick={handleClickUserManage}>
                         유저 관리
                     </button>
                 </li>
                 <li>
-                    <button className='bg-gray-300 p-2' onClick={handleClickEntryTest}>
+                    <button className='topMenuBtn' onClick={handleClickEntryTest}>
                         입출차 테스트
                     </button>
                 </li>

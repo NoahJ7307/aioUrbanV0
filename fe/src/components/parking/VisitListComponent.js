@@ -104,7 +104,7 @@ const VisitListComponent = ({ pageServerData, searchData }) => {
 
   return (
     <div className='tableRowContainer'>
-      <div className='tableHeader'>
+      <div className='parkingRVTable tableHeader'>
         <div>No</div>
         <div>차량번호</div>
         <div>이름</div>
@@ -118,7 +118,7 @@ const VisitListComponent = ({ pageServerData, searchData }) => {
       {serverData.dtoList.map((visit, index) => (
         <label
           key={index}
-          className={`tableRow ${checked.includes(visit.vpno) ? "checked" : ""}`}
+          className={`parkingRVTable tableRow ${checked.includes(visit.vpno) ? "checked" : ""}`}
           htmlFor={`checkbox-${visit.vpno}`}
         >
           <input

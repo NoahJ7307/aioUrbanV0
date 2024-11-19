@@ -28,7 +28,7 @@ const ListPage = () => {
     const { checkedUno, setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
     const [searchData, setSearchData] = useState(initStateSearchData)
     const [pageServerData, setPageServerData] = useState(initStateServerData)
-    const [inputTitle, setInputTitle] = useState('')
+    const [inputTitle, setInputTitle] = useState('검색 필터를 선택해주세요')
     const location = useLocation()
 
     const handleClickModify = useCallback(() => {
@@ -115,23 +115,23 @@ const ListPage = () => {
 
     return (
         <div>
-            <ul className='flex justify-center'>
+            <ul className='topMenu'>
                 <li>
-                    <button className='bg-gray-300 p-2 mr' onClick={handleClickModify}>
+                    <button className='topMenuBtn' onClick={handleClickModify}>
                         수정
                     </button>
                 </li>
                 <li>
-                    <button className='bg-gray-300 p-2 mr' onClick={handleClickDelete}>
+                    <button className='topMenuBtn' onClick={handleClickDelete}>
                         삭제
                     </button>
                 </li>
                 {/* // ------- 검색 ------- */}
                 <li>
-                    <select className=''
+                    <select className='inputBox'
                         name='searchCategory'
                         onChange={handleChangeSearchCategory}>
-                        <option value=''>검색 필터</option>
+                        <option value='' title='검색 필터를 선택해주세요'>검색 필터</option>
                         <option value='dong-ho' title='예시) 101-101'>동-호</option>
                         <option value='dong' title='예시) 101'>동</option>
                         <option value='ho' title='예시) 101'>호</option>
@@ -143,7 +143,7 @@ const ListPage = () => {
                 <li>
                     {searchData.searchCategory === 'role' ?
                         <div>
-                            <select className=''
+                            <select className='inputBox'
                                 name='searchValue'
                                 onChange={handleChangeSearchValue}>
                                 <option value=''>권한선택</option>
@@ -154,7 +154,7 @@ const ListPage = () => {
                             </select>
                         </div>
                         :
-                        <input className=''
+                        <input className='inputBox'
                             name='searchValue'
                             placeholder={inputTitle}
                             onChange={handleChangeSearchValue}
@@ -162,12 +162,12 @@ const ListPage = () => {
                     }
                 </li>
                 <li>
-                    <button className='bg-gray-300 p-2 mr' onClick={handleClickSearch}>
+                    <button className='topMenuBtn' onClick={handleClickSearch}>
                         검색
                     </button>
                 </li>
                 <li>
-                    <button className='bg-gray-300 p-2 mr' onClick={handleClickClear}>
+                    <button className='topMenuBtn' onClick={handleClickClear}>
                         검색 초기화
                     </button>
                 </li>

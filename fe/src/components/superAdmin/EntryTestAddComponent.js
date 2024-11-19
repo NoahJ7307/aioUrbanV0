@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import useCustom from '../hook/useCustom'
 import { entryPost, exitPost } from '../api/parking/entryApi'
+import '../../css/public/public.css'
 
 const initState = {
     carNum: '',
@@ -32,62 +33,49 @@ const EntryTestAddComponent = () => {
 
     }
     return (
-        <div className='flex p-2'>
-            <div className='p-2'>
-                <div>
-                    <div>
-                        차량번호
-                    </div>
-                    <div>
-                        동
-                    </div>
-                    <div>
-                        호
-                    </div>
-                    <div>
-                        입차일
-                    </div>
-                    <div>
-                        출차일
-                    </div>
-                </div>
+        <div className='formContainer superAdminAdd'>
+            <div className="formGroup superAdminAdd">
+                <label className="formLabel">차량번호</label>
+                <input
+                    className="inputBox"
+                    name='carNum'
+                    onChange={handleChange} />
             </div>
-            <div>
-                <div className='p-2'>
-                    <div>
-                        <input className='border'
-                            name='carNum'
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            name='dong'
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            name='ho'
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            type='date'
-                            name='entryDate'
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            type='date'
-                            name='exitDate'
-                            onChange={handleChange} />
-                    </div>
-                </div>
-                <div>
-                    <button type='button' className='bg-blue-400 p-2'
-                        onClick={handleClickEntry}>입차 추가</button>
-                    <button type='button' className='bg-red-400 p-2'
-                        onClick={handleClickExit}>출차 추가</button>
-                </div>
+            <div className="formGroup superAdminAdd">
+                <label className="formLabel">동</label>
+                <input
+                    className="inputBox"
+                    name='dong'
+                    onChange={handleChange} />
+            </div>
+            <div className="formGroup superAdminAdd">
+                <label className="formLabel">호</label>
+                <input
+                    className="inputBox"
+                    name='ho'
+                    onChange={handleChange} />
+            </div>
+            <div className="formGroup superAdminAdd">
+                <label className="formLabel">입차일</label>
+                <input
+                    className="inputBox"
+                    type='date'
+                    name='entryDate'
+                    onChange={handleChange} />
+            </div>
+            <div className="formGroup superAdminAdd">
+                <label className="formLabel">출차일</label>
+                <input
+                    className="inputBox"
+                    type='date'
+                    name='exitDate'
+                    onChange={handleChange} />
+            </div>
+            <div className="buttonGroup">
+                <button type='button' className='formButton add'
+                    onClick={handleClickEntry}>입차</button>
+                <button type='button' className='formButton cancel'
+                    onClick={handleClickExit}>출차</button>
             </div>
         </div>
     )

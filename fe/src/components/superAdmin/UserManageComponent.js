@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import useCustomLogin from '../hook/useCustomLogin'
 import PageComponent from '../common/PageComponent'
 import { superAdminGetAllList } from '../api/superAdmin/superAdminApi'
+import '../../css/public/public.css'
 
 const initState = {
   dtoList: [],
@@ -90,8 +91,8 @@ const UserManageComponent = ({ pageServerData, searchData }) => {
   }, [checked, setCheckedUno])
 
   return (
-    <div>
-      <div className="grid grid-cols-6">
+    <div className="tableRowContainer">
+      <div className="userManageTable tableHeader">
         <div>No</div>
         <div>동</div>
         <div>호</div>
@@ -102,20 +103,23 @@ const UserManageComponent = ({ pageServerData, searchData }) => {
 
       {/* 유저 데이터를 map으로 렌더링 */}
       {serverData.dtoList.map((user, index) => (
-        <div key={index} className="grid grid-cols-6">
-          <div>
-            <input
-              type='checkbox'
-              checked={checked.includes(user.uno)} // 페이지 이동 시 체크항목 유지
-              onChange={() => handleCheckChange(user.uno)}
-            />
-          </div>
+        <label
+          key={index}
+          className={`userManageTable tableRow ${checked.includes(user.uno) ? "checked" : ""}`}
+          htmlFor={`checkbox-${user.uno}`}
+        >
+          <input
+            type='checkbox'
+            id={`checkbox-${user.uno}`}
+            checked={checked.includes(user.uno)} // 페이지 이동 시 체크항목 유지
+            onChange={() => handleCheckChange(user.uno)}
+          />
           <div>{user.dong}</div>
           <div>{user.ho}</div>
           <div>{user.userName}</div>
           <div>{user.phone}</div>
           <div>{user.userRoleList}</div>
-        </div>
+        </label>
       ))}
       <PageComponent serverData={serverData} movePage={movePage} />
     </div>

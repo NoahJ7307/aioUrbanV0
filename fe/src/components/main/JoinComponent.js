@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import useCustomLogin from '../hook/useCustomLogin'
 import { register } from '../api/mainApi'
+import '../../css/public/public.css'
 
 const initState = {
     dong: 0,
@@ -27,66 +28,71 @@ const JoinComponent = () => {
         moveToPath('/')
     }
     return (
-        <div className='flex p-2'>
-            <div className='p-2'>
-                <div>
-                    <div>
-                        이름
-                    </div>
-                    <div>
-                        전화번호
-                    </div>
-                    <div>
-                        비밀번호
-                    </div>
-                    <div>
-                        동
-                    </div>
-                    <div>
-                        호
-                    </div>
+        <div className='formContainer'>
+            <div className='formGroup'>
+                <label className='formLabel'>이름</label>
+                <input className='inputBox'
+                    name='userName'
+                    placeholder='이름 입력'
+                    onChange={handleChange} />
+            </div>
+            <div className='formGroup'>
+                <div className='flex justify-end mt-6'>
+                    <button type='button' className='formButton add'
+                        onClick={handleClick}>인증번호 전송</button>
+                    <button type='button' className='formButton add'
+                        onClick={handleClick}>인증 확인</button>
                 </div>
             </div>
-            <div>
-                <div className='p-2'>
-                    <div>
-                        <input className='border'
-                            name='userName'
-                            placeholder='Insert your Name'
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            name='phone'
-                            placeholder='Insert your phone Number'
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            type='password'
-                            name='pw'
-                            placeholder='Insert your password'
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            name='dong'
-                            placeholder='Insert your dong'
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            name='ho'
-                            placeholder='Insert your ho'
-                            onChange={handleChange} />
-                    </div>
-                </div>
-                <div>
-                    <button type='button' className='bg-blue-400 p-2'
-                        onClick={handleClick}>회원가입</button>
-                    <button type='button' className='bg-red-400 p-2'
-                        onClick={() => moveToPath('/')}>취소</button>
-                </div>
+            <div className='formGroup'>
+                <label className='formLabel'>전화번호</label>
+                <input className='inputBox'
+                    name='phone'
+                    placeholder='전화번호 입력'
+                    onChange={handleChange} />
+            </div>
+            <div className='formGroup'>
+                <label className='formLabel'>인증번호</label>
+                <input className='inputBox'
+                    name='phone'
+                    placeholder='전화번호 입력'
+                    onChange={handleChange} />
+            </div>
+            <div className='formGroup'>
+                <label className='formLabel'>비밀번호</label>
+                <input className='inputBox'
+                    type='password'
+                    name='pw'
+                    placeholder='비밀번호 입력'
+                    onChange={handleChange} />
+            </div>
+            <div className='formGroup'>
+                <label className='formLabel'>비밀번호 확인</label>
+                <input className='inputBox'
+                    type='password'
+                    name='pw'
+                    placeholder='비밀번호 입력'
+                    onChange={handleChange} />
+            </div>
+            <div className='formGroup'>
+                <label className='formLabel'>동</label>
+                <input className='inputBox'
+                    name='dong'
+                    placeholder='동 입력'
+                    onChange={handleChange} />
+            </div>
+            <div className='formGroup'>
+                <label className='formLabel'>호</label>
+                <input className='inputBox'
+                    name='ho'
+                    placeholder='호 입력'
+                    onChange={handleChange} />
+            </div>
+            <div className='buttonGroup'>
+                <button type='button' className='formButton add'
+                    onClick={handleClick}>회원가입</button>
+                <button type='button' className='formButton cancel'
+                    onClick={() => moveToPath('/')}>취소</button>
             </div>
         </div>
     )

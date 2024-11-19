@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import useCustomLogin from '../../components/hook/useCustomLogin'
 import RegularListComponent from '../../components/parking/RegularListComponent'
-import { regularGetList, regularGetSearchList, regularParkingDeleteChecked } from '../../components/api/parking/regularApi'
-import useCustom from '../../components/hook/useCustom'
+import { regularGetSearchList, regularParkingDeleteChecked } from '../../components/api/parking/regularApi'
 import '../../css/public/public.css'
 
 const initStateSearchData = {

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import useCustom from '../hook/useCustom'
 import { getOne, putOne } from '../api/userApi'
-import { useNavigate, useOutletContext } from 'react-router-dom'
-import useCustomLogin from '../hook/useCustomLogin'
-import axios from 'axios'
+import { useOutletContext } from 'react-router-dom'
+import '../../css/public/public.css'
 
 const initState = {
     dong: 0,
@@ -50,67 +49,60 @@ const UserModifyComponent = () => {
         })
     }
     return (
-        <div className='flex p-2'>
-            <div className='p-2'>
-                <div>
-                    <div>
-                        이름
-                    </div>
-                    <div>
-                        전화번호
-                    </div>
-                    <div>
-                        비밀번호
-                    </div>
-                    <div>
-                        동
-                    </div>
-                    <div>
-                        호
-                    </div>
-                </div>
+        <div className='formContainer'>
+            <div className="formGroup">
+                <label className="formLabel">이름</label>
+                <input className='inputBox'
+                    name='userName'
+                    placeholder='이름 입력'
+                    value={userData.userName}
+                    onChange={handleChange} />
             </div>
-            <div>
-                <div className='p-2'>
-                    <div>
-                        <input className='border'
-                            name='userName'
-                            value={userData.userName}
-                            placeholder={userData.userName}
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            name='phone'
-                            value={userData.phone}
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            type='password'
-                            name='pw'
-                            placeholder='Insert your password'
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            name='dong'
-                            value={userData.dong}
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            name='ho'
-                            value={userData.ho}
-                            onChange={handleChange} />
-                    </div>
-                </div>
-                <div>
-                    <button type='button' className='bg-blue-400 p-2'
-                        onClick={handleClick}>추가</button>
-                    <button type='button' className='bg-red-400 p-2'
-                        onClick={moveToList}>취소</button>
-                </div>
+            <div className="formGroup">
+                <label className="formLabel">전화번호</label>
+                <input className='inputBox'
+                    name='phone'
+                    placeholder='전화번호 입력'
+                    value={userData.phone}
+                    onChange={handleChange} />
+            </div>
+            <div className="formGroup">
+                <label className="formLabel">비밀번호</label>
+                <input className='inputBox'
+                    type='password'
+                    name='pw'
+                    placeholder='비밀번호 입력'
+                    onChange={handleChange} />
+            </div>
+            <div className="formGroup">
+                <label className="formLabel">비밀번호 확인</label>
+                <input className='inputBox'
+                    type='password'
+                    name='pw'
+                    placeholder='비밀번호 입력'
+                    onChange={handleChange} />
+            </div>
+            <div className="formGroup">
+                <label className="formLabel">동</label>
+                <input className='inputBox'
+                    name='dong'
+                    placeholder='동 입력'
+                    value={userData.dong}
+                    onChange={handleChange} />
+            </div>
+            <div className="formGroup">
+                <label className="formLabel">호</label>
+                <input className='inputBox'
+                    name='ho'
+                    placeholder='동 입력'
+                    value={userData.ho}
+                    onChange={handleChange} />
+            </div>
+            <div className="buttonGroup">
+                <button type='button' className='formButton add'
+                    onClick={handleClick}>추가</button>
+                <button type='button' className='formButton cancel'
+                    onClick={moveToList}>취소</button>
             </div>
         </div>
     )

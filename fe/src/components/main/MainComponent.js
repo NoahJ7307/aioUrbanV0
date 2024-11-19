@@ -1,74 +1,173 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import '../../css/_modules/main.css'
-const MainComponent = () => {
-  // 카드 정보 배열
-  const cards = [
-    { title: "시설 예약", link: "/facilities", description: "공용 시설 예약", image: "/images/city.jpg" },
-    { title: "소통", link: "/communities", description: "입주민 간 소통 공간", image: "/images/cafe.jpg" },
-    { title: "주차 관리", link: "/parking", description: "주차 공간 확인 및 관리", image: "/images/parking.jpg" },
-  ];
+// MainComponent.js
+import React, { useRef, useEffect, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
+import FirstLayout from '../../layout/FirstLayout';
+import SecondLayout from '../../layout/SecondLayout';
+import ThirdLayout from '../../layout/ThirdLayout';
+import FourthLayout from '../../layout/FourthLayout';
+import FifthLayout from '../../layout/FifthLayout';
 
-  // 현재 활성화된 카드의 인덱스
-  const [activeIndex, setActiveIndex] = useState(null);
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const Container = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
+const Content = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+const Section = styled.section`
+  width: 100%;
+  height: 100vh;
+  position: relative;
+`;
+
+const ScrollProgress = styled.div`
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ${fadeIn} 0.3s ease-in-out;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  &:hover {
+    transform: translateY(-3px);
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+`;
+
+const CircularProgress = styled.svg`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+`;
+
+const Circle = styled.circle`
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #00ff88;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: ${2 * Math.PI * 28}; // 원의 둘레 (r=28)
+  stroke-dashoffset: ${props =>
+    2 * Math.PI * 28 * (1 - props.progress)}; // 진행률에 따라 선 길이 조절
+  transition: stroke-dashoffset 0.3s ease;
+  filter: drop-shadow(0 0 2px rgba(0, 255, 136, 0.5));
+`;
+
+const ProgressText = styled.span`
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  margin-top: 25px;
+`;
+
+const ArrowIcon = styled.div`
+  width: 12px;
+  height: 12px;
+  border-left: 3px solid white;
+  border-top: 3px solid white;
+  transform: rotate(45deg);
+  margin-top: -5px;
+  transition: transform 0.3s ease;
+
+  ${ScrollProgress}:hover & {
+    transform: rotate(45deg) scale(1.1);
+  }
+`;
+
+const MainComponent = () => {
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = Math.min(Math.max(window.scrollY / totalHeight, 0), 1);
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // 초기 로드 시 진행률 계산
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   return (
-    <div className="mainComponent">
-    <div className="card-wrapper">
-      {cards.map((card, index) => (
-        <div
-          key={index}
-          onMouseEnter={() => setActiveIndex(index)}
-          onMouseLeave={() => setActiveIndex(null)}
-          className={`card ${activeIndex === index ? "active" : ""}`}
-        >
-          <img
-            src={card.image}
-            alt={`${card.title} 이미지`}
+    <Container>
+      <Content>
+        <Section>
+          <FirstLayout />
+        </Section>
+        <Section>
+          <SecondLayout />
+        </Section>
+        <Section>
+          <ThirdLayout />
+        </Section>
+        <Section>
+          <FourthLayout />
+        </Section>
+        <Section>
+          <FifthLayout />
+        </Section>
+      </Content>
+
+      <ScrollProgress
+        onClick={scrollToTop}
+        title="맨 위로 이동"
+      >
+        <CircularProgress>
+          <Circle
+            cx="30"
+            cy="30"
+            r="28"
+            progress={scrollProgress}
           />
-          <div className="mainHoverBox">
-            <h2 className="card-title">{card.title}</h2>
-            <p className="card-description">{card.description}</p>
-            <Link to={card.link}>
-              <button className="go-button">Go</button>
-            </Link>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-    // <div className="min-h-screen p-6 flex items-center justify-center bg-gray-100">
-    //   <div className="flex w-full max-w-4xl space-x-4 h-96">
-    //     {cards.map((card, index) => (
-    //       <div
-    //         key={index}
-    //         onMouseEnter={() => setActiveIndex(index)}
-    //         onMouseLeave={() => setActiveIndex(null)}
-    //         className={`relative overflow-hidden rounded-lg shadow-md transition-all duration-300 ease-in-out cursor-pointer ${
-    //           activeIndex === index ? "flex-[3]" : "flex-1"
-    //         } h-full`}
-    //       >
-    //         <img
-    //           src={card.image}
-    //           alt={`${card.title} 이미지`}
-    //           className="w-full h-full object-cover transition-transform duration-300"
-    //           style={{ transform: activeIndex === index ? 'scale(1.05)' : 'scale(1)' }}
-    //         />
-    //         {/* 오버레이 내용 */}
-    //         <div
-    //           className={`absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-center text-white p-4 transition-opacity duration-300 
-    //            mainHoverBox ${activeIndex === index ? "opacity-100" : "opacity-0"}`}
-    //         >
-    //           <h2 className="text-2xl font-semibold mb-2">{card.title}</h2>
-    //           <p className="text-gray-200 mb-4">{card.description}</p>
-    //           <Link to={card.link} className="mt-4">
-    //             <button className="px-6 py-2 bg-white text-black font-bold rounded-full">Go</button>
-    //           </Link>
-    //         </div>
-    //       </div>
-    //     ))}
-    //   </div>
-    // </div>
+        </CircularProgress>
+        <ArrowIcon />
+        <ProgressText>
+          {Math.round(scrollProgress * 100)}%
+        </ProgressText>
+      </ScrollProgress>
+    </Container>
   );
 };
 
