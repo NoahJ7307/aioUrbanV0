@@ -55,7 +55,7 @@ public class MileageController {
 
     }
 
-    @PostMapping("/manualPayment")
+    @PostMapping("/manualpayment")
     public ResponseEntity<?> manualPayment(@RequestBody ManualRequestDTO dto) {
     log.info(dto.getMileage());
     log.info(dto.getCard());
