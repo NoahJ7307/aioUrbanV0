@@ -1,5 +1,60 @@
-전체 레이아웃/* 전체 스크롤 및 여백 제거 */
-html, body {
+/* components\menu\MenuComponent.js */
+/* 로고체 */
+@font-face {
+    font-family: 'Giants-Inline';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-1@1.1/Giants-Inline.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 두꺼운 글씨체 : 리아체 */
+@font-face {
+    font-family: 'RiaSans-ExtraBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/RiaSans-ExtraBold.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* weight 3 , 5, 9 .G마켓 산스 */
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*  weight 3 , 5, 9 . line 글씨체 */
+@font-face {
+    font-family: 'LINESeedKR-Bd';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* weight 4 , 7 , 경기체 */
+@font-face {
+    font-family: 'Gyeonggi_Batang_Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-3@1.0/Batang_Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+
+/* 전체 스크롤 및 여백 제거 */
+html,
+body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
@@ -8,9 +63,9 @@ html, body {
 /* 크롬 사파리 스크롤바 없애기 */
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
-    display: none; 
+    display: none;
 }
- */
+
 .app-container {
     display: flex;
     flex-direction: column;
@@ -18,7 +73,8 @@ body::-webkit-scrollbar {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    overflow: hidden;  /* 추가 */
+    overflow: hidden;
+    /* 추가 */
 }
 
 /* 네비게이션 바 */
@@ -34,8 +90,8 @@ body::-webkit-scrollbar {
     justify-content: space-between;
     align-items: center;
     color: white;
-    
-    
+
+
 }
 
 .navbar-left ul {
@@ -77,7 +133,7 @@ body::-webkit-scrollbar {
     border: 1px solid white;
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s ease-in-out;
-    
+
 }
 
 .navbar-right .nav-link:hover {
@@ -111,7 +167,7 @@ body::-webkit-scrollbar {
 
 .menu-toggle i {
     font-size: 1.2rem;
-    
+
 }
 
 .menu-toggle:hover {
@@ -202,7 +258,7 @@ body::-webkit-scrollbar {
 /* 컨텐츠 영역 */
 .content {
     padding-top: 60px;
-    
+
 }
 
 .content section {
