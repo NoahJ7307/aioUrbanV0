@@ -228,17 +228,6 @@ export const createGymMembership = async (membershipData) => {
     }
 };
 // 관리자가 이용권 삭제
-// export const deleteGymMembership = async (membershipPlanId) => {
-//     console.log("121212",membershipPlanId)
-//     const config = getConfig();
-//     try {
-//         const response = await axios.delete(`${host}/membership/delete/${membershipPlanId}`, config);
-//         return response.data; // 삭제 후 서버 응답 처리
-//     } catch (error) {
-//         console.error('삭제실패111:', error);
-//         throw error; // 에러 처리
-//     }
-// }
 export const deleteGymMembership = async (membershipPlanId) => {
     
     console.log("삭제할 이용권 ID:", membershipPlanId);

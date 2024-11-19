@@ -28,7 +28,11 @@ const GymProgramDetail = () => {
     const location = useLocation();
     const { gym } = location.state || { title: '', content: '', target: '', participantLimit: 0, programId: null, currentParticipants: 0, applicationStartDate: '', applicationEndDate: '', price: 0 };
     console.log("detail gym", gym)
-
+    //   const token = localStorage.getItem("token")
+    //     const uno = localStorage.getItem("uno")
+    //     const role = localStorage.getItem("role")
+    //     const dong = localStorage.getItem("dong")
+    //     const ho = localStorage.getItem("ho")
 
     useEffect(() => {
         const getUno = localStorage.getItem('uno');
