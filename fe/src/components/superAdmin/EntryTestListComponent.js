@@ -76,7 +76,7 @@ const EntryTestListComponent = ({ pageServerData, searchData, checkedEeno, setCh
 
     return (
         <div className="tableRowContainer">
-            <div className="tableHeader">
+            <div className="entryListTable tableHeader">
                 <div>삭제할 항목</div>
                 <div>차량번호</div>
                 <div>동</div>
@@ -90,7 +90,7 @@ const EntryTestListComponent = ({ pageServerData, searchData, checkedEeno, setCh
             {serverData.dtoList.map((entry, index) => (
                 <label
                     key={index}
-                    className={`tableRow ${checkedEeno.includes(entry.eeno) ? "checked" : ""}`}
+                    className={`entryListTable tableRow ${checkedEeno.includes(entry.eeno) ? "checked" : ""}`}
                     htmlFor={`checkbox-${entry.eeno}`}
                 >
                     <input
