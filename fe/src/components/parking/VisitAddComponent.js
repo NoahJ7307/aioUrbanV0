@@ -30,82 +30,80 @@ const VisitAddComponent = () => {
   }
   return (
     <div className='formContainer'>
-      <div className='formGroup'>
-        <div className="formGroup">
-          <label className="formLabel">차량번호</label>
-          <input
-            className="inputBox"
-            name="carNum"
-            placeholder="차량번호 입력"
-            onChange={handleChange}
-          />
-        </div>
-        <div className="formGroup">
-          <label className="formLabel">이름</label>
-          <input
-            className="inputBox"
-            name="name"
-            placeholder="이름 입력"
-            onChange={handleChange}
-          />
-        </div>
-        <div className="formGroup">
-          <label className="formLabel">전화번호</label>
-          <input
-            className="inputBox"
-            name="phone"
-            placeholder="전화번호 입력"
-            onChange={handleChange}
-          />
-        </div>
-        {/* 권한 별 분기 - 동/호 선택 여부 */}
-        {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
-          <>
-            <div className="formGroup">
-              <label className="formLabel">동</label>
-              <input className="inputBox"
-                name='dong'
-                value={loadLoginData().dong}
-                placeholder="수정 불가"
-                readOnly
-                onChange={handleChange} />
-            </div>
-            <div className="formGroup">
-              <label className="formLabel">호</label>
-              <input className="inputBox"
-                name='ho'
-                value={loadLoginData().ho}
-                placeholder="수정 불가"
-                readOnly
-                onChange={handleChange} />
-            </div>
-          </>
-          :
-          <>
-            <div className="formGroup">
-              <label className="formLabel">동</label>
-              <input className="inputBox"
-                name='dong'
-                placeholder="동 입력"
-                onChange={handleChange} />
-            </div>
-            <div className="formGroup">
-              <label className="formLabel">호</label>
-              <input className="inputBox"
-                name='ho'
-                placeholder="호 입력"
-                onChange={handleChange} />
-            </div>
-          </>
-        }
-        {/* --------------- */}
-        <div className="formGroup">
-          <label className="formLabel">입차 예상 날짜</label>
-          <input className='inputBox'
-            type='date'
-            name='expectedDate'
-            onChange={handleChange} />
-        </div>
+      <div className="formGroup">
+        <label className="formLabel">차량번호</label>
+        <input
+          className="inputBox"
+          name="carNum"
+          placeholder="차량번호 입력"
+          onChange={handleChange}
+        />
+      </div>
+      <div className="formGroup">
+        <label className="formLabel">이름</label>
+        <input
+          className="inputBox"
+          name="name"
+          placeholder="이름 입력"
+          onChange={handleChange}
+        />
+      </div>
+      <div className="formGroup">
+        <label className="formLabel">전화번호</label>
+        <input
+          className="inputBox"
+          name="phone"
+          placeholder="전화번호 입력"
+          onChange={handleChange}
+        />
+      </div>
+      {/* 권한 별 분기 - 동/호 선택 여부 */}
+      {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
+        <>
+          <div className="formGroup">
+            <label className="formLabel">동</label>
+            <input className="inputBox"
+              name='dong'
+              value={loadLoginData().dong}
+              placeholder="수정 불가"
+              readOnly
+              onChange={handleChange} />
+          </div>
+          <div className="formGroup">
+            <label className="formLabel">호</label>
+            <input className="inputBox"
+              name='ho'
+              value={loadLoginData().ho}
+              placeholder="수정 불가"
+              readOnly
+              onChange={handleChange} />
+          </div>
+        </>
+        :
+        <>
+          <div className="formGroup">
+            <label className="formLabel">동</label>
+            <input className="inputBox"
+              name='dong'
+              placeholder="동 입력"
+              onChange={handleChange} />
+          </div>
+          <div className="formGroup">
+            <label className="formLabel">호</label>
+            <input className="inputBox"
+              name='ho'
+              placeholder="호 입력"
+              onChange={handleChange} />
+          </div>
+        </>
+      }
+      {/* --------------- */}
+      <div className="formGroup">
+        <label className="formLabel">입차 예상 날짜</label>
+        <input className='inputBox'
+          type='date'
+          name='expectedDate'
+          onChange={handleChange} />
       </div>
       <div className="buttonGroup">
         <button type='button' className='formButton add'

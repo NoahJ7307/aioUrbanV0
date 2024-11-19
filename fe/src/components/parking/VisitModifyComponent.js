@@ -54,6 +54,7 @@ const VisitModifyComponent = () => {
                 <input
                     className="inputBox"
                     name="carNum"
+                    placeholder='차량번호 입력'
                     value={serverData.carNum}
                     onChange={handleChange}
                 />
@@ -63,6 +64,7 @@ const VisitModifyComponent = () => {
                 <input
                     className="inputBox"
                     name="name"
+                    placeholder='이름 입력'
                     value={serverData.name}
                     onChange={handleChange}
                 />
@@ -72,6 +74,7 @@ const VisitModifyComponent = () => {
                 <input
                     className="inputBox"
                     name="phone"
+                    placeholder='전화번호 입력'
                     value={serverData.phone}
                     onChange={handleChange}
                 />

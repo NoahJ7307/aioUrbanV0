@@ -21,7 +21,7 @@ const initState = {
 
 const RegularListComponent = ({ pageServerData, searchData }) => {
     const [serverData, setServerData] = useState(initState)
-    const { page, size, moveToPath } = useCustom()
+    const { page, size } = useCustom()
     const [checked, setChecked] = useState([])
     const { setCheckedRpno } = useOutletContext() // 부모에게서 전달된 함수
     const { exceptionHandler, loadLoginData } = useCustomLogin()
@@ -104,7 +104,7 @@ const RegularListComponent = ({ pageServerData, searchData }) => {
     }
     return (
         <div className="tableRowContainer">
-            <div className="tableHeader">
+            <div className="parkingRVTable tableHeader">
                 <div>No</div>
                 <div>차량번호</div>
                 <div>이름</div>
@@ -118,7 +118,7 @@ const RegularListComponent = ({ pageServerData, searchData }) => {
             {serverData.dtoList.map((regular, index) => (
                 <label
                     key={index}
-                    className={`tableRow ${checked.includes(regular.rpno) ? "checked" : ""}`}
+                    className={`parkingRVTable tableRow ${checked.includes(regular.rpno) ? "checked" : ""}`}
                     htmlFor={`checkbox-${regular.rpno}`}
                 >
                     <input

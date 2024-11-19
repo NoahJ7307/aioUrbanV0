@@ -98,8 +98,8 @@ body {
   
   .tableHeader {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
     padding: 1rem 0.5rem;
+    grid-template-columns: repeat(7, 1fr); /* 기본 7열 테이블 (아래 custom class 설정) */
     background-color: #515c8fee;
     color: white;
     text-align: center;
@@ -110,41 +110,76 @@ body {
   
   .tableRow {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, 1fr); /* 기본 7열 테이블 (아래 custom class 설정) */
     padding: 0.75rem 0.5rem;
     border-bottom: 1px solid #e1e5ea;
     background-color: #d0e9ff;
     text-align: center;
     transition: background-color 0.3s ease;
   }
+
   
   .tableRow:hover {
     background-color: #c1f0c9;
   }
-
-
-/* 폼 스타일 */
-.formContainer {
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #515c8fee;
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px rgba(231, 229, 229, 0.1);
-    width: 50%;
-  }
   
+  /* 테이블 갯수 별 custom class */
+
+    /* parking */
+  .parkingRVTable{
+    grid-template-columns: .5fr repeat(2, 1.5fr) repeat(2, .5fr) 1.5fr 1fr;
+  }
+
+  .parkingEntryTable{
+    grid-template-columns: .5fr 1.5fr repeat(2, .7fr) repeat(3, .8fr);
+  }
+
+    /* user */
+  .userTable{
+    grid-template-columns: .5fr repeat(2, 1fr) repeat(2, 1.5fr) 1fr;
+  }
+  .approvalTable{
+    grid-template-columns: repeat(2, 1fr) repeat(2, 2fr) 1fr;
+  }
+    /* superAdmin */
+  .userManageTable{
+    grid-template-columns: .5fr repeat(2, 1fr) repeat(2, 2fr) 1fr;
+  }
+
+  /* 폼 스타일 */
+  .formContainer {
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: #515c8fee;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(231, 229, 229, 0.1);
+      width: 50%;
+    }
+
+  .formContainer.superAdminAdd {
+    display: flex;
+    width: initial;
+    margin: 1rem;
+    }
+
+  .formGroup.superAdminAdd {
+    flex: 1 1 calc(16.66% - 0.5rem);
+    min-width: 150px;
+    }
+
   .formGroup {
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
+    padding: .2rem;
   }
-  
+
   .formLabel {
     font-weight: 600;
     margin-bottom: 0.5rem;
     color: white;
   }
-  
+
   .inputBox {
     padding: 0.5rem 1rem;
     border: 2px solid #ddd;
@@ -154,7 +189,7 @@ body {
     color: #273a4e;
     transition: all 0.3s ease;
   }
-  
+
   .inputBox:focus {
     outline: none;
     background-color: white;
@@ -162,18 +197,21 @@ body {
     border-color: #749fcd;
     box-shadow: 0 0 0 3px rgba(116, 159, 205, 0.1);
   }
-  
+
   .inputBox::placeholder {
     color: rgba(39, 58, 78, 0.5);
   }
-  
+
   /* 버튼 스타일 */
   .buttonGroup {
     display: flex;
     justify-content: end;
   }
-  
+
   .formButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 0.75rem 1.5rem;
     border-radius: 1rem;
     border: none;
@@ -183,29 +221,35 @@ body {
     transition: all 0.3s ease;
     margin-left: 1rem;
   }
-  
+
   .formButton.add {
     background-color: #749fcd;
     color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
-  
+
+  .formButton.add.green {
+    background-color: #74cd96;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
   .formButton.add:hover {
     background-color: #577dad;
     transform: translateY(-2px);
   }
-  
+
   .formButton.cancel {
     background-color: #e57373;
     color: white;
     box-shadow: 0 4px 6px rgba(59, 47, 47, 0.1);
   }
-  
+
   .formButton.cancel:hover {
     background-color: #c54444;
     transform: translateY(-2px);
   }
-  
+
   /* 페이지네이션 스타일 */
   .pagination {
     display: flex;
@@ -217,7 +261,7 @@ body {
     background-color: #515c8fee;
 
   }
-  
+
   .paginationButton {
     display: flex;
     justify-content: center;
@@ -232,12 +276,12 @@ body {
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
+
   .paginationButton.active {
     background-color: #7997e9b2;
     color: white;
   }
-  
+
   .paginationButton:hover {
     background-color: #c1f0c9;
     color: #749fcd;

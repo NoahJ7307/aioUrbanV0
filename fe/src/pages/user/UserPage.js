@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import BasicLayout from '../../layout/BasicLayout'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { deleteChecked } from '../../components/api/userApi'
-import useCustomLogin from '../../components/hook/useCustomLogin'
+import '../../css/public/public.css'
 
 const UserPage = () => {
     const navigate = useNavigate()
@@ -14,19 +13,19 @@ const UserPage = () => {
 
     return (
         <BasicLayout>
-            <ul className='flex justify-center'>
+            <ul className='topMenu'>
                 <li>
-                    <button className='bg-gray-300 p-2' onClick={handleClickList}>
+                    <button className='topMenuBtn' onClick={handleClickList}>
                         입주민 목록
                     </button>
                 </li>
                 <li>
-                    <button className='bg-gray-300 p-2 mr' onClick={handleClickApprovalList}>
+                    <button className='topMenuBtn' onClick={handleClickApprovalList}>
                         가입 승인
                     </button>
                 </li>
                 <li>
-                    <button className='bg-gray-300 p-2' onClick={handleClickAdd}>
+                    <button className='topMenuBtn' onClick={handleClickAdd}>
                         입주민 등록
                     </button>
                 </li>

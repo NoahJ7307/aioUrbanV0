@@ -3,6 +3,7 @@ import useCustom from '../hook/useCustom'
 import { getOne, putOne } from '../api/userApi'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { addRole } from '../api/superAdmin/superAdminApi'
+import '../../css/public/public.css'
 
 const initState = {
     dong: 0,
@@ -71,93 +72,74 @@ const UserManageAddRoleComponent = () => {
         })
     }
     return (
-        <div className='flex p-2'>
-            <div className='p-2'>
-                <div>
-                    <div>
-                        이름
-                    </div>
-                    <div>
-                        전화번호
-                    </div>
-                    <div>
-                        비밀번호
-                    </div>
-                    <div>
-                        동
-                    </div>
-                    <div>
-                        호
-                    </div>
-                    <div>
-                        권한
-                    </div>
-                    <div>
-                        복구
-                    </div>
-                </div>
+        <div className='formContainer'>
+            <div className="formGroup">
+                <label className="formLabel">이름</label>
+                <input className='inputBox'
+                    name='userName'
+                    value={userData.userName}
+                    placeholder='이름 입력'
+                    onChange={handleChange} />
             </div>
-            <div>
-                <div className='p-2'>
-                    <div>
-                        <input className='border'
-                            name='userName'
-                            value={userData.userName}
-                            placeholder={userData.userName}
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            name='phone'
-                            value={userData.phone}
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            name='pw'
-                            placeholder='Insert your password'
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            name='dong'
-                            value={userData.dong}
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <input className='border'
-                            name='ho'
-                            value={userData.ho}
-                            onChange={handleChange} />
-                    </div>
-                    <div>
-                        <select className=''
-                            name='userRoleList'
-                            onChange={handleChangeRole}>
-                            <option value={userData.userRoleList[0]}>
-                                {roleLabelList[userData.userRoleList[0]] || '삭제된 유저'}</option>
-                            <option value='PENDING'>승인대기</option>
-                            <option value='USER'>일반유저</option>
-                            <option value='ADMIN'>관리자</option>
-                            <option value='ROOT'>루트</option>
-                        </select>
-                    </div>
-                    <div>
-                        <select className=''
-                            name='delFlag'
-                            onChange={handleChange}>
-                            <option value={userData.delFlag}>{userData.delFlag ? '삭제된 유저' : '삭제되지 않은 유저'}</option>
-                            <option value='false'>복구</option>
-                            <option value='true'>삭제</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <button type='button' className='bg-blue-400 p-2'
-                        onClick={handleClick}>수정</button>
-                    <button type='button' className='bg-red-400 p-2'
-                        onClick={() => moveToPath('/superAdmin/userManage')}>취소</button>
-                </div>
+            <div className="formGroup">
+                <label className="formLabel">전화번호</label>
+                <input className='inputBox'
+                    name='phone'
+                    value={userData.phone}
+                    placeholder='전화번호 입력'
+                    onChange={handleChange} />
+            </div>
+            <div className="formGroup">
+                <label className="formLabel">비밀번호</label>
+                <input className='inputBox'
+                    name='pw'
+                    placeholder='비밀번호 입력'
+                    onChange={handleChange} />
+            </div>
+            <div className="formGroup">
+                <label className="formLabel">동</label>
+                <input className='inputBox'
+                    name='dong'
+                    placeholder='동 입력'
+                    value={userData.dong}
+                    onChange={handleChange} />
+            </div>
+            <div className="formGroup">
+                <label className="formLabel">호</label>
+                <input className='inputBox'
+                    name='ho'
+                    placeholder='호 입력'
+                    value={userData.ho}
+                    onChange={handleChange} />
+            </div>
+            <div className="formGroup">
+                <label className="formLabel">권한</label>
+                <select className='inputBox'
+                    name='userRoleList'
+                    onChange={handleChangeRole}>
+                    <option value={userData.userRoleList[0]}>
+                        {roleLabelList[userData.userRoleList[0]] || '삭제된 유저'}</option>
+                    <option value='PENDING'>승인대기</option>
+                    <option value='USER'>일반유저</option>
+                    <option value='ADMIN'>관리자</option>
+                    <option value='ROOT'>루트</option>
+                </select>
+            </div>
+            <div className="formGroup">
+                <label className="formLabel">복구</label>
+                <select className='inputBox'
+                    name='delFlag'
+                    onChange={handleChange}>
+                    <option value={userData.delFlag}>{userData.delFlag ? '삭제된 유저' : '삭제되지 않은 유저'}</option>
+                    <option value='false'>복구</option>
+                    <option value='true'>삭제</option>
+                </select>
+            </div>
+            <div className="buttonGroup">
+                <button type='button' className='formButton add'
+                    onClick={handleClick}>수정</button>
+                <button type='button' className='formButton cancel'
+                    onClick={() => moveToPath('/superAdmin/userManage')}>취소</button>
             </div>
         </div>
     )

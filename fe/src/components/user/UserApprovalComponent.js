@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { addUserRole, approvalStatus, deleteChecked, getApprovalList, getList } from '../api/userApi'
+import { addUserRole, deleteChecked, getApprovalList } from '../api/userApi'
 import PageComponent from '../common/PageComponent'
 import useCustomApproval from '../hook/useCustomApproval'
-import { useNavigate } from 'react-router-dom'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import DoNotTouchIcon from '@mui/icons-material/DoNotTouch'
+import '../../css/public/public.css'
 
 const initState = {
     dtoList: [],
@@ -48,8 +50,8 @@ const UserApprovalComponent = () => {
     }, [page, size])
 
     return (
-        <div>
-            <div className="grid grid-cols-5">
+        <div className="tableRowContainer">
+            <div className="approvalTable tableHeader">
                 <div>동</div>
                 <div>호</div>
                 <div>이름</div>
@@ -59,19 +61,20 @@ const UserApprovalComponent = () => {
 
             {/* 유저 데이터를 map으로 렌더링 */}
             {serverData.dtoList.map((user, index) => (
-                <div key={index} className="grid grid-cols-5">
+                <div key={index} className="approvalTable tableRow">
                     <div>{user.dong}</div>
                     <div>{user.ho}</div>
                     <div>{user.userName}</div>
                     <div>{user.phone}</div>
-                    <div>
-                        <button className='bg-green-500'
+                    <div className="buttonGroup">
+                        <button className='formButton add green h-4 '
                             value={user.uno}
                             onClick={handleClickAccess}
-                        >승인</button>
-                        <button className='bg-red-500'
+                        ><CheckCircleIcon /></button>
+                        <button className='formButton cancel h-4'
                             value={user.uno}
-                            onClick={handleClickDenial}>거부</button>
+                            onClick={handleClickDenial}
+                        ><DoNotTouchIcon /></button>
                     </div>
                 </div>
             ))}
