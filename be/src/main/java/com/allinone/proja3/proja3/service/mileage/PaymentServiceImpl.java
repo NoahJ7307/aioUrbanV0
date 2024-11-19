@@ -115,6 +115,7 @@ public class PaymentServiceImpl implements PaymentService {
                 throw new RuntimeException("금액이 부족합니다.");
             // 2-2 : 자동결제 & 잔액 부족 => 충전후 사용
             } else {
+
                 log.info("자동 충전 요망: 현재 잔액 = {}, 필요한 금액 = {}", mileage.getPrice(), amount);
                 //2-2-1. 부족금액 계산을 통해 충전할 금액 계산.
                 int requiredAmount = amount - mileage.getPrice(); // 부족한 금액 계산
