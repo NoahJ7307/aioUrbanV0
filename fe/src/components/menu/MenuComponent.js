@@ -1,78 +1,115 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import useCustomLogin from '../hook/useCustomLogin'
-import '../../css/_modules/header.css'
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import useCustomLogin from '../hook/useCustomLogin';
+import '../../css/_modules/header.css';
 
 const MenuComponent = () => {
-    const loginState = useSelector(state => state.loginSlice)
-    const { doLogout, moveToPath, isLogin, loadLoginData } = useCustomLogin()
+    const navigate = useNavigate();
+    const { doLogout, moveToPath, isLogin, loadLoginData } = useCustomLogin();
+
+    // 사이드바 토글 핸들러
+    const toggleSidebar = () => {
+        const sidebar = document.getElementById('sidebar-wrapper');
+        const menuButton = document.querySelector('.menu-toggle');
+        sidebar.classList.toggle('active');
+        menuButton.classList.toggle('active');
+    };
 
     const handleClickLogout = () => {
-        doLogout()
-        alert("로그아웃 되었습니다.")
-        moveToPath('/')
-    }
+        doLogout();
+        alert('로그아웃 되었습니다.');
+        moveToPath('/');
+    };
+
+    const handleLogoClick = () => {
+        navigate('/'); // 홈 경로로 이동
+    };
 
     return (
-        <div className='headerBox'>
-            <div className='positionRelative'>
-                <div className='flexCenter'>
-                    <Link to={'/'}><h1 className='logoLink'>
-                        {Array.from('aio Urban').map((char, index) => (
-                            <span key={index} className='logo-char'>
-                                {char}
-                            </span>
-                        ))}
-                    </h1></Link>
+        <div>
+            {/* 상단 네비게이션 바 */}
+            <nav className="navbar">
+                <div className="navbar-logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
+                    {Array.from('aioUrban').map((char, index) => (
+                        <span key={index} className="urban-char">
+                            {char}
+                        </span>
+                    ))}
                 </div>
-                <div className='flexEnd'>
 
-                    {!isLogin ?
+                <div className="navbar-left">
+                    <ul>
+                        <li onClick={() => navigate('/user')}>입주민관리</li>
+                        <li onClick={() => navigate('/facilities')}>시설관리</li>
+                        <li onClick={() => navigate('/communities')}>소통관리</li>
+                        <li onClick={() => navigate('/parking')}>주차관리</li>
+                        <li onClick={() => navigate('/mileage/manual')}>결제관리</li>
+
+                    </ul>
+                </div>
+
+                <div className="navbar-right">
+                    {isLogin ? (
                         <>
-                            <div className='flexEnd marginRight0_5'>
-                                <Link to={'/login'}>로그인</Link>
-                            </div>
-                            <div className='flexEnd marginRight0_5'>
-                                <Link to={'/join'}>회원가입</Link>
-                            </div>
+                            <button onClick={handleClickLogout} className="nav-link">
+                                <i className="bi bi-box-arrow-right"></i>로그아웃
+                            </button>
+                            <a href="#"
+                                className="menu-toggle"
+                                onClick={toggleSidebar}>
+                                <i className="bi bi-person"></i>  마이페이지
+                            </a>
                         </>
-                        :
-                        <div className='flexEnd marginRight0_5'>
-                            <div className='flexEnd marginRight0_5'>
-                                <Link to={'/myPage'}>마이페이지</Link>
-                            </div>
-                            <button onClick={handleClickLogout}>로그아웃</button>
-                        </div>
-                    }
+                    ) : (
+                        <>
+                            <Link to="/login" className="nav-link">
+                                <i className="bi bi-box-arrow-in-left"></i> 로그인
+                            </Link>
+                            <Link to="/join" className="nav-link">
+                                <i className="bi bi-person-plus"></i>  회원가입
+                            </Link>
+                        </>
+                    )}
                 </div>
-            </div>
-            <ul className='flexCenter'>
-                {/* <li><Link to={'/'}>홈</Link></li> */}
-                {loadLoginData().role === 'ADMIN' ||
-                    loadLoginData().role === 'ROOT' ?
-                    <li><Link to={'/user'}>입주민관리</Link></li>
-                    :
-                    <></>
-                }
-                <li><Link to={'/facilities'}>시설예약</Link></li>
-                <li><Link to={'/communities'}>소통</Link></li>
-                <li><Link to={'/parking'}>주차관리</Link></li>
-                {isLogin ?
-                    <>
-                        <li><Link to={'/mileage/manual'}>마일리지결제</Link></li>
-                        {/* <li><Link to={'/'}>LoginTest</Link></li> */}
-                    </>
-                    : <></>
-                }
-                {loadLoginData().role === 'ROOT' ?
-                    <li><Link to={'/superAdmin'}>관리자 모드</Link></li>
-                    :
-                    <></>
-                }
-            </ul>
-        </div>
-    )
-}
+            </nav>
 
-export default MenuComponent
+            {/* 메뉴 버튼 */}
+            {/* <a href="#"
+                className="menu-toggle"
+                onClick={toggleSidebar}>
+                <i className="bi bi-person"></i>  마이페이지
+            </a> */}
+
+            {/* 사이드바 */}
+            <nav id="sidebar-wrapper">
+                <ul className="sidebar-nav">
+                    <li className="sidebar-brand">
+                        <Link to="/">aio Urban</Link>
+                    </li>
+                    <li>
+                        <Link to="/myPage/myInfo"> <i className="bi bi-calendar-check"></i>내정보</Link>
+                    </li>
+                    <li>
+                        <Link to="/myPage/mileage"><i className="bi bi-chat-dots"></i>마일리지 내역</Link>
+                    </li>
+                    <li>
+                        <Link to="/myPage/facilities"> <i className="bi bi-car-front"></i>예약현황</Link>
+                    </li>
+                    {loadLoginData().role === 'ADMIN' || loadLoginData().role === 'ROOT' ? (
+                        <li>
+                            <Link to="/user">   <i className="bi bi-wallet2"></i>입주민관리</Link>
+                        </li>
+                    ) : null}
+                    {/* {isLogin ? (
+                        <li>
+                        <button onClick={handleClickLogout} >
+                        <i className="bi bi-box-arrow-right"></i>로그아웃
+                            </button></li>):null}
+                         */}
+                </ul>
+            </nav>
+        </div>
+    );
+};
+
+export default MenuComponent;
