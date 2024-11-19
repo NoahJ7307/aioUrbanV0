@@ -3,6 +3,7 @@ package com.allinone.proja3.proja3.service.facilities;
 
 import com.allinone.proja3.proja3.dto.facilities.GymMembershipDTO;
 import com.allinone.proja3.proja3.dto.facilities.MembershipPlanDTO;
+import com.allinone.proja3.proja3.dto.mileage.MileageDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.GymMembership;
 
@@ -13,6 +14,7 @@ import com.allinone.proja3.proja3.repository.facilities.GymMembershipRepository;
 
 import com.allinone.proja3.proja3.repository.facilities.MembershipPlanRepository;
 import com.allinone.proja3.proja3.repository.mileage.MileageRepository;
+import com.allinone.proja3.proja3.service.mileage.MileageService;
 import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.log4j.Log4j2;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Member;
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.allinone.proja3.proja3.model.mileage.QMileage.mileage;
 
 @Service
 @Log4j2
@@ -37,23 +41,48 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     private PaymentService paymentService;
     @Autowired
     private MembershipPlanRepository membershipPlanRepository;
+    @Autowired
+    private MileageService mileageService;
 
 
     @Override
-    // (회원들이 그 등록된 이용권을 **구매(결제)**하는 로직)
-    public GymMembership createMembership(GymMembershipDTO gymMembershipDTO) {
-        // DTO를 엔티티로 변환
+    public GymMembership purchaseMembership(GymMembershipDTO gymMembershipDTO) {
         GymMembership gymMembership = toEntity(gymMembershipDTO);
+        String membershipType =gymMembership.getMembershipPlan().getMembershipType();
+        int amount = gymMembership.getMembershipPlan().getPrice();
+        String description = "헬스장 이용권 결제 (" +membershipType+") : "+ amount+"원";
+        Long uno = gymMembership.getUser().getUno();
+        String dong = gymMembership.getUser().getDong();
+        String ho = gymMembership.getUser().getHo();
 
-        // 엔티티 저장
-        gymMembership = gymMembershipRepository.save(gymMembership);
+//        MileageDTO mileageDTO = mileageService.findByDongHoDTO(dong, ho);
 
-        // 결제 처리
-        User user = gymMembership.getUser();
-        MembershipPlan membershipPlan = gymMembership.getMembershipPlan();
-        paymentService.processUseMileage(user.getDong(), user.getHo(), gymMembershipDTO.getUno(), membershipPlan.getPrice(), "헬스장 일일이용권이 결제되었습니다.");
-        return gymMembership;
+//        Long mileageId = null;
+//        if(mileageDTO != null) {
+//            mileageId = mileageDTO.getMileageId(); // MileageDTO에서 ID 가져오기
+//        }
+
+
+        paymentService.processUseMileage(dong, ho, uno, amount, description);
+
+        log.info("Regular Payment / dong:{}, ho:{}, amount:{}", dong, ho, amount);
+        return gymMembershipRepository.save(gymMembership);
     }
+//    @Override
+//    // (회원들이 그 등록된 이용권을 **구매(결제)**하는 로직)
+//    public GymMembership createMembership(GymMembershipDTO gymMembershipDTO) {
+//        // DTO를 엔티티로 변환
+//        GymMembership gymMembership = toEntity(gymMembershipDTO);
+//
+//        // 엔티티 저장
+//        gymMembership = gymMembershipRepository.save(gymMembership);
+//
+//        // 결제 처리
+//        User user = gymMembership.getUser();
+//        MembershipPlan membershipPlan = gymMembership.getMembershipPlan();
+//        paymentService.processUseMileage(user.getDong(), user.getHo(), gymMembershipDTO.getUno(), membershipPlan.getPrice(), "헬스장 일일이용권이 결제되었습니다.");
+//        return gymMembership;
+//    }
 
     @Override
     public GymMembership toEntity(GymMembershipDTO gymMembershipDTO) {

@@ -21,4 +21,6 @@ public class GymMembershipDTO {
     private Long membershipPlanId;
     private String membershipType;
 
+
+
 }

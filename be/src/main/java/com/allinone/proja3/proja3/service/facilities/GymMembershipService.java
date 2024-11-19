@@ -13,12 +13,14 @@ import java.util.List;
 public interface GymMembershipService {
 //    public GymMembership createMembership(GymMembershipDTO gymMembershipDTO );
     public GymMembership toEntity(GymMembershipDTO gymMembershipDTO);
-    public GymMembership createMembership(GymMembershipDTO gymMembershipDTO);
+//    public GymMembership createMembership(GymMembershipDTO gymMembershipDTO);
     public GymMembership createGymMembership(User user, Mileage mileage, MembershipPlan plan);
     public MembershipPlan createGymMembershipPlan (String membershipType, int durationMonths, int price);
     public List<MembershipPlan> getAllMembershipPlans();
     void deleteMembership(Long membershipPlanId);
+    public GymMembership  purchaseMembership(GymMembershipDTO gymMembershipDTO);
     public MembershipPlan toEntityMembership (MembershipPlanDTO membershipPlanDTO);
+
     // Convert GymMembership entity to GymMembershipDTO
 //    default GymMembershipDTO toDto(GymMembership gymMembership) {
 //        if (gymMembership == null) {
