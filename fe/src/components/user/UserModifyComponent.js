@@ -5,8 +5,8 @@ import { useOutletContext } from 'react-router-dom'
 import '../../css/public/public.css'
 
 const initState = {
-    dong: 0,
-    ho: 0,
+    dong: '',
+    ho: '',
     userName: '',
     phone: '',
     pw: '',
@@ -30,8 +30,8 @@ const UserModifyComponent = () => {
                 phone: data.phone || '',
                 pw: '',
                 verifyPw: '',
-                dong: data.dong ?? 0,
-                ho: data.ho ?? 0,
+                dong: data.dong ?? '',
+                ho: data.ho ?? '',
             })
         })
     }, [checkedUno])
@@ -70,7 +70,7 @@ const UserModifyComponent = () => {
             return
         }
 
-        if (!(userData.pw == userData.verifyPw)) {
+        if (!(userData.pw === userData.verifyPw)) {
             alert('비밀번호와 비밀번호 확인이 일치하지 않습니다')
             setErrors({ pw: true, verifyPw: true })
             return
