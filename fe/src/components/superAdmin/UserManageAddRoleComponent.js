@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import useCustom from '../hook/useCustom'
 import { getOne, putOne } from '../api/userApi'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
 import { addRole } from '../api/superAdmin/superAdminApi'
 import '../../css/public/public.css'
 
 const initState = {
-    dong: 0,
-    ho: 0,
+    dong: '',
+    ho: '',
     userName: '',
     phone: '',
     pw: '',
@@ -27,6 +27,7 @@ const UserManageAddRoleComponent = () => {
     const [userData, setUserData] = useState({ ...initState })
     const { checkedUno } = useOutletContext()
     const [roleData, setRoleData] = useState('')
+    const [errors, setErrors] = useState({})
 
     // data 수신
     useEffect(() => {
@@ -37,9 +38,10 @@ const UserManageAddRoleComponent = () => {
                 ...data,
                 userName: data.userName || '',
                 phone: data.phone || '',
-                pw: data.pw || '',
-                dong: data.dong ?? 0,
-                ho: data.ho ?? 0,
+                pw: '',
+                verifyPw: '',
+                dong: data.dong ?? '',
+                ho: data.ho ?? '',
                 userRoleList: data.userRoleList ?? [],
                 delFlag: data.delFlag,
             })
@@ -62,6 +64,40 @@ const UserManageAddRoleComponent = () => {
 
     // 수정 data 전송
     const handleClick = async () => {
+        // 입력 예외처리
+        const fieldLabels = {
+            userName: '이름',
+            phone: '전화번호',
+            pw: '비밀번호',
+            verifyPw: '비밀번호확인',
+            dong: '동',
+            ho: '호',
+        }
+        const errorMsg = [] // 인풋 에러 메세지
+        const newErrors = {} // 인풋 에러 상태
+        for (const [key, value] of Object.entries(userData)) {
+            if (key === 'delFlag') continue
+            // 권한, 복구 add
+            if (!value) {
+                console.log(key, value)
+                errorMsg.push(`[${fieldLabels[key]}]`)
+                newErrors[key] = true
+            }
+        }
+
+        setErrors(newErrors)
+
+        if (errorMsg.length > 0) {
+            alert(errorMsg.join(' ') + ' 입력값이 없습니다')
+            return
+        }
+
+        if (!(userData.pw === userData.verifyPw)) {
+            alert('비밀번호와 비밀번호 확인이 일치하지 않습니다')
+            setErrors({ pw: true, verifyPw: true })
+            return
+        }
+
         console.log('addRole uno : ' + checkedUno[0])
         await putOne(checkedUno[0], userData).then(() => {
             console.log('addRole success')
@@ -75,7 +111,7 @@ const UserManageAddRoleComponent = () => {
         <div className='formContainer'>
             <div className="formGroup">
                 <label className="formLabel">이름</label>
-                <input className='inputBox'
+                <input className={`inputBox ${errors.userName ? 'error' : ''}`}
                     name='userName'
                     value={userData.userName}
                     placeholder='이름 입력'
@@ -83,7 +119,7 @@ const UserManageAddRoleComponent = () => {
             </div>
             <div className="formGroup">
                 <label className="formLabel">전화번호</label>
-                <input className='inputBox'
+                <input className={`inputBox ${errors.phone ? 'error' : ''}`}
                     name='phone'
                     value={userData.phone}
                     placeholder='전화번호 입력'
@@ -91,21 +127,25 @@ const UserManageAddRoleComponent = () => {
             </div>
             <div className="formGroup">
                 <label className="formLabel">비밀번호</label>
-                <input className='inputBox'
+                <input className={`inputBox ${errors.pw ? 'error' : ''}`}
                     name='pw'
+                    value={userData.pw}
+                    type='password'
                     placeholder='비밀번호 입력'
                     onChange={handleChange} />
             </div>
             <div className="formGroup">
                 <label className="formLabel">비밀번호 확인</label>
-                <input className='inputBox'
-                    name='pw'
+                <input className={`inputBox ${errors.verifyPw ? 'error' : ''}`}
+                    name='verifyPw'
+                    value={userData.verifyPw}
+                    type='password'
                     placeholder='비밀번호 입력'
                     onChange={handleChange} />
             </div>
             <div className="formGroup">
                 <label className="formLabel">동</label>
-                <input className='inputBox'
+                <input className={`inputBox ${errors.dong ? 'error' : ''}`}
                     name='dong'
                     placeholder='동 입력'
                     value={userData.dong}
@@ -113,7 +153,7 @@ const UserManageAddRoleComponent = () => {
             </div>
             <div className="formGroup">
                 <label className="formLabel">호</label>
-                <input className='inputBox'
+                <input className={`inputBox ${errors.ho ? 'error' : ''}`}
                     name='ho'
                     placeholder='호 입력'
                     value={userData.ho}
