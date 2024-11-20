@@ -11,6 +11,7 @@ const initState = {
   pw: '',
   verifyPw: '',
 }
+
 const UserAddComponent = () => {
   const { moveToList } = useCustom()
   const [userData, setUserData] = useState({ ...initState })
