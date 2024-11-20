@@ -60,14 +60,19 @@ const MenuComponent = () => {
                 <div className="navbar-right">
                     {isLogin ? (
                         <>
+                            {loadLoginData().role === 'PENDING' ?
+                                <></>
+                                :
+                                <a href="#"
+                                    className="menu-toggle"
+                                    onClick={toggleSidebar}>
+                                    <i className="bi bi-person"></i>  마이페이지
+                                </a>
+                            }
                             <button onClick={handleClickLogout} className="nav-link">
                                 <i className="bi bi-box-arrow-right"></i>로그아웃
                             </button>
-                            <a href="#"
-                                className="menu-toggle"
-                                onClick={toggleSidebar}>
-                                <i className="bi bi-person"></i>  마이페이지
-                            </a>
+
                         </>
                     ) : (
                         <>
@@ -104,11 +109,6 @@ const MenuComponent = () => {
                     <li>
                         <Link to="/myPage/facilities"> <i className="bi bi-car-front"></i>예약현황</Link>
                     </li>
-                    {loadLoginData().role === 'ADMIN' || loadLoginData().role === 'ROOT' ? (
-                        <li>
-                            <Link to="/user">   <i className="bi bi-wallet2"></i>입주민관리</Link>
-                        </li>
-                    ) : null}
                     {/* {isLogin ? (
                         <li>
                         <button onClick={handleClickLogout} >
