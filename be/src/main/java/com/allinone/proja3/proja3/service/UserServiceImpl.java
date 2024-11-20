@@ -186,7 +186,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageResponseDTO<UserDTO> getApprovalList(PageRequestDTO pageRequestDTO) {
-        System.out.println("getList service");
+        System.out.println("getApprovalList service");
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),

@@ -13,9 +13,8 @@ drop table tbl_visit_parking;
 drop table tbl_household;
 -- -------------------------------------------------------------
 select * from tbl_user order by uno desc;
-select * from tbl_user where uno = 77;
-select * from user_user_role_list where user_uno = 77 order by user_uno desc;
-select * from user_user_role_list where user_role_list = 2 order by user_uno desc;
+SELECT u.*, r.* FROM tbl_user u LEFT JOIN user_user_role_list r ON u.uno = r.user_uno ORDER BY u.uno DESC;
+select * from tbl_user where uno = 66;
 select * from tbl_household;
 select * from tbl_regular_parking order by rpno desc;
 select * from tbl_visit_parking order by vpno desc;

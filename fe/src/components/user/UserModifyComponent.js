@@ -7,10 +7,10 @@ import '../../css/public/public.css'
 const initState = {
     dong: 0,
     ho: 0,
-    userName: "",
-    phone: "",
-    pw: "",
-    verifyPw: "",
+    userName: '',
+    phone: '',
+    pw: '',
+    verifyPw: '',
 }
 
 const UserModifyComponent = () => {
@@ -24,12 +24,12 @@ const UserModifyComponent = () => {
         getOne(checkedUno[0]).then(data => {
             console.log(data)
             setUserData({
-                // null || undefined 일 경우 "" || 0 로 대체 (controlled input 에러)
+                // null || undefined 일 경우 '' || 0 로 대체 (controlled input 에러)
                 ...data,
-                userName: data.userName || "",
-                phone: data.phone || "",
-                pw: "",
-                verifyPw: "",
+                userName: data.userName || '',
+                phone: data.phone || '',
+                pw: '',
+                verifyPw: '',
                 dong: data.dong ?? 0,
                 ho: data.ho ?? 0,
             })
@@ -45,12 +45,12 @@ const UserModifyComponent = () => {
     const handleClick = () => {
         // 입력 예외처리
         const fieldLabels = {
-            userName: "이름",
-            phone: "전화번호",
-            pw: "비밀번호",
-            verifyPw: "비밀번호확인",
-            dong: "동",
-            ho: "호",
+            userName: '이름',
+            phone: '전화번호',
+            pw: '비밀번호',
+            verifyPw: '비밀번호확인',
+            dong: '동',
+            ho: '호',
         }
         const errorMsg = [] // 인풋 에러 메세지
         const newErrors = {} // 인풋 에러 상태
@@ -76,66 +76,66 @@ const UserModifyComponent = () => {
             return
         }
 
-        console.log("modify uno : " + checkedUno[0])
+        console.log('modify uno : ' + checkedUno[0])
         putOne(checkedUno[0], userData).then(() => {
-            console.log("modify success")
+            console.log('modify success')
             moveToList()
         })
     }
 
     return (
         <div className='formContainer'>
-            <div className="formGroup">
-                <label className="formLabel">이름</label>
-                <input className={`inputBox ${errors.userName ? "error" : ""}`}
+            <div className='formGroup'>
+                <label className='formLabel'>이름</label>
+                <input className={`inputBox ${errors.userName ? 'error' : ''}`}
                     name='userName'
                     placeholder='이름 입력'
                     value={userData.userName}
                     onChange={handleChange} />
             </div>
-            <div className="formGroup">
-                <label className="formLabel">전화번호</label>
-                <input className={`inputBox ${errors.phone ? "error" : ""}`}
+            <div className='formGroup'>
+                <label className='formLabel'>전화번호</label>
+                <input className={`inputBox ${errors.phone ? 'error' : ''}`}
                     name='phone'
                     placeholder='전화번호 입력'
                     value={userData.phone}
                     onChange={handleChange} />
             </div>
-            <div className="formGroup">
-                <label className="formLabel">비밀번호</label>
-                <input className={`inputBox ${errors.pw ? "error" : ""}`}
+            <div className='formGroup'>
+                <label className='formLabel'>비밀번호</label>
+                <input className={`inputBox ${errors.pw ? 'error' : ''}`}
                     type='password'
                     name='pw'
                     value={userData.pw}
                     placeholder='비밀번호 입력'
                     onChange={handleChange} />
             </div>
-            <div className="formGroup">
-                <label className="formLabel">비밀번호 확인</label>
-                <input className={`inputBox ${errors.verifyPw ? "error" : ""}`}
+            <div className='formGroup'>
+                <label className='formLabel'>비밀번호 확인</label>
+                <input className={`inputBox ${errors.verifyPw ? 'error' : ''}`}
                     type='password'
                     name='verifyPw'
                     value={userData.verifyPw}
                     placeholder='비밀번호 재입력'
                     onChange={handleChange} />
             </div>
-            <div className="formGroup">
-                <label className="formLabel">동</label>
-                <input className={`inputBox ${errors.dong ? "error" : ""}`}
+            <div className='formGroup'>
+                <label className='formLabel'>동</label>
+                <input className={`inputBox ${errors.dong ? 'error' : ''}`}
                     name='dong'
                     placeholder='동 입력'
                     value={userData.dong}
                     onChange={handleChange} />
             </div>
-            <div className="formGroup">
-                <label className="formLabel">호</label>
-                <input className={`inputBox ${errors.ho ? "error" : ""}`}
+            <div className='formGroup'>
+                <label className='formLabel'>호</label>
+                <input className={`inputBox ${errors.ho ? 'error' : ''}`}
                     name='ho'
                     placeholder='호 입력'
                     value={userData.ho}
                     onChange={handleChange} />
             </div>
-            <div className="buttonGroup">
+            <div className='buttonGroup'>
                 <button type='button' className='formButton add'
                     onClick={handleClick}>수정</button>
                 <button type='button' className='formButton cancel'
