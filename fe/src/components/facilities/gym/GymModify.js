@@ -207,7 +207,7 @@ const GymModify = () => {
           </div>
         </div>
   
-        {/* 금액 */}
+        {/* 금액
         <div>
           <label className="text-lg font-medium text-gray-700">금액 (마일리지, 포인트 중에 결정):</label>
           <div className="flex items-center space-x-2">
@@ -221,7 +221,7 @@ const GymModify = () => {
             />
             <span className="text-lg text-gray-500">원</span>
           </div>
-        </div>
+        </div> */}
   
         {/* 저장 버튼 */}
         <div className="flex justify-center">

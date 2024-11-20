@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -117,41 +118,41 @@ public class GolfServiceImpl implements GolfService {
     }
 
 
-
+    //나의 예약 조회
     @Override
     public PageResponseDTO<GolfDTO> getUserReservations(Long uno, PageRequestDTO pageRequestDTO) {
-        Pageable pageable = PageRequest.of(pageRequestDTO.getPage(), pageRequestDTO.getSize());
+        Pageable pageable = PageRequest.of(pageRequestDTO.getPage()-1, pageRequestDTO.getSize(),
+                Sort.by("reservationId").descending());
 
         // 엔티티를 조회
-        List<Golf> reservations = golfRepository.findByUserUno(uno, pageable);
-
+//        List<Golf> reservations = golfRepository.findByUserUno(uno, pageable);
+        Page<Golf> result = golfRepository.findByUserUno(uno, pageable);
         // 엔티티를 DTO로 변환
-        List<GolfDTO> dtoList = reservations.stream()
+        List<GolfDTO> dtoList = result.getContent()
+                .stream()
                 .map(this::entityToDto)  // 엔티티 -> DTO 변환
                 .collect(Collectors.toList());
 
         // 총 예약 수
-        long totalCount = golfRepository.countByUserUno(uno);
+        long totalCount = result.getTotalElements();
 
         // DTO 리스트와 PageRequestDTO를 사용해 PageResponseDTO를 생성하여 반환
-        return new PageResponseDTO<>(dtoList,  pageRequestDTO ,totalCount);
+        return PageResponseDTO.<GolfDTO>withAll()
+                .dtoList(dtoList)
+                .pageRequestDTO(pageRequestDTO)
+                .totalCount(totalCount)
+                .build();
     }
 
 
     //===========삭제메서드==========
+    @Transactional
     @Override
     public void remove(Long reservationId) {
         System.out.println("remove service: " + reservationId);
         golfRepository.updateToDelete(reservationId, true);
     }
 
-//    @Override
-//    public void findGolfBydelFlag(Long reservationId) {
-//        System.out.println("check findGolfBydelFlag");
-//        Golf reservation = golfRepository.findById(reservationId).orElseThrow(() -> new ResourceAccessException("예약된 내용이 없어요"));
-//        reservation.setDelFlag(true);
-//        golfRepository.save(reservation);
-//    }
     @Override
     public PageResponseDTO<GolfDTO> getNonDeletedReservations(PageRequestDTO pageRequestDTO) {
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize());

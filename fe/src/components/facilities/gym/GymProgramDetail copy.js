@@ -163,7 +163,6 @@ const GymProgramDetail = () => {
         }
     };
 
-
     //참가 대기자 로직
     const handleWaiting = async () => {
         const applicationState = getApplicationState(gym);
@@ -282,7 +281,7 @@ const GymProgramDetail = () => {
                     <p><strong>진행 시간:</strong> {gym.programStartTime} ~ {gym.programEndTime}</p>
                     {/* <p><strong>접수 기간:</strong> {gym.applicationStartDate.replace('T', ' ')} ~ {gym.applicationEndDate.replace('T', ' ')}</p> */}
                     <p><strong>접수 기간:</strong> {gym.applicationStartDate.split('T')[0]} {gym.applicationStartDate.split('T')[1].slice(0, 5)} ~ {gym.applicationEndDate.split('T')[0]} {gym.applicationEndDate.split('T')[1].slice(0, 5)}</p>
-                    {/* <p><strong>금액:</strong> {gym.price} (마일리지, 포인트 중에 결정 예정)</p> */}
+                    <p><strong>금액:</strong> {gym.price} (마일리지, 포인트 중에 결정 예정)</p>
                 </div>
             </div>
 

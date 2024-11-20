@@ -30,12 +30,7 @@ const GymProgramAdd = () => {
     setProgram((prevProgram) => ({ ...prevProgram, [name]: value }));
   };
   const handleClickAdd = async () => {
-    const files = uploadRef.current.files;
     const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append("files", files[i]);
-    }
-
     Object.entries(program).forEach(([key, value]) => {
       formData.append(key, value);
     });
@@ -185,7 +180,7 @@ const GymProgramAdd = () => {
             </div>
           </div>
   
-          {/* 금액 */}
+          {/* 금액
           <div>
             <label className="text-lg font-medium text-gray-700">금액 (마일리지, 포인트 중에 결정):</label>
             <div className="flex items-center space-x-2">
@@ -199,19 +194,9 @@ const GymProgramAdd = () => {
               />
               <span className="text-lg text-gray-500">원</span>
             </div>
-          </div>
-  
-          {/* 파일 업로드
-          <div>
-            <label className="text-lg font-medium text-gray-700">Files:</label>
-            <input
-              ref={uploadRef}
-              type="file"
-              multiple
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
           </div> */}
   
+     
           {/* 등록하기 버튼 */}
           <div className="flex justify-center">
             <button

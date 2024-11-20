@@ -2,7 +2,9 @@ package com.allinone.proja3.proja3.repository.facilities;
 
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.SearchPageRequestDTO;
+import com.allinone.proja3.proja3.model.facilities.Golf;
 import com.allinone.proja3.proja3.model.facilities.Gym;
+import com.allinone.proja3.proja3.model.facilities.GymParticipant;
 import com.allinone.proja3.proja3.model.facilities.QGym;
 import com.querydsl.core.BooleanBuilder;
 import jdk.swing.interop.SwingInterOpUtils;
@@ -14,6 +16,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface GymRepository extends JpaRepository<Gym, Long>, QuerydslPredicateExecutor<Gym> {
@@ -25,7 +28,8 @@ public interface GymRepository extends JpaRepository<Gym, Long>, QuerydslPredica
 
     @Query("SELECT g FROM Gym g WHERE g.delFlag = false ORDER BY g.programId DESC")
     Page<Gym> findNonDeletedPrograms(Pageable pageable);
-
+//    List<Golf> findByUserUno(@Param("uno") Long uno, Pageable pageable);
+//    List<GymParticipant> findByUserUno(@Param("uno") Long uno, Pageable pageable);
     //검색
     default Page<Gym> searchPrograms(SearchPageRequestDTO requestDTO, Pageable pageable) {
         QGym gym = QGym.gym;

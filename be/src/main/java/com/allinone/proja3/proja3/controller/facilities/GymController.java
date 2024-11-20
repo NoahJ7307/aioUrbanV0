@@ -1,5 +1,7 @@
 package com.allinone.proja3.proja3.controller.facilities;
 
+import com.allinone.proja3.proja3.dto.PageRequestDTO;
+import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.SearchPageRequestDTO;
 import com.allinone.proja3.proja3.dto.SearchPageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymDTO;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +35,34 @@ public class GymController {
     @Autowired
     private PaymentService paymentService;
 
+    // 마이페이지에서 사용자가 신청한 프로그램 목록 조회
+//    @GetMapping("/user/programs")
+//    public ResponseEntity<List<GymDTO>> getProgramsByUser(@AuthenticationPrincipal User user) {
+//        // 로그인한 사용자가 신청한 프로그램 목록을 조회
+//        List<GymDTO> programs = service.getProgramsByUser(user);
+//        return ResponseEntity.ok(programs);
+//    }
+
+//    @GetMapping("/myPage/{uno}")
+//    public ResponseEntity<PageResponseDTO<GymDTO>> getProgramsByUser(
+//            @PathVariable Long uno,
+//            @RequestParam(defaultValue = "1") int page,  // 기본값 1
+//            @RequestParam(defaultValue = "10") int size) {  // 기본값 10
+//        PageRequestDTO pageRequestDTO = new PageRequestDTO(page, size);
+//        PageResponseDTO<GymDTO> result = service.getProgramsByUser(uno, pageRequestDTO);
+//        System.out.println("1212: "+result);
+//        return ResponseEntity.ok(result);
+//    }
+
+//    @GetMapping("/myPage/{uno}")
+//    public ResponseEntity<PageResponseDTO<GymDTO>> getProgramsByUser(
+//            @PathVariable Long uno,
+//            @ModelAttribute PageRequestDTO pageRequestDTO) {
+//        // 사용자 uno로 등록된 프로그램 목록 조회
+//        PageResponseDTO<GymDTO> result = service.getProgramsByUser(uno, pageRequestDTO);
+//
+//        return ResponseEntity.ok(result);
+//    }
     //등록
     @PostMapping("/add")
     public ResponseEntity<GymDTO> newProgramPost (@RequestBody Gym gym) {
