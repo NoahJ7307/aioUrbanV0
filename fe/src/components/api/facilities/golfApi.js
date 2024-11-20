@@ -1,5 +1,3 @@
-import { retry } from '@reduxjs/toolkit/query';
-import { computeHeadingLevel } from '@testing-library/react';
 import axios from 'axios';
 
 export const API_SERVER_HOST = "http://localhost:8080"
@@ -40,9 +38,12 @@ export const listGolf = async (pageParam) => {
 }
 //cancel 정상동작 확인완료
 export const cancelGolf = async (checkedReservationId) => {
+
+    console.log("0505",checkedReservationId)
     const config = getConfig();
     return axios.post(`${host}/delete`, checkedReservationId, config);
 }
+
 
 
 
@@ -92,3 +93,17 @@ export const modifyGolf = async (reservationId, reservationData) => {
     return response;
 }
 
+//MYPAGE 나의 예약 조회
+export const myPageGolfReservations = async (uno, page, size) => {
+    const config = getConfig();
+    try {
+        const response = await axios.get(`${host}/myPage/${uno}`, {
+            params: { uno, page, size },
+            ...config
+        })
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching user reservations:", error);
+        throw error;
+    }
+}

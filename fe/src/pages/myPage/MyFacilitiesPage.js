@@ -3,7 +3,7 @@ import MyFacilitiesComponent from '../../components/myPage/MyFacilitiesComponent
 
 const MyFacilitiesPage = () => {
   return (
-    <MyFacilitiesComponent/>
+    <div><MyFacilitiesComponent/></div>
   )
 }
 

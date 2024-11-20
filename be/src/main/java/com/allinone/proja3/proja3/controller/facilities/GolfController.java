@@ -67,6 +67,16 @@ public class GolfController {
         return Map.of("RESULT" , "SUCCESS");
     }
 
+    //사용자 마이페이지 예약 조회
+    @GetMapping("/myPage/{uno}")
+    public ResponseEntity<PageResponseDTO<GolfDTO>> getUserReservations (
+            @PathVariable Long uno,
+            @ModelAttribute PageRequestDTO pageRequestDTO) {
+
+        PageResponseDTO<GolfDTO> result = service.getUserReservations(uno, pageRequestDTO);
+        return ResponseEntity.ok(result);
+    }
+
 
 
     //예약 등록을 위한 로직

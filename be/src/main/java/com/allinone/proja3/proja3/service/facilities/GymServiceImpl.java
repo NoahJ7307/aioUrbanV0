@@ -1,5 +1,7 @@
 package com.allinone.proja3.proja3.service.facilities;
 
+import com.allinone.proja3.proja3.dto.PageRequestDTO;
+import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.SearchPageRequestDTO;
 import com.allinone.proja3.proja3.dto.SearchPageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymDTO;
@@ -48,7 +50,94 @@ public class GymServiceImpl implements GymService {
         System.out.println("service gym: " + gym);
         return gymRepository.save(gym);
     }
+    //1121 이어서 계속
+//    // 사용자가 신청한 프로그램 목록 조회
+//    @Override
+//    public List<GymDTO> getProgramsByUser(User user) {
+//        // 사용자가 신청한 모든 프로그램 조회
+//        List<GymParticipant> participants = gymParticipantRepository.findByUser(user);
+//
+//        // 신청한 프로그램 목록을 GymDTO로 변환하여 반환
+//        return participants.stream()
+//                .map(participant -> {
+//                    Gym gym = participant.getGym();
+////                    return new GymDTO(
+////                            gym.getProgramId(),
+////                            gym.getTitle(),
+////                            gym.getContent(),
+////                            gym.getProgramState(),
+////                            gym.getCurrentParticipants(),
+////                            gym.getParticipantLimit()
+////                    );
+//                })
+//                .collect(Collectors.toList());
+//    }
 
+//    // 프로그램 ID별로 등록된 사용자 조회
+//    @Override
+//    public List<UserDTO> getRegisteredUsers(Long programId) {
+//        Gym gym = gymRepository.findById(programId)
+//                .orElseThrow(() -> new EntityNotFoundException("Gym program not found with id: " + programId));
+//        List<GymParticipant> participants = gymParticipantRepository.findByGymAndWaitlisted(gym, false);
+//
+//        return participants.stream()
+//                .map(participant -> {
+//                    User user = participant.getUser();
+//                    return UserDTO.builder()
+//                            .uno(user.getUno())
+//                            .userName(user.getUserName())
+//                            .phone(user.getPhone())
+//                            .build();
+//                })
+//                .collect(Collectors.toList());
+//    }
+//
+//    // 프로그램 ID별 대기자 사용자 조회
+//    @Override
+//    public List<UserDTO> getWaitlistUsers(Long programId) {
+//        Gym gym = gymRepository.findById(programId)
+//                .orElseThrow(() -> new EntityNotFoundException("Gym program not found with id: " + programId));
+//        List<GymParticipant> waitlist = gymParticipantRepository.findByGymAndWaitlisted(gym, true);
+//
+//        return waitlist.stream()
+//                .map(participant -> {
+//                    User user = participant.getUser();
+//                    return UserDTO.builder()
+//                            .uno(user.getUno())
+//                            .userName(user.getUserName())
+//                            .phone(user.getPhone())
+//                            .build();
+//                })
+//                .collect(Collectors.toList());
+//    }
+//    //사용자별 프로그램 조회 (마이페이지)
+//    @Override
+//    public PageResponseDTO<GymDTO> getProgramsByUser (Long uno, PageRequestDTO pageRequestDTO){
+//        Pageable pageable = PageRequest.of(pageRequestDTO.getPage()-1,pageRequestDTO.getSize(),
+//                Sort.by("programId").descending());
+//
+//        Page<GymParticipant> participantsPage = gymParticipantRepository.findByUserUno(uno, pageable);
+//        List<GymDTO> dtoList = participantsPage.getContent()
+//                .stream()
+//                .map(participant -> {
+//                    Gym gym = participant.getGym(); // Gym 객체를 가져옴
+//                    return GymDTO.builder()
+//                            .programId(gym.getProgramId())  // 프로그램 ID
+//                            .title(gym.getTitle())  // 프로그램 이름
+//                            .programStartDate(gym.getProgramStartDate())  // 프로그램 시작일
+//                            .programEndDate(gym.getProgramEndDate())  // 프로그램 종료일
+////                            .status(gym.getStatus())  // 프로그램 상태
+//                            .build();
+//                })
+//                .collect(Collectors.toList());
+//        long totalCount = participantsPage.getTotalElements();
+//
+//        return PageResponseDTO.<GymDTO>withAll()
+//                .dtoList(dtoList)
+//                .pageRequestDTO(pageRequestDTO)
+//                .totalCount(totalCount)
+//                .build();
+//    }
     //선택한 게시글 상세조회 메서드
     @Override
     public GymDTO getProgramPost(Long programId) {
@@ -157,34 +246,7 @@ public class GymServiceImpl implements GymService {
 
         }
     }
-//    public String registerParticipant(Long programId, User user) {
-//        Gym gym = gymRepository.findById(programId)
-//                .orElseThrow(() -> new EntityNotFoundException("post not found with Id: " + programId));
-//        boolean isAlreadyRegistered = gymParticipantRepository.existsByGymAndUser(gym, user);
-//        if(isAlreadyRegistered) {
-//            return "Already";
-//        }
-//
-//        //모집인원 확인 및 참가자 등록처리
-//        if (gym.getCurrentParticipants() < gym.getParticipantLimit()) {
-//            gym.setCurrentParticipants(gym.getCurrentParticipants() + 1);
-//
-//            GymParticipant participant = new GymParticipant();
-//            participant.setGym(gym);
-//            participant.setUser(user);
-//            participant.setWaitlisted(false); //정식참가자로 등록
-//
-//            gymParticipantRepository.save(participant);  // 중간 엔티티 저장
-//            gym.updateProgramState();  // 상태 업데이트
-//            gymRepository.save(gym);
-//
-//            return "Done";
-//        } else {
-//            return "Over";
-//            // 대기자 등록 로직을 별도의 메서드로 호출
-////            return registerWaitlist(programId, user);
-//        }
-//    }
+
     //대기자 등록 로직
     @Override
     public String registerWaitlist(Long programId, User user) {

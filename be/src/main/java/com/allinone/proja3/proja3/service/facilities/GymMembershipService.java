@@ -1,6 +1,7 @@
 package com.allinone.proja3.proja3.service.facilities;
 
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
+import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymMembershipDTO;
 import com.allinone.proja3.proja3.dto.facilities.MembershipPlanDTO;
 import com.allinone.proja3.proja3.model.User;
@@ -20,7 +21,7 @@ public interface GymMembershipService {
     void deleteMembership(Long membershipPlanId);
     public GymMembership  purchaseMembership(GymMembershipDTO gymMembershipDTO);
     public MembershipPlan toEntityMembership (MembershipPlanDTO membershipPlanDTO);
-
+//    public List<GymDTO> getUserRegisteredPrograms (Long uno);
     // Convert GymMembership entity to GymMembershipDTO
 //    default GymMembershipDTO toDto(GymMembership gymMembership) {
 //        if (gymMembership == null) {
