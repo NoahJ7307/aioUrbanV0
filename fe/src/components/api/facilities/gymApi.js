@@ -82,8 +82,7 @@ export const searchListGym = async ({ page, size }, searchType, searchKeyWord) =
 // }
 
 
-//수정누르면 기존내용 불러오는 로직 수정 필요 데이터 안불려짐 1105
-
+//수정누르면 기존내용 불러오는 로직 
 export const getGymListByProgramId = async ({ programId, page, size }) => {
     console.log("Fetching program gym by programId : ", programId, page, size)
     const config = getConfig();
@@ -256,3 +255,17 @@ export const fetchAllMembershipPlans = async () => {
 };
 
 
+//사용자에 따른 프로그램 리스트 가져오기
+export const myPageGymReservations = async (uno, page, size) => {
+    const config = getConfig();
+    try {
+        const response = await axios.get(`${host}/myPage/${uno}`, {
+            params:  { page, size },
+            ...config
+        })
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching user reservations:", error);
+        throw error;
+    }
+}

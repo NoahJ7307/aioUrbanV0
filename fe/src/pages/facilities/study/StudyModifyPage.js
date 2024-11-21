@@ -1,12 +1,12 @@
-import React from 'react'
-import StudyModify from '../../../components/facilities/study/StudyModify'
+// import React from 'react'
+// import StudyModify from '../../../components/facilities/study/StudyModify'
 
-const StudyModifyPage = () => {
-    return (
-        <div>
-            <StudyModify />
-        </div>
-    )
-}
+// const StudyModifyPage = () => {
+//     return (
+//         <div>
+//             <StudyModify />
+//         </div>
+//     )
+// }
 
-export default StudyModifyPage
+// export default StudyModifyPage
