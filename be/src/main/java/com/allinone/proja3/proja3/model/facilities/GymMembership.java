@@ -38,8 +38,8 @@ public class GymMembership {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @Builder.Default
-    private boolean isOnHold = false; // 홀딩상태 관리하는 변수
+//    @Builder.Default
+//    private boolean isOnHold = false; // 홀딩상태 관리하는 변수
 
 
 //    //이용권 시작기간과 만료기간 설정

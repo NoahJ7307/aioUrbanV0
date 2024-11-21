@@ -9,9 +9,9 @@ const myPageRouter = () => {
     const Facilities = lazy(() => import("../../pages/myPage/MyFacilitiesPage"))
     const MyMileagePurchasePage = lazy(() => import("../../components/mileage/MyMileagePurchasePage"))
     const MyMileageUsagePage = lazy(() => import("../../components/mileage/MyMileageUsagePage"))
-    // const GolfMyReservationList = lazy(()=> import ("../../components/facilities/golf/GolfMyReservationList"))
-    // const StudyMyReservationList = lazy(()=> import ("../../components/facilities/study/StudyMyReservationList"))
-    // const GymMyReservationList = lazy(()=> import ("../../components/facilities/gym/GymMyReservationList"))
+    // const GolfMyList = lazy(()=> import ("../../components/facilities/golf/GolfMyListPage"))
+    // const StudyMyList = lazy(()=> import ("../../components/facilities/study/StudyMyListPage"))
+    // const GymMyList = lazy(()=> import ("../../components/facilities/gym/GymMyListPage"))
     return [
         {
             path: "",
@@ -45,15 +45,15 @@ const myPageRouter = () => {
         //     children: [
         //         {
         //             path: "golf",
-        //             element: <Suspense fallback={Loading} ><GolfMyReservationList/> </Suspense>
+        //             element: <Suspense fallback={Loading} ><GolfMyList/> </Suspense>
         //         },
         //         {
         //             path: "study",
-        //             element: <Suspense fallback={Loading} ><StudyMyReservationList/> </Suspense>
+        //             element: <Suspense fallback={Loading} ><StudyMyList/> </Suspense>
         //         },
         //         {
         //             path: "gym",
-        //             element: <Suspense fallback={Loading} ><GymMyReservationList/> </Suspense>
+        //             element: <Suspense fallback={Loading} ><GymMyList/> </Suspense>
         //         },
         //     ]
         // },

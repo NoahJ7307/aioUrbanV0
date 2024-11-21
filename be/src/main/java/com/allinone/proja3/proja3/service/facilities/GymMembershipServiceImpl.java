@@ -1,10 +1,14 @@
 package com.allinone.proja3.proja3.service.facilities;
 
 
+import com.allinone.proja3.proja3.dto.PageRequestDTO;
+import com.allinone.proja3.proja3.dto.PageResponseDTO;
+import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymMembershipDTO;
 import com.allinone.proja3.proja3.dto.facilities.MembershipPlanDTO;
 import com.allinone.proja3.proja3.dto.mileage.MileageDTO;
+import com.allinone.proja3.proja3.dto.user.UserDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Gym;
 import com.allinone.proja3.proja3.model.facilities.GymMembership;
@@ -23,6 +27,10 @@ import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Member;
@@ -52,6 +60,27 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     private MileageService mileageService;
 
 
+    public List<GymMembershipDTO> getUserMemberships (Long uno) {
+        List<GymMembership> memberships = gymMembershipRepository.findByUserUno(uno);
+
+        return memberships.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+
+    private GymMembershipDTO toDTO(GymMembership membership) {
+        return GymMembershipDTO.builder()
+                .membershipId(membership.getMembershipId())
+                .startDate(membership.getStartDate())
+                .endDate(membership.getEndDate())
+                .membershipType(membership.getMembershipPlan().getMembershipType())
+//                .price(membership.getMembershipPlan().getPrice())
+//                .durationMonths(membership.getMembershipPlan().getDurationMonths())
+                .build();
+    }
+
+    //사용자 이용권 결제
     @Override
     public GymMembership purchaseMembership(GymMembershipDTO gymMembershipDTO) {
         GymMembership gymMembership = toEntity(gymMembershipDTO);
@@ -111,11 +140,11 @@ public class GymMembershipServiceImpl implements GymMembershipService {
         gymMembership.setMembershipPlan(membershipPlan);
         gymMembership.setStartDate(gymMembershipDTO.getStartDate());
         gymMembership.setEndDate(gymMembershipDTO.getEndDate());
-        gymMembership.setOnHold(gymMembershipDTO.isOnHold());
+//        gymMembership.setOnHold(gymMembershipDTO.isOnHold());
 
         return gymMembership;
     }
-
+    //관리자가 이용권 생성하는 메서드
     @Override
     public MembershipPlan createGymMembershipPlan (String membershipType, int durationMonths, int price) {
         //이용권 계획 생성
