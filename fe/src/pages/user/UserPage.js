@@ -13,24 +13,26 @@ const UserPage = () => {
 
     return (
         <BasicLayout>
-            <ul className='topMenu'>
-                <li>
-                    <button className='topMenuBtn' onClick={handleClickList}>
-                        입주민 목록
-                    </button>
-                </li>
-                <li>
-                    <button className='topMenuBtn' onClick={handleClickApprovalList}>
-                        가입 승인
-                    </button>
-                </li>
-                <li>
-                    <button className='topMenuBtn' onClick={handleClickAdd}>
-                        입주민 등록
-                    </button>
-                </li>
-            </ul>
-            <Outlet context={{ checkedUno, setCheckedUno }} />
+            <div className='userBackground'>
+                <ul className='topMenu'>
+                    <li>
+                        <button className='topMenuBtn' onClick={handleClickList}>
+                            입주민 목록
+                        </button>
+                    </li>
+                    <li>
+                        <button className='topMenuBtn' onClick={handleClickApprovalList}>
+                            가입 승인
+                        </button>
+                    </li>
+                    <li>
+                        <button className='topMenuBtn' onClick={handleClickAdd}>
+                            입주민 등록
+                        </button>
+                    </li>
+                </ul>
+                <Outlet context={{ checkedUno, setCheckedUno }} />
+            </div>
         </BasicLayout>
     )
 }

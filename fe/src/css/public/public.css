@@ -7,6 +7,42 @@ body {
 
 /* -------------------------------------------- */
 
+/* ----------------배경 이미지----------------- */
+/* parking */
+.parkingBackground {
+  background-image: url('../../images/parking.jpg'); /* 이미지 경로 */
+  background-size: cover; /* 이미지를 컨테이너에 맞게 조정 */
+  background-repeat: no-repeat; /* 이미지 반복 제거 */
+  background-position: center; /* 이미지 중앙 정렬 */
+  min-height: 100vh; /* 화면 전체 높이 */
+  display: flex;
+  flex-direction: column;
+}
+
+/* user */
+.userBackground {
+  background-image: url('../../images/user.jpg'); /* 이미지 경로 */
+  background-size: cover; /* 이미지를 컨테이너에 맞게 조정 */
+  background-repeat: no-repeat; /* 이미지 반복 제거 */
+  background-position: center; /* 이미지 중앙 정렬 */
+  min-height: 100vh; /* 화면 전체 높이 */
+  display: flex;
+  flex-direction: column;
+}
+
+/* superAdmin */
+.superAdminBackground {
+  background-image: url('../../images/superAdmin.jpg'); /* 이미지 경로 */
+  background-size: cover; /* 이미지를 컨테이너에 맞게 조정 */
+  background-repeat: no-repeat; /* 이미지 반복 제거 */
+  background-position: center; /* 이미지 중앙 정렬 */
+  min-height: 100vh; /* 화면 전체 높이 */
+  display: flex;
+  flex-direction: column;
+}
+
+/* -------------------------------------------- */
+
 /* --------------------메뉴-------------------- */
 .topMenu {
   display: flex;
@@ -34,7 +70,7 @@ body {
 }
 
 .topMenuBtn:hover {
-  background-color: rgba(255, 166, 0, 0.70);;
+  background-color: rgba(255, 166, 0, 0.8);;
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -99,7 +135,7 @@ body {
   margin: 1rem;
   border-radius: 1rem;
   overflow: hidden;
-  background-color: white;
+  background-color: rgb(255, 255, 255, 0.7);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   line-height: 0.8rem;
 }
@@ -109,7 +145,7 @@ body {
   padding: 1rem 0.5rem;
   grid-template-columns: repeat(7, 1fr);
   /* 기본 7열 테이블 (아래 custom class 설정) */
-  background-color: #515c8fee;
+  background-color: rgba(81, 92, 143, 0.8);
   color: white;
   text-align: center;
   font-weight: 600;
@@ -123,7 +159,7 @@ body {
   /* 기본 7열 테이블 (아래 custom class 설정) */
   padding: 0.75rem 0.5rem;
   border-bottom: 1px solid #e1e5ea;
-  background-color: #d0e9ff;
+  background-color: rgb(208, 233, 255, 0.8);
   text-align: center;
   transition: background-color 0.3s ease;
 }

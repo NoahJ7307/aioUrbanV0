@@ -14,6 +14,7 @@ const ParkingPage = () => {
 
     return (
         <BasicLayout>
+            <div className='parkingBackground'>
             <ul className='topMenu flex justify-center'>
                 <li>
                     <button className='topMenuBtn' onClick={handleClickRegularList}>
@@ -32,6 +33,7 @@ const ParkingPage = () => {
                 </li>
             </ul>
             <Outlet context={{ checkedRpno, setCheckedRpno, checkedVpno, setCheckedVpno }} />
+                </div>
         </BasicLayout>
     )
 }
