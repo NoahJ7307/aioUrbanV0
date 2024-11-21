@@ -95,6 +95,9 @@ const MenuComponent = () => {
                     <li>
                         <Link to="/myPage/facilities"> <i className="bi bi-car-front"></i>예약현황</Link>
                     </li>
+                    <li>
+                        <Link to="/myPage/communities"> <i className="bi bi-car-front"></i>내가 쓴 글</Link>
+                    </li>
                     {loadLoginData().role === 'ADMIN' || loadLoginData().role === 'ROOT' ? (
                         <li>
                             <Link to="/user">   <i className="bi bi-wallet2"></i>입주민관리</Link>

@@ -9,6 +9,7 @@ const myPageRouter = () => {
     const Facilities = lazy(() => import("../../pages/myPage/MyFacilitiesPage"))
     const MyMileagePurchasePage = lazy(() => import("../../components/mileage/MyMileagePurchasePage"))
     const MyMileageUsagePage = lazy(() => import("../../components/mileage/MyMileageUsagePage"))
+    const Communities = lazy(() => import("../../pages/myPage/MyCommunities"))
     return [
         {
             path: "",
@@ -35,6 +36,10 @@ const myPageRouter = () => {
         {
             path: "facilities",
             element: <Suspense fallback={Loading}><Facilities /></Suspense>,
+        },
+        {
+            path: "communities",
+            element: <Suspense fallback={Loading}><Communities /></Suspense>,
         },
     ]
 }
