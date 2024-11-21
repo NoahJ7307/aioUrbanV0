@@ -1,5 +1,6 @@
 package com.allinone.proja3.proja3.dto.facilities;
 
+import com.allinone.proja3.proja3.dto.user.UserDTO;
 import com.allinone.proja3.proja3.model.facilities.ProgramState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -24,6 +26,7 @@ public class GymDTO {
     private LocalDateTime applicationStartDate; //접수기간 시작일
     private int participantLimit; //모집정원
     private int currentParticipants; // 현재 참가 인원
+    private List<UserDTO> participants;
 
     private String title;
     private String target;

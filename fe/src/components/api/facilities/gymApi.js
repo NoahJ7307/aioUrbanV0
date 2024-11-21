@@ -256,16 +256,29 @@ export const fetchAllMembershipPlans = async () => {
 
 
 //사용자에 따른 프로그램 리스트 가져오기
-export const myPageGymReservations = async (uno, page, size) => {
+export const myPageGymReservations = async ( uno ) => {
+    console.log("uno가 뭔가요 : " , uno)
     const config = getConfig();
     try {
-        const response = await axios.get(`${host}/myPage/${uno}`, {
-            params:  { page, size },
-            ...config
-        })
-        return response.data;
+        const response = await axios.get(`${host}/myPage/program/${uno}`, config);
+        console.log("프로그램에따른 사용자조회 api: ", response)
+        return response;
     } catch (error) {
         console.error("Error fetching user reservations:", error);
         throw error;
     }
 }
+//사용자에 따른 프로그램 리스트 가져오기
+export const myPageGymMembership = async ( uno ) => {
+    console.log("uno가 뭔가요 : " , uno)
+    const config = getConfig();
+    try {
+        const response = await axios.get(`${host}/myPage/membership/${uno}`, config);
+        console.log(" 사용자 이용권 조회 api: ", response)
+        return response;
+    } catch (error) {
+        console.error("Error fetching membership reservations:", error);
+        throw error;
+    }
+}
+

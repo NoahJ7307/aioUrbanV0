@@ -217,7 +217,6 @@ public class GymController {
         }
 
     }
-
     //참가 신청한 명단 불러오기
     @GetMapping("/{programId}/participants")
     public ResponseEntity<List<UserDTO>> getRegisterdUsers(@PathVariable Long programId) {
@@ -233,5 +232,12 @@ public class GymController {
         return ResponseEntity.ok(waitlist);
     }
 
+    //유저에 따른 프로그램 조회
+    @GetMapping("/myPage/program/{uno}")
+    public  ResponseEntity<List<GymDTO>> getProgramsByUser (@PathVariable Long uno) {
+        List<GymDTO> programs = service.getProgramsByUser(uno);
+        System.out.println("program1121 " + programs);
+        return ResponseEntity.ok(programs);
+    }
 
 }

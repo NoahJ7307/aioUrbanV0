@@ -121,6 +121,16 @@ public class GymMembershipController {
         List<MembershipPlan> plans = gymMembershipService.getAllMembershipPlans(); // 모든 이용권 가져오기
         return ResponseEntity.ok(plans); // JSON 응답 반환
     }
+
+    //사용자의 멤버쉽 조회하기
+    @GetMapping("/myPage/membership/{uno}")
+    public ResponseEntity<List<GymMembershipDTO>> getUserMemberships(@PathVariable Long uno) {
+        System.out.println("membership 1121"+uno);
+        List<GymMembershipDTO> memberships = gymMembershipService.getUserMemberships(uno);
+        return ResponseEntity.ok(memberships);
+    }
+
+
     //삭제한 이용권 반환 (조회) 관리자용 필요시 사용
 //    @GetMapping("/membership/plans/admin")
 //    public ResponseEntity<List<MembershipPlan>> getAllMembershipPlansForAdmin(@RequestParam(defaultValue = "false") boolean includeDeleted) {

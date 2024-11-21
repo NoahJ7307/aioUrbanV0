@@ -1,188 +1,58 @@
-import React, { useEffect, useState } from 'react'
-import { myPageGolfReservations } from '../api/facilities/golfApi';
-import PageComponent from '../common/PageComponent';
-import { myPageStudyReservations } from '../api/facilities/studyApi';
-import { myPageGymReservations } from '../api/facilities/gymApi';
+import React, { useState, useEffect } from 'react';
+import GolfMyList from '../facilities/golf/GolfMyList';
+import StudyMyList from '../facilities/study/StudyMyList';
+import GymMyList from '../facilities/gym/GymMyList';
 
-const MyFacilitiesComponent = ({ page, size }) => {
-  const [uno, setUno] = useState(); // 로그인한 사용자 uno
-  const [golfReservations, setGolfReservations] = useState({
-    dtoList: [],
-    pageNumList: [],
-    prev: false,
-    next: false,
-    totalCount: 0,
-    current: 0
-  });
-  const [studyReservations, setStudyReservations] = useState({
-    dtoList: [],
-    pageNumList: [],
-    prev: false,
-    next: false,
-    totalCount: 0,
-    current: 0
-  });
-  const [gymReservations, setGymReservations] = useState({
-    dtoList: [],
-    pageNumList: [],
-    prev: false,
-    next: false,
-    totalCount: 0,
-    current: 0
-  });
- 
+const MyFacilitiesComponent = () => {
+  const [uno, setUno] = useState();
+  const [selectedTab, setSelectedTab] = useState('golf'); // 현재 선택된 탭
+  const [page, setPage] = useState(1);
+  const [size] = useState(10);
 
-  // uno 초기화
   useEffect(() => {
     const storedUno = localStorage.getItem('uno');
-    if (storedUno) {
-      setUno(Number(storedUno));
-    } else {
-      console.error('로그인 정보가 없습니다.');
-    }
+    if (storedUno) setUno(Number(storedUno));
   }, []);
 
-  // 예약 정보 조회
-  const fetchMyReservations = async () => {
-    try {
-      if (!uno) return; // uno가 초기화되기 전에 API 호출 방지
-
-      const golfData = await myPageGolfReservations(uno, page, size); // 골프 예약 정보
-      if (golfData.error) {
-        throw new Error(golfData.error);
-      }
-      setGolfReservations(golfData);
-
-      const studyData = await myPageStudyReservations(uno, page, size); // 독서실 예약 정보
-      if (studyData.error) {
-        throw new Error(studyData.error);
-      }
-      setStudyReservations(studyData);
-
-      const gymData = await myPageGymReservations(uno ,page, size); // 독서실 예약 정보
-      if (gymData.error) {
-        throw new Error(gymData.error);
-      }
-      setGymReservations(gymData);
-
-    } catch (err) {
-      console.error('예약 정보를 가져오는 데 실패했습니다:', err);
-      alert('예약 정보를 가져오는 중 오류가 발생했습니다. 다시 시도해 주세요.');
-    }
+  const handleTabChange = (tabName) => {
+    setSelectedTab(tabName); // 선택된 탭 변경
+    setPage(1); // 탭이 변경될 때 페이지 초기화
   };
 
-  useEffect(() => {
-    fetchMyReservations();
-  }, [uno, page, size]);
-
-  // 페이지 이동 함수
-  const movePage = (newPage) => {
-    console.log(`페이지 이동: ${newPage}`);
-    // 페이지 이동 로직 구현
-  };
-  // 페이지 이동 함수
-  // const movePage = (pageParam) => {
-  //   console.log(`페이지 이동: ${pageParam}`);
-  //   // 페이지 이동 로직 구현
-  // };
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-6">나의 골프 예약 현황</h2>
-
-      <div className="grid grid-cols-7 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
-        <div>예약번호</div>
-        <div>날짜</div>
-        <div>사용시작</div>
-        <div>사용종료</div>
-        <div>예약구역</div>
-        <div>예약자</div>
-        <div>연락처</div>
-      </div>
-
-      {/* {golfReservations.dtoList && golfReservations.dtoList.length > 0 ? (
-        golfReservations.dtoList.map((golf) => ( */}
-      
-      {golfReservations.dtoList.length > 0 ? (
-        golfReservations.dtoList.map((golf) => (
-          <div key={golf.reservationId} className="grid grid-cols-7 gap-4 items-center border-t py-4">
-            <div className="text-sm">{golf.reservationId}</div>
-            <div className="text-sm">{golf.date}</div>
-            <div className="text-sm">{golf.startTime}</div>
-            <div className="text-sm">{golf.endTime}</div>
-            <div className="text-sm">{golf.teeBox}</div>
-            <div className="text-sm">{golf.userName}</div>
-            <div className="text-sm">{golf.phone}</div>
+      {uno && (
+        <>
+          {/* 버튼으로 탭 변경 */}
+          <div className="flex space-x-4 mb-6">
+            <button
+              className={`px-4 py-2 font-bold rounded ${selectedTab === 'golf' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+              onClick={() => handleTabChange('golf')}
+            >
+              골프 예약
+            </button>
+            <button
+              className={`px-4 py-2 font-bold rounded ${selectedTab === 'study' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+              onClick={() => handleTabChange('study')}
+            >
+              독서실 예약
+            </button>
+            <button
+              className={`px-4 py-2 font-bold rounded ${selectedTab === 'gym' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+              onClick={() => handleTabChange('gym')}
+            >
+              헬스장 예약
+            </button>
           </div>
-        ))
-      ) : (
-        <div className="text-center text-gray-500 col-span-7">예약 정보가 없습니다.</div>
-      )}
-      <h2 className="text-2xl font-semibold mb-6">나의 프로그램 신청 내역</h2>
 
-      <div className="grid grid-cols-7 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
-        <div>프로그램번호</div>
-        <div>시작날짜</div>
-        <div>종료날짜</div>
-        <div>프로그램 명</div>
-        <div>예약자</div>
-        <div>연락처</div>
-      </div>
-
-      {/* {studyReservations.dtoList && studyReservations.dtoList.length > 0 ? (
-        studyReservations.dtoList.map((study) => ( */}
-      
-      {gymReservations.dtoList.length > 0 ? (
-        gymReservations.dtoList.map((gym) => (
-          <div key={gym.programId} className="grid grid-cols-7 gap-4 items-center border-t py-4">
-            <div className="text-sm">{gym.programId}</div>
-            <div className="text-sm">{gym.programStartDate}</div>
-            <div className="text-sm">{gym.programEndDate}</div>
-            <div className="text-sm">{gym.title}</div>
-            <div className="text-sm">{gym.userName}</div>
-            <div className="text-sm">{gym.phone}</div>
-          </div>
-        ))
-      ) : (
-        <div className="text-center text-gray-500 col-span-7">예약 정보가 없습니다.</div>
-      )}
-      <h2 className="text-2xl font-semibold mb-6">나의 독서실 예약 현황</h2>
-
-      <div className="grid grid-cols-7 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
-        <div>예약번호</div>
-        <div>날짜</div>
-        <div>사용시작</div>
-        <div>사용종료</div>
-        <div>예약구역</div>
-        <div>예약자</div>
-        <div>연락처</div>
-      </div>
-
-      {/* {studyReservations.dtoList && studyReservations.dtoList.length > 0 ? (
-        studyReservations.dtoList.map((study) => ( */}
-      
-      {studyReservations.dtoList.length > 0 ? (
-        studyReservations.dtoList.map((study) => (
-          <div key={study.reservationId} className="grid grid-cols-7 gap-4 items-center border-t py-4">
-            <div className="text-sm">{study.reservationId}</div>
-            <div className="text-sm">{study.date}</div>
-            <div className="text-sm">{study.startTime}</div>
-            <div className="text-sm">{study.endTime}</div>
-            <div className="text-sm">{study.seatNum}</div>
-            <div className="text-sm">{study.userName}</div>
-            <div className="text-sm">{study.phone}</div>
-          </div>
-        ))
-      ) : (
-        <div className="text-center text-gray-500 col-span-7">예약 정보가 없습니다.</div>
-      )}
-      
-      {(golfReservations.dtoList.length > 0 || studyReservations.dtoList.length > 0) && (
-        <PageComponent
-          serverData={golfReservations} // 페이지네이션을 골프 예약 데이터로 처리
-          movePage={movePage} />
+          {/* 선택된 탭에 따라 렌더링 */}
+          {selectedTab === 'golf' && <GolfMyList uno={uno} page={page} size={size} />}
+          {selectedTab === 'study' && <StudyMyList uno={uno} page={page} size={size} />}
+          {selectedTab === 'gym' && <GymMyList uno={uno} />}
+        </>
       )}
     </div>
   );
 };
 
-export default MyFacilitiesComponent
+export default MyFacilitiesComponent;

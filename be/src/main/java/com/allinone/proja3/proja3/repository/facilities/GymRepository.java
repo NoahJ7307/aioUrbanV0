@@ -28,7 +28,7 @@ public interface GymRepository extends JpaRepository<Gym, Long>, QuerydslPredica
 
     @Query("SELECT g FROM Gym g WHERE g.delFlag = false ORDER BY g.programId DESC")
     Page<Gym> findNonDeletedPrograms(Pageable pageable);
-//    List<Golf> findByUserUno(@Param("uno") Long uno, Pageable pageable);
+    List<Gym> findByUserUno(@Param("uno") Long uno);
 //    List<GymParticipant> findByUserUno(@Param("uno") Long uno, Pageable pageable);
     //검색
     default Page<Gym> searchPrograms(SearchPageRequestDTO requestDTO, Pageable pageable) {
