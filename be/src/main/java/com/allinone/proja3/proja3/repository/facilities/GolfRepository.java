@@ -1,5 +1,8 @@
 package com.allinone.proja3.proja3.repository.facilities;
 
+import com.allinone.proja3.proja3.dto.PageRequestDTO;
+import com.allinone.proja3.proja3.dto.PageResponseDTO;
+import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Golf;
 import org.springframework.data.domain.Page;
@@ -25,7 +28,6 @@ public interface GolfRepository extends JpaRepository<Golf, Long> {
 //    @Query("select new com.allinone.proja3.proja3.dto.facilities.GolfDTO(g.reservationId, g.date, g.startTime, g.endTime, g.delFlag, g.teeBox, g.Uno, g.userName, g.Phone) " +
 //             "FROM Golf g WHERE g.user.uno = :uno")
 //    List<Golf> findByUserUno(Long uno, Pageable pageable);
-
 
 
     @Query("select count(g) from Golf g WHERE g.user.uno = :uno")
@@ -58,7 +60,8 @@ public interface GolfRepository extends JpaRepository<Golf, Long> {
 
     //==========사용자의 uno, 이름, phone 불러오기================
     @Query("select g from Golf g where g.user.uno = :uno")
-    List<Golf> findByUserUno(@Param("uno") Long uno, Pageable pageable);
+//    List<Golf> findByUserUno(@Param("uno") Long uno, Pageable pageable);
+    Page <Golf> findByUserUno(@Param("uno") Long uno, Pageable pageable);
 //    @Query("select g from Golf g where g.user.userName = :userName")
 //    List<Golf> findByUserName(@Param("userName") String userName, Pageable pageable);
 //    @Query("select g from Golf g where g.user.phone = :phone")

@@ -1,5 +1,6 @@
 package com.allinone.proja3.proja3.controller.facilities;
 
+import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymMembershipDTO;
 import com.allinone.proja3.proja3.dto.facilities.MembershipPlanDTO;
 import com.allinone.proja3.proja3.dto.user.UserDTO;
@@ -40,7 +41,17 @@ public class GymMembershipController {
     @Autowired
     private MileageRepository mileageRepository;
 
-
+//    //사용자가 등록한 프로그램 목록 조회
+//    @GetMapping("/myPage/{uno}")
+//    public ResponseEntity<List<GymDTO>> getUserRegisteredPrograms(@PathVariable Long uno) {
+//        // 사용자 uno로 등록된 프로그램 목록 조회
+//        List<GymDTO> registeredPrograms = gymMembershipService.getUserRegisteredPrograms(uno);
+//        //프로그램 목록 반환
+//        if(registeredPrograms.isEmpty()) {
+//            return ResponseEntity.noContent().build();
+//        }
+//        return ResponseEntity.ok(registeredPrograms);
+//    }
     //관리자가 이용권 등록하는 로직
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/membership/create/admin")

@@ -50,6 +50,7 @@ public class UserController {
     public void PostApproval(@RequestBody Map<String, Long> request){
         Long uno = request.get("uno");
         System.out.println("User post approval controller : "+uno);
+        userService.clearRole(uno);
         userService.addRole(uno, UserRole.USER);
     }
 

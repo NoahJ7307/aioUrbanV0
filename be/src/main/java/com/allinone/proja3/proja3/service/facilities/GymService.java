@@ -23,8 +23,7 @@ public interface GymService {
     public GymDTO findDataByProgramId(Long programId);
     GymDTO entityToDto(Gym gym);
     Gym dtoToEntity(GymDTO gymDTO);
-
-    //프로그램 접수관련
+   ;    //프로그램 접수관련
      String registerParticipant(Long programId, User user);
      // 대기자 접수
      String registerWaitlist(Long programId, User user);
@@ -36,4 +35,8 @@ public interface GymService {
     String cancelWaitlist(Long programId, User user);
     //검색관련
     public SearchPageResponseDTO<GymDTO> searchList (SearchPageRequestDTO requestDTO);
+
+//    public List<GymDTO> getProgramsByUser(User user);
+//    public List<UserDTO> getRegisteredUsers(Long programId);
 }
+

@@ -9,8 +9,8 @@ const initState = {
     carNum: '',
     name: '',
     phone: '',
-    dong: 0,
-    ho: 0,
+    dong: '',
+    ho: '',
 }
 
 const RegularModifyComponent = () => {
@@ -18,6 +18,7 @@ const RegularModifyComponent = () => {
     const [serverData, setServerData] = useState({ ...initState })
     const { checkedRpno } = useOutletContext()
     const { loadLoginData } = useCustomLogin()
+    const [errors, setErrors] = useState({})
 
     // data 수신
     useEffect(() => {
@@ -29,8 +30,8 @@ const RegularModifyComponent = () => {
                 carNum: data.carNum || '',
                 name: data.name || '',
                 phone: data.phone || '',
-                dong: data.household.householdPK.dong ?? 0,
-                ho: data.household.householdPK.ho ?? 0,
+                dong: data.household.householdPK.dong ?? '',
+                ho: data.household.householdPK.ho ?? '',
             })
         })
     }, [checkedRpno])
@@ -41,6 +42,32 @@ const RegularModifyComponent = () => {
     }
 
     const handleClick = () => {
+        // 입력 예외처리
+        const fieldLabels = {
+            carNum: '차량번호',
+            name: '이름',
+            phone: '전화번호',
+            dong: '동',
+            ho: '호',
+        }
+        const errorMsg = [] // 인풋 에러 메세지
+        const newErrors = {} // 인풋 에러 상태
+        for (const [key, value] of Object.entries(serverData)) {
+            if (key === 'householdDTO') continue
+            if (!value) {
+                console.log(key, value)
+                errorMsg.push(`[${fieldLabels[key]}]`)
+                newErrors[key] = true
+            }
+        }
+
+        setErrors(newErrors)
+
+        if (errorMsg.length > 0) {
+            alert(errorMsg.join(' ') + ' 입력값이 없습니다')
+            return
+        }
+
         regularPutOne(checkedRpno[0], serverData).then(() => {
             moveToPath('/parking/regular', { page, size })
         })
@@ -50,7 +77,7 @@ const RegularModifyComponent = () => {
             <div className="formGroup">
                 <label className="formLabel">차량번호</label>
                 <input
-                    className="inputBox"
+                    className={`inputBox ${errors.carNum ? 'error' : ''}`}
                     name="carNum"
                     placeholder="차량번호 입력"
                     value={serverData.carNum}
@@ -58,9 +85,11 @@ const RegularModifyComponent = () => {
                 />
             </div>
             <div className="formGroup">
+            </div>
+            <div className="formGroup">
                 <label className="formLabel">이름</label>
                 <input
-                    className="inputBox"
+                    className={`inputBox ${errors.name ? 'error' : ''}`}
                     name="name"
                     placeholder="이름 입력"
                     value={serverData.name}
@@ -70,7 +99,7 @@ const RegularModifyComponent = () => {
             <div className="formGroup">
                 <label className="formLabel">전화번호</label>
                 <input
-                    className="inputBox"
+                    className={`inputBox ${errors.phone ? 'error' : ''}`}
                     name="phone"
                     placeholder="전화번호 입력"
                     value={serverData.phone}
@@ -82,7 +111,7 @@ const RegularModifyComponent = () => {
                     <div className="formGroup">
                         <label className="formLabel">동</label>
                         <input
-                            className="inputBox"
+                            className={`inputBox ${errors.dong ? 'error' : ''}`}
                             name='dong'
                             placeholder="동 입력"
                             value={loadLoginData().dong}
@@ -91,7 +120,7 @@ const RegularModifyComponent = () => {
                     <div className="formGroup">
                         <label className="formLabel">호</label>
                         <input
-                            className="inputBox"
+                            className={`inputBox ${errors.ho ? 'error' : ''}`}
                             name='ho'
                             placeholder="호 입력"
                             value={loadLoginData().ho}
@@ -103,7 +132,7 @@ const RegularModifyComponent = () => {
                     <div className="formGroup">
                         <label className="formLabel">동</label>
                         <input
-                            className="inputBox"
+                            className={`inputBox ${errors.dong ? 'error' : ''}`}
                             name="dong"
                             placeholder="동 입력"
                             value={serverData.dong}
@@ -113,7 +142,7 @@ const RegularModifyComponent = () => {
                     <div className="formGroup">
                         <label className="formLabel">호</label>
                         <input
-                            className="inputBox"
+                            className={`inputBox ${errors.ho ? 'error' : ''}`}
                             name="ho"
                             placeholder="호 입력"
                             value={serverData.ho}

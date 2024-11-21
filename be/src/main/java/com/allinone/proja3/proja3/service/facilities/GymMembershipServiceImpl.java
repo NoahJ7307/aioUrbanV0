@@ -1,17 +1,21 @@
 package com.allinone.proja3.proja3.service.facilities;
 
 
+import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymMembershipDTO;
 import com.allinone.proja3.proja3.dto.facilities.MembershipPlanDTO;
 import com.allinone.proja3.proja3.dto.mileage.MileageDTO;
 import com.allinone.proja3.proja3.model.User;
+import com.allinone.proja3.proja3.model.facilities.Gym;
 import com.allinone.proja3.proja3.model.facilities.GymMembership;
 
+import com.allinone.proja3.proja3.model.facilities.GymParticipant;
 import com.allinone.proja3.proja3.model.facilities.MembershipPlan;
 import com.allinone.proja3.proja3.model.mileage.Mileage;
 import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.repository.facilities.GymMembershipRepository;
 
+import com.allinone.proja3.proja3.repository.facilities.GymParticipantRepository;
 import com.allinone.proja3.proja3.repository.facilities.MembershipPlanRepository;
 import com.allinone.proja3.proja3.repository.mileage.MileageRepository;
 import com.allinone.proja3.proja3.service.mileage.MileageService;
@@ -24,6 +28,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Member;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.allinone.proja3.proja3.model.mileage.QMileage.mileage;
 
@@ -33,6 +38,8 @@ public class GymMembershipServiceImpl implements GymMembershipService {
 
     @Autowired
     private GymMembershipRepository gymMembershipRepository;
+    @Autowired
+    private GymParticipantRepository gymParticipantRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -69,20 +76,23 @@ public class GymMembershipServiceImpl implements GymMembershipService {
         return gymMembershipRepository.save(gymMembership);
     }
 //    @Override
-//    // (회원들이 그 등록된 이용권을 **구매(결제)**하는 로직)
-//    public GymMembership createMembership(GymMembershipDTO gymMembershipDTO) {
-//        // DTO를 엔티티로 변환
-//        GymMembership gymMembership = toEntity(gymMembershipDTO);
+//    public List<GymDTO> getUserRegisteredPrograms (Long uno){
+//        List<GymParticipant> participants = gymParticipantRepository.findByUserUno(uno);
 //
-//        // 엔티티 저장
-//        gymMembership = gymMembershipRepository.save(gymMembership);
-//
-//        // 결제 처리
-//        User user = gymMembership.getUser();
-//        MembershipPlan membershipPlan = gymMembership.getMembershipPlan();
-//        paymentService.processUseMileage(user.getDong(), user.getHo(), gymMembershipDTO.getUno(), membershipPlan.getPrice(), "헬스장 일일이용권이 결제되었습니다.");
-//        return gymMembership;
+//        // 프로그램 정보를 GymDTO 형태로 반환
+//        return participants.stream()
+//                .map(participant -> {
+//                    Gym gym = participant.getGym();
+//                    return GymDTO.builder()
+//                            .programId(gym.getProgramId())
+//                            .title(gym.getTitle()) // 프로그램 제목
+//                            .programStartDate(gym.getProgramStartDate()) // 프로그램 시작일
+//                            .programEndDate(gym.getProgramEndDate()) // 프로그램 종료일
+//                            .build();
+//                })
+//                .collect(Collectors.toList());
 //    }
+
 
     @Override
     public GymMembership toEntity(GymMembershipDTO gymMembershipDTO) {

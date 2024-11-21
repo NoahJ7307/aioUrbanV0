@@ -30,7 +30,7 @@ const MenuComponent = () => {
             {/* 상단 네비게이션 바 */}
             <nav className="navbar">
                 <div className="navbar-logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
-                    {Array.from('aioUrban').map((char, index) => (
+                    {Array.from('Urban').map((char, index) => (
                         <span key={index} className="urban-char">
                             {char}
                         </span>
@@ -39,26 +39,40 @@ const MenuComponent = () => {
 
                 <div className="navbar-left">
                     <ul>
-                        <li onClick={() => navigate('/user')}>입주민관리</li>
+                        {loadLoginData().role === 'ADMIN' ||
+                            loadLoginData().role === 'ROOT' ?
+                            <li onClick={() => navigate('/user')}>입주민관리</li>
+                            :
+                            <></>
+                        }
                         <li onClick={() => navigate('/facilities')}>시설관리</li>
                         <li onClick={() => navigate('/communities')}>소통관리</li>
                         <li onClick={() => navigate('/parking')}>주차관리</li>
                         <li onClick={() => navigate('/mileage/manual')}>결제관리</li>
-
+                        {loadLoginData().role === 'ROOT' ?
+                            <li onClick={() => navigate('/superAdmin')}>관리자 모드</li>
+                            :
+                            <></>
+                        }
                     </ul>
                 </div>
 
                 <div className="navbar-right">
                     {isLogin ? (
                         <>
+                            {loadLoginData().role === 'PENDING' ?
+                                <></>
+                                :
+                                <a href="#"
+                                    className="menu-toggle"
+                                    onClick={toggleSidebar}>
+                                    <i className="bi bi-person"></i>  마이페이지
+                                </a>
+                            }
                             <button onClick={handleClickLogout} className="nav-link">
                                 <i className="bi bi-box-arrow-right"></i>로그아웃
                             </button>
-                            <a href="#"
-                                className="menu-toggle"
-                                onClick={toggleSidebar}>
-                                <i className="bi bi-person"></i>  마이페이지
-                            </a>
+
                         </>
                     ) : (
                         <>
@@ -98,11 +112,6 @@ const MenuComponent = () => {
                     <li>
                         <Link to="/myPage/communities"> <i className="bi bi-car-front"></i>내가 쓴 글</Link>
                     </li>
-                    {loadLoginData().role === 'ADMIN' || loadLoginData().role === 'ROOT' ? (
-                        <li>
-                            <Link to="/user">   <i className="bi bi-wallet2"></i>입주민관리</Link>
-                        </li>
-                    ) : null}
                     {/* {isLogin ? (
                         <li>
                         <button onClick={handleClickLogout} >

@@ -88,16 +88,6 @@ const MembershipPurchase = () => {
     return endDate.toLocaleDateString(); // 날짜를 YYYY/MM/DD 형식으로 반환
   };
 
-  // function calculateStartDate() {
-  //   return new Date().toISOString().split('T')[0]; // 현재 날짜
-  // }
-  
-  // function calculateEndDate(durationMonths) {
-  //   const endDate = new Date();
-  //   endDate.setMonth(endDate.getMonth() + durationMonths);
-  //   return endDate.toISOString().split('T')[0];
-  // }
-
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow rounded-lg">
       <h1 className="text-2xl font-bold mb-4 text-center">헬스장 이용권 구매</h1>

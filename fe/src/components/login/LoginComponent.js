@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import useCustomLogin from '../hook/useCustomLogin'
+import '../../css/public/public.css'
 
 const initState = {
     phone: '',
@@ -19,27 +20,31 @@ const LoginComponent = () => {
     }
 
     return (
-        <div className='border'>
-            <div className='flex'>
-                <div className='mr-3'>전화번호</div>
-                <input className='border border-solid'
+        <div className='formContainer'>
+            <div className='formGroup'>
+                <label className='formLabel'>전화번호</label>
+                <input className='inputBox'
                     name='phone'
+                    placeholder='전화번호 입력'
                     type='text'
                     value={loginParam.phone}
                     onChange={handleChange}
                 />
             </div>
-            <div className='flex'>
-                <div className='mr-3'>비밀번호</div>
-                <input className='border border-solid'
+            <div className='formGroup'>
+                <label className='formLabel'>비밀번호</label>
+                <input className='inputBox'
                     name='pw'
                     type='password'
+                    placeholder='비밀번호 입력'
                     value={loginParam.pw}
                     onChange={handleChange}
                 />
             </div>
-            <div className='flex'>
-                <button className='bg-gray-300'
+            <div className='buttonGroup'>
+                <button type='button' className='formButton add'
+                    onClick={handleClick}>비밀번호 찾기</button>
+                <button type='button' className='formButton add'
                     onClick={handleClick}>로그인</button>
             </div>
         </div>

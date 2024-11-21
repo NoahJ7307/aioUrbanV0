@@ -1,11 +1,13 @@
-/* 공통 스타일 */
+/* --------------------공통-------------------- */
 body {
   font-family: 'GmarketSansMedium', sans-serif;
   background-color: #f0f4f8;
   color: #273a4e;
 }
 
-/* 메뉴 스타일 */
+/* -------------------------------------------- */
+
+/* --------------------메뉴-------------------- */
 .topMenu {
   display: flex;
   justify-content: center;
@@ -39,7 +41,9 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* 버튼 스타일 */
+/* -------------------------------------------- */
+
+/* --------------------버튼-------------------- */
 .button {
   display: inline-flex;
   justify-content: center;
@@ -63,7 +67,9 @@ body {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* 인풋 박스 */
+/* -------------------------------------------- */
+
+/* --------------------인풋---------------------*/
 .inputBox {
   padding: 0.5rem 1rem;
   border: 2px solid white;
@@ -86,7 +92,9 @@ body {
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* 테이블 스타일 */
+/* -------------------------------------------- */
+
+/* -------------------테이블------------------- */
 .tableRowContainer {
   margin: 1rem;
   border-radius: 1rem;
@@ -153,14 +161,19 @@ body {
   grid-template-columns: 1fr 2fr repeat(5, 1fr);
 }
 
-/* 폼 스타일 */
+/* -------------------------------------------- */
+
+/* ---------------------폼--------------------- */
 .formContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
   margin: 2rem auto;
   padding: 2rem;
   background-color: #515c8fee;
   border-radius: 1rem;
   box-shadow: 0 4px 6px rgba(231, 229, 229, 0.1);
-  width: 50%;
+  width: 80%;
 }
 
 .formContainer.superAdminAdd {
@@ -176,6 +189,7 @@ body {
 
 .formGroup {
   display: flex;
+  flex: 1 1 calc(50% - 1rem);
   flex-direction: column;
   margin-bottom: 1rem;
   padding: .2rem;
@@ -189,12 +203,16 @@ body {
 
 .inputBox {
   padding: 0.5rem 1rem;
-  border: 2px solid #ddd;
+  border: .15rem solid white;
   border-radius: 0.5rem;
   font-size: 1rem;
   background-color: #f9f9f9;
   color: #273a4e;
   transition: all 0.3s ease;
+}
+
+.inputBox.error {
+  border: .15rem solid red;
 }
 
 .inputBox:focus {
@@ -209,9 +227,12 @@ body {
   color: rgba(39, 58, 78, 0.5);
 }
 
-/* 버튼 스타일 */
+/* -------------------------------------------- */
+
+/* --------------------버튼-------------------- */
 .buttonGroup {
   display: flex;
+  flex: 1 1 100%;
   justify-content: end;
 }
 
@@ -257,7 +278,9 @@ body {
   transform: translateY(-2px);
 }
 
-/* 페이지네이션 스타일 */
+/* -------------------------------------------- */
+
+/* ----------------페이지네이션---------------- */
 .pagination {
   display: flex;
   justify-content: center;
@@ -295,3 +318,5 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
+
+/* -------------------------------------------- */
