@@ -232,12 +232,27 @@ public class GymController {
         return ResponseEntity.ok(waitlist);
     }
 
-    //유저에 따른 프로그램 조회
+    //유저에 따른 참가 프로그램 조회
     @GetMapping("/myPage/program/{uno}")
     public  ResponseEntity<List<GymDTO>> getProgramsByUser (@PathVariable Long uno) {
         List<GymDTO> programs = service.getProgramsByUser(uno);
         System.out.println("program1121 " + programs);
         return ResponseEntity.ok(programs);
     }
+
+    //유저에 따른 대기 프로그램 조회
+    @GetMapping("/myPage/waitlist/{uno}")
+    public  ResponseEntity<List<GymDTO>> getWaitlistByUser (@PathVariable Long uno) {
+        List<GymDTO> programs = service.getWaitlistByUser(uno);
+        System.out.println("program1121 " + programs);
+        return ResponseEntity.ok(programs);
+    }
+//    @GetMapping("/myPage/program/{uno}/{programId}")
+//    public ResponseEntity<List<GymDTO>> getProgramsByUser(@PathVariable Long uno, @PathVariable Long programId) {
+//        List<GymDTO> programs = service.getProgramsByUserAndProgramId(uno, programId);
+//        System.out.println("program1121 " + programs);
+//        return ResponseEntity.ok(programs);
+//    }
+
 
 }

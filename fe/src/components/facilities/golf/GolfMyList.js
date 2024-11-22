@@ -25,6 +25,7 @@ const GolfMyList = ({ uno, page, size }) => {
     const fetchGolfReservations = async () => {
         if (!uno) return;
         try {
+            
             const golfData = await myPageGolfReservations(uno, page, size);
             setGolfReservations(golfData);
         } catch (err) {
@@ -45,6 +46,7 @@ const GolfMyList = ({ uno, page, size }) => {
 
         });
     };
+
 
 
     const handleModify = (reservationId) => {
@@ -73,7 +75,7 @@ const GolfMyList = ({ uno, page, size }) => {
             </div>
 
             <div className="grid grid-cols-8 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
-                <div>예약번호</div>
+                <div>NO</div>
                 <div>날짜</div>
                 <div>사용시작</div>
                 <div>사용종료</div>

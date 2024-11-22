@@ -1,6 +1,7 @@
 package com.allinone.proja3.proja3.repository.facilities;
 
 import com.allinone.proja3.proja3.model.User;
+import com.allinone.proja3.proja3.model.facilities.Golf;
 import com.allinone.proja3.proja3.model.facilities.Study;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,6 +60,10 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
     //==========사용자의 uno, 이름, phone 불러오기================
     @Query("select g from Study g where g.user.uno = :uno")
     Page <Study> findByUserUno(@Param("uno") Long uno, Pageable pageable);
+
+    @Query("SELECT g FROM Study g WHERE g.user.uno = :uno AND g.delFlag = false")
+    Page<Study> findNonDeletedReservationsByUserUno(@Param("uno") Long uno, Pageable pageable);
+
 //    @Query("select g from Study g where g.user.userName = :userName")
 //    List<Study> findByUserName(@Param("userName") String userName, Pageable pageable);
 //    @Query("select g from Study g where g.user.phone = :phone")

@@ -8,9 +8,6 @@ const StudyPage = () => {
     const handleClickList = useCallback(() => {
         navigate('/facilities/study/list');
     }, [navigate]);
-    // const handleClickDetailRead = useCallback(() => {
-    //     navigate(`/facilities/study/StudyDetailReadPage/${uno}`);
-    // }, [navigate, uno]);
     const handleClickReserve = useCallback(() => {
         navigate('/facilities/study/reserve');
     }, [navigate]);

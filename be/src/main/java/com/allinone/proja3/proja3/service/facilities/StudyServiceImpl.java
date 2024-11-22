@@ -121,15 +121,39 @@ public class StudyServiceImpl implements StudyService {
 
 
 
-    //나의 예약 조회
+//    //나의 예약 조회
+//    @Override
+//    public PageResponseDTO<StudyDTO> getUserReservations(Long uno, PageRequestDTO pageRequestDTO) {
+//        Pageable pageable = PageRequest.of(pageRequestDTO.getPage()-1, pageRequestDTO.getSize(),
+//                Sort.by("reservationId").descending());
+//
+//        // 엔티티를 조회
+////        List<Study> reservations = studyRepository.findByUserUno(uno, pageable);
+//        Page<Study> result = studyRepository.findByUserUno(uno, pageable);
+//        // 엔티티를 DTO로 변환
+//        List<StudyDTO> dtoList = result.getContent()
+//                .stream()
+//                .map(this::entityToDto)  // 엔티티 -> DTO 변환
+//                .collect(Collectors.toList());
+//
+//        // 총 예약 수
+//        long totalCount = result.getTotalElements();
+//
+//        // DTO 리스트와 PageRequestDTO를 사용해 PageResponseDTO를 생성하여 반환
+//        return PageResponseDTO.<StudyDTO>withAll()
+//                .dtoList(dtoList)
+//                .pageRequestDTO(pageRequestDTO)
+//                .totalCount(totalCount)
+//                .build();
+//    }
+//나의 예약 조회
     @Override
     public PageResponseDTO<StudyDTO> getUserReservations(Long uno, PageRequestDTO pageRequestDTO) {
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage()-1, pageRequestDTO.getSize(),
                 Sort.by("reservationId").descending());
 
         // 엔티티를 조회
-//        List<Study> reservations = studyRepository.findByUserUno(uno, pageable);
-        Page<Study> result = studyRepository.findByUserUno(uno, pageable);
+        Page<Study> result = studyRepository.findNonDeletedReservationsByUserUno(uno, pageable);
         // 엔티티를 DTO로 변환
         List<StudyDTO> dtoList = result.getContent()
                 .stream()
@@ -146,6 +170,7 @@ public class StudyServiceImpl implements StudyService {
                 .totalCount(totalCount)
                 .build();
     }
+
 
 
     //===========삭제메서드==========
@@ -182,6 +207,12 @@ public class StudyServiceImpl implements StudyService {
     //=========수정메서드==========
     @Override
     public void modify(StudyDTO studyDTO) {
+        // 예약 유효성 검증
+        String validationMessage = validateReservationDetails(studyDTO);
+        if(!"valid".equals(validationMessage)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validationMessage);
+        }
+
         System.out.println("study modify !!!!");
         Optional<Study> result = studyRepository.findById(studyDTO.getReservationId());
         Study study = result.orElseThrow();

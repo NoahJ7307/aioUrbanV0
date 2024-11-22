@@ -41,17 +41,7 @@ public class GymMembershipController {
     @Autowired
     private MileageRepository mileageRepository;
 
-//    //사용자가 등록한 프로그램 목록 조회
-//    @GetMapping("/myPage/{uno}")
-//    public ResponseEntity<List<GymDTO>> getUserRegisteredPrograms(@PathVariable Long uno) {
-//        // 사용자 uno로 등록된 프로그램 목록 조회
-//        List<GymDTO> registeredPrograms = gymMembershipService.getUserRegisteredPrograms(uno);
-//        //프로그램 목록 반환
-//        if(registeredPrograms.isEmpty()) {
-//            return ResponseEntity.noContent().build();
-//        }
-//        return ResponseEntity.ok(registeredPrograms);
-//    }
+
     //관리자가 이용권 등록하는 로직
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/membership/create/admin")
@@ -80,39 +70,34 @@ public class GymMembershipController {
             System.out.println("121212:"+ e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 중 오류가 발생했습니다.");
         }
-//    public void deleteMembershipType(@RequestBody Long membershipPlanId) {
-//        System.out.println("programId" + membershipPlanId);
-//        gymMembershipService.deleteMembership(membershipPlanId);
     }
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @PostMapping("/membership/create/admin")
-//    public ResponseEntity<MembershipPlan> createGymMembership (
-//            @RequestBody MembershipPlanDTO membershipPlanDTO) {
-////            @RequestParam String membershipType, // 이용권 이름
-////            @RequestParam int durationMonths, // 이용권 기간(개월)
-////            @RequestParam int price) { //이용권 가격
-//
+
+//     사용자가 이용권을 구매하는 API
+//    @PostMapping("/membership/purchase")
+//    public ResponseEntity<GymMembership> purchaseGymMembership(
+//            @RequestBody GymMembershipDTO gymMembershipDTO){
 //        try {
-//            //관리자에 의해 이용권 생성
-//            MembershipPlan newPlan = gymMembershipService.createGymMembershipPlan(membershipType,durationMonths, price);
-//            System.out.println("1212" + newPlan);
-//            return ResponseEntity.ok(newPlan);
-//        }catch (Exception e){
+//            System.out.println("sss"+gymMembershipDTO);
+//            GymMembership gymMembership = gymMembershipService.purchaseMembership(gymMembershipDTO);
+//            return ResponseEntity.ok(gymMembership);
+//        }catch (Exception e) {
+//            System.out.println("sss"+gymMembershipDTO);
 //            return ResponseEntity.status(500).body(null);
 //        }
 //    }
-
-//     사용자가 이용권을 구매하는 API
     @PostMapping("/membership/purchase")
-    public ResponseEntity<GymMembership> purchaseGymMembership(
+    public ResponseEntity<String> purchaseGymMembership(
             @RequestBody GymMembershipDTO gymMembershipDTO){
         try {
-            System.out.println("sss"+gymMembershipDTO);
+            System.out.println("sss" + gymMembershipDTO);
             GymMembership gymMembership = gymMembershipService.purchaseMembership(gymMembershipDTO);
-            return ResponseEntity.ok(gymMembership);
+            return new ResponseEntity<>("M001",HttpStatus.OK);
+        }catch (IllegalStateException e) {
+            return new ResponseEntity<>("M002", HttpStatus.OK);
         }catch (Exception e) {
-            System.out.println("sss"+gymMembershipDTO);
-            return ResponseEntity.status(500).body(null);
+            // 예기치 않은 오류 발생 시 500 상태 코드와 메시지 반환
+            return new ResponseEntity<>("M003", HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
     //등록한 이용권 반환하기(조회)
@@ -139,37 +124,4 @@ public class GymMembershipController {
 //    }
 
 
-//    public ResponseEntity<String> add(@RequestBody GymMembershipDTO dto) {
-//        System.out.println("controller 100) " + dto);
-//        System.out.println("Received data: " + dto.toString());
-//        // DTO를 엔티티로 변환 후 저장
-//        GymMembership gymMembership = gymMembershipService.createMembership(dto);
-//        System.out.println("membership after 200) : " + gymMembership);
-//
-//        log.info("Gym Membership added and payment processed for user: {}", dto.getUno());
-//
-//        return new ResponseEntity<>("OK", HttpStatus.OK);
-//    }
-
-
-//    @PostMapping("/membership/add")
-//    public ResponseEntity<String> add(@RequestBody GymMembershipDTO dto) {
-//        System.out.println("controller 100) " +dto);
-//        // Convert DTO to entity
-//        GymMembership gymMembership = gymMembershipService.createMembership(dto);
-//        System.out.println("membership after 200) : " + gymMembership);
-////        UserDTO user = userService.getOne(dto.getUno()); //uno 정보로 user에 있는 동, 호를 알고 싶다
-////        User user = userRepository.findById(dto.getUno())
-////                .orElseThrow(() -> new RuntimeException("User not found"));
-////        Mileage mileage = mileageRepository.findById(dto.getMileageId())
-////                .orElseThrow(() -> new RuntimeException("Mileage not found"));
-//
-//        // Save the membership using the service
-//        gymMembership = gymMembershipService.createMembership(dto);
-//        System.out.println("membershsip after 200) : " +gymMembership);
-//        log.info("Gym Membership added and payment processed for user: {}", dto.getUno());
-////        paymentService.processUseMileage(user.getDong(), user.getHo(), dto.getUno(), dto.getAmount(), "헬스장 일일이용권이 결제되었습니다.");
-//
-//        return new ResponseEntity<>("OK", HttpStatus.OK);
-//    }
 }

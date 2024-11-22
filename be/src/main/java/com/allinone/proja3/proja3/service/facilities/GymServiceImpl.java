@@ -22,8 +22,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.allinone.proja3.proja3.model.facilities.QGym.gym;
+
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -242,25 +246,26 @@ public class GymServiceImpl implements GymService {
         gymParticipantRepository.delete(waitlistParticipant);
         return "Waitlist Canceled";
     }
-    //유저에 따른 프로그램 조회(마이페이지)
+    //유저에 따른 참가 프로그램 조회(마이페이지)
     @Override
     public List<GymDTO> getProgramsByUser(Long uno) {
         User user = userRepository.findById(uno)
                 .orElseThrow(()-> new EntityNotFoundException("User not found with id: " + uno));
-        List<GymParticipant> participants  =  gymParticipantRepository.findByUser(user);
-
+        // 해당 사용자의 참가 정보 조회
+        List<GymParticipant> participants  =  gymParticipantRepository.findByUserAndWaitlisted(user,false);
         return participants.stream()
                 .map(participant -> {
                     Gym gym = participant.getGym();
+                    // 해당 프로그램에 등록된 사용자 정보 가져오기
                     List<UserDTO> userDTOS = gymParticipantRepository.findByGym(gym).stream()
                             .filter(p -> p.getUser().getUno().equals(uno)) //참가자중 해당 유저의 정보만가져오기
                             .map(p-> {
-                            User userInGym = p.getUser();
-                            return UserDTO.builder() //프로그램 신청한 유저정보가져오기
-                                    .uno(userInGym.getUno())
-                                    .userName(userInGym.getUserName())
-                                    .phone(userInGym.getPhone())
-                                    .build();
+                                User userInGym = p.getUser();
+                                return UserDTO.builder() //프로그램 신청한 유저정보가져오기
+                                        .uno(userInGym.getUno())
+                                        .userName(userInGym.getUserName())
+                                        .phone(userInGym.getPhone())
+                                        .build();
                             })
                             .collect(Collectors.toList());
                     return GymDTO.builder()  //프로그램 정보가져오기
@@ -276,14 +281,48 @@ public class GymServiceImpl implements GymService {
                 .collect(Collectors.toList());
 
     }
-    //프로그램 ID별로 등록된 User 조회 메서드
+    //유저에 따른 대기중인 프로그램 조회(마이페이지)
+    @Override
+    public List<GymDTO> getWaitlistByUser(Long uno) {
+        User user = userRepository.findById(uno)
+                .orElseThrow(()-> new EntityNotFoundException("User not found with id: " + uno));
+        // 해당 사용자의 참가 정보 조회
+        List<GymParticipant> participants  =  gymParticipantRepository.findByUserAndWaitlisted(user,true);
+        return participants.stream()
+                .map(participant -> {
+                    Gym gym = participant.getGym();
+                    // 해당 프로그램에 등록된 사용자 정보 가져오기
+                    List<UserDTO> userDTOS = gymParticipantRepository.findByGym(gym).stream()
+                            .filter(p -> p.getUser().getUno().equals(uno)) //참가자중 해당 유저의 정보만가져오기
+                            .map(p-> {
+                                User userInGym = p.getUser();
+                                return UserDTO.builder() //프로그램 신청한 유저정보가져오기
+                                        .uno(userInGym.getUno())
+                                        .userName(userInGym.getUserName())
+                                        .phone(userInGym.getPhone())
+                                        .build();
+                            })
+                            .collect(Collectors.toList());
+                    return GymDTO.builder()  //프로그램 정보가져오기
+                            .programState(gym.getProgramState())
+                            .programId(gym.getProgramId())
+                            .title(gym.getTitle())
+                            .content(gym.getContent())
+                            .programStartDate(gym.getProgramStartDate())
+                            .programEndDate(gym.getProgramEndDate())
+                            .participants(userDTOS)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+    }
+
+    //프로그램 ID별로 등록된 참가자 User 조회 메서드
     @Override
     public List<UserDTO> getRegisterdUsers(Long programId) {
         Gym gym = gymRepository.findById(programId)
                 .orElseThrow(() -> new EntityNotFoundException("Gym program not found with id: " + programId));
-//        List<GymParticipant> participants = gymParticipantRepository.findByGym(gym);
         List<GymParticipant> participants = gymParticipantRepository.findByGymAndWaitlisted(gym, false);
-//        List<GymParticipant> participants = gymParticipantRepository.findByGymAndStatus(gym, "REGISTERED");
         return participants.stream()
                 .map(participant -> {
                     User user = participant.getUser();

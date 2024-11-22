@@ -25,6 +25,7 @@ import com.allinone.proja3.proja3.repository.mileage.MileageRepository;
 import com.allinone.proja3.proja3.service.mileage.MileageService;
 import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,6 +43,7 @@ import static com.allinone.proja3.proja3.model.mileage.QMileage.mileage;
 
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class GymMembershipServiceImpl implements GymMembershipService {
 
     @Autowired
@@ -59,7 +61,10 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     @Autowired
     private MileageService mileageService;
 
+    private final SmsService smsService;
 
+
+    //참가자 헬스장 이용권 조회
     public List<GymMembershipDTO> getUserMemberships (Long uno) {
         List<GymMembership> memberships = gymMembershipRepository.findByUserUno(uno);
 
@@ -83,6 +88,11 @@ public class GymMembershipServiceImpl implements GymMembershipService {
     //사용자 이용권 결제
     @Override
     public GymMembership purchaseMembership(GymMembershipDTO gymMembershipDTO) {
+        GymMembership existingMembership = gymMembershipRepository.findByUserUnoAndEndDateAfter(gymMembershipDTO.getUno(), LocalDate.now());
+        // 이미 유효한 이용권이 있으면 예외를 발생
+        if (existingMembership != null) {
+            throw new IllegalStateException("이미 유효한 이용권이 존재합니다. 이용권이 만료된 후에 다시 시도해 주세요.");
+        }
         GymMembership gymMembership = toEntity(gymMembershipDTO);
         String membershipType =gymMembership.getMembershipPlan().getMembershipType();
         int amount = gymMembership.getMembershipPlan().getPrice();
@@ -91,12 +101,16 @@ public class GymMembershipServiceImpl implements GymMembershipService {
         String dong = gymMembership.getUser().getDong();
         String ho = gymMembership.getUser().getHo();
 
-//        MileageDTO mileageDTO = mileageService.findByDongHoDTO(dong, ho);
+        // 랜덤한 입장 코드 생성
+       int accessCode = (int) (Math.random() * 90000) + 10000;
+        System.out.println(accessCode);
 
-//        Long mileageId = null;
-//        if(mileageDTO != null) {
-//            mileageId = mileageDTO.getMileageId(); // MileageDTO에서 ID 가져오기
-//        }
+//        헬스장 이용권 정보와 입장코드를 생성하여  메시지 전송
+//            String messageText ="안녕하세요! " + gymMembership.getUser().getUserName()+"님, 헬스장(" +membershipType+") 이용권이 구매 완료되었습니다."
+//                    +gymMembership.getStartDate()+" 부터 " +gymMembership.getEndDate()+"까지 이용가능하며, 귀하의 입장 코드는 "+accessCode+" 입니다. 이용해주셔서 감사합니다.";
+//
+//            System.out.println("1212"+messageText);
+//            smsService.sendConfirmationMessage(gymMembership.getUser().getPhone(), messageText);
 
 
         paymentService.processUseMileage(dong, ho, uno, amount, description);
@@ -104,23 +118,35 @@ public class GymMembershipServiceImpl implements GymMembershipService {
         log.info("Regular Payment / dong:{}, ho:{}, amount:{}", dong, ho, amount);
         return gymMembershipRepository.save(gymMembership);
     }
+
+    //사용자 이용권 결제
 //    @Override
-//    public List<GymDTO> getUserRegisteredPrograms (Long uno){
-//        List<GymParticipant> participants = gymParticipantRepository.findByUserUno(uno);
+//    public GymMembership purchaseMembership(GymMembershipDTO gymMembershipDTO) {
+//        GymMembership gymMembership = toEntity(gymMembershipDTO);
+//        String membershipType =gymMembership.getMembershipPlan().getMembershipType();
+//        int amount = gymMembership.getMembershipPlan().getPrice();
+//        String description = "헬스장 이용권 결제 (" +membershipType+") : "+ amount+"원";
+//        Long uno = gymMembership.getUser().getUno();
+//        String dong = gymMembership.getUser().getDong();
+//        String ho = gymMembership.getUser().getHo();
 //
-//        // 프로그램 정보를 GymDTO 형태로 반환
-//        return participants.stream()
-//                .map(participant -> {
-//                    Gym gym = participant.getGym();
-//                    return GymDTO.builder()
-//                            .programId(gym.getProgramId())
-//                            .title(gym.getTitle()) // 프로그램 제목
-//                            .programStartDate(gym.getProgramStartDate()) // 프로그램 시작일
-//                            .programEndDate(gym.getProgramEndDate()) // 프로그램 종료일
-//                            .build();
-//                })
-//                .collect(Collectors.toList());
+//        int accessCode = (int) (Math.random() * 90000) + 10000;
+//        System.out.println(accessCode);
+//
+////        헬스장 이용권 정보와 입장코드를 생성하여  메시지 전송
+////            String messageText ="안녕하세요! " + gymMembership.getUser().getUserName()+"님, 헬스장(" +membershipType+") 이용권이 구매 완료되었습니다."
+////                    +gymMembership.getStartDate()+" 부터 " +gymMembership.getEndDate()+"까지 이용가능하며, 귀하의 입장 코드는 "+accessCode+" 입니다. 이용해주셔서 감사합니다.";
+////
+////            System.out.println("1212"+messageText);
+////            smsService.sendConfirmationMessage(gymMembership.getUser().getPhone(), messageText);
+//
+//
+//        paymentService.processUseMileage(dong, ho, uno, amount, description);
+//
+//        log.info("Regular Payment / dong:{}, ho:{}, amount:{}", dong, ho, amount);
+//        return gymMembershipRepository.save(gymMembership);
 //    }
+
 
 
     @Override

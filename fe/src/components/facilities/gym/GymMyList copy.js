@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { cancelParticipant, cancelWaitlist, myPageGymMembership, myPageGymReservations, myPageGymWaitlist } from '../../api/facilities/gymApi';
 import { useLocation } from 'react-router-dom';
-import GymProgramState from './GymProgramState';
 
 const GymMyList = ({ uno, page, size }) => {
 
@@ -145,23 +144,114 @@ const GymMyList = ({ uno, page, size }) => {
                 )}
             </div>
 
-            <div>
-            {/* 참가신청 내역 */}
-            <GymProgramState
-                reservations={gymReservations.data}
-                isParticipant={isParticipant}
-                handleCancel={handleUserCancel}
-                listTitle="참가신청 내역"
-            />
-            
-            {/* 대기신청 내역 */}
-            <GymProgramState
-                reservations={gymWaitlists.data}
-                isParticipant={isWaitList}
-                handleCancel={handleWaitingCancel}
-                listTitle="대기신청 내역"
-            />
-        </div>
+            <h2 className="text-2xl font-semibold mb-6"> 참가신청 내역</h2>
+
+            <div className="grid grid-cols-7 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
+                <div>NO</div>
+                <div>시작일</div>
+                <div>종료일</div>
+                <div>프로그램명</div>
+                <div>프로그램상태</div>
+                <div>신청자</div>
+                <div>참가취소</div>
+
+                {/* <div>연락처</div> */}
+            </div>
+            <div className="overflow-y-auto max-h-96">
+                {gymReservations.data && gymReservations.data.length > 0 ? (
+                    gymReservations.data.map((gym) => (
+                        <div key={gym.programId} className="grid grid-cols-7 gap-4 items-center border-t py-4">
+                            <div className="text-sm">{gym.programId}</div>
+                            <div className="text-sm">{gym.programStartDate}</div>
+                            <div className="text-sm">{gym.programEndDate}</div>
+                            <div className="text-sm">{gym.title}</div>
+                            <div className="text-sm">{gym.programState}</div>
+
+                            <div className="text-sm">
+                                {gym.participants && gym.participants.length > 0 ? (
+                                    gym.participants.map((participant) => (
+                                        <div key={participant.uno} className='flex flex-col'>
+                                            <span>{participant.userName}</span>
+                                            {/* <span>{participant.phone}</span> */}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <span>예약자 없음</span>
+                                )}
+                            </div>
+                            <div className="flex justify-center space-x-4 mt-4">
+                            
+                                {isParticipant && (
+                                    <button
+                                        type="button"
+                                        onClick={() => handleUserCancel(gym.programId)}
+                                        className="px-6 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+                                    >
+                                        참가 취소
+                                    </button>
+                                )}
+                               
+
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="text-center text-gray-500 col-span-7">신청 정보가 없습니다.</div>
+                )}
+            </div>
+            <h2 className="text-2xl font-semibold mb-6"> 대기신청 내역</h2>
+
+            <div className="grid grid-cols-7 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
+                <div>NO</div>
+                <div>시작일</div>
+                <div>종료일</div>
+                <div>프로그램명</div>
+                <div>프로그램상태</div>
+                <div>신청자</div>
+                <div>대기취소</div>
+
+                {/* <div>연락처</div> */}
+            </div>
+            <div className="overflow-y-auto max-h-96">
+                {gymWaitlists.data && gymWaitlists.data.length > 0 ? (
+                    gymWaitlists.data.map((gym) => (
+                        <div key={gym.programId} className="grid grid-cols-7 gap-4 items-center border-t py-4">
+                            <div className="text-sm">{gym.programId}</div>
+                            <div className="text-sm">{gym.programStartDate}</div>
+                            <div className="text-sm">{gym.programEndDate}</div>
+                            <div className="text-sm">{gym.title}</div>
+                            <div className="text-sm">{gym.programState}</div>
+
+                            <div className="text-sm">
+                                {gym.participants && gym.participants.length > 0 ? (
+                                    gym.participants.map((participant) => (
+                                        <div key={participant.uno} className='flex flex-col'>
+                                            <span>{participant.userName}</span>
+                                            {/* <span>{participant.phone}</span> */}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <span>예약자 없음</span>
+                                )}
+                            </div>
+                            <div className="flex justify-center space-x-4 mt-4">
+                                {isWaitList && (
+                                    <button
+                                        type="button"
+                                        onClick={() => handleWaitingCancel(gym.programId)}
+                                        className="px-6 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+                                    >
+                                        대기 취소
+                                    </button>
+                                )}
+
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="text-center text-gray-500 col-span-7">신청 정보가 없습니다.</div>
+                )}
+            </div>
 
 
 

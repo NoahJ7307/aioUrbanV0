@@ -93,6 +93,8 @@ export const modifyStudy = async (reservationId, reservationData) => {
 
 //MYPAGE 나의 예약 조회
 export const myPageStudyReservations = async (uno, page, size) => {
+    console.log("study uno조회 ", uno)
+
     const config = getConfig();
     try {
         const response = await axios.get(`${host}/myPage/${uno}`, {

@@ -74,6 +74,7 @@ public class GolfController {
             @ModelAttribute PageRequestDTO pageRequestDTO) {
 
         PageResponseDTO<GolfDTO> result = service.getUserReservations(uno, pageRequestDTO);
+        System.out.println("1122"+result);
         return ResponseEntity.ok(result);
     }
 

@@ -126,7 +126,8 @@ public class GolfServiceImpl implements GolfService {
 
         // 엔티티를 조회
 //        List<Golf> reservations = golfRepository.findByUserUno(uno, pageable);
-        Page<Golf> result = golfRepository.findByUserUno(uno, pageable);
+//        Page<Golf> result = golfRepository.findByUserUno(uno, pageable);
+        Page<Golf> result = golfRepository.findNonDeletedReservationsByUserUno(uno, pageable);
         // 엔티티를 DTO로 변환
         List<GolfDTO> dtoList = result.getContent()
                 .stream()
@@ -172,6 +173,11 @@ public class GolfServiceImpl implements GolfService {
     //=========수정메서드==========
     @Override
     public void modify(GolfDTO golfDTO) {
+        // 예약 유효성 검증
+        String validationMessage = validateReservationDetails(golfDTO);
+        if(!"valid".equals(validationMessage)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, validationMessage);
+        }
         System.out.println("golf modify !!!!");
         Optional<Golf> result = golfRepository.findById(golfDTO.getReservationId());
         Golf golf = result.orElseThrow();

@@ -199,7 +199,7 @@ export const purchaseMembership = async (membershipData) => {
     const config = getConfig(); // 인증 헤더 등을 설정
     try {
         const response = await axios.post(`${host}/membership/purchase`, membershipData, config);
-        console.log("헬스장 이용권 구매 성공 : ", response.data);
+        console.log("헬스장 이용권 버튼 결과 : ", response.data);
         return response.data;
     } catch (error) {
         console.error("헬스장 이용권 구매 중 오류 발생: ", error);
@@ -255,9 +255,9 @@ export const fetchAllMembershipPlans = async () => {
 };
 
 
-//사용자에 따른 프로그램 리스트 가져오기
+//사용자 참가리스트 가져오기(마이페이지)
 export const myPageGymReservations = async ( uno ) => {
-    console.log("uno가 뭔가요 : " , uno)
+    console.log("gym uno 조회 프로그램 ", uno)
     const config = getConfig();
     try {
         const response = await axios.get(`${host}/myPage/program/${uno}`, config);
@@ -268,9 +268,22 @@ export const myPageGymReservations = async ( uno ) => {
         throw error;
     }
 }
-//사용자에 따른 프로그램 리스트 가져오기
+//사용자 대기 리스트 가져오기(마이페이지)
+export const myPageGymWaitlist = async ( uno ) => {
+    console.log("gym uno 조회 프로그램 ", uno)
+    const config = getConfig();
+    try {
+        const response = await axios.get(`${host}/myPage/waitlist/${uno}`, config);
+        console.log("프로그램에따른 사용자조회 api: ", response)
+        return response;
+    } catch (error) {
+        console.error("Error fetching user reservations:", error);
+        throw error;
+    }
+}
+//사용자에 따른 이용권 리스트 가져오기
 export const myPageGymMembership = async ( uno ) => {
-    console.log("uno가 뭔가요 : " , uno)
+    console.log("gym uno 조회 이용권 ", uno)
     const config = getConfig();
     try {
         const response = await axios.get(`${host}/myPage/membership/${uno}`, config);
