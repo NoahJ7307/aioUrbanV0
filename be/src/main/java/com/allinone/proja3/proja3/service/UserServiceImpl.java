@@ -9,6 +9,7 @@ import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.repository.mileage.CardInfoRepository;
+import com.allinone.proja3.proja3.service.facilities.SmsService;
 import com.allinone.proja3.proja3.service.mileage.CardInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CardInfoService cardInfoService;
+    private final SmsService smsService;
 
     @Override
     public Long register(UserDTO userDTO) {
@@ -263,6 +266,19 @@ public class UserServiceImpl implements UserService {
         Optional<User> result = userRepository.findById(uno);
         User user = result.orElseThrow();
         user.clearRole();
+    }
+
+    @Override
+    public String verify(String phone) {
+        // 랜덤 인증번호 생성
+        SecureRandom rand = new SecureRandom(); // 보안을 위해 SecureRandom 사용
+        String verifyNum = String.format("%06d", rand.nextInt(1000000));
+        String sendStr = "Urban 인증번호 전송\n"+"["+verifyNum+"]";
+
+        // 전화번호 국가코드 변환
+        String newPhone = "+82"+phone.substring(1);
+//        smsService.sendConfirmationMessage(newPhone, sendStr);
+        return verifyNum;
     }
 
     private User dtoToEntity(UserDTO userDTO) {
