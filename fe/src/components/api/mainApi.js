@@ -14,12 +14,13 @@ export const register = async (userData) => {
     return res.data
 }
 
-export const verifyPhoneSend = async (userData) => {
+export const verifyPhoneSend = async (phone) => {
     const config = {
         headers: {
             "Content-Type": "application/json",
         },
     }
-    const res = await axios.post(`${host}/verify`, JSON.stringify(userData), config)
+    const res = await axios.post(`${host}/verify`, JSON.stringify(phone), config)
+    console.log(res.data)
     return res.data
 }

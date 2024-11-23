@@ -10,6 +10,7 @@ const initState = {
     phone: '010',
     pw: '',
     verifyPw: '',
+    verifyNumber: '',
     userRoleList: [],
 }
 
@@ -17,6 +18,8 @@ const JoinComponent = () => {
     const { moveToPath } = useCustomLogin()
     const [userData, setUserData] = useState({ ...initState })
     const [errors, setErrors] = useState({})
+    const [verifyNum, setVerifyNum] = useState('')
+    const [isVerify, setIsVerify] = useState(false)
 
     const handleChange = (e) => {
         userData[e.target.name] = e.target.value
@@ -47,9 +50,9 @@ const JoinComponent = () => {
         console.log(verifyPhone.length)
         if (verifyPhone.length === 11) {
             verifyPhoneSend(verifyPhone).then(data => {
-                console.log(data)
+                setVerifyNum('' + data)
             })
-            console.log('인증번호 전송')
+            alert('인증번호 입력 후 인증 확인을 눌러주세요')
         } else {
             alert('전화번호는 11자리 입니다')
             return
@@ -57,6 +60,13 @@ const JoinComponent = () => {
     }
 
     const handleClickVerifyCheck = () => {
+        if (userData.verifyNumber === verifyNum) {
+            alert('인증 확인')
+            setIsVerify(true)
+        } else {
+            alert('인증번호가 일치하지 않습니다')
+            setIsVerify(false)
+        }
         console.log('인증번호 확인')
     }
 
@@ -75,6 +85,7 @@ const JoinComponent = () => {
         for (const [key, value] of Object.entries(userData)) {
             if (key === 'delFlag') continue
             if (key === 'userRoleList') continue
+            if (key === 'verifyNumber') continue
             if (!value) {
                 console.log(key, value)
                 errorMsg.push(`[${fieldLabels[key]}]`)
@@ -92,6 +103,12 @@ const JoinComponent = () => {
         if (!(userData.pw === userData.verifyPw)) {
             alert('비밀번호와 비밀번호 확인이 일치하지 않습니다')
             setErrors({ pw: true, verifyPw: true })
+            return
+        }
+
+        if (!isVerify) { // 인증 검증 로직 추가 필요
+            alert('전화번호 인증이 필요합니다')
+            setErrors({ phone: true, verifyNumber: true })
             return
         }
 
@@ -128,8 +145,8 @@ const JoinComponent = () => {
             </div>
             <div className='formGroup'>
                 <label className='formLabel'>인증번호</label>
-                <input className='inputBox'
-                    name='phone'
+                <input className={`inputBox ${errors.verifyNumber ? 'error' : ''}`}
+                    name='verifyNumber'
                     placeholder='인증번호 입력'
                     onChange={handleChange} />
             </div>

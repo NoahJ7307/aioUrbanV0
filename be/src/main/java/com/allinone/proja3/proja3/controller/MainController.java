@@ -20,8 +20,8 @@ public class MainController {
     }
 
     @PostMapping("/verify")
-    public String verifyPhone(@RequestBody UserDTO userDTO){
-        System.out.println("register : "+userDTO.getPhone());
-        return userDTO.getPhone();
+    public String verifyPhone(@RequestBody String phone){
+        System.out.println("verify : "+ phone);
+        return userService.verify(phone);
     }
 }
