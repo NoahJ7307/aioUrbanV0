@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import useCustomLogin from '../hook/useCustomLogin'
-import { register } from '../api/mainApi'
+import { register, verifyPhoneSend } from '../api/mainApi'
 import '../../css/public/public.css'
 
 const initState = {
-    dong: 0,
-    ho: 0,
+    dong: '',
+    ho: '',
     userName: '',
-    phone: '',
+    phone: '010',
     pw: '',
     verifyPw: '',
     userRoleList: [],
@@ -21,6 +21,43 @@ const JoinComponent = () => {
     const handleChange = (e) => {
         userData[e.target.name] = e.target.value
         setUserData({ ...userData })
+    }
+
+    // 전화번호 입력 제한
+    const handlePhoneChange = (e) => {
+        const value = e.target.value
+
+        if (!value.startsWith('010')) {
+            setUserData({
+                ...userData,
+                phone: '010', // 강제로 '010'으로 고정
+            })
+            return
+        }
+
+        const onlyNum = value.slice(3).replace(/\D/g, '') // 숫자만 남김 ("/\D/g" : 숫자가 아닌 문자를 찾는 정규식)
+        setUserData({
+            ...userData,
+            phone: '010' + onlyNum.slice(0, 8), // 010 이후 8자리까지 제한
+        })
+    }
+
+    const handleClickVerifySend = () => {
+        const verifyPhone = userData.phone
+        console.log(verifyPhone.length)
+        if (verifyPhone.length === 11) {
+            verifyPhoneSend(verifyPhone).then(data => {
+                console.log(data)
+            })
+            console.log('인증번호 전송')
+        } else {
+            alert('전화번호는 11자리 입니다')
+            return
+        }
+    }
+
+    const handleClickVerifyCheck = () => {
+        console.log('인증번호 확인')
     }
 
     const handleClick = () => {
@@ -75,23 +112,25 @@ const JoinComponent = () => {
             <div className='formGroup'>
                 <div className='flex justify-end mt-6'>
                     <button type='button' className='formButton add'
-                        onClick={handleClick}>인증번호 전송</button>
+                        onClick={handleClickVerifySend}>인증번호 전송</button>
                     <button type='button' className='formButton add'
-                        onClick={handleClick}>인증 확인</button>
+                        onClick={handleClickVerifyCheck}>인증 확인</button>
                 </div>
             </div>
             <div className='formGroup'>
                 <label className='formLabel'>전화번호</label>
                 <input className={`inputBox ${errors.phone ? 'error' : ''}`}
                     name='phone'
+                    value={userData.phone}
                     placeholder='전화번호 입력'
-                    onChange={handleChange} />
+                    // onChange={handleChange} />
+                    onChange={handlePhoneChange} />
             </div>
             <div className='formGroup'>
                 <label className='formLabel'>인증번호</label>
                 <input className='inputBox'
                     name='phone'
-                    placeholder='전화번호 입력'
+                    placeholder='인증번호 입력'
                     onChange={handleChange} />
             </div>
             <div className='formGroup'>

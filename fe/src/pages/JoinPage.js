@@ -5,7 +5,9 @@ import BasicLayout from '../layout/BasicLayout'
 const JoinPage = () => {
     return (
         <BasicLayout>
-            <JoinComponent />
+            <div className='joinBackground'>
+                <JoinComponent />
+            </div>
         </BasicLayout>
     )
 }

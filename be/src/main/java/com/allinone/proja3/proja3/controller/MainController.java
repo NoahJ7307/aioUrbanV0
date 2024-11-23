@@ -18,4 +18,10 @@ public class MainController {
         Long uno = userService.register(userDTO);
         userService.addRole(uno, UserRole.PENDING);
     }
+
+    @PostMapping("/verify")
+    public String verifyPhone(@RequestBody UserDTO userDTO){
+        System.out.println("register : "+userDTO.getPhone());
+        return userDTO.getPhone();
+    }
 }
