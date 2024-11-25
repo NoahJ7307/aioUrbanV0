@@ -130,7 +130,7 @@ const JoinComponent = () => {
                 <div className='flex justify-end mt-6'>
                     <button type='button' className='formButton add'
                         onClick={handleClickVerifySend}>인증번호 전송</button>
-                    <button type='button' className='formButton add'
+                    <button type='button' className='formButton add green'
                         onClick={handleClickVerifyCheck}>인증 확인</button>
                 </div>
             </div>
@@ -140,7 +140,6 @@ const JoinComponent = () => {
                     name='phone'
                     value={userData.phone}
                     placeholder='전화번호 입력'
-                    // onChange={handleChange} />
                     onChange={handlePhoneChange} />
             </div>
             <div className='formGroup'>

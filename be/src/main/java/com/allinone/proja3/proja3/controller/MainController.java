@@ -20,8 +20,14 @@ public class MainController {
     }
 
     @PostMapping("/verify")
-    public String verifyPhone(@RequestBody String phone){
+    public String verifyPhone(@RequestParam String phone){
         System.out.println("verify : "+ phone);
         return userService.verify(phone);
+    }
+
+    @PostMapping("/findPw")
+    public Long findPw(@RequestParam String phone){
+        System.out.println("findPw : "+ phone);
+        return userService.findPw(phone);
     }
 }

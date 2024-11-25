@@ -6,7 +6,13 @@ body {
 }
 
 /* -------------------------------------------- */
-
+.outlet {
+  position: absolute; /* 문맥에서 벗어나 화면 위에 배치 */
+  top: 0; /* 화면 상단 고정 */
+  left: 0; /* 화면 좌측 고정 */
+  width: 100%; /* 화면 전체 너비 */
+  z-index: 9999; /* 가장 위에 배치 */
+}
 /* ----------------배경 이미지----------------- */
 /* parking */
 .parkingBackground {
@@ -56,6 +62,7 @@ body {
 
 /* --------------------메뉴-------------------- */
 .topMenu {
+  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -224,6 +231,10 @@ body {
   width: 80%;
 }
 
+.formContainer.op{
+  background-color: #515c8f;
+}
+
 .formContainer.superAdminAdd {
   display: flex;
   width: initial;
@@ -308,6 +319,11 @@ body {
   background-color: #74cd96;
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.formButton.add.green:hover {
+  background-color: #55b194;
+  transform: translateY(-2px);
 }
 
 .formButton.add:hover {
