@@ -1,35 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { reserveGolf } from '../../api/facilities/golfApi';
+import { listGolf, reserveGolf } from '../../api/facilities/golfApi';
+import loadLoginData from '../../hook/useCustomLogin'
 import { useNavigate } from 'react-router-dom';
+import useFormFields from '../../hook/facilities/useFormFields';
 
 const GolfReserve = () => {
     const [uno, setUno] = useState()
     const navigate = useNavigate()
-    const [formData, setFormData] = useState({
+    const [formData, handleFieldChange] = useFormFields({
         date: '',
         startTime: '',
         endTime: '',
         teeBox: '',
     });
-
-    const handleFieldChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
-    // const [formData, handleFieldChange] = useFormFields({
-    //     date: '',
-    //     startTime: '',
-    //     endTime: '',
-    //     teeBox: '',
-    // });
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const images = [
-        "/images/g1.png",
-        "/images/g2.png",
-        "/images/g3.png",
-    ];
 
     useEffect(() => {
         const getUno = localStorage.getItem('uno');
@@ -97,40 +80,24 @@ const GolfReserve = () => {
 
         }
     };
-
-    const handlePrevImage = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
-    }
-
-    const handleNextImage = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
-    };
-
-
-
-    const handleTeeBoxClick = (teeBoxNumber) => {
-        setFormData({
-            ...formData,
-            teeBox: teeBoxNumber,
-        });
-    };
-
-
+   
 
     return (
-        <div className="flex justify-between p-10 bg-white rounded-lg shadow-lg w-full">
-            {/* 왼쪽 여백 10% */}
-            <div className="w-1/5" />
+        <div className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto flex">
 
-            {/* 예약 폼 30% */}
-            <div className="w-5/10 pl-4 pr-4">
-                <h2 className="text-2xl font-bold text-center mb-6">골프장 예약하기</h2>
+            <h2 className="text-2xl font-bold text-center mb-6">Reserve Golf</h2>
+
+
+            {/* 예약폼  */}
+            <div className="flex-1 pl-10">
+                <h2 className="text-2xl font-bold text-center mb-6">골프 예약</h2>
 
                 <div className="mb-4">
                     <label htmlFor="date" className="block text-sm font-medium text-gray-700">예약 날짜</label>
                     <input
                         type="date"
                         name="date"
+                        placeholder="예약날짜"
                         value={formData.date}
                         onChange={handleFieldChange}
                         className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
@@ -142,6 +109,7 @@ const GolfReserve = () => {
                     <input
                         type="time"
                         name="startTime"
+                        placeholder="사용시작시간"
                         value={formData.startTime}
                         onChange={handleFieldChange}
                         className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
@@ -153,13 +121,14 @@ const GolfReserve = () => {
                     <input
                         type="time"
                         name="endTime"
+                        placeholder="사용종료시간"
                         value={formData.endTime}
                         onChange={handleFieldChange}
                         className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
                     />
                 </div>
 
-                {/* 예약 구역 선택 */}
+                {/* 예약구역 선택 */}
                 <div className="mb-4">
                     <label htmlFor="teeBox" className="block text-sm font-medium text-gray-700">예약 구역</label>
                     <select
@@ -178,54 +147,19 @@ const GolfReserve = () => {
                     </select>
                 </div>
 
-                {/* 예약 구역 선택 (이미지 맵) */}
-                <div className="mb-4">
-                    <label htmlFor="teeBox" className="block text-sm font-medium text-gray-700">예약 구역</label>
-                    <img src="/images/golf.png" useMap="#image-map" alt="Golf course layout" />
-                    <map name="image-map">
-                        {/* 좌석 영역 */}
-                        <area target="" alt="1" title="1" href="#" coords="330,533,526,884" shape="rect" onClick={() => handleTeeBoxClick(1)} />
-                        <area target="" alt="2" title="2" href="#" coords="575,533,774,886" shape="rect" onClick={() => handleTeeBoxClick(2)} />
-                        <area target="" alt="3" title="3" href="#" coords="813,535,1008,880" shape="rect" onClick={() => handleTeeBoxClick(3)} />
-                        <area target="" alt="4" title="4" href="#" coords="1068,535,1263,884" shape="rect" onClick={() => handleTeeBoxClick(4)} />
-                        <area target="" alt="5" title="5" href="#" coords="1308,535,1503,882" shape="rect" onClick={() => handleTeeBoxClick(5)} />
-                        <area target="" alt="6" title="6" href="#" coords="1548,537,1745,888" shape="rect" onClick={() => handleTeeBoxClick(6)} />
-                        <area target="" alt="7" title="7" href="#" coords="262,967,607,1166" shape="rect" onClick={() => handleTeeBoxClick(7)} />
-                        <area target="" alt="8" title="8" href="#" coords="1297,967,1658,1166" shape="rect" onClick={() => handleTeeBoxClick(8)} />
-                        <area target="" alt="9" title="9" href="#" coords="277,1294,624,1491" shape="rect" onClick={() => handleTeeBoxClick(9)} />
-                        <area target="" alt="10" title="10" href="#" coords="1295,1315,1652,1510" shape="rect" onClick={() => handleTeeBoxClick(10)} />
-                    </map>
-                </div>
-
                 {/* 예약 버튼 */}
                 <div className="mt-6 flex justify-center">
                     <button
                         onClick={handleReserve}
-                        className="px-6 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                        className="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
                     >
                         예약하기
                     </button>
                 </div>
             </div>
 
-            {/* 오른쪽 이미지 */}
-            <div className="w-4/10 ml-8 relative">
-                <div className="absolute top-1/2 transform -translate-y-1/2 left-0">
-                    <button onClick={handlePrevImage} className="text-white p-2 bg-black bg-opacity-50 rounded-full mb-2">
-                        &lt;
-                    </button>
-                    <button onClick={handleNextImage} className="text-white p-2 bg-black bg-opacity-50 rounded-full mt-2">
-                        &gt;
-                    </button>
-                </div>
-                <img
-                    src={images[currentImageIndex]}
-                    alt="골프장 이미지"
-                    className="w-full h-auto object-cover rounded-lg"
-                />
-            </div>
         </div>
     );
 };
 
-export default GolfReserve;
+export default GolfReserve
