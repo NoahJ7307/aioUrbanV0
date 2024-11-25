@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react'
 import useCustomLogin from '../hook/useCustomLogin'
 import '../../css/public/public.css'
 import { Outlet, useNavigate } from 'react-router-dom'
-import FindPwComponent from './FindPwComponent'
 
 const initState = {
     phone: '',
