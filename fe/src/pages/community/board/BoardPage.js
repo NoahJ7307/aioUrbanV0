@@ -14,11 +14,11 @@ const BoardPage = () => {
         <div>
             
 
-            <ul className='flex justify-center space-x-8'>
+            {/* <ul className='flex justify-center space-x-8'>
                 <li>
                     <button className="button" onClick={handleClickList}>자유 게시판</button>
                 </li>
-            </ul>
+            </ul> */}
           
             <Outlet/>
         </div>

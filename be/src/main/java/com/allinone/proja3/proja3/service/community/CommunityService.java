@@ -10,11 +10,15 @@ import java.util.List;
 
 public interface CommunityService {
     public List<CommunityDTO> findDataByUno(Long uno);
-    boolean deletePost(Long pno, Long uno);
+    void deletePost(Long pno, Long uno);
+    void deletePostByAdmin(Long pno); // 관리자 삭제
     Community createPost(Community community, User user);
     PageResponseDTO<CommunityDTO> findAllPosts(PageRequestDTO pageRequestDTO);
     boolean modify(CommunityDTO communityDTO);
     CommunityDTO getCommunityByPno(Long pno ,User user);
+
+
+
 
     default CommunityDTO entityToDto(Community community) {
         return CommunityDTO.builder()
@@ -27,4 +31,6 @@ public interface CommunityService {
                 .userName(community.getUser().getUserName())
                 .build();
     }
+
+
 }

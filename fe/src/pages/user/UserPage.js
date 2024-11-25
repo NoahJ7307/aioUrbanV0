@@ -13,7 +13,7 @@ const UserPage = () => {
 
     return (
         <BasicLayout>
-            <ul className='topMenu'>
+            {/* <ul className='topMenu'>
                 <li>
                     <button className='topMenuBtn' onClick={handleClickList}>
                         입주민 목록
@@ -29,7 +29,7 @@ const UserPage = () => {
                         입주민 등록
                     </button>
                 </li>
-            </ul>
+            </ul> */}
             <Outlet context={{ checkedUno, setCheckedUno }} />
         </BasicLayout>
     )

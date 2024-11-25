@@ -19,8 +19,8 @@ const FacilitiesPage = () => {
    
     return (
         <BasicLayout>
-            <ul className='flex justify-center'>
-                <li>
+            {/* <ul className='flex justify-center'> */}
+                {/* <li>
                     <button className='bg-blue-400 p-2' onClick={handleClickGym}>Gym</button>
                 </li>
                 <li>
@@ -28,11 +28,11 @@ const FacilitiesPage = () => {
                 </li>
                 <li>
                     <button className='bg-blue-400 p-2' onClick={handleClickStudy}>Study</button>
-                </li>
+                </li> */}
                 {/* <li>
                     <button className='bg-blue-400 p-2' onClick={handleClickStudy}>My Reservation Page</button>
                 </li> */}
-            </ul>
+            {/* </ul> */}
             <Outlet />
         </BasicLayout>
     );

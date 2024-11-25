@@ -66,13 +66,25 @@ public class CommunityController {
     }
 
     @DeleteMapping("/{pno}")
-    public ResponseEntity<String> deletePost(@PathVariable("pno") Long pno, @RequestParam("uno") Long uno) {
-         service.deletePost(pno, uno);
+    public ResponseEntity<String> deletePost(
+            @PathVariable("pno") Long pno,
+            @RequestParam(value = "uno", required = false) Long uno, // 관리자는 uno 필요 없음
+            @RequestParam("role") String role) {
 
+        if ("root".equalsIgnoreCase(role) || "admin".equalsIgnoreCase(role)) {
+            // 관리자 권한으로 바로 삭제
+            service.deletePostByAdmin(pno);
+            return new ResponseEntity<>("관리자 권한으로 게시글이 삭제되었습니다.", HttpStatus.OK);
+        }
 
-            return new ResponseEntity<>("게시글이 삭제되었습니다.", HttpStatus.OK);
-
+        // 일반 사용자 검증 후 삭제
+        if (uno == null) {
+            throw new IllegalArgumentException("일반 사용자의 경우 uno 값이 필요합니다.");
+        }
+        service.deletePost(pno, uno);
+        return new ResponseEntity<>("게시글이 삭제되었습니다.", HttpStatus.OK);
     }
+
     @PutMapping("/{pno}")
     public ResponseEntity<String> modify(
             @PathVariable(name = "pno") Long pno,

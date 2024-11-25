@@ -17,5 +17,6 @@ public interface AnnounceService {
     AnnounceDTO entityDto(Announce announce);
     AnnounceDTO getPno(Long pno ,User user);
     void deletePost(Long pno, Long uno);
+    void deletePostByAdmin(Long pno);
     boolean modify(AnnounceDTO announceDTO);
 }

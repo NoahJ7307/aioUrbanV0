@@ -16,7 +16,8 @@ public interface MarketService {
     Market createPost(User user, Market market, MultipartFile thumbnail, List<MultipartFile> images) throws IOException;
     MarketDTO entityDto(Market market);
     MarketDTO getMno(Long mno, User user);
-    void deletePost(Long mno, Long uno);
+    void deletePost(Long mno, Long uno);//일반삭제
+    void deletePostByAdmin(Long mno);//관리자삭제
     User findByUno(Long uno);
     Market findMarketById(Long mno); // 추가된 메서드
     // 여러 개의 이미지에 대한 수정도 지원하도록 변경

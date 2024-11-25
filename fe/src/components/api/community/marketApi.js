@@ -38,7 +38,7 @@ export const post = async (formData) => {
 };
 
 // 게시물 삭제
-export const deleteChecked = async (mno, uno) => {
+export const deleteChecked = async (mno, uno, role) => {
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -48,13 +48,15 @@ export const deleteChecked = async (mno, uno) => {
 
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
         },
-        params: { uno }, // URL 파라미터로 uno 전달
     };
 
+    // 관리자일 경우 uno를 전달하지 않음
+    const queryParams = role === "admin" || role === "root" ? `role=${role}` : `uno=${uno}&role=${role}`;
+
     try {
-        const res = await axios.delete(`${host}/${mno}`, config); // mno 기반 삭제
+        const res = await axios.delete(`${host}/${mno}?${queryParams}`, config);
         return res.data;
     } catch (error) {
         console.error("삭제 요청 실패", error);
@@ -138,3 +140,28 @@ export const getMyMarketPosts = async (uno) => {
         throw error;
     }
 };
+export const search = async ({ type, keyword, page, size, category }) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        console.error("토큰이 없습니다.");
+        throw new Error("로그인이 필요합니다.");
+    }
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        params: { type, keyword, page, size, category },
+    };
+
+    try {
+        const res = await axios.get(`${host}/search`, config);
+        return res.data;
+    } catch (error) {
+        console.error("검색 요청 실패:", error);
+        throw error;
+    }
+};
+

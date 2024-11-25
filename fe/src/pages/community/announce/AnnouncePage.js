@@ -12,13 +12,13 @@ const AnnouncePage = () => {
 
     return (
         <div>
-
+{/* 
 
             <ul className='flex justify-center space-x-8'>
                 <li>
                     <button className="button" onClick={handleClickList}>공지사항</button>
                 </li>
-            </ul>
+            </ul> */}
 
             <Outlet />
         </div>

@@ -2,60 +2,66 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMyCommunityPosts, deleteChecked as deleteCommunityPost } from '../api/community/communityApi';
 import { getMyMarketPosts, deleteChecked as deleteMarketPost } from '../api/community/marketApi';
-import "./MyCommunitiesComponent.css"
+import { getMyAnnouncePosts, deleteChecked as deleteAnnouncePost } from '../api/community/announceApi';
+
 const MyCommunitiesComponent = () => {
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [error, setError] = useState(null); // 에러 상태
   const [myCommunities, setMyCommunities] = useState([]); // 자유게시판 데이터
   const [myMarketPosts, setMyMarketPosts] = useState([]); // 마켓 데이터
+  const [myAnnouncePosts, setMyAnnouncePosts] = useState([]); // 공지사항 데이터
   const navigate = useNavigate(); // 페이지 이동을 위한 훅
 
-  // 데이터 가져오기
   useEffect(() => {
     const fetchMyPosts = async () => {
       try {
         const uno = localStorage.getItem('uno'); // 로그인된 사용자 uno
         if (!uno) throw new Error("로그인 정보가 없습니다.");
 
-        // API 호출
-        const [communityResponse, marketResponse] = await Promise.all([
+        const [communityResponse, marketResponse, announceResponse] = await Promise.all([
           getMyCommunityPosts(uno),
           getMyMarketPosts(uno),
+          getMyAnnouncePosts(uno),
         ]);
 
-        // 상태 업데이트
-        setMyCommunities(communityResponse || []); // 데이터가 없으면 빈 배열로
-        setMyMarketPosts(marketResponse || []);    // 데이터가 없으면 빈 배열로
-        setLoading(false); // 로딩 종료
+        setMyCommunities(communityResponse || []);
+        setMyMarketPosts(marketResponse || []);
+        setMyAnnouncePosts(announceResponse || []);
+        setLoading(false);
       } catch (err) {
         console.error("데이터를 불러오는 중 문제가 발생했습니다:", err);
         setError("데이터를 불러오는 중 문제가 발생했습니다.");
-        setMyCommunities([]); // 에러 시 빈 배열로 초기화
-        setMyMarketPosts([]); // 에러 시 빈 배열로 초기화
-        setLoading(false); // 로딩 종료
+        setLoading(false);
       }
     };
 
     fetchMyPosts();
   }, []);
 
-  // 자유게시판 게시글 삭제
   const handleDeleteCommunityPost = async (pno) => {
     try {
-      await deleteCommunityPost(pno, localStorage.getItem('uno')); // API 호출
-      setMyCommunities((prev) => prev.filter((post) => post.pno !== pno)); // 삭제된 데이터 제거
+      await deleteCommunityPost(pno, localStorage.getItem('uno'));
+      setMyCommunities((prev) => prev.filter((post) => post.pno !== pno));
     } catch (err) {
       console.error("게시글 삭제 중 오류 발생:", err);
     }
   };
 
-  // 마켓 게시글 삭제
   const handleDeleteMarketPost = async (mno) => {
     try {
-      await deleteMarketPost(mno, localStorage.getItem('uno')); // API 호출
-      setMyMarketPosts((prev) => prev.filter((post) => post.mno !== mno)); // 삭제된 데이터 제거
+      await deleteMarketPost(mno, localStorage.getItem('uno'));
+      setMyMarketPosts((prev) => prev.filter((post) => post.mno !== mno));
     } catch (err) {
       console.error("마켓 게시글 삭제 중 오류 발생:", err);
+    }
+  };
+
+  const handleDeleteAnnouncePost = async (pno) => {
+    try {
+      await deleteAnnouncePost(pno, localStorage.getItem('uno'));
+      setMyAnnouncePosts((prev) => prev.filter((post) => post.pno !== pno));
+    } catch (err) {
+      console.error("공지사항 게시글 삭제 중 오류 발생:", err);
     }
   };
 
@@ -68,15 +74,15 @@ const MyCommunitiesComponent = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto mt-8 p-4">
-      <header className="text-center mb-8">
+    <div className="max-w-7xl mx-auto mt-1 p-4 ">
+      <header className="text-center mb-8 ">
         <h1 className="text-3xl font-bold">내가 쓴 글</h1>
-        <p className="text-gray-600">자유게시판 및 마켓에서 작성한 글</p>
+        <p className="text-gray-600 ">자유게시판, 공지사항 및 마켓에서 작성한 글</p>
       </header>
 
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 ">
         {/* 자유게시판 */}
-        <section className="flex-1 bg-red-500 shadow-lg rounded-lg p-4">
+        <section className="flex-1 bg-white shadow-lg rounded-lg p-4 ">
           <h2 className="text-2xl font-semibold mb-6">자유게시판</h2>
           <table className="min-w-full table-auto text-sm text-gray-600 bg-white rounded-lg overflow-hidden">
             <thead>
@@ -88,22 +94,13 @@ const MyCommunitiesComponent = () => {
                 <th className="w-20 py-3 border">삭제</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className=''>
               {myCommunities.length > 0 ? (
                 myCommunities.map((post) => (
                   <tr key={post.pno} className="hover:bg-gray-100">
                     <td className="py-3 px-4 border text-center">{post.pno}</td>
-                    <td className="py-3 px-4 border">
-                      <button
-                        onClick={() => navigate(`/communities/board/modify/${post.pno}`)}
-                        className="text-blue-600 hover:underline"
-                      >
-                        {post.title}
-                      </button>
-                    </td>
-                    <td className="py-3 px-4 border text-center">
-                      {new Date(post.createdAt).toLocaleDateString()}
-                    </td>
+                    <td className="py-3 px-4 border text-center">{post.title}</td>
+                    <td className="py-3 px-4 border text-center">{new Date(post.createdAt).toLocaleDateString()}</td>
                     <td className="py-3 px-4 border text-center">
                       <button
                         onClick={() => navigate(`/communities/board/modify/${post.pno}`)}
@@ -131,9 +128,9 @@ const MyCommunitiesComponent = () => {
           </table>
         </section>
 
-        {/* 마켓 */}
+        {/* 공지사항 */}
         <section className="flex-1 bg-white shadow-lg rounded-lg p-4">
-          <h2 className="text-2xl font-semibold mb-6">마켓</h2>
+          <h2 className="text-2xl font-semibold mb-6">공지사항</h2>
           <table className="min-w-full table-auto text-sm text-gray-600 bg-white rounded-lg overflow-hidden">
             <thead>
               <tr className="bg-gray-200 text-gray-800">
@@ -145,24 +142,15 @@ const MyCommunitiesComponent = () => {
               </tr>
             </thead>
             <tbody>
-              {myMarketPosts.length > 0 ? (
-                myMarketPosts.map((post) => (
-                  <tr key={post.mno} className="hover:bg-gray-100">
-                    <td className="py-3 px-4 border text-center">{post.mno}</td>
-                    <td className="py-3 px-4 border">
-                      <button
-                        onClick={() => navigate(`/communities/market/modify/${post.mno}`)}
-                        className="text-blue-600 hover:underline"
-                      >
-                        {post.title}
-                      </button>
-                    </td>
-                    <td className="py-3 px-4 border text-center">
-                      {new Date(post.createdAt).toLocaleDateString()}
-                    </td>
+              {myAnnouncePosts.length > 0 ? (
+                myAnnouncePosts.map((post) => (
+                  <tr key={post.pno} className="hover:bg-gray-100">
+                    <td className="py-3 px-4 border text-center">{post.pno}</td>
+                    <td className="py-3 px-4 border text-center">{post.title}</td>
+                    <td className="py-3 px-4 border text-center">{new Date(post.createdAt).toLocaleDateString()}</td>
                     <td className="py-3 px-4 border text-center">
                       <button
-                        onClick={() => navigate(`/communities/market/modify/${post.mno}`)}
+                        onClick={() => navigate(`/communities/announce/modify/${post.pno}`)}
                         className="py-1 px-3 rounded-lg bg-blue-500 text-white"
                       >
                         수정
@@ -170,7 +158,7 @@ const MyCommunitiesComponent = () => {
                     </td>
                     <td className="py-3 px-4 border text-center">
                       <button
-                        onClick={() => handleDeleteMarketPost(post.mno)}
+                        onClick={() => handleDeleteAnnouncePost(post.pno)}
                         className="py-1 px-3 rounded-lg bg-red-500 text-white"
                       >
                         삭제
@@ -187,6 +175,54 @@ const MyCommunitiesComponent = () => {
           </table>
         </section>
       </div>
+
+      {/* 마켓 */}
+      <section className="mt-8">
+        <h2 className="text-2xl font-semibold mb-6">내 마켓 게시글</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {myMarketPosts.length > 0 ? (
+            myMarketPosts.map((item) => (
+              <div
+                key={item.mno}
+                className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+              >
+                {item.thumbnailUrl ? (
+                  <img
+                    src={`http://localhost:8080${item.thumbnailUrl}`}
+                    alt={item.title}
+                    className="w-full h-48 object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                    <p className="text-gray-500">이미지 없음</p>
+                  </div>
+                )}
+                <div className="p-4">
+                  <h2 className="text-xl font-semibold mb-2">상품명: {item.title}</h2>
+                  <p className="text-gray-600">가격: {item.price} 원</p>
+                  <div className="flex justify-between mt-2">
+                 
+                    <button
+                      onClick={() => navigate(`/communities/market/modify/${item.mno}`)}
+                      className="py-1 px-3 rounded-lg bg-blue-500 text-white"
+                    >
+                      수정
+                    </button>
+                    <button
+                      onClick={() => handleDeleteMarketPost(item.mno)}
+                      className="py-1 px-3 rounded-lg bg-red-500 text-white"
+                    >
+                      삭제
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-3 text-center text-gray-500 py-4">작성한 마켓 게시글이 없습니다.</div>
+          )}
+        </div>
+      </section>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { deleteChecked, get } from '../../api/community/marketApi';
+import { deleteChecked, get, search } from '../../api/community/marketApi';
 import { useNavigate } from 'react-router-dom';
 import PageComponent from '../../common/PageComponent';
 import CommunityCustom from '../../hook/CommunityCustom';
@@ -18,15 +18,29 @@ const initState = {
 };
 
 const MarketListComponents = () => {
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [uno, setUno] = useState();
-    const [serverData, setServerData] = useState(initState);
-    const [showModal, setShowModal] = useState(false);
-    const [currentPost, setCurrentPost] = useState(null);
+    const [loading, setLoading] = useState(true); // 로딩 상태
+    const [error, setError] = useState(null); // 에러 상태
+    const [uno, setUno] = useState(); // 로그인한 사용자 uno
+    const [serverData, setServerData] = useState(initState); // 서버 데이터 상태
+    const [showModal, setShowModal] = useState(false); // 모달 상태
+    const [currentPost, setCurrentPost] = useState(null); // 현재 모달에 표시할 게시물
+    const [type, setType] = useState('title'); // 검색 필터 상태
+    const [keyword, setKeyword] = useState(''); // 검색어 상태 추가
+    const { page, size, moveToList } = CommunityCustom(); // 페이지 이동 훅
+    const navigate = useNavigate(); // 페이지 이동 훅
     const [currentImageIndex, setCurrentImageIndex] = useState(0); // 현재 이미지 인덱스 추가
-    const { page, size, moveToList } = CommunityCustom();
-    const navigate = useNavigate();
+    const [userRole, setUserRole] = useState(null);
+
+
+
+    useEffect(() => {
+        const storedRole = localStorage.getItem('role');
+        console.log(storedRole)
+        if (storedRole) {
+
+            setUserRole(storedRole);
+        }
+    }, [])
 
     useEffect(() => {
         const getUno = localStorage.getItem('uno');
@@ -52,7 +66,7 @@ const MarketListComponents = () => {
 
     const handleDelete = async (mno) => {
         try {
-            const result = await deleteChecked(mno, uno);
+            const result = await deleteChecked(mno, uno, userRole);
             if (result) {
                 const updatedList = serverData.dtoList.filter(item => item.mno !== mno);
 
@@ -60,6 +74,8 @@ const MarketListComponents = () => {
                     ...prevData,
                     dtoList: updatedList
                 }));
+                alert("삭제성공");
+                console.log("삭제 성공");
             }
         } catch {
             console.error("삭제 에러", error);
@@ -88,13 +104,79 @@ const MarketListComponents = () => {
             setCurrentImageIndex((prevIndex) => (prevIndex - 1 + currentPost.imageUrls.length) % currentPost.imageUrls.length);
         }
     };
+    const handleSearchInputChange = (e) => {
+        setKeyword(e.target.value);
+    };
+
+    const handleSearch = async () => {
+        setLoading(true);
+        try {
+            const data = await search({
+                type,
+                keyword,
+                page,
+                size,
+                category: "market",
+            });
+            console.log("검색 요청 데이터:", { type, keyword, page, size, category: "market" });
+            console.log("검색 결과:", data);
+            setServerData(data);
+            setError(null);
+        } catch (err) {
+            console.error("검색 실패:", err);
+            setError("검색 중 문제가 발생했습니다.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="max-w-7xl mx-auto mt-8 p-4">
             <header className="text-center mb-8">
                 <h1 className="text-3xl font-bold">마켓 리스트</h1>
-                <p className="text-gray-600">Avan APT 마켓</p>
+
             </header>
+            {/* 왼쪽 검색 필터 */}
+            {/* 검색 필터와 글쓰기 버튼 */}
+            <div className="flex items-center justify-between mb-6">
+                {/* 왼쪽 검색 필터 */}
+                <div className="flex items-center space-x-4">
+                    <select
+                        value={type}
+                        onChange={(e) => setType(e.target.value)}
+                        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="title">글 제목</option>
+                        <option value="content">글 내용</option>
+                        <option value="target">작성자</option>
+                        <option value="titleAndContent">제목+내용</option>
+                    </select>
+
+                    <input
+                        type="text"
+                        value={keyword}
+                        onChange={handleSearchInputChange}
+                        placeholder="검색어를 입력해 주세요"
+                        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+
+                    <button
+                        onClick={handleSearch}
+                        className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                    >
+                        검색
+                    </button>
+                </div>
+
+                {/* 오른쪽 글쓰기 버튼 */}
+                <button
+                    onClick={() =>navigate('/communities/market/add')}
+                    className="bg-blue-500 text-white py-1 px-4 rounded-lg"
+                >
+                    상품등록
+                </button>
+            </div>
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {loading ? (
@@ -118,7 +200,7 @@ const MarketListComponents = () => {
                             <div className="p-4">
                                 <h2 className="text-xl font-semibold mb-2">상품명: {item.title}</h2>
                                 <p className="text-gray-600">가격: {item.price} 원</p>
-                                <p className="text-gray-500">판매자: {item.userName}</p>
+                                <p className="text-gray-500">판매자: {item.user?.userName || item.userName || '알 수 없음'}</p>
                                 <div className="flex justify-between mt-2">
                                     <button
                                         onClick={() => openModal(item)}
@@ -126,20 +208,32 @@ const MarketListComponents = () => {
                                     >
                                         상세보기
                                     </button>
-                                    <button
-                                        onClick={() => { navigate(`/communities/market/modify/${item.mno}`); }}
-                                        disabled={uno !== item.userId}
-                                        className={`py-1 px-3 rounded-lg ${uno !== item.userId ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 text-white'}`}
-                                    >
-                                        {uno !== item.userId ? '본인확인' : '수정'}
-                                    </button>
-                                    <button
-                                        onClick={() => { handleDelete(item.mno); }}
-                                        disabled={uno !== item.userId}
-                                        className={`py-1 px-3 rounded-lg ${uno !== item.userId ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 text-white'}`}
-                                    >
-                                        {uno !== item.userId ? '본인확인' : '삭제'}
-                                    </button>
+                                   
+                                        <button
+                                            onClick={() => { navigate(`/communities/market/modify/${item.mno}`); }}
+                                            disabled={!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)}
+                                            className={`py-1 px-3 rounded-lg ${!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)
+                                                ? 'bg-gray-300 cursor-not-allowed'
+                                                : 'bg-blue-500 text-white'
+                                                }`}
+                                        >
+                                            {!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId) ? '권한없음' : '수정'}
+                                        </button>
+                                    
+
+                                    {/* 삭제 버튼 */}
+                             
+                                        <button
+                                            onClick={() => { handleDelete(item.mno); }}
+                                            disabled={!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)}
+                                            className={`py-1 px-3 rounded-lg ${!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)
+                                                ? 'bg-gray-300 cursor-not-allowed'
+                                                : 'bg-red-500 text-white'
+                                                }`}
+                                        >
+                                            {!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId) ? '권한없음' : '삭제'}
+                                        </button>
+                               
                                     {/* <button
                                         onClick={() => { navigate(`/communities/market/chat/${item.mno}`); }}
                                         className="bg-green-500 text-white py-1 px-3 rounded-lg hover:bg-green-600 transition duration-200"
@@ -153,13 +247,8 @@ const MarketListComponents = () => {
                 )}
             </div>
 
-            <div className="flex justify-between items-center mt-4">
-                <button
-                    onClick={() => { navigate('/communities/market/add'); }}
-                    className="bg-blue-500 text-white py-1 px-4 rounded-lg"
-                >
-                    상품 등록
-                </button>
+            <div>
+         
 
                 <PageComponent serverData={serverData} movePage={moveToList} />
             </div>

@@ -89,9 +89,8 @@ export const update = async (data, pno, uno) => {
     const res = await axios.put(`${host}/${pno}?uno=${uno}`, JSON.stringify(data), config);
     return res.data;
 };
-
-// 게시글 삭제
-export const deleteChecked = async (pno, uno) => {
+//삭제
+export const deleteChecked = async (pno, uno, role) => {
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -101,19 +100,23 @@ export const deleteChecked = async (pno, uno) => {
 
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
         },
     };
 
+    // 관리자일 경우 uno를 전달하지 않음
+    const queryParams = role === "admin" || role === "root" ? `role=${role}` : `uno=${uno}&role=${role}`;
+
     try {
-        const res = await axios.delete(`${host}/${pno}?uno=${uno}`, config);
+        const res = await axios.delete(`${host}/${pno}?${queryParams}`, config);
         return res.data;
     } catch (error) {
         console.error("삭제 요청 실패", error);
         throw error;
     }
 };
+
+
 
 // 내가 쓴 게시글 조회
 export const getMyCommunityPosts = async (uno) => {
@@ -139,3 +142,28 @@ export const getMyCommunityPosts = async (uno) => {
         throw error;
     }
 };
+export const search = async ({ type, keyword, page, size, category }) => {
+const token = localStorage.getItem("token");
+
+if (!token) {
+    console.error("토큰이 없습니다.");
+    throw new Error("로그인이 필요합니다.");
+}
+
+const config = {
+    headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+    },
+    params: { type, keyword, page, size, category },
+};
+
+try {
+    const res = await axios.get(`${host}/search`, config);
+    return res.data;
+} catch (error) {
+    console.error("검색 요청 실패:", error);
+    throw error;
+}
+};
+

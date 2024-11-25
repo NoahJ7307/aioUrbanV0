@@ -1,5 +1,4 @@
-/* components\menu\MenuComponent.js */
-/* 로고체 */
+/* ===== 폰트 설정 영역 시작 ===== */
 @font-face {
     font-family: 'Giants-Inline';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-1@1.1/Giants-Inline.woff2') format('woff2');
@@ -7,7 +6,6 @@
     font-style: normal;
 }
 
-/* 두꺼운 글씨체 : 리아체 */
 @font-face {
     font-family: 'RiaSans-ExtraBold';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-1@1.0/RiaSans-ExtraBold.woff2') format('woff2');
@@ -15,7 +13,6 @@
     font-style: normal;
 }
 
-/* weight 3 , 5, 9 .G마켓 산스 */
 @font-face {
     font-family: 'GmarketSansMedium';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
@@ -23,7 +20,6 @@
     font-style: normal;
 }
 
-/*  weight 3 , 5, 9 . line 글씨체 */
 @font-face {
     font-family: 'LINESeedKR-Bd';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');
@@ -31,36 +27,27 @@
     font-style: normal;
 }
 
-/* weight 4 , 7 , 경기체 */
 @font-face {
     font-family: 'Gyeonggi_Batang_Regular';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2410-3@1.0/Batang_Regular.woff') format('woff');
     font-weight: 400;
     font-style: normal;
 }
+/* ===== 폰트 설정 영역 끝 ===== */
 
+/* ===== 애니메이션 설정 ===== */
 @keyframes bounce {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
-
-/* 전체 스크롤 및 여백 제거 */
-html,
-body {
+/* ===== 기본 페이지 설정 ===== */
+html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
 }
 
-/* 크롬 사파리 스크롤바 없애기 */
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
     display: none;
@@ -74,14 +61,14 @@ body::-webkit-scrollbar {
     padding: 0;
     font-family: Arial, sans-serif;
     overflow: hidden;
-    /* 추가 */
 }
 
-/* 네비게이션 바 */
+/* ===== 네비게이션 바 영역 ===== */
 .navbar {
     position: fixed;
     top: 0px;
     left: 0;
+    height: 150px;
     width: 100%;
     background-color: #749fcd;
     padding: 10px 20px;
@@ -90,8 +77,17 @@ body::-webkit-scrollbar {
     justify-content: space-between;
     align-items: center;
     color: white;
+}
 
-
+.navbar-left {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
 }
 
 .navbar-left ul {
@@ -99,14 +95,20 @@ body::-webkit-scrollbar {
     list-style: none;
     padding: 0;
     margin: 0;
+    justify-content: center;
+    align-items: center;
 }
 
 .navbar-left li {
-    margin-right: 20px;
+    margin: 0 35px;
     cursor: pointer;
     color: white;
-    font-size: 1rem;
+    font-size: 1.6rem;
     transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
 }
 
 .navbar-left li.active {
@@ -118,22 +120,99 @@ body::-webkit-scrollbar {
     color: orange;
 }
 
-.navbar-right {
+/* ===== 서브메뉴 스타일 ===== */
+.menu-item {
+    position: relative;
+    margin: 0 20px;
+    cursor: pointer;
+    color: white;
+}
+
+.menu-title {
+    /* padding: 10px 15px; */
+    font-weight: 500;
+    transition: all 0.3s ease;
+    font-family: 'LINESeedKR-Bd';
+    font-size: 1.6rem;
+}
+
+.menu-title.active {
+    color: #FFA500;
+}
+
+.menu-title:hover {
+    color: #FFA500;
+}
+
+.submenu {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    padding: 15px 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    top: 100%;
+}
+
+.submenu.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.submenu-item {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding-right: 15px;
+    padding: 8px 15px;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 500;
+    font-family: 'LINESeedKR-Bd';
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.submenu-item i {
+    margin-right: 8px;
+    font-size: 1rem;
+}
+
+.submenu-item:hover {
+    color: #FFA500;
+}
+.submenu-item.active {
+    color: #FFA500;
+    /* background-color: rgba(255, 255, 255, 0.1); */
+}
+
+.submenu-item:hover {
+    color: #FFA500;
+    /* background-color: rgba(255, 255, 255, 0.1); */
+}
+/* ===== 우측 상단 버튼 영역 ===== */
+.navbar-right {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .navbar-right .nav-link {
     color: white;
     text-decoration: none;
-    font-size: 1rem;
-    padding: 5px 10px;
+    font-size: 0.9rem;
+    padding: 4px 10px;
     border: 1px solid white;
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s ease-in-out;
-
 }
 
 .navbar-right .nav-link:hover {
@@ -142,12 +221,11 @@ body::-webkit-scrollbar {
     box-shadow: 0px 4px 6px rgba(0, 123, 255, 0.4);
 }
 
-
-/* 메뉴 버튼 */
+/* ===== 메뉴 토글 버튼 ===== */
 .menu-toggle {
     position: fixed;
-    top: 35px;
-    right: 150px;
+    top: 10px;
+    right: 125px;
     background-color: #749fcd;
     border: none;
     border-radius: 5px;
@@ -158,8 +236,8 @@ body::-webkit-scrollbar {
     justify-content: center;
     color: white;
     text-decoration: none;
-    font-size: 1rem;
-    padding: 3px 10px;
+    font-size: 0.9rem;
+    padding: 1px 10px;
     border: 1px solid white;
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s ease-in-out;
@@ -167,7 +245,6 @@ body::-webkit-scrollbar {
 
 .menu-toggle i {
     font-size: 1.2rem;
-
 }
 
 .menu-toggle:hover {
@@ -175,10 +252,10 @@ body::-webkit-scrollbar {
     color: #749fcd;
 }
 
-/* 사이드바 */
+/* ===== 사이드바 영역 ===== */
 #sidebar-wrapper {
     position: fixed;
-    top: 105px;
+    top: 150px;
     right: -250px;
     width: 250px;
     height: calc(100% - 70px);
@@ -188,6 +265,7 @@ body::-webkit-scrollbar {
     transition: all 0.3s ease-in-out;
     overflow-y: auto;
     border-left: 2px solid #495057;
+    opacity: 0.8;
 }
 
 #sidebar-wrapper.active {
@@ -229,8 +307,12 @@ body::-webkit-scrollbar {
     border-bottom: 2px solid #495057;
 }
 
-/* 어반 로고 */
+/* ===== Urban 로고 영역 ===== */
 .navbar-logo {
+    position: absolute;
+    left: 50px;
+    top: 60px;
+    transform: translateY(-50%);
     text-align: center;
     font-size: 3rem;
     font-weight: bold;
@@ -255,10 +337,9 @@ body::-webkit-scrollbar {
     text-shadow: 0px 0px 10px rgba(255, 165, 0, 0.7);
 }
 
-/* 컨텐츠 영역 */
+/* ===== 컨텐츠 영역 ===== */
 .content {
     padding-top: 60px;
-
 }
 
 .content section {

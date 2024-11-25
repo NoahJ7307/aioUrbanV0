@@ -4,27 +4,27 @@ import { Outlet, useNavigate } from 'react-router-dom';
 
 const CommunityPage = () => {
     const navigate = useNavigate();
-    const handleClickList = useCallback(() => { navigate({ pathname: 'board' }) });
-    const handleClickCommunityAnnouncementPage = useCallback(() => { navigate({ pathname: 'announce' }) });
-    const handleClickMarketPage = useCallback(() => { navigate({ pathname: 'market' }) });
-    const handleClickLifeInfoPage = useCallback(() => { navigate({ pathname: 'info' }) });
+    const handleClickList = useCallback(() => { navigate({ pathname: 'board/list' }) });
+    const handleClickCommunityAnnouncementPage = useCallback(() => { navigate({ pathname: 'announce/list' }) });
+    const handleClickMarketPage = useCallback(() => { navigate({ pathname: 'market/list' }) });
+    const handleClickLifeInfoPage = useCallback(() => { navigate({ pathname: 'info/jobs' }) });
 
     return (
         <BasicLayout>
-            <ul className='flex justify-center'>
-                <button className='m-5 p-2 bg-green-600 rounded-lg' onClick={handleClickList}>
+            {/* <ul className='topMenu'>
+                <button className='topMenuBtn' onClick={handleClickList}>
                     게시판
                 </button>
-                <button className='m-5 p-2 bg-green-600 rounded-lg' onClick={handleClickCommunityAnnouncementPage}>
+                <button className='topMenuBtn' onClick={handleClickCommunityAnnouncementPage}>
                     공지사항
                 </button>
-                <button className='m-5 p-2 bg-green-600 rounded-lg' onClick={handleClickMarketPage}>
+                <button className='topMenuBtn' onClick={handleClickMarketPage}>
                     장터
                 </button>
-                <button className='m-5 p-2 bg-green-600 rounded-lg' onClick={handleClickLifeInfoPage}>
+                <button className='topMenuBtn' onClick={handleClickLifeInfoPage}>
                     생활정보
                 </button>
-            </ul>
+            </ul> */}
             <Outlet />
         </BasicLayout>
     );
