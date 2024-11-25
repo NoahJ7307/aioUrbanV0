@@ -24,9 +24,11 @@ const GymProgramDetail = () => {
     const page = searchParams.get('page') || 1;
     const size = searchParams.get('size') || 10;
     // console.log('예약 수정asfda: ', page, size);
-
+    const role = localStorage.getItem("role")
     const location = useLocation();
+    const currentDate = new Date(); // 현재 날짜
     const { gym } = location.state || { title: '', content: '', target: '', participantLimit: 0, programId: null, currentParticipants: 0, applicationStartDate: '', applicationEndDate: '', price: 0 };
+    const isAfterProgramEndDate = currentDate > new Date(gym.applicationEndDate); // 접수 종료일 이후인지 체크
     console.log("detail gym", gym)
     //   const token = localStorage.getItem("token")
     //     const uno = localStorage.getItem("uno")
@@ -262,25 +264,56 @@ const GymProgramDetail = () => {
 
     };
 
-
+    const formatLocalTimeWithMeridiem = (timeString) => {
+        const [hours, minutes] = timeString.split(':').map(Number); // 시, 분 분리
+        const meridiem = hours >= 12 ? '오후' : '오전';
+        const formattedHours = hours % 12 === 0 ? 12 : hours % 12; // 12시간제 변환
+        return `${meridiem} ${formattedHours}:${minutes.toString().padStart(2, '0')}`;
+    };
 
     const handleBackToList = () => {
         // navigate(`/facilities/gym/list?page=${page}&size=${size}`, { state: { gym } });
         navigate(`/facilities/gym/list?type=${type}&keyword=${keyword}&page=${page}&size=${size}`, { state: { gym } });
     };
+
+
     return (
-        <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+            {role === 'ADMIN' && (
+                <div className="absolute top-4 right-4 flex space-x-2">
+
+                    <button
+                        type="button"
+                        onClick={handleModify}
+                        className="px-3 py-1.5 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                    >
+                        수정
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={handleDelete}
+                        className="px-3 py-1.5 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                    >
+                        삭제
+                    </button>
+
+                </div>
+            )}
             {/* 프로그램 세부정보 */}
+
             <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-center mb-4">프로그램 세부정보</h2>
+
                 <div className="space-y-4">
-                    <p><strong>프로그램 명:</strong> {gym.title}</p>
+                    <p><strong>프로그램 명: </strong> {gym.title}</p>
                     <p><strong>세부내용:</strong> {gym.content}</p>
-                    <p><strong>대상:</strong> {gym.target}</p>
-                    <p><strong>모집 인원:</strong> {gym.currentParticipants}/{gym.participantLimit}명</p>
-                    <p><strong>진행 기간:</strong> {gym.programStartDate} ~ {gym.programEndDate}</p>
-                    <p><strong>진행 시간:</strong> {gym.programStartTime} ~ {gym.programEndTime}</p>
-                    {/* <p><strong>접수 기간:</strong> {gym.applicationStartDate.replace('T', ' ')} ~ {gym.applicationEndDate.replace('T', ' ')}</p> */}
+                    <p><strong>대상: </strong> {gym.target}</p>
+                    <p><strong>모집 인원: </strong> {gym.currentParticipants}/{gym.participantLimit}명</p>
+                    <p><strong>진행 기간: </strong> {gym.programStartDate} ~ {gym.programEndDate}</p>
+                    <p> <strong>진행 시간: </strong>
+                        {formatLocalTimeWithMeridiem(gym.programStartTime)} ~ {formatLocalTimeWithMeridiem(gym.programEndTime)}
+                    </p>
                     <p><strong>접수 기간:</strong> {gym.applicationStartDate.split('T')[0]} {gym.applicationStartDate.split('T')[1].slice(0, 5)} ~ {gym.applicationEndDate.split('T')[0]} {gym.applicationEndDate.split('T')[1].slice(0, 5)}</p>
                     {/* <p><strong>금액:</strong> {gym.price} (마일리지, 포인트 중에 결정 예정)</p> */}
                 </div>
@@ -312,21 +345,11 @@ const GymProgramDetail = () => {
             </div>
 
             {/* 버튼 영역 */}
+
+
             <div className="flex justify-center space-x-4 mt-6">
-                <button
-                    type="button"
-                    onClick={handleModify}
-                    className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-                >
-                    수정
-                </button>
-                <button
-                    type="button"
-                    onClick={handleDelete}
-                    className="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                >
-                    삭제
-                </button>
+
+                {/* 메인 버튼 */}
                 <button
                     type="button"
                     onClick={buttonState.onClick}
@@ -335,6 +358,8 @@ const GymProgramDetail = () => {
                 >
                     {buttonState.text}
                 </button>
+
+                {/* 목록 버튼 */}
                 <button
                     type="button"
                     onClick={handleBackToList}
@@ -342,11 +367,9 @@ const GymProgramDetail = () => {
                 >
                     목록
                 </button>
-            </div>
 
-            {/* 참가자 취소 및 대기자 취소 버튼 */}
-            <div className="flex justify-center space-x-4 mt-4">
-                {isParticipant && (
+                {/* 참가 취소 및 대기 취소 버튼 */}
+                {!isAfterProgramEndDate && isParticipant && (
                     <button
                         type="button"
                         onClick={handleUserCancel}
@@ -355,7 +378,7 @@ const GymProgramDetail = () => {
                         참가 취소
                     </button>
                 )}
-                {isWaitList && (
+                {!isAfterProgramEndDate && isWaitList && (
                     <button
                         type="button"
                         onClick={handleWaitingCancel}
@@ -366,6 +389,7 @@ const GymProgramDetail = () => {
                 )}
             </div>
         </div>
+
     );
 }
 

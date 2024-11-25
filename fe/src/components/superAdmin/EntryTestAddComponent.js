@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import useCustom from '../hook/useCustom'
 import { entryPost, exitPost } from '../api/parking/entryApi'
 import '../../css/public/public.css'
 

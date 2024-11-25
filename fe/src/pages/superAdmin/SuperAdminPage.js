@@ -12,19 +12,21 @@ const SuperAdminPage = () => {
 
     return (
         <BasicLayout>
-            <ul className='topMenu'>
-                <li>
-                    <button className='topMenuBtn' onClick={handleClickUserManage}>
-                        유저 관리
-                    </button>
-                </li>
-                <li>
-                    <button className='topMenuBtn' onClick={handleClickEntryTest}>
-                        입출차 테스트
-                    </button>
-                </li>
-            </ul>
-            <Outlet context={{ checkedUno, setCheckedUno }} />
+            <div className='superAdminBackground'>
+                <ul className='topMenu'>
+                    <li>
+                        <button className='topMenuBtn' onClick={handleClickUserManage}>
+                            유저 관리
+                        </button>
+                    </li>
+                    <li>
+                        <button className='topMenuBtn' onClick={handleClickEntryTest}>
+                            입출차 테스트
+                        </button>
+                    </li>
+                </ul>
+                <Outlet context={{ checkedUno, setCheckedUno }} />
+            </div>
         </BasicLayout>
     )
 }

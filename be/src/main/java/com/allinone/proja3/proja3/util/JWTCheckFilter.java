@@ -24,7 +24,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         // login 경로 허용
         if (path.startsWith("/api/user/login")) return true;
-        if (path.startsWith("/api/main/join")) return true;
+        if (path.startsWith("/api/main")) return true;
         if (path.startsWith("/upload")) return  true; // 이미지 인증 추가
         if (path.startsWith("/ws/chat")) return true; // WebSocket 경로 허용
 

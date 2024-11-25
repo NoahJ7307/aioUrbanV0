@@ -31,6 +31,7 @@ const UserPage = () => {
                 </li>
             </ul> */}
             <Outlet context={{ checkedUno, setCheckedUno }} />
+  
         </BasicLayout>
     )
 }

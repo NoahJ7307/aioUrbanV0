@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useCustomLogin from '../hook/useCustomLogin'
 import { getOne, putOne } from '../api/userApi'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import '../../css/public/public.css'
 
 const initState = {
@@ -35,7 +35,7 @@ const MyInfoComponent = () => {
                 ho: data.ho ?? '',
             })
         })
-    },[uno])
+    }, [uno])
 
     const handleChange = (e) => {
         userData[e.target.name] = e.target.value

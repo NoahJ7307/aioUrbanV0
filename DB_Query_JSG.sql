@@ -14,7 +14,7 @@ drop table tbl_household;
 -- -------------------------------------------------------------
 select * from tbl_user order by uno desc;
 SELECT u.*, r.* FROM tbl_user u LEFT JOIN user_user_role_list r ON u.uno = r.user_uno ORDER BY u.uno DESC;
-select * from user_user_role_list order by uno desc;
+select * from user_user_role_list order by user_uno desc;
 select * from tbl_user where uno = 66;
 select * from tbl_household;
 select * from tbl_regular_parking order by rpno desc;

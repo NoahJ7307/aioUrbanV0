@@ -95,6 +95,7 @@ export const modifyGolf = async (reservationId, reservationData) => {
 
 //MYPAGE 나의 예약 조회
 export const myPageGolfReservations = async (uno, page, size) => {
+    console.log("golf uno조회 " ,uno)
     const config = getConfig();
     try {
         const response = await axios.get(`${host}/myPage/${uno}`, {

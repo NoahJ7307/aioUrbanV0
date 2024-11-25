@@ -32,6 +32,7 @@ const ParkingPage = () => {
                 </li>
             </ul> */}
             <Outlet context={{ checkedRpno, setCheckedRpno, checkedVpno, setCheckedVpno }} />
+                
         </BasicLayout>
     )
 }

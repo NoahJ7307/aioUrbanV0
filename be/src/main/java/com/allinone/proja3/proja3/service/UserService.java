@@ -20,6 +20,7 @@ public interface UserService {
     boolean approvalStatus(Long uno);
     Long addRole(Long uno, UserRole role);
     void clearRole(Long uno);
+    String verify(String phone);
     PageResponseDTO<UserDTO> getSearchList(PageRequestDTO pageRequestDTO, UserSearchDataDTO userSearchData);
     PageResponseDTO<UserDTO> getAllSearchList(PageRequestDTO pageRequestDTO, UserSearchDataDTO userSearchData);
 }

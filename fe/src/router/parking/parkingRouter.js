@@ -16,7 +16,7 @@ const parkingRouter = () => {
     return [
         {
             path: "",
-            element: <Navigate replace to="/parking" />
+            element: <Navigate replace to="/parking/regular" />
         },
         {
             path: "",

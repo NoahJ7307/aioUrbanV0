@@ -49,16 +49,50 @@ const MembershipPurchase = () => {
 
 
     console.log("구매 요청 데이터:", membershipData);
-
     try {
+      // purchaseMembership 함수 호출
       const result = await purchaseMembership(membershipData); // API 호출
-      setMessage('구매가 완료되었습니다!');
       console.log("구매 완료 결과:", result);
+    
+      // result를 기준으로 조건 처리 (M001, M002, M003)
+      if (result === "M001") {
+        setMessage('구매가 완료되었습니다!');
+      } else if (result === "M002") {
+        setMessage('이미 유효한 이용권이 존재합니다. 이용권이 만료된 후에 다시 시도해 주세요.');
+      } else if (result === "M003") {
+        setMessage('마일리지가 부족합니다. 충전 후 이용해주세요.');
+      }
+    
     } catch (error) {
-      setMessage('마일리지가 부족합니다. 충전 후 이용해주세요.');
+      // 오류 발생 시 처리
       console.error("구매 요청 중 오류:", error);
+      
+      // 각 오류 코드에 맞는 메시지 설정
+      if (error.response?.data === "M002") {
+        setMessage("이미 유효한 이용권이 존재합니다. 이용권이 만료된 후에 다시 시도해 주세요");
+        // alert("이미 유효한 이용권이 존재합니다. 이용권이 만료된 후에 다시 시도해 주세요");
+      } else if (error.response?.data === "M003") {
+        setMessage("마일리지가 부족합니다. 충전 후 이용해주세요.");
+        // alert("마일리지가 부족합니다. 충전 후 이용해주세요.");
+      } else {
+        setMessage("알 수 없는 오류가 발생했습니다.");
+        alert("알 수 없는 오류가 발생했습니다.");
+      }
     }
-  };
+  }
+
+  //   try {
+  //     const result = await purchaseMembership(membershipData); // API 호출
+  //     setMessage('구매가 완료되었습니다!');
+  //     console.log("구매 완료 결과:", result);
+  //   } catch (error) {
+  //     if (error.response.data === "M002") {
+  //       alert("이미 유효한 이용권이 존재합니다. 이용권이 만료된 후에 다시 시도해 주세요");
+  //     }
+  //     setMessage('마일리지가 부족합니다. 충전 후 이용해주세요.');
+  //     console.error("구매 요청 중 오류:", error);
+  //   }
+  // };
 
 
   const handleDelete = async (planId) => {

@@ -20,15 +20,19 @@ import com.allinone.proja3.proja3.service.parking.RegularParkingScheduler;
 import com.allinone.proja3.proja3.service.parking.RegularParkingService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @SpringBootTest
 public class PaymentServiceTests {
+    private static final Logger log = LoggerFactory.getLogger(PaymentServiceTests.class);
     @Autowired
     private PaymentService paymentService;
     @Autowired
@@ -121,5 +125,13 @@ public class PaymentServiceTests {
                 .build());
         regularParkingService.register(regularParkingDTO);
         regularParkingScheduler.startRegularPayment();
+    }
+
+    @Test
+    public void randNumTest(){
+        SecureRandom rand = new SecureRandom(); // 보안을 위해 SecureRandom 사용
+        String verifyNum = String.format("%06d", rand.nextInt(1000000));
+        String sendStr = "인증번호 전송\n"+"["+verifyNum+"]";
+        System.out.println(sendStr);
     }
 }

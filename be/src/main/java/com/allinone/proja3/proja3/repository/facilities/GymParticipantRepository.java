@@ -29,6 +29,6 @@ public interface GymParticipantRepository extends JpaRepository<GymParticipant,L
 
 
 
-    List<GymParticipant> findByUser(User user);
+    List<GymParticipant> findByUserAndWaitlisted(User user,boolean waitlisted);
 
 }
