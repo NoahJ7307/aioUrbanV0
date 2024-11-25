@@ -64,30 +64,34 @@ public class AnnounceServiceImpl implements AnnounceService {
                 .build();
     }
 
-    @Override
-    public AnnounceDTO getPno(Long pno, User user) {
-        Announce announce = repository.findById(pno).orElseThrow(()->new IllegalArgumentException("읽었다"+pno));
-        return new AnnounceDTO(announce.getPno(), announce.getTitle(), announce.getContent());
+    public AnnounceDTO getPno(Long pno, User user){
+        Announce announce = repository.findById(pno)
+                .orElseThrow(()->new IllegalArgumentException("읽었다"+pno));
+        return new AnnounceDTO(announce.getPno(),announce.getTitle(),announce.getContent());
     }
+
+
 
     @Override
     public void deletePost(Long pno, Long uno) {
-        // 게시글을 찾고, 해당 게시글이 로그인한 사용자(uno)의 것인지 확인
-        Optional<Announce> announceDelete = repository.findById(pno);
+        // 게시글 찾기
+        Announce announce = repository.findById(pno)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다: " + pno));
 
-        if (announceDelete.isPresent()) {
-            Announce announce = announceDelete.get();
-            // 삭제 권한 체크: 게시글 작성자와 현재 로그인한 사용자의 uno가 일치하는지 확인
-            if (announceDelete.get().getUser().getUno().equals(uno)) {
-                repository.delete(announce);
-                return; // 삭제 성공
-            } else {
-                return; // 삭제 권한 없음
-            }
+        // 작성자 검증
+        if (!announce.getUser().getUno().equals(uno)) {
+            throw new SecurityException("본인만 게시글을 삭제할 수 있습니다.");
         }
-        throw new IllegalArgumentException("게시글을 찾을 수 없습니다.");
+
+        // 삭제 실행
+        repository.deleteById(pno);
     }
 
+    @Override
+    public void deletePostByAdmin(Long pno) {
+        // 관리자 권한으로 삭제
+        repository.deleteById(pno);
+    }
     @Override
     public boolean modify(AnnounceDTO announceDTO) {
         Optional<Announce> optionalPost = repository.findById(announceDTO.getPno());

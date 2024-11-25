@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CommunityCustom from '../../hook/CommunityCustom';
 
-import { deleteChecked, get } from '../../api/community/announceApi';
+import { deleteChecked, get, search } from '../../api/community/announceApi';
 import PageComponent from '../../common/PageComponent';
 
 
@@ -28,14 +28,17 @@ const AnnounceListComponent = () => {
     const [serverData, setServerData] = useState(initState); // 서버 데이터 상태
     const [showModal, setShowModal] = useState(false); // 모달 상태
     const [currentPost, setCurrentPost] = useState(null); // 현재 모달에 표시할 게시물
+    const [type, setType] = useState('title'); // 검색 필터 상태
+    const [keyword, setKeyword] = useState(''); // 검색어 상태 추가
     const { page, size, moveToList } = CommunityCustom(); // 페이지 이동 훅
     const navigate = useNavigate(); // 페이지 이동 훅
     const [userRole, setUserRole] = useState(null);
 
+
     useEffect(() => {
         const getUno = localStorage.getItem('uno');
         if (getUno) {
-            console.log("로그인 데이터 정보" + getUno+"여기는 공지사항 리스트 입니다.")
+            console.log("로그인 데이터 정보" + getUno + "여기는 공지사항 리스트 입니다.")
             setUno(Number(getUno));
         } else {
             console.log("로그인 정보가 없습니다.");
@@ -45,10 +48,10 @@ const AnnounceListComponent = () => {
         const storedRole = localStorage.getItem('role');
         console.log(storedRole)
         if (storedRole) {
-            
+
             setUserRole(storedRole);
         }
-    },[])
+    }, [])
 
     useEffect(() => {
         get({ page, size })
@@ -66,7 +69,7 @@ const AnnounceListComponent = () => {
 
     const handleDelete = async (pno) => {
         try {
-            const result = await deleteChecked(pno, uno);
+            const result = await deleteChecked(pno, uno,userRole);
             if (result) {
                 const updatedList = serverData.dtoList.filter(item => item.pno !== pno);
                 setServerData(prevData => ({
@@ -89,14 +92,93 @@ const AnnounceListComponent = () => {
         setShowModal(false);
         setCurrentPost(null);
     };
+    const handleSearchInputChange = (e) => {
+        setKeyword(e.target.value);
+    };
+
+    const handleSearch = async () => {
+        // 검색어가 비어있으면 경고창 표시
+        if (!keyword.trim()) {
+            alert("검색어를 입력해 주세요."); // 경고창
+            return; // 검색 실행 중단
+        }
+
+        setLoading(true); // 로딩 상태 설정
+        try {
+            const data = await search({
+                type,
+                keyword,
+                page,
+                size,
+                category: 'announce', // 검색 카테고리
+            });
+
+            if (data.dtoList.length === 0) {
+                alert("검색 결과가 없습니다."); // 검색 결과가 없을 경우 경고창
+            }
+
+            console.log("검색 요청 데이터:", { type, keyword, page, size, category: "announce" });
+            console.log("검색 결과:", data);
+            setServerData(data); // 검색 결과 설정
+            setError(null);
+        } catch (err) {
+            console.error("검색 실패:", err);
+            setError("검색 중 문제가 발생했습니다.");
+        } finally {
+            setLoading(false); // 로딩 상태 해제
+        }
+    };
 
     return (
         <div className="max-w-7xl mx-auto mt-8 p-4">
             <header className="text-center mb-8">
                 <h1 className="text-3xl font-bold">공지사항</h1>
-             
-            </header>
 
+            </header>
+            {/* 왼쪽 검색 필터 */}
+            {/* 검색 필터와 글쓰기 버튼 */}
+            <div className="flex items-center justify-between mb-6">
+                {/* 왼쪽 검색 필터 */}
+                <div className="flex items-center space-x-4">
+                    <select
+                        value={type}
+                        onChange={(e) => setType(e.target.value)}
+                        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option value="title">글 제목</option>
+                        <option value="content">글 내용</option>
+                        <option value="target">작성자</option>
+                        <option value="titleAndContent">제목+내용</option>
+                    </select>
+
+                    <input
+                        type="text"
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                        placeholder="검색어를 입력해 주세요"
+                        className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+
+                    <button
+                        onClick={handleSearch}
+                        className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                    >
+                        검색
+                    </button>
+                </div>
+
+                {/* 오른쪽 글쓰기 버튼 */}
+                {(userRole === 'ADMIN' || userRole === 'ROOT') && (
+                    <button
+                        onClick={() => navigate('/communities/announce/add')}
+                        className="bg-blue-500 text-white py-1 px-4 rounded-lg"
+                    >
+                        글쓰기
+                    </button>
+                )}
+            </div>
+
+           
             <table className="min-w-full table-auto text-sm text-gray-600 bg-white shadow-lg rounded-lg overflow-hidden">
                 <thead>
                     <tr className="bg-gray-200 text-gray-800">
@@ -129,7 +211,7 @@ const AnnounceListComponent = () => {
                                         {item.title}
                                     </button>
                                 </td>
-                                <td className="py-3 px-4 border text-center">{item.userName}</td>
+                                <td className="py-3 px-4 border text-center">{item.user?.userName || item.userName || '알 수 없음'}</td>
                                 <td className="py-3 px-4 border text-center">
                                     {new Date(item.createdAt).toLocaleDateString()}
                                 </td>
@@ -140,8 +222,8 @@ const AnnounceListComponent = () => {
                                         onClick={() => { navigate(`/communities/announce/modify/${item.pno}`); }}
                                         disabled={!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)}
                                         className={`py-1 px-3 rounded-lg ${!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)
-                                                ? 'bg-gray-300 cursor-not-allowed'
-                                                : 'bg-blue-500 text-white'
+                                            ? 'bg-gray-300 cursor-not-allowed'
+                                            : 'bg-blue-500 text-white'
                                             }`}
                                     >
                                         {!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId) ? '권한없음' : '수정'}
@@ -154,8 +236,8 @@ const AnnounceListComponent = () => {
                                         onClick={() => { handleDelete(item.pno); }}
                                         disabled={!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)}
                                         className={`py-1 px-3 rounded-lg ${!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)
-                                                ? 'bg-gray-300 cursor-not-allowed'
-                                                : 'bg-blue-500 text-white'
+                                            ? 'bg-gray-300 cursor-not-allowed'
+                                            : 'bg-red-500 text-white'
                                             }`}
                                     >
                                         {(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId) ? '삭제' : '권한없음'}
@@ -166,16 +248,8 @@ const AnnounceListComponent = () => {
                     )}
                 </tbody>
             </table>
-            <div className="flex justify-between items-center mt-4">
-                {(userRole === 'ADMIN' || userRole==='ROOT' )&&(
-                    <button
-                        onClick={() => { navigate('/communities/announce/add'); }}
-                        className="bg-blue-500 text-white py-1 px-4 rounded-lg"
-                    
-                    >
-                        글쓰기
-                    </button>
-                )}
+
+            <div>
                 <PageComponent serverData={serverData} movePage={moveToList} />
             </div>
 

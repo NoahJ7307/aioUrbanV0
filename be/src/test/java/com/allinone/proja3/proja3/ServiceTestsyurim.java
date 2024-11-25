@@ -167,11 +167,13 @@ public class ServiceTestsyurim {
     @Test
     public void insertRolesAdmin() {
         User userAdmin = User.builder()
-                .userName("최유림")
-                .phone("0509")
+                .userName("짜이")
+                .phone("55")
                 .pw(passwordEncoder.encode("1"))
+                .dong("103")
+                .ho("400")
                 .build();
-        userAdmin.addRole(UserRole.ADMIN);
+        userAdmin.addRole(UserRole.USER);
         repository.save(userAdmin);
     }
 

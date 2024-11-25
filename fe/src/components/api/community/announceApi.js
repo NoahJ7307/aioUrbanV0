@@ -70,25 +70,79 @@ export const update = async (data, pno, uno) => {
 
 
 
-export const deleteChecked = async (pno, uno) => {
+//삭제
+export const deleteChecked = async (pno, uno, role) => {
     const token = localStorage.getItem("token");
 
     if (!token) {
         console.error("토큰이 존재하지 않습니다.");
-        return;
+        throw new Error("로그인이 필요합니다.");
     }
 
     const config = {
         headers: {
-            "Authorization": `Bearer ${token}`, // Bearer 토큰 제대로 설정
+            Authorization: `Bearer ${token}`,
+        },
+    };
+
+    // 관리자일 경우 uno를 전달하지 않음
+    const queryParams = role === "admin" || role === "root" ? `role=${role}` : `uno=${uno}&role=${role}`;
+
+    try {
+        const res = await axios.delete(`${host}/${pno}?${queryParams}`, config);
+        return res.data;
+    } catch (error) {
+        console.error("삭제 요청 실패", error);
+        throw error;
+    }
+};
+
+
+export const search = async ({ type, keyword, page, size, category }) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        console.error("토큰이 없습니다.");
+        throw new Error("로그인이 필요합니다.");
+    }
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        params: { type, keyword, page, size, category },
+    };
+
+    try {
+        const res = await axios.get(`${host}/search`, config);
+        return res.data;
+    } catch (error) {
+        console.error("검색 요청 실패:", error);
+        throw error;
+    }
+};
+export const getMyAnnouncePosts = async (uno) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        console.error("토큰이 존재하지 않습니다.");
+        throw new Error("로그인이 필요합니다.");
+    }
+
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json",
         },
     };
 
     try {
-        const res = await axios.delete(`${host}/${pno}?uno=${uno}`, config); // data는 DELETE 요청에서는 보통 사용되지 않음
+        const res = await axios.get(`${host}/${uno}`, config);
         return res.data;
     } catch (error) {
-        console.error("삭제 요청 실패", error);
+        console.error("내 게시글 조회 실패", error);
+        throw error;
     }
 };
+

@@ -17,9 +17,11 @@ public class GymMembershipDTO {
     private Long mileageId;  // Instead of embedding the full Mileage object
     private LocalDate startDate;
     private LocalDate endDate;
-    private boolean isOnHold;
+//    private boolean isOnHold;
     private Long membershipPlanId;
     private String membershipType;
+
+
 
 
 

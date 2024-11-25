@@ -5,7 +5,9 @@ import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymMembershipDTO;
 import com.allinone.proja3.proja3.dto.facilities.MembershipPlanDTO;
 import com.allinone.proja3.proja3.model.User;
+import com.allinone.proja3.proja3.model.facilities.Gym;
 import com.allinone.proja3.proja3.model.facilities.GymMembership;
+import com.allinone.proja3.proja3.model.facilities.GymParticipant;
 import com.allinone.proja3.proja3.model.facilities.MembershipPlan;
 import com.allinone.proja3.proja3.model.mileage.Mileage;
 
@@ -21,7 +23,16 @@ public interface GymMembershipService {
     void deleteMembership(Long membershipPlanId);
     public GymMembership  purchaseMembership(GymMembershipDTO gymMembershipDTO);
     public MembershipPlan toEntityMembership (MembershipPlanDTO membershipPlanDTO);
-//    public List<GymDTO> getUserRegisteredPrograms (Long uno);
+    public List<GymMembershipDTO> getUserMemberships (Long uno);
+
+
+
+
+
+
+
+
+    //    public List<GymDTO> getUserRegisteredPrograms (Long uno);
     // Convert GymMembership entity to GymMembershipDTO
 //    default GymMembershipDTO toDto(GymMembership gymMembership) {
 //        if (gymMembership == null) {

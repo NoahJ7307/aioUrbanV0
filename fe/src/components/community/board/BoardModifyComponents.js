@@ -35,7 +35,8 @@ const BoardModifyComponents = () => { // pno는 수정할 게시글의 ID
       }
 
       const result = response.data;
-      if (result) {
+      console.log(response)
+      if (response) {
         window.alert("업데이트 성공!");
         navigate("/communities/board/list");
       } else {

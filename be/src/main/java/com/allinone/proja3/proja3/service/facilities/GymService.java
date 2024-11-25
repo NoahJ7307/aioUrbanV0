@@ -36,6 +36,13 @@ public interface GymService {
     //검색관련
     public SearchPageResponseDTO<GymDTO> searchList (SearchPageRequestDTO requestDTO);
 
+
+
+    public List<GymDTO> getProgramsByUser(Long uno);
+    public List<GymDTO> getWaitlistByUser(Long uno);
+
+//    public List<GymDTO> getProgramsByUserAndProgramId(Long uno, Long programId);
+
 //    public List<GymDTO> getProgramsByUser(User user);
 //    public List<UserDTO> getRegisteredUsers(Long programId);
 }

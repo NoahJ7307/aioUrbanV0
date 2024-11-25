@@ -15,7 +15,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -114,23 +117,7 @@ public class MarketServiceImpl implements MarketService {
         return new MarketDTO(market.getMno(), market.getTitle(), market.getContent(), market.getImageUrls(), market.getThumbnailUrl(), market.getPrice());
     }
 
-    @Override
-    public void deletePost(Long mno, Long uno) {
-        Optional<Market> marketToDelete = repository.findById(mno);
 
-        if (marketToDelete.isPresent()) {
-            Market market = marketToDelete.get();
-            if (market.getUser().getUno().equals(uno)) {
-                deleteFile(market.getThumbnailUrl());
-                market.getImageUrls().forEach(this::deleteFile); // 모든 이미지 파일 삭제
-                repository.delete(market);
-            } else {
-                throw new SecurityException("삭제 권한이 없습니다.");
-            }
-        } else {
-            throw new IllegalArgumentException("게시글을 찾을 수 없습니다.");
-        }
-    }
 
     @Override
     public MarketDTO findByMno(Long mno) {
@@ -139,17 +126,60 @@ public class MarketServiceImpl implements MarketService {
         return entityDto(market);
     }
 
-    private void deleteFile(String fileUrl) {
-        if (fileUrl != null && !fileUrl.isEmpty()) {
-            String filePath = fileUrl.replace("/upload/", "upload/");
-            try {
-                Files.deleteIfExists(Paths.get(filePath));
-            } catch (IOException e) {
-                System.err.println("파일 삭제 실패: " + filePath);
-                e.printStackTrace();
+
+
+    @Override
+    public void deletePost(Long mno, Long uno) {
+        // 게시글 찾기
+        Market market = repository.findById(mno)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다: " + mno));
+
+        // 작성자 검증
+        if (!market.getUser().getUno().equals(uno)) {
+            throw new SecurityException("본인만 게시글을 삭제할 수 있습니다.");
+        }
+
+        // 썸네일 삭제
+        deleteFile(market.getThumbnailUrl());
+
+        // 모든 이미지 파일 삭제
+        market.getImageUrls().forEach(this::deleteFile);
+
+        // 게시글 삭제
+        repository.delete(market);
+    }
+
+    @Override
+    public void deletePostByAdmin(Long mno) {
+        // 관리자 권한으로 삭제
+        Market market = repository.findById(mno)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다: " + mno));
+
+        // 썸네일 삭제
+        deleteFile(market.getThumbnailUrl());
+
+        // 모든 이미지 파일 삭제
+        market.getImageUrls().forEach(this::deleteFile);
+
+        // 게시글 삭제
+        repository.delete(market);
+    }
+
+
+    // 파일 삭제 메서드
+    private void deleteFile(String filePath) {
+        if (filePath != null && !filePath.isEmpty()) {
+            File file = new File(filePath);
+            if (file.exists()) {
+                if (!file.delete()) {
+                    System.err.println("파일 삭제 실패: " + filePath);
+                }
+            } else {
+                System.err.println("파일이 존재하지 않음: " + filePath);
             }
         }
     }
+
 
     @Override
     public boolean modify(MarketDTO marketDTO, MultipartFile thumbnail, List<MultipartFile> images) {

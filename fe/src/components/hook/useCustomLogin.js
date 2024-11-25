@@ -13,7 +13,10 @@ const useCustomLogin = () => {
         const role = localStorage.getItem("role")
         const dong = localStorage.getItem("dong")
         const ho = localStorage.getItem("ho")
-        return { token, uno, role, dong, ho }
+        //이름,연락처 추가 1121(CYR)
+        const userName = localStorage.getItem("userName")
+        const phone = localStorage.getItem("phone")
+        return { token, uno, role, dong, ho, userName, phone }
     }
 
     const isLogin = loadLoginData().token != null

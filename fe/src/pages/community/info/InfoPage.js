@@ -15,13 +15,13 @@ const InfoPage = () => {
     return (
         <div>
             
-
+{/* 
             <ul className='flex justify-center space-x-8'>
                 <li>
                     <button className="button" onClick={handleClickList}>동네 알바 </button>
                 </li>
             </ul>
-          
+           */}
             <Outlet/>
         </div>
     )

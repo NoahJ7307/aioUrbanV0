@@ -5,6 +5,7 @@ import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GolfDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Golf;
+import com.allinone.proja3.proja3.model.facilities.Study;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -62,6 +63,11 @@ public interface GolfRepository extends JpaRepository<Golf, Long> {
     @Query("select g from Golf g where g.user.uno = :uno")
 //    List<Golf> findByUserUno(@Param("uno") Long uno, Pageable pageable);
     Page <Golf> findByUserUno(@Param("uno") Long uno, Pageable pageable);
+
+    @Query("SELECT g FROM Golf g WHERE g.user.uno = :uno AND g.delFlag = false")
+    Page<Golf> findNonDeletedReservationsByUserUno(@Param("uno") Long uno, Pageable pageable);
+
+
 //    @Query("select g from Golf g where g.user.userName = :userName")
 //    List<Golf> findByUserName(@Param("userName") String userName, Pageable pageable);
 //    @Query("select g from Golf g where g.user.phone = :phone")
