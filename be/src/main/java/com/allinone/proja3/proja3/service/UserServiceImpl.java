@@ -12,6 +12,8 @@ import com.allinone.proja3.proja3.repository.mileage.CardInfoRepository;
 import com.allinone.proja3.proja3.service.facilities.SmsService;
 import com.allinone.proja3.proja3.service.mileage.CardInfoService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CardInfoService cardInfoService;
@@ -278,7 +281,22 @@ public class UserServiceImpl implements UserService {
         // 전화번호 국가코드 변환
         String newPhone = "+82"+phone.substring(1);
 //        smsService.sendConfirmationMessage(newPhone, sendStr);
+        log.info(newPhone);
         return verifyNum;
+    }
+
+    @Override
+    public Long findPw(String phone) {
+        User user = userRepository.findByPhone(phone);
+        Long uno;
+        log.info(phone);
+        log.info(String.valueOf(user));
+        if (user == null){
+            throw new NullPointerException("해당 번호로 가입된 사용자가 없습니다");
+        } else {
+            uno = user.getUno();
+        }
+        return uno;
     }
 
     private User dtoToEntity(UserDTO userDTO) {
