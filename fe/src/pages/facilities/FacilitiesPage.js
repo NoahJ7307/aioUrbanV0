@@ -7,23 +7,23 @@ const FacilitiesPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleClickGym = useCallback(() => {
-        navigate('/facilities/gym');
-    }, [navigate]);
+    // const handleClickGym = useCallback(() => {
+    //     navigate('/facilities/gym');
+    // }, [navigate]);
 
-    const handleClickGolf = useCallback(() => {
-        navigate('/facilities/golf');
+    // const handleClickGolf = useCallback(() => {
+    //     navigate('/facilities/golf');
 
-    }, [navigate]);
+    // }, [navigate]);
 
-    const handleClickStudy = useCallback(() => {
-        navigate('/facilities/study');
-    }, [navigate]);
+    // const handleClickStudy = useCallback(() => {
+    //     navigate('/facilities/study');
+    // }, [navigate]);
    
     return (
         <BasicLayout>
-            <ul className='flex justify-center'>
-                <li>
+            {/* <ul className='flex justify-center'> */}
+                {/* <li>
                     <button className='bg-blue-400 p-2' onClick={handleClickGym}>Gym</button>
                 </li>
                 <li>
@@ -31,14 +31,13 @@ const FacilitiesPage = () => {
                 </li>
                 <li>
                     <button className='bg-blue-400 p-2' onClick={handleClickStudy}>Study</button>
-                </li>
+                </li> */}
                 {/* <li>
                     <button className='bg-blue-400 p-2' onClick={handleClickStudy}>My Reservation Page</button>
                 </li> */}
-            </ul>
-            
-            {/* 현재 경로가 /facilities 일 때만 FacilitySchedule 표시 */}
-            {location.pathname === '/facilities' && <FacilitySchedule/>}
+            {/* </ul> */}
+             {/* 현재 경로가 /facilities 일 때만 FacilitySchedule 표시 */}
+             {location.pathname === '/facilities' && <FacilitySchedule/>}
             <Outlet />
         </BasicLayout>
     );

@@ -15,12 +15,12 @@ const MarketPage = () => {
     return (
         <div>
             
-
+{/* 
             <ul className='flex justify-center space-x-8'>
                 <li>
                     <button className="button" onClick={handleClickList}>거래소</button>
                 </li>
-            </ul>
+            </ul> */}
           
             <Outlet/>
         </div>

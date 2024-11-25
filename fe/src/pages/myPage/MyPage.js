@@ -43,7 +43,16 @@ const MyPage = () => {
                         >
                             예약현황
                         </NavLink>
-                    </li>
+                        </li>
+                        <li>
+                            <NavLink
+                                to="communities"
+                                className="sidebarButton"
+                                activeClassName="active"
+                            >
+                                내가 쓸 글
+                            </NavLink>
+                        </li>
                 </ul>
             </nav>
             <div className="contentArea">

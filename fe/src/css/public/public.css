@@ -41,6 +41,17 @@ body {
   flex-direction: column;
 }
 
+/* join */
+.joinBackground {
+  background-image: url('../../images/join.jpg'); /* 이미지 경로 */
+  background-size: cover; /* 이미지를 컨테이너에 맞게 조정 */
+  background-repeat: no-repeat; /* 이미지 반복 제거 */
+  background-position: center; /* 이미지 중앙 정렬 */
+  min-height: 100vh; /* 화면 전체 높이 */
+  display: flex;
+  flex-direction: column;
+}
+
 /* -------------------------------------------- */
 
 /* --------------------메뉴-------------------- */
@@ -161,6 +172,7 @@ body {
   border-bottom: 1px solid #e1e5ea;
   background-color: rgb(208, 233, 255, 0.8);
   text-align: center;
+  align-items: center; /* 수직 정렬 */
   transition: background-color 0.3s ease;
 }
 
@@ -324,7 +336,7 @@ body {
   padding-top: 0.8rem;
   padding-bottom: 0.8rem;
   gap: 0.7rem;
-  background-color: #515c8fee;
+  background-color: rgba(81, 92, 143, 0.8);;
 
 }
 

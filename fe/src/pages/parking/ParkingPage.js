@@ -14,8 +14,7 @@ const ParkingPage = () => {
 
     return (
         <BasicLayout>
-            <div className='parkingBackground'>
-            <ul className='topMenu flex justify-center'>
+            {/* <ul className='topMenu flex justify-center'>
                 <li>
                     <button className='topMenuBtn' onClick={handleClickRegularList}>
                         정기권 차량
@@ -31,9 +30,9 @@ const ParkingPage = () => {
                         입출차 기록
                     </button>
                 </li>
-            </ul>
+            </ul> */}
             <Outlet context={{ checkedRpno, setCheckedRpno, checkedVpno, setCheckedVpno }} />
-                </div>
+                
         </BasicLayout>
     )
 }

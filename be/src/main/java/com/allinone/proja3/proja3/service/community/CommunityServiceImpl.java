@@ -98,23 +98,25 @@ public class CommunityServiceImpl implements CommunityService {
 
 
     @Override
-    public boolean deletePost(Long pno, Long uno) {
-        // 게시글을 찾고, 해당 게시글이 로그인한 사용자(uno)의 것인지 확인
-        Optional<Community> communityOpt = communityRepository.findById(pno);
+    public void deletePost(Long pno, Long uno) {
+        // 게시글 찾기
+        Community community = communityRepository.findById(pno)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다: " + pno));
 
-        if (communityOpt.isPresent()) {
-            Community community = communityOpt.get();
-            // 삭제 권한 체크: 게시글 작성자와 현재 로그인한 사용자의 uno가 일치하는지 확인
-            if (community.getUser().getUno().equals(uno)) {
-                communityRepository.delete(community);
-                return true; // 삭제 성공
-            } else {
-                return false; // 삭제 권한 없음
-            }
+        // 작성자 검증
+        if (!community.getUser().getUno().equals(uno)) {
+            throw new SecurityException("본인만 게시글을 삭제할 수 있습니다.");
         }
-        throw new IllegalArgumentException("게시글을 찾을 수 없습니다.");
+
+        // 삭제 실행
+        communityRepository.deleteById(pno);
     }
 
+    @Override
+    public void deletePostByAdmin(Long pno) {
+        // 관리자 권한으로 삭제
+        communityRepository.deleteById(pno);
+    }
     @Override
     public boolean modify(CommunityDTO communityDTO) {
         Optional<Community> optionalPost = communityRepository.findById(communityDTO.getPno());
