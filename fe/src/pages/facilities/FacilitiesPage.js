@@ -1,21 +1,24 @@
 import React, { useCallback } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import BasicLayout from '../../layout/BasicLayout';
+import FacilitySchedule from '../../components/facilities/FacilitySchedule';
 
 const FacilitiesPage = () => {
     const navigate = useNavigate();
-    const handleClickGym = useCallback(() => {
-        navigate('/facilities/gym');
-    }, [navigate]);
+    const location = useLocation();
 
-    const handleClickGolf = useCallback(() => {
-        navigate('/facilities/golf');
+    // const handleClickGym = useCallback(() => {
+    //     navigate('/facilities/gym');
+    // }, [navigate]);
 
-    }, [navigate]);
+    // const handleClickGolf = useCallback(() => {
+    //     navigate('/facilities/golf');
 
-    const handleClickStudy = useCallback(() => {
-        navigate('/facilities/study');
-    }, [navigate]);
+    // }, [navigate]);
+
+    // const handleClickStudy = useCallback(() => {
+    //     navigate('/facilities/study');
+    // }, [navigate]);
    
     return (
         <BasicLayout>
@@ -33,6 +36,8 @@ const FacilitiesPage = () => {
                     <button className='bg-blue-400 p-2' onClick={handleClickStudy}>My Reservation Page</button>
                 </li> */}
             {/* </ul> */}
+             {/* 현재 경로가 /facilities 일 때만 FacilitySchedule 표시 */}
+             {location.pathname === '/facilities' && <FacilitySchedule/>}
             <Outlet />
         </BasicLayout>
     );
