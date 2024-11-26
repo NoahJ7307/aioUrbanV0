@@ -6,13 +6,7 @@ body {
 }
 
 /* -------------------------------------------- */
-.outlet {
-  position: absolute; /* 문맥에서 벗어나 화면 위에 배치 */
-  top: 0; /* 화면 상단 고정 */
-  left: 0; /* 화면 좌측 고정 */
-  width: 100%; /* 화면 전체 너비 */
-  z-index: 9999; /* 가장 위에 배치 */
-}
+
 /* ----------------배경 이미지----------------- */
 /* parking */
 .parkingBackground {
@@ -50,6 +44,17 @@ body {
 /* join */
 .joinBackground {
   background-image: url('../../images/join.jpg'); /* 이미지 경로 */
+  background-size: cover; /* 이미지를 컨테이너에 맞게 조정 */
+  background-repeat: no-repeat; /* 이미지 반복 제거 */
+  background-position: center; /* 이미지 중앙 정렬 */
+  min-height: 100vh; /* 화면 전체 높이 */
+  display: flex;
+  flex-direction: column;
+}
+
+/* login */
+.loginBackground {
+  background-image: url('../../images/login.jpg'); /* 이미지 경로 */
   background-size: cover; /* 이미지를 컨테이너에 맞게 조정 */
   background-repeat: no-repeat; /* 이미지 반복 제거 */
   background-position: center; /* 이미지 중앙 정렬 */
@@ -229,10 +234,6 @@ body {
   border-radius: 1rem;
   box-shadow: 0 4px 6px rgba(231, 229, 229, 0.1);
   width: 80%;
-}
-
-.formContainer.op{
-  background-color: #515c8f;
 }
 
 .formContainer.superAdminAdd {

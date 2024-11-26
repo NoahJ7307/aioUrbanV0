@@ -110,10 +110,10 @@ const FindPwComponent = () => {
         moveToPath('/login')
     }
     return (
-        <div className='formContainer op'>
+        <div className='formContainer'>
             <div className='formGroup'>
                 <label className='formLabel'>전화번호</label>
-                <input className={`inputBox ${errors.phone ? 'error' : ''}`}
+                <input className={`inputBox ${errors.phone && 'error' }`}
                     name='phone'
                     value={userData.phone}
                     placeholder='전화번호 입력'
@@ -121,7 +121,7 @@ const FindPwComponent = () => {
             </div>
             <div className='formGroup'>
                 <label className='formLabel'>인증번호</label>
-                <input className={`inputBox ${errors.verifyNumber ? 'error' : ''}`}
+                <input className={`inputBox ${errors.verifyNumber && 'error' }`}
                     name='verifyNumber'
                     placeholder='인증번호 입력'
                     onChange={handleChange} />
@@ -129,7 +129,7 @@ const FindPwComponent = () => {
             {isVerify ?
                 <div className='formGroup'>
                     <label className='formLabel'>비밀번호</label>
-                    <input className={`inputBox ${errors.pw ? 'error' : ''}`}
+                    <input className={`inputBox ${errors.pw && 'error' }`}
                         type='password'
                         name='pw'
                         placeholder='비밀번호 입력'
@@ -143,12 +143,18 @@ const FindPwComponent = () => {
                         onClick={handleClickVerifySend}>인증번호 전송</button>
                     <button type='button' className='formButton add green'
                         onClick={handleClickVerifyCheck}>인증 확인</button>
+                    {isVerify ?
+                        <></>
+                        :
+                        <button type='button' className='formButton cancel'
+                            onClick={() => moveToPath('/login')}>취소</button>
+                    }
                 </div>
             </div>
             {isVerify ?
                 <div className='formGroup'>
                     <label className='formLabel'>비밀번호 확인</label>
-                    <input className={`inputBox ${errors.verifyPw ? 'error' : ''}`}
+                    <input className={`inputBox ${errors.verifyPw && 'error' }`}
                         type='password'
                         name='verifyPw'
                         placeholder='비밀번호 입력'

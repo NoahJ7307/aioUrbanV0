@@ -100,8 +100,8 @@ const EntryTestListComponent = ({ pageServerData, searchData, checkedEeno, setCh
                         onChange={() => handleCheckChange(entry.eeno)}
                     />
                     <div>{entry.carNum}</div>
-                    <div>{entry.dong ? entry.dong : ''}</div>
-                    <div>{entry.ho ? entry.ho : ''}</div>
+                    <div>{entry.dong && entry.dong}</div>
+                    <div>{entry.ho && entry.ho}</div>
                     <div>{entry.entryDate}</div>
                     <div>{entry.exitDate}</div>
                     <div>{entry.exit ? '출차완료' : '미출차'}</div>

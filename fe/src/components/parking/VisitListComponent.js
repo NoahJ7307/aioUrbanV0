@@ -129,8 +129,8 @@ const VisitListComponent = ({ pageServerData, searchData }) => {
           />
           <div>{visit.carNum}</div>
           <div>{visit.name}</div>
-          <div>{visit.household ? visit.household.householdPK.dong : ''}</div>
-          <div>{visit.household ? visit.household.householdPK.ho : ''}</div>
+          <div>{visit.household && visit.household.householdPK.dong}</div>
+          <div>{visit.household && visit.household.householdPK.ho}</div>
           <div>{visit.phone}</div>
           <div>{visit.expectedDate}</div>
         </label>
