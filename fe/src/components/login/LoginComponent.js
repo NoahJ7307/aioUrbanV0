@@ -46,7 +46,7 @@ const LoginComponent = () => {
     }
 
     return (
-        <div className='loginBackground'>
+        <div>
             <div>
                 <Outlet />
             </div>

@@ -5,7 +5,9 @@ import LoginComponent from '../../components/login/LoginComponent'
 const LoginPage = () => {
     return (
         <BasicLayout>
-            <LoginComponent />
+            <div className='loginBackground'>
+                <LoginComponent />
+            </div>
         </BasicLayout>
     )
 }
