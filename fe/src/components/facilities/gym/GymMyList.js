@@ -7,7 +7,7 @@ const GymMyList = ({ uno, page, size }) => {
 
     const location = useLocation();
     const { gym } = location.state || { title: '', content: '', target: '', participantLimit: 0, programId: null, currentParticipants: 0, applicationStartDate: '', applicationEndDate: '', price: 0 };
-   
+
     const [isParticipant, setIsParticipant] = useState(true);
     const [isWaitList, setIsWaitList] = useState(true);
     const [gymMembership, setGymMembership] = useState({
@@ -34,9 +34,6 @@ const GymMyList = ({ uno, page, size }) => {
         totalCount: 0,
         current: 0
     });
-//   const applicationEndDate = gym.applicationEndDate;
-//     const currentDate = new Date(); // 현재 날짜
-//     const isAfterProgramEndDate = currentDate > new Date({ applicationEndDate }); // 접수 종료일 이후인지 체크
 
     useEffect(() => {
         const fetchGymReservations = async () => {
@@ -46,9 +43,9 @@ const GymMyList = ({ uno, page, size }) => {
                 //참가프로그램 조회
                 const gymData = await myPageGymReservations(uno, page, size);
                 setGymReservations(gymData);
-                 //대기프로그램 조회
-                 const gymWaitData = await myPageGymWaitlist(uno, page, size);
-                 setGymWaitlists(gymWaitData);
+                //대기프로그램 조회
+                const gymWaitData = await myPageGymWaitlist(uno, page, size);
+                setGymWaitlists(gymWaitData);
                 //결제 한 이용권 조회
                 const gymMembershipData = await myPageGymMembership(uno, page, size);
                 setGymMembership(gymMembershipData);
@@ -119,54 +116,57 @@ const GymMyList = ({ uno, page, size }) => {
 
 
     return (
-        <div>
-            <h2 className="text-2xl font-semibold mb-6">나의 이용권 </h2>
-            <div className="grid grid-cols-7 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
-                <div>NO</div>
-                <div>이용권 종류</div>
-                <div>시작일</div>
-                <div>종료일</div>
-                <div>이용권 상태</div>
+        <div >
+            <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg mb-5 overflow-y-auto max-h-96">
+
+                    <h2 className="text-2xl font-semibold mb-6">나의 이용권 </h2>
+                    <div className="grid grid-cols-5 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
+                        <div>NO</div>
+                        <div>이용권 종류</div>
+                        <div>시작일</div>
+                        <div>종료일</div>
+                        <div>이용권 상태</div>
+
+                    </div>
+                    <div className="overflow-y-auto max-h-13">
+                        {gymMembership.data && gymMembership.data.length > 0 ? (
+                            gymMembership.data.map((membership) => (
+                                <div key={membership.membershipId} className="grid grid-cols-5 gap-4 items-center border-t py-4">
+                                    <div className="text-sm">{membership.membershipId}</div>
+                                    <div className="text-sm">{membership.membershipType}</div>
+                                    <div className="text-sm">{membership.startDate}</div>
+                                    <div className="text-sm">{membership.endDate}</div>
+                                    <div> {membershipState(membership.endDate)}</div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="text-center text-gray-500 col-span-7">예약 정보가 없습니다.</div>
+                        )}
+                    </div>
+                </div>
+
+                <div>
+                    {/* 참가신청 내역 */}
+                    <GymProgramState
+                        reservations={gymReservations.data}
+                        isParticipant={isParticipant}
+                        handleCancel={handleUserCancel}
+                        listTitle="프로그램 참가신청 내역"
+                    />
+
+                    {/* 대기신청 내역 */}
+                    <GymProgramState
+                        reservations={gymWaitlists.data}
+                        isParticipant={isWaitList}
+                        handleCancel={handleWaitingCancel}
+                        listTitle="프로그램 대기신청 내역"
+                    />
+                </div>
+
+
 
             </div>
-            <div className="overflow-y-auto max-h-13">
-                {gymMembership.data && gymMembership.data.length > 0 ? (
-                    gymMembership.data.map((membership) => (
-                        <div key={membership.membershipId} className="grid grid-cols-7 gap-4 items-center border-t py-4">
-                            <div className="text-sm">{membership.membershipId}</div>
-                            <div className="text-sm">{membership.membershipType}</div>
-                            <div className="text-sm">{membership.startDate}</div>
-                            <div className="text-sm">{membership.endDate}</div>
-                            <div> {membershipState(membership.endDate)}</div>
-                        </div>
-                    ))
-                ) : (
-                    <div className="text-center text-gray-500 col-span-7">예약 정보가 없습니다.</div>
-                )}
-            </div>
-
-            <div>
-            {/* 참가신청 내역 */}
-            <GymProgramState
-                reservations={gymReservations.data}
-                isParticipant={isParticipant}
-                handleCancel={handleUserCancel}
-                listTitle="참가신청 내역"
-            />
-            
-            {/* 대기신청 내역 */}
-            <GymProgramState
-                reservations={gymWaitlists.data}
-                isParticipant={isWaitList}
-                handleCancel={handleWaitingCancel}
-                listTitle="대기신청 내역"
-            />
-        </div>
-
-
-
-        </div>
-    );
+            );
 }
 
-export default GymMyList
+            export default GymMyList

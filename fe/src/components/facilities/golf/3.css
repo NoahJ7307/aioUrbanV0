@@ -1,0 +1,17 @@
+
+.seat-box:hover {
+    cursor: pointer;
+    fill-opacity: 0.42;
+    transition: fill 0.3s ease, fill-opacity 0.3s ease;
+}
+
+
+
+.selected {
+    fill: rgb(0, 0, 0);
+    fill-opacity: 0.5;
+}
+
+.available {
+    fill-opacity: 0;
+}

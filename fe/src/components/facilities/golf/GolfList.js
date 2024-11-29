@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { cancelGolf, listGolf } from '../../api/facilities/golfApi';
+import { listGolf } from '../../api/facilities/golfApi';
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
-import GolfCancel, { handleCheckedCancel } from './GolfCancel';
+import { useNavigate } from 'react-router-dom';
+import { handleCheckedCancel } from './GolfCancel';
 import GolfDetailModifyModal from './GolfDetailModifyModal';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 
 const initState = {
     dtoList: [],
@@ -17,29 +20,24 @@ const initState = {
     nextPage: 0,
     totalPage: 0,
     current: 0
-}
-
-
+};
 
 const GolfList = ({ page, size }) => {
-    // console.log(page, size)
-    const [uno, setUno] = useState(); // 로그인한 사용자 uno
-    const [userName, setUserName] = useState(); // 로그인한 사용자 name
-    const [phone, setPhone] = useState(); // 로그인한 사용자 phone
-    const navigate = useNavigate();
+    const [uno, setUno] = useState();
+    const [userName, setUserName] = useState();
+    const [phone, setPhone] = useState();
     const [checkedReservationId, setCheckedReservationId] = useState([]);
-    const [serverData, setServerData] = useState(initState)
-    const { moveToList } = useCustom()
-    const [checked, setChecked] = useState([])
+    const [serverData, setServerData] = useState(initState);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedReservationId, setSelectedReservationId] = useState(null);
+    const [groupedData, setGroupedData] = useState({});
+    const [selectedTeeBox, setSelectedTeeBox] = useState(''); // 선택된 구역 상태
+    const [groupedDataDate, setGroupedDataDate] = useState({});
+    const [selectedDate, setSelectedDate] = useState(new Date()); // 선택된 날짜
+    const navigate = useNavigate();
+    const { moveToList } = useCustom();
 
-    //로그인에 따라 다르게 보여주는 속성으로 인한 권한 변수선언
-    const role = localStorage.getItem("role")
-
-    //모달 상태 및 선택된 예약 id관리
-    const [isModalOpen, setIsModalOpen] = useState(false); //모달 열림상태
-    const [selectedReservationId, setSelectedReservationId] = useState(null); //선택된 예약 id
-
-
+    const role = localStorage.getItem("role");
 
     useEffect(() => {
         const getUno = localStorage.getItem('uno');
@@ -49,30 +47,22 @@ const GolfList = ({ page, size }) => {
         if (getUno) setUno(Number(getUno));
         if (getUserName) setUserName(getUserName);
         if (getPhone) setPhone(getPhone);
-        if (!getUno && !getUserName && !getPhone) console.log("로그인 정보가 없습니다.");
-
-    }, [])
+    }, []);
 
     const handleCheckChange = (reservationId) => {
-        setChecked((prevChecked) => {
+        setCheckedReservationId((prevChecked) => {
             const isChecked = prevChecked.includes(reservationId);
             const updatedChecked = isChecked
                 ? prevChecked.filter(item => item !== reservationId)
                 : [...prevChecked, reservationId];
-            setCheckedReservationId(updatedChecked);
             return updatedChecked;
-
         });
     };
-
 
     const fetchGolfReservations = async () => {
         try {
             const data = await listGolf({ page, size });
-            if (data.error) {
-                throw new Error(data.error);
-            }
-            console.log("Fetched data:", data);
+            if (data.error) throw new Error(data.error);
             setServerData(data);
         } catch (err) {
             console.error("데이터를 가져오는데 오류가 발생했습니다 => ", err);
@@ -80,106 +70,197 @@ const GolfList = ({ page, size }) => {
         }
     };
 
-
     useEffect(() => {
-        console.log(page, size)
         fetchGolfReservations();
     }, [page, size]);
 
-    //수정로직구현하기
+
     const handleModify = (reservationId) => {
-        console.log("수정 버튼이 눌렸어요", reservationId)
         setSelectedReservationId(reservationId);
         setIsModalOpen(true);
-
     };
+
     const handleDelete = async () => {
         await handleCheckedCancel(checkedReservationId, fetchGolfReservations);
-    }
+    };
+    //이름 암호화
+    const privacyUserName = (userName) => {
+        if (!userName || userName.length < 2) return userName;
+        const firstChar = userName.charAt(0);
+        const maskedPart = '*'.repeat(userName.length - 1);
+        return firstChar + maskedPart;
+    };
+
+    const groupReservationsByTeeBox = (reservations) => {
+        return reservations.reduce((acc, reservation) => {
+            const { teeBox } = reservation;
+            if (!teeBox) return acc; // teeBox가 없으면 해당 예약은 제외
+            if (!acc[teeBox]) acc[teeBox] = [];
+            acc[teeBox].push(reservation);
+            return acc;
+        }, {});
+    };
+    const groupReservationsByDate = (reservations) => {
+        return reservations.reduce((acc, reservation) => {
+            const { date } = reservation;
+            if (!date) return acc;
+            if (!acc[date]) acc[date] = [];
+            acc[date].push(reservation);
+            return acc;
+        }, {});
+    };
+
+    useEffect(() => {
+        if (serverData.dtoList && serverData.dtoList.length > 0) {
+            setGroupedData(groupReservationsByTeeBox(serverData.dtoList));
+            setGroupedDataDate(groupReservationsByDate(serverData.dtoList));
+        }
+    }, [serverData]);
 
 
+
+
+    // const filteredData = (groupedData[String(selectedTeeBox)] || Object.values(groupedData).flat())
+    //     .filter((golf) =>
+    //         groupedDataDate[selectedDate.toISOString().split('T')[0]]?.some(
+    //             (dateGolf) => dateGolf.reservationId === golf.reservationId
+    //         )
+    //     );
+    const filteredData = (selectedTeeBox === '' ?
+        Object.values(groupedData).flat() :
+        groupedData[String(selectedTeeBox)] || []
+    ).filter((golf) =>
+        groupedDataDate[selectedDate.toISOString().split('T')[0]]?.some(
+            (dateGolf) => dateGolf.reservationId === golf.reservationId
+        )
+    );
 
     return (
-        <div className="p-6">
-            <h2 className="text-2xl font-semibold mb-6">골프장 예약 현황</h2>
-            <div className="flex justify-between mb-4">
+        <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+            <div className="mb-6 text-center">
+                <h2 className="text-3xl font-semibold">골프장 예약 현황</h2>
+            </div>
+            <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center mr-4">
+                    <label htmlFor="teeBoxSelect" className="mr-2">구역별로 조회하기:</label>
+                    <select
+                        id="teeBoxSelect"
+                        value={selectedTeeBox}
+                        onChange={(e) => setSelectedTeeBox(e.target.value)}
+                        className="p-2 border rounded-md"
+                    >
+                        <option value="">전체</option>
+                        {Array.from({ length: 10 }, (_, i) => i + 1).map((teeBox) => (
+                            <option key={teeBox} value={teeBox}>
+                                {teeBox}번
+                            </option>
+                        ))}
+                    </select>
+
+                </div>
+                {/* 구역 선택 셀렉트 박스 추가 */}
                 {role === 'ADMIN' && (
-                    <div>
-                        <button
-                            onClick={handleDelete}
-                            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
-                        >
-                            선택 삭제
-                        </button>
-                    </div>
+
+                    <button
+                        onClick={handleDelete}
+                        className="px-2 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+                    >
+                        선택 삭제
+                    </button>
+
                 )}
             </div>
+            <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center mr-4">
+                    <label htmlFor="dateSelect" className="mr-2">날짜별로 조회하기:</label>
+                    <DatePicker
+                        id="dateSelect"
+                        selected={selectedDate}
+                        onChange={(date) => setSelectedDate(date)} // 선택한 날짜를 Date 객체로 업데이트
+                        // className="p-2 border rounded-md"
+                        dateFormat="yyyy-MM-dd" // 날짜 형식
+                        className="p-2 border rounded-md"
+                        isClearable={false}
+                        placeholderText="날짜를 선택하세요"
+                    />
 
-            <div className="grid grid-cols-9 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
+
+                </div>
+
+            </div>
+
+
+
+            <div className={`grid ${role === 'ADMIN' ? 'grid-cols-9' : 'grid-cols-6'} gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg`}>
                 <div>예약번호</div>
                 <div>날짜</div>
                 <div>사용시작</div>
                 <div>사용종료</div>
                 <div>예약구역</div>
                 <div>예약자</div>
-                <div>연락처</div>
+                {role === 'ADMIN' && <div>연락처</div>}
                 {role === 'ADMIN' && <div>예약 변경</div>}
                 {role === 'ADMIN' && <div>선택</div>}
             </div>
+            {/* 
 
-            {serverData.dtoList && serverData.dtoList.length > 0 ? (
-                serverData.dtoList.map((golf) => (
-                    <div key={golf.reservationId} className="grid grid-cols-9 gap-4 items-center border-t py-4">
+            {filteredData.length > 0 && filteredData.map((golf) => ( */}
+            {filteredData.length > 0 ? (
+                filteredData.map((golf) => (
+                    <div key={golf.reservationId} className={`grid ${role === 'ADMIN' ? 'grid-cols-9' : 'grid-cols-6'} gap-4 items-center border-t py-4`}>
                         <div className="text-sm">{golf.reservationId}</div>
                         <div className="text-sm">{golf.date}</div>
                         <div className="text-sm">{golf.startTime}</div>
                         <div className="text-sm">{golf.endTime}</div>
                         <div className="text-sm">{golf.teeBox}</div>
-                        <div className="text-sm">{golf.userName}</div> {/* userName 값을 확인 */}
-                        <div className="text-sm">{golf.phone}</div> {/* phone 값을 확인 */}
-                        <div>
-                            {role === 'ADMIN' && (
+                        <div className="text-sm">{role === 'ADMIN' ? golf.userName : privacyUserName(golf.userName)}</div>
+                        {role === 'ADMIN' && <div className="text-sm">{golf.phone}</div>}
+                        {role === 'ADMIN' && (
+                            <div>
                                 <button
                                     onClick={() => handleModify(golf.reservationId)}
                                     className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
                                 >
                                     수정
                                 </button>
-                            )}
-                        </div>
-                        <div>
-                            {role === 'ADMIN' && (
+                            </div>
+                        )}
+                        {role === 'ADMIN' && (
+                            <div>
                                 <input
                                     type="checkbox"
-                                    checked={checked.includes(golf.reservationId)}
+                                    checked={checkedReservationId.includes(golf.reservationId)}
                                     onChange={() => handleCheckChange(golf.reservationId)}
                                     className="w-5 h-5"
                                 />
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
                 ))
             ) : (
-                <div className="text-center text-gray-500 col-span-9">정보없음</div>
-            )}
+                <div className="text-center text-red-500 mt-4">예약 정보가 없습니다.</div>
 
-            {serverData && serverData.dtoList && serverData.dtoList.length > 0 && (
-                <PageComponent
-                    serverData={serverData}
-                    movePage={(pageParam) => moveToList(pageParam, '/facilities/golf/list')}
-                />
-            )}
+            )
+            }
 
-            {/* 모달 렌더링 */}
-            {isModalOpen && (
-                <GolfDetailModifyModal
-                    reservationId={selectedReservationId}
-                    closeModal={() => setIsModalOpen(false)}
-                    refreshList={fetchGolfReservations}
-                />
-            )}
-        </div>
+            {
+                serverData && serverData.dtoList && serverData.dtoList.length > 0 && (
+                    <PageComponent
+                        serverData={serverData}
+                        movePage={(pageParam) => moveToList(pageParam, '/facilities/golf/list')}
+                    />
+                )
+            }
 
+            {
+                isModalOpen && (
+                    <GolfDetailModifyModal
+                        reservationId={selectedReservationId}
+                        closeModal={() => setIsModalOpen(false)}
+                    />
+                )
+            }
+        </div >
     );
 };
 

@@ -103,6 +103,8 @@ const GymList = () => {
     setPage(newPage);
   }
 
+  
+
 
   return (
     <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">

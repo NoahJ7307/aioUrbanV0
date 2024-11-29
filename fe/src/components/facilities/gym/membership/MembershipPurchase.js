@@ -53,7 +53,7 @@ const MembershipPurchase = () => {
       // purchaseMembership 함수 호출
       const result = await purchaseMembership(membershipData); // API 호출
       console.log("구매 완료 결과:", result);
-    
+
       // result를 기준으로 조건 처리 (M001, M002, M003)
       if (result === "M001") {
         setMessage('구매가 완료되었습니다!');
@@ -62,11 +62,11 @@ const MembershipPurchase = () => {
       } else if (result === "M003") {
         setMessage('마일리지가 부족합니다. 충전 후 이용해주세요.');
       }
-    
+
     } catch (error) {
       // 오류 발생 시 처리
       console.error("구매 요청 중 오류:", error);
-      
+
       // 각 오류 코드에 맞는 메시지 설정
       if (error.response?.data === "M002") {
         setMessage("이미 유효한 이용권이 존재합니다. 이용권이 만료된 후에 다시 시도해 주세요");
@@ -123,8 +123,10 @@ const MembershipPurchase = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow rounded-lg">
-      <h1 className="text-2xl font-bold mb-4 text-center">헬스장 이용권 구매</h1>
+    <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+      <div className="mb-6 text-center">
+        <h2 className="text-3xl font-semibold"> 이용권 구매</h2>
+      </div>
       <div className="mb-6">
         <h2 className="text-xl font-semibold mb-3">이용권 목록</h2>
         {membershipPlans.length === 0 ? (

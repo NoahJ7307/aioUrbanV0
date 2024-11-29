@@ -57,9 +57,9 @@ const MenuComponent = () => {
             { name: '입주민 등록', path: '/user/add', icon: 'bi-person-plus' }
         ],
         '시설관리': [
-            { name: 'Gym', path: '/facilities/gym', icon: 'bi-bicycle' },
-            { name: 'Golf', path: '/facilities/golf', icon: 'bi-trophy' },
-            { name: 'Study', path: '/facilities/study', icon: 'bi-book' }
+            { name: 'Gym', path: '/facilities/gym/list', icon: 'bi-bicycle' },
+            { name: 'Golf', path: '/facilities/golf/list', icon: 'bi-trophy' },
+            { name: 'Study', path: '/facilities/study/list', icon: 'bi-book' }
         ],
         '소통관리': [
             { name: '게시판', path: '/communities/board/list', icon: 'bi-clipboard' },
@@ -77,12 +77,20 @@ const MenuComponent = () => {
     const handleMenuClick = (menuName, e) => {
         e.stopPropagation();
         setActiveMenu(activeMenu === menuName ? null : menuName);
+
+        
+        //1127 cyr추가 
+        if (menuName === '시설관리') {
+            navigate('/facilities');  // 기본 서브 페이지로 이동
+        }
     };
+    
 
     const handleSubMenuClick = (path) => {
         navigate(path);
     };
 
+ 
     return (
         <div>
             <nav className="navbar">

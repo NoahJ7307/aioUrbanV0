@@ -276,6 +276,13 @@ const GymProgramDetail = () => {
         navigate(`/facilities/gym/list?type=${type}&keyword=${keyword}&page=${page}&size=${size}`, { state: { gym } });
     };
 
+    const privacyUserName = (userName) => {
+        if (!userName || userName.length < 2) return userName;
+        const firstChar = userName.charAt(0);
+        const maskedPart = '*'.repeat(userName.length - 1);
+        return firstChar + maskedPart;
+    }
+
 
     return (
         <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg relative">
@@ -325,7 +332,10 @@ const GymProgramDetail = () => {
                 <ul className="list-disc pl-5 space-y-2">
                     {participants && participants.length > 0 ? (
                         participants.map((user, index) => (
-                            <li key={`participant-${user.uno}-${index}`} className="text-lg">{user.userName} - {user.phone}</li>
+                            <li key={`participant-${user.uno}-${index}`} className="text-lg">
+                                {role === 'ADMIN' ? `${user.userName}-${user.phone}`
+                                    : `${privacyUserName(user.userName)}`}
+                            </li>
                         ))
                     ) : (
                         <li className="text-gray-500">등록된 참가자가 없습니다.</li>
@@ -336,7 +346,10 @@ const GymProgramDetail = () => {
                 <ul className="list-disc pl-5 space-y-2">
                     {waitlist && waitlist.length > 0 ? (
                         waitlist.map((user, index) => (
-                            <li key={`waitlist-${user.uno}-${index}`} className="text-lg">{user.userName} - {user.phone}</li>
+                            <li key={`waitlist-${user.uno}-${index}`} className="text-lg">
+                                {role === 'ADMIN' ? `${user.userName}-${user.phone}`
+                                    : `${privacyUserName(user.userName)}`}
+                            </li>
                         ))
                     ) : (
                         <li className="text-gray-500">등록된 대기자가 없습니다.</li>

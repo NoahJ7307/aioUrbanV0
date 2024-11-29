@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -50,6 +51,8 @@ public class GolfController {
         });
 
     }
+
+
 
     //예약 수정 메소드
     @PutMapping("/detail/{reservationId}") //detail 추가 1025
@@ -114,6 +117,7 @@ public class GolfController {
         System.out.println("데이터 조회: " + uno);
         return service.findDataByUno(uno);
     }
+
 //    @GetMapping({"/detail/{uno}"})
 //    public List<GolfDTO> readUno(@PathVariable(name = "uno") Long uno) {
 //        User user = userRepository.findById(uno)
