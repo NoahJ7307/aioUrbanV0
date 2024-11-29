@@ -40,7 +40,27 @@ export const findPw = async (phone) => {
     try {
         const res = await axios.post(`${host}/findPw`, null, config)
         return res.data
-    } catch(error) {
+    } catch (error) {
+        throw error
+    }
+}
+
+export const changePw = async (pw, uno) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }
+
+    const body = {
+        pw: pw,
+        uno: uno
+    }
+
+    try {
+        const res = await axios.post(`${host}/changePw`, body, config)
+        return res.data
+    } catch (error) {
         throw error
     }
 }

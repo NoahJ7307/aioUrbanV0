@@ -129,8 +129,8 @@ const RegularListComponent = ({ pageServerData, searchData }) => {
                     />
                     <div>{regular.carNum}</div>
                     <div>{regular.name}</div>
-                    <div>{regular.household ? regular.household.householdPK.dong : ''}</div>
-                    <div>{regular.household ? regular.household.householdPK.ho : ''}</div>
+                    <div>{regular.household && regular.household.householdPK.dong}</div>
+                    <div>{regular.household && regular.household.householdPK.ho}</div>
                     <div>{regular.phone}</div>
                     <div>{regular.regDate}</div>
                 </label>

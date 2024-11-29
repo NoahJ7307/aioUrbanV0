@@ -65,7 +65,7 @@ const UserAddComponent = () => {
     <div className='formContainer'>
       <div className='formGroup'>
         <label className='formLabel'>이름</label>
-        <input className={`inputBox ${errors.userName ? 'error' : ''}`}
+        <input className={`inputBox ${errors.userName && 'error'}`}
           name='userName'
           value={userData.userName}
           placeholder='이름 입력'
@@ -73,7 +73,7 @@ const UserAddComponent = () => {
       </div>
       <div className='formGroup'>
         <label className='formLabel'>전화번호</label>
-        <input className={`inputBox ${errors.phone ? 'error' : ''}`}
+        <input className={`inputBox ${errors.phone && 'error'}`}
           name='phone'
           value={userData.phone}
           placeholder='전화번호 입력'
@@ -81,7 +81,7 @@ const UserAddComponent = () => {
       </div>
       <div className='formGroup'>
         <label className='formLabel'>비밀번호</label>
-        <input className={`inputBox ${errors.pw ? 'error' : ''}`}
+        <input className={`inputBox ${errors.pw && 'error'}`}
           name='pw'
           value={userData.pw}
           type='password'
@@ -90,7 +90,7 @@ const UserAddComponent = () => {
       </div>
       <div className='formGroup'>
         <label className='formLabel'>비밀번호 확인</label>
-        <input className={`inputBox ${errors.verifyPw ? 'error' : ''}`}
+        <input className={`inputBox ${errors.verifyPw && 'error'}`}
           name='verifyPw'
           value={userData.verifyPw}
           type='password'
@@ -99,7 +99,7 @@ const UserAddComponent = () => {
       </div>
       <div className='formGroup'>
         <label className='formLabel'>동</label>
-        <input className={`inputBox ${errors.dong ? 'error' : ''}`}
+        <input className={`inputBox ${errors.dong && 'error'}`}
           name='dong'
           value={userData.dong}
           placeholder='동 입력'
@@ -107,7 +107,7 @@ const UserAddComponent = () => {
       </div>
       <div className='formGroup'>
         <label className='formLabel'>호</label>
-        <input className={`inputBox ${errors.ho ? 'error' : ''}`}
+        <input className={`inputBox ${errors.ho && 'error'}`}
           name='ho'
           value={userData.ho}
           placeholder='호 입력'

@@ -3,6 +3,7 @@ package com.allinone.proja3.proja3.service;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.mileage.CardInfoDTO;
+import com.allinone.proja3.proja3.dto.user.ChangePwReqDTO;
 import com.allinone.proja3.proja3.dto.user.UserDTO;
 import com.allinone.proja3.proja3.dto.user.UserSearchDataDTO;
 import com.allinone.proja3.proja3.model.User;
@@ -288,15 +289,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long findPw(String phone) {
         User user = userRepository.findByPhone(phone);
-        Long uno;
-        log.info(phone);
-        log.info(String.valueOf(user));
+        log.info("findPw service (P): {}", phone);
+        log.info("findPw service (U): {}", user);
         if (user == null){
             throw new NullPointerException("해당 번호로 가입된 사용자가 없습니다");
         } else {
-            uno = user.getUno();
+            return user.getUno();
         }
-        return uno;
     }
 
     private User dtoToEntity(UserDTO userDTO) {

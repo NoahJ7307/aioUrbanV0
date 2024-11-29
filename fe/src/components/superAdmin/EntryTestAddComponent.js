@@ -79,28 +79,28 @@ const EntryTestAddComponent = () => {
             <div className="formGroup superAdminAdd">
                 <label className="formLabel">차량번호</label>
                 <input
-                    className={`inputBox ${errors.carNum ? 'error' : ''}`}
+                    className={`inputBox ${errors.carNum && 'error'}`}
                     name='carNum'
                     onChange={handleChange} />
             </div>
             <div className="formGroup superAdminAdd">
                 <label className="formLabel">동</label>
                 <input
-                    className={`inputBox ${errors.dong ? 'error' : ''}`}
+                    className={`inputBox ${errors.dong && 'error'}`}
                     name='dong'
                     onChange={handleChange} />
             </div>
             <div className="formGroup superAdminAdd">
                 <label className="formLabel">호</label>
                 <input
-                    className={`inputBox ${errors.ho ? 'error' : ''}`}
+                    className={`inputBox ${errors.ho && 'error'}`}
                     name='ho'
                     onChange={handleChange} />
             </div>
             <div className="formGroup superAdminAdd">
                 <label className="formLabel">입차일</label>
                 <input
-                    className={`inputBox ${errors.entryDate ? 'error' : ''}`}
+                    className={`inputBox ${errors.entryDate && 'error'}`}
                     type='date'
                     name='entryDate'
                     onChange={handleChange} />
@@ -108,7 +108,7 @@ const EntryTestAddComponent = () => {
             <div className="formGroup superAdminAdd">
                 <label className="formLabel">출차일</label>
                 <input
-                    className={`inputBox ${errors.exitDate ? 'error' : ''}`}
+                    className={`inputBox ${errors.exitDate && 'error'}`}
                     type='date'
                     name='exitDate'
                     onChange={handleChange} />
