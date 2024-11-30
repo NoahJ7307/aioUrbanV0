@@ -3,8 +3,8 @@ import { lazy, Suspense } from "react"
 const loginRouter = () => {
 
     const Loading = <div>....</div>
-    const LoginPage = lazy(() => import("../../pages/login/LoginPage"))
-    const FindPw = lazy(() => import("../../pages/login/FindPwPage"))
+    const LoginPage = lazy(() => import("../../components/login/LoginComponent"))
+    const FindPw = lazy(() => import("../../components/login/FindPwComponent"))
 
     return [
         {

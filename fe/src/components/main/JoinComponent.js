@@ -70,6 +70,10 @@ const JoinComponent = () => {
         console.log('인증번호 확인')
     }
 
+    const handleClickPhoneCheck = () => {
+
+    }
+
     const handleClick = () => {
         // 입력 예외처리
         const fieldLabels = {
@@ -128,6 +132,8 @@ const JoinComponent = () => {
             </div>
             <div className='formGroup'>
                 <div className='flex justify-end mt-6'>
+                    <button type='button' className='formButton add'
+                        onClick={handleClickPhoneCheck}>전화번호 중복 확인</button>
                     <button type='button' className='formButton add'
                         onClick={handleClickVerifySend}>인증번호 전송</button>
                     <button type='button' className='formButton add green'

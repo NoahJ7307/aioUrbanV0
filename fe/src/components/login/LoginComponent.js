@@ -47,39 +47,35 @@ const LoginComponent = () => {
 
     return (
         <div>
-            <div>
-                <Outlet />
-            </div>
-            {!isFindPw && ( // findPw 경로에서 표기 X (opacity 때문에 비침)
-                <div className='formContainer'>
-                    <div className='formGroup'>
-                        <label className='formLabel'>전화번호</label>
-                        <input className='inputBox'
-                            name='phone'
-                            placeholder='전화번호 입력'
-                            type='text'
-                            value={loginParam.phone}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className='formGroup'>
-                        <label className='formLabel'>비밀번호</label>
-                        <input className='inputBox'
-                            name='pw'
-                            type='password'
-                            placeholder='비밀번호 입력'
-                            value={loginParam.pw}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className='buttonGroup'>
-                        <button type='button' className='formButton add'
-                            onClick={handleClickFindPw}>비밀번호 찾기</button>
-                        <button type='button' className='formButton add'
-                            onClick={handleClick}>로그인</button>
-                    </div>
+            <div className='formContainer'>
+                <div className='formGroup'>
+                    <label className='formLabel'>전화번호</label>
+                    <input className='inputBox'
+                        name='phone'
+                        placeholder='전화번호 입력'
+                        type='text'
+                        value={loginParam.phone}
+                        onChange={handleChange}
+                    />
                 </div>
-            )}
+                <div className='formGroup'>
+                    <label className='formLabel'>비밀번호</label>
+                    <input className='inputBox'
+                        name='pw'
+                        type='password'
+                        placeholder='비밀번호 입력'
+                        value={loginParam.pw}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className='buttonGroup'>
+                    <button type='button' className='formButton add'
+                        onClick={handleClickFindPw}>비밀번호 찾기</button>
+                    <button type='button' className='formButton add'
+                        onClick={handleClick}>로그인</button>
+                </div>
+            </div>
+
         </div>
     )
 }
