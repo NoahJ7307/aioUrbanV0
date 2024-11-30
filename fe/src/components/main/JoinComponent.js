@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import useCustomLogin from '../hook/useCustomLogin'
-import { register, verifyPhoneSend } from '../api/mainApi'
+import { duplicateCheckPhone, register, verifyPhoneSend } from '../api/mainApi'
 import '../../css/public/public.css'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 const initState = {
     dong: '',
@@ -15,6 +16,7 @@ const initState = {
 }
 
 const JoinComponent = () => {
+    const navigate = useNavigate()
     const { moveToPath } = useCustomLogin()
     const [userData, setUserData] = useState({ ...initState })
     const [errors, setErrors] = useState({})
@@ -47,7 +49,6 @@ const JoinComponent = () => {
 
     const handleClickVerifySend = () => {
         const verifyPhone = userData.phone
-        console.log(verifyPhone.length)
         if (verifyPhone.length === 11) {
             verifyPhoneSend(verifyPhone).then(data => {
                 setVerifyNum('' + data)
@@ -71,7 +72,20 @@ const JoinComponent = () => {
     }
 
     const handleClickPhoneCheck = () => {
-
+        const verifyPhone = userData.phone
+        if (verifyPhone.length === 11) {
+            duplicateCheckPhone(verifyPhone).then(data => {
+                if (data) {
+                    alert('가입된 전화번호가 존재합니다\n비밀번호 찾기 페이지로 이동합니다')
+                    navigate('/login/findPw')
+                } else {
+                    alert('가입된 전화번호가 없습니다\n가입이 가능합니다')
+                }
+            })
+        } else {
+            alert('전화번호는 11자리 입니다')
+            return
+        }
     }
 
     const handleClick = () => {

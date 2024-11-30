@@ -22,6 +22,7 @@ public interface UserService {
     Long addRole(Long uno, UserRole role);
     void clearRole(Long uno);
     String verify(String phone);
+    boolean duplicate(String phone);
     Long findPw(String phone);
     PageResponseDTO<UserDTO> getSearchList(PageRequestDTO pageRequestDTO, UserSearchDataDTO userSearchData);
     PageResponseDTO<UserDTO> getAllSearchList(PageRequestDTO pageRequestDTO, UserSearchDataDTO userSearchData);

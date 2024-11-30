@@ -287,6 +287,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean duplicate(String phone) {
+        User user = userRepository.findByPhone(phone);
+        return user != null;
+    }
+
+    @Override
     public Long findPw(String phone) {
         User user = userRepository.findByPhone(phone);
         log.info("findPw service (P): {}", phone);

@@ -29,6 +29,12 @@ public class MainController {
         return userService.verify(phone);
     }
 
+    @PostMapping("/duplicate")
+    public boolean duplicate(@RequestParam String phone){
+        System.out.println("verify : "+ phone);
+        return userService.duplicate(phone);
+    }
+
     @PostMapping("/findPw")
     public Long findPw(@RequestParam String phone){
         System.out.println("findPw : "+ phone);

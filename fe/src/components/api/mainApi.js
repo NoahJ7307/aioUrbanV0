@@ -28,6 +28,20 @@ export const verifyPhoneSend = async (phone) => {
     return res.data
 }
 
+export const duplicateCheckPhone = async (phone) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+        },
+        params: {
+            phone: phone
+        },
+    }
+    const res = await axios.post(`${host}/duplicate`, null, config)
+    console.log(res.data)
+    return res.data
+}
+
 export const findPw = async (phone) => {
     const config = {
         headers: {

@@ -77,4 +77,11 @@ public class ServiceTests {
         Long user = userService.findPw("01011111111");
         System.out.println(user);
     }
+
+    @Test
+    public void duplicateTest(){
+        String phone = "01011112222";
+        boolean bool = userService.duplicate(phone);
+        System.out.println(bool);
+    }
 }
