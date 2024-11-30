@@ -22,20 +22,7 @@ const FacilitiesPage = () => {
    
     return (
         <BasicLayout>
-            {/* <ul className='flex justify-center'> */}
-                {/* <li>
-                    <button className='bg-blue-400 p-2' onClick={handleClickGym}>Gym</button>
-                </li>
-                <li>
-                    <button className='bg-blue-400 p-2' onClick={handleClickGolf}>Golf</button>
-                </li>
-                <li>
-                    <button className='bg-blue-400 p-2' onClick={handleClickStudy}>Study</button>
-                </li> */}
-                {/* <li>
-                    <button className='bg-blue-400 p-2' onClick={handleClickStudy}>My Reservation Page</button>
-                </li> */}
-            {/* </ul> */}
+            
              {/* 현재 경로가 /facilities 일 때만 FacilitySchedule 표시 */}
              {location.pathname === '/facilities' && <FacilitySchedule/>}
             <Outlet />

@@ -1,0 +1,152 @@
+/* 공통 스타일 */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.layout {
+    width: 100%;
+}
+
+/* 1번: 상단 배너 */
+.banner {
+    position: relative;
+    height: 300px;
+    background: center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* 어두운 레이어 처리 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner-text {
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* 2번: 중앙 시설 이미지 */
+
+
+.facility-section {
+    background-color: rgba(0, 0, 0, 0.1); /* 배경 어두운 투명도 처리 */
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 세로 가운데 정렬 */
+}
+
+.facility-pagination {
+    display: flex;
+    gap: 10px;
+}
+
+/* 이미지 컨테이너 (이미지의 크기와 위치를 제어) */
+.image-container {
+    position: relative; /* 절대 위치화 된 화살표의 기준이 됩니다 */
+}
+
+.facility-image {
+    width: 400px;
+    height: 300px;
+    border-radius: 10px;
+    transition: box-shadow 0.3s ease; /* 효과 부드럽게 변화 */
+}
+
+/* 화살표 버튼 */
+.arrow-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-size: 24px;
+    padding: 10px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10; /* 이미지보다 앞에 배치 */
+}
+
+.left-arrow {
+    left: -40px; /* 이미지의 왼쪽에 배치 */
+}
+
+.right-arrow {
+    right: -40px; /* 이미지의 오른쪽에 배치 */
+}
+
+/* 3번: 예약 폼과 좌석 배치도 */
+.reservation-section {
+    
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.1); /* 2번과 동일한 배경색 */
+
+}
+
+/* 예약 폼과 좌석 배치도 각각의 배경을 밝게 처리 */
+.reservation-form, .seat-map {
+    width: 48%; /* 각각의 너비를 설정하여 두 개가 나란히 배치될 수 있도록 */
+    background: #ffffff; /* 밝은 배경 */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+/* 예약 폼 제목 */
+.reservation-form label, .seat-map h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.reservation-form input, .reservation-form select, .reservation-form button {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.reservation-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.reservation-form button:hover {
+    background-color: #0056b3;
+}
+
+/* 좌석 배치도 섹션 */
+.seat-map {
+    position: relative; /* 자식 요소들을 절대 위치로 배치할 수 있게 해줌 */
+    text-align: center; /* 이미지의 부모 요소에 텍스트 가운데 정렬 */
+    width: 45%; /* 부모 요소 크기에 맞게 너비를 100%로 설정 */
+    max-width: 800px; /* 최대 너비를 지정할 수 있음 */
+    margin: 0 auto; /* 화면 중앙 정렬 */
+}
+
+.seat-map img {
+    /* width: 100%; */ /* 화면 크기에 맞게 배경 이미지 크기 조정 */
+    height: auto; /* 비율에 맞게 자동으로 높이 조정 */
+    /* border-radius: 10px; */
+}
+
+
+

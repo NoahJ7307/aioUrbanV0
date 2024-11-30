@@ -1,6 +1,25 @@
 const GymProgramState = ({ reservations, isParticipant, handleCancel, listTitle }) => {
+    const isPastReservation = (applicationEndDate) => {
+        const now = new Date(); // 현재 날짜 및 시간
+        const reservationEndDate = new Date(applicationEndDate); // 접수 종료일
+        return now > reservationEndDate; // 현재 시간이 종료일을 초과했는지 비교
+    };
+
+
+
+    // <ul className="list-disc pl-5 space-y-2">
+    //     {participants && participants.length > 0 ? (
+    //         participants.map((user, index) => (
+    //             <li key={`participant-${user.uno}-${index}`} className="text-lg">
+    //                 {user.userName} - {user.phone}</li>
+    //         ))
+    //     ) : (
+    //         <li className="text-gray-500">등록된 참가자가 없습니다.</li>
+    //     )}
+    // </ul>
+
     return (
-        <div>
+        <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg mb-5">
             <h2 className="text-2xl font-semibold mb-6">{listTitle}</h2>
 
             <div className="grid grid-cols-7 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
@@ -28,7 +47,6 @@ const GymProgramState = ({ reservations, isParticipant, handleCancel, listTitle 
                                     gym.participants.map((participant) => (
                                         <div key={participant.uno} className="flex flex-col">
                                             <span>{participant.userName}</span>
-                                            {/* <span>{participant.phone}</span> */}
                                         </div>
                                     ))
                                 ) : (
@@ -39,9 +57,12 @@ const GymProgramState = ({ reservations, isParticipant, handleCancel, listTitle 
                             <div className="flex justify-center items-center space-x-4 mt-4">
                                 {isParticipant && (
                                     <button
-                                        type="button"
-                                        onClick={() => handleCancel(gym.programId)}
-                                        className="px-6 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+                                        className={`px-4 py-2 rounded-md transition ${isPastReservation(gym.applicationEndDate)
+                                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                            : "bg-blue-500 text-white hover:bg-blue-600"
+                                            }`}
+                                        disabled={isPastReservation(gym.applicationEndDate)} // 버튼 비활성화
+                                        title={isPastReservation(gym.applicationEndDate) ? "접수 기간이 지난 참가 취소는 관리자에게 문의하세요." : ""}
                                     >
                                         취소
                                     </button>

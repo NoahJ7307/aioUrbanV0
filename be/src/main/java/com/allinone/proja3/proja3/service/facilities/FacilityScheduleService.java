@@ -29,6 +29,7 @@ public class FacilityScheduleService {
             existingSchedule.setFacilityName(schedule.getFacilityName());
             existingSchedule.setStartTime(schedule.getStartTime());
             existingSchedule.setEndTime(schedule.getEndTime());
+            existingSchedule.setLink(schedule.getLink());
             return repository.save(existingSchedule);
 
         }

@@ -22,4 +22,6 @@ public class FacilitySchedule {
     private LocalTime startTime;
     private LocalTime endTime;
 
+    private String link;
+
 }

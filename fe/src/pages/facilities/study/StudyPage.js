@@ -1,9 +1,12 @@
 // import StudyList from '../../components/facilities/study/StudyList'
 
 import { useCallback } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import '../../../css/facility/facilitySidebar.css'; // CSS 파일 import
+import FacilitySchedule from "../../../components/facilities/FacilitySchedule";
 
 const StudyPage = () => {
+
     const navigate = useNavigate();
     const handleClickList = useCallback(() => {
         navigate('/facilities/study/list');
@@ -18,24 +21,45 @@ const StudyPage = () => {
 
 
     return (
-        <div>
-            
+        <div className="flex">
+            <div className="facilitySidebar">
+                <h2>독서실 이용하기</h2>
 
-            <ul className='flex justify-center space-x-8'>
-                <li>
-                    <button className="button" onClick={handleClickList}>예약현황</button>
-                </li>
-                <li>
-                    <button className="button" onClick={handleClickReserve}>예약 등록 </button>
-                </li>
-                <li>
-                    <button className="button" onClick={handleClickMyPage}>나의예약</button>
-                </li>
-            
-            </ul>
-            <h1>Study Facilities</h1>
-            <Outlet/>
+                <ul>
+                    <li>
+                        <button
+                            className="facilitySidebar-button"
+                            onClick={handleClickList}
+                        >
+                            예약현황
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            className="facilitySidebar-button"
+                            onClick={handleClickReserve}
+                        >
+                            예약 등록
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            className="facilitySidebar-button"
+                            onClick={handleClickMyPage}
+                        >
+                            나의 예약
+                        </button>
+                    </li>
+
+                </ul>
+            </div>
+            <div className="facilityMain-content">
+            {/* {location.pathname === '/facilities/study' && <FacilitySchedule/>} */}
+
+                <Outlet />
+            </div>
         </div>
+
     )
 }
 

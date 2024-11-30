@@ -21,6 +21,7 @@ public class FacilityScheduleController {
         return service.getAllSchedules();
     }
     @PostMapping
+    @PutMapping
     public FacilitySchedule saveOrUpdateSchedule(@RequestBody FacilitySchedule schedule){
         System.out.println("1124:"+schedule);
         return service.saveOrUpdateSchedule(schedule);
@@ -30,8 +31,5 @@ public class FacilityScheduleController {
         System.out.println("1111: "+id);
         service.deleteSchedule(id);
     }
-    @PutMapping
-    public FacilitySchedule updateSchedule(@RequestBody FacilitySchedule schedule) {
-        return service.saveOrUpdateSchedule(schedule);
-    }
+
 }

@@ -8,8 +8,8 @@ const AdminCreateMembership = () => {
   const [message, setMessage] = useState('');
 
 
-    // 이용권명 동적 생성
-    const membershipPlanName = durationMonths === 0 ? '일일권' : `${durationMonths}개월권`;
+  // 이용권명 동적 생성
+  const membershipPlanName = durationMonths === 0 ? '일일권' : `${durationMonths}개월권`;
 
 
   const handleCreateMembership = async () => {
@@ -31,9 +31,10 @@ const AdminCreateMembership = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h1 className="text-2xl font-bold mb-6 text-center">헬스장 이용권 등록</h1>
-
+    <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+      <div className="mb-6 text-center">
+        <h2 className="text-3xl font-semibold">헬스장 이용권 등록</h2>
+      </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-1">이용권 기간 (개월)</label>
         <input
