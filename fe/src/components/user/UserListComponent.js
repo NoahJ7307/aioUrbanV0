@@ -130,7 +130,8 @@ const UserListComponent = ({ pageServerData, searchData }) => {
             </div>
 
             {/* 유저 데이터를 map으로 렌더링 */}
-            {serverData.dtoList.map((user, index) => (
+            {serverData.dtoList.filter(data => !data.userRoleList.includes('ROOT') // ROOT 권한 표기 X
+            ).map((user, index) => (
                 <label
                     key={index}
                     className={`userTable tableRow ${checked.includes(user.uno) ? "checked" : ""}`}
