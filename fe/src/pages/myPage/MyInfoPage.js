@@ -3,7 +3,9 @@ import MyInfoComponent from '../../components/myPage/MyInfoComponent'
 
 const MyInfoPage = () => {
     return (
-        <MyInfoComponent />
+        <div className='myInfoBackground'>
+            <MyInfoComponent />
+        </div>
     )
 }
 

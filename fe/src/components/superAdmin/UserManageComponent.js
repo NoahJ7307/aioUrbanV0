@@ -26,8 +26,12 @@ const UserManageComponent = ({ pageServerData, searchData }) => {
   const { exceptionHandler, loadLoginData } = useCustomLogin()
   const location = useLocation()
   const navigate = useNavigate()
+  const [allChecked, setAllChecked] = useState(false)
 
   useEffect(() => {
+    setChecked([])
+    setAllChecked(false)
+
     if (!pageServerData.dtoList || pageServerData.dtoList.length === 0) {
       try {
         if (loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT') {
@@ -80,6 +84,18 @@ const UserManageComponent = ({ pageServerData, searchData }) => {
     })
   }
 
+  const handleAllCheckChange = () => {
+    if (allChecked) {
+      // 전체 해제
+      setChecked([])
+    } else {
+      // 현재 페이지의 모든 uno를 checked에 추가
+      const allUno = serverData.dtoList.map(user => user.uno)
+      setChecked(allUno)
+    }
+    setAllChecked(!allChecked)
+  }
+
   // 체크된 항목이 변경 시 부모에 [uno] 전달 / 부모(UserPage) 업데이트
   useEffect(() => {
     if (checked.length > 0) {
@@ -93,7 +109,19 @@ const UserManageComponent = ({ pageServerData, searchData }) => {
   return (
     <div className="tableRowContainer">
       <div className="userManageTable tableHeader">
-        <div>No</div>
+        <div>
+          <label
+            htmlFor='checkbox-all'
+            className={`cursor-pointer ${allChecked ? 'selected' : ''}`}>
+            전체선택
+            <input
+              type='checkbox'
+              id='checkbox-all'
+              checked={allChecked}
+              onChange={handleAllCheckChange}
+              style={{ display: 'none' }}
+            /></label>
+        </div>
         <div>동</div>
         <div>호</div>
         <div>이름</div>

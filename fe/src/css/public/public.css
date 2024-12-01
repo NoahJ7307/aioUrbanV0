@@ -63,6 +63,17 @@ body {
   flex-direction: column;
 }
 
+/* myInfo */
+.myInfoBackground {
+  background-image: url('../../images/myInfo.jpg'); /* 이미지 경로 */
+  background-size: cover; /* 이미지를 컨테이너에 맞게 조정 */
+  background-repeat: no-repeat; /* 이미지 반복 제거 */
+  background-position: center; /* 이미지 중앙 정렬 */
+  min-height: 80vh; /* 화면 전체 높이 */
+  display: flex;
+  flex-direction: column;
+}
+
 /* -------------------------------------------- */
 
 /* --------------------메뉴-------------------- */
@@ -174,6 +185,14 @@ body {
   font-weight: 600;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
+}
+
+/* 전체선택 체크 */
+.selected {
+  text-shadow: 0 0 5px orange, 0 0 10px orange, 0 0 15px orange, 0 0 20px orange;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
 }
 
 .tableRow {

@@ -27,6 +27,7 @@ const RegularListComponent = ({ pageServerData, searchData }) => {
     const { exceptionHandler, loadLoginData } = useCustomLogin()
     const location = useLocation()
     const navigate = useNavigate()
+    const [allChecked, setAllChecked] = useState(false)
 
     const handleCheckChange = (rpno) => {
         console.log(serverData)
@@ -37,6 +38,18 @@ const RegularListComponent = ({ pageServerData, searchData }) => {
                 return [...checkedItem, rpno];
             }
         })
+    }
+
+    const handleAllCheckChange = () => {
+        if (allChecked) {
+            // 전체 해제
+            setChecked([])
+        } else {
+            // 현재 페이지의 모든 uno를 checked에 추가
+            const allUno = serverData.dtoList.map(user => user.rpno)
+            setChecked(allUno)
+        }
+        setAllChecked(!allChecked)
     }
 
     // 체크된 항목이 변경 시 부모에 [rpno] 전달 / 부모 업데이트
@@ -50,6 +63,9 @@ const RegularListComponent = ({ pageServerData, searchData }) => {
     }, [checked, setCheckedRpno]);
 
     useEffect(() => {
+        setChecked([])
+        setAllChecked(false)
+
         const loginUser = {
             dong: loadLoginData().dong,
             ho: loadLoginData().ho,
@@ -105,7 +121,19 @@ const RegularListComponent = ({ pageServerData, searchData }) => {
     return (
         <div className="tableRowContainer">
             <div className="parkingRVTable tableHeader">
-                <div>No</div>
+                <div>
+                    <label
+                        htmlFor='checkbox-all'
+                        className={`cursor-pointer ${allChecked ? 'selected' : ''}`}>
+                        전체선택
+                        <input
+                            type='checkbox'
+                            id='checkbox-all'
+                            checked={allChecked}
+                            onChange={handleAllCheckChange}
+                            style={{ display: 'none' }}
+                        /></label>
+                </div>
                 <div>차량번호</div>
                 <div>이름</div>
                 <div>동</div>
