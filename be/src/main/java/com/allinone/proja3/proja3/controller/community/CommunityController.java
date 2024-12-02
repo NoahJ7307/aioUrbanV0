@@ -21,8 +21,7 @@ public class CommunityController {
 
     @Autowired
     private CommunityService service;
-    @Autowired
-    private CommunityServiceImpl service2;
+
     @Autowired
     private UserRepository userRepository;
     // 특정 사용자의 게시물 조회

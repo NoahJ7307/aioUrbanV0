@@ -22,6 +22,5 @@ public interface MarketService {
     Market findMarketById(Long mno); // 추가된 메서드
     // 여러 개의 이미지에 대한 수정도 지원하도록 변경
     boolean modify(MarketDTO marketDTO, MultipartFile thumbnail, List<MultipartFile> images);
-
     MarketDTO findByMno(Long mno);
 }

@@ -72,6 +72,10 @@ const ParticlesContainer = styled.div`
         width: 100% !important;
         height: 100% !important;
     }
+
+    @media (max-width: 768px) {
+        opacity: 0.7;
+    }
 `;
 
 const ContentWrapper = styled.div`
@@ -93,6 +97,23 @@ const ContentWrapper = styled.div`
         opacity: 0;
         animation: ${fadeInUp} 1s forwards;
         line-height: 1.3;
+
+        @media (max-width: 1024px) {
+            font-size: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            font-size: 2.5rem;
+            text-align: center;
+            br {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            font-size: 2rem;
+            padding: 0 10px;
+        }
     }
 
     p {
@@ -101,6 +122,25 @@ const ContentWrapper = styled.div`
         opacity: 0;
         animation: ${fadeInUp} 1s forwards 0.3s;
         line-height: 1.6;
+
+        @media (max-width: 768px) {
+            font-size: 1.1rem;
+            text-align: center;
+            br {
+                display: none;
+            }
+            padding: 0 15px;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 1rem;
+            padding: 0 10px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 0 1rem;
+        align-items: center;
     }
 `;
 
@@ -114,6 +154,11 @@ const ButtonGroup = styled.div`
         flex-direction: column;
         width: 100%;
         max-width: 300px;
+        gap: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+        padding: 0 10px;
     }
 `;
 
@@ -127,6 +172,13 @@ const Button = styled.button`
     transition: all 0.3s ease;
     cursor: pointer;
     backdrop-filter: blur(5px);
+    width: auto;
+
+    @media (max-width: 768px) {
+        width: 100%;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
 
     &:hover {
         background: rgba(255, 255, 255, 0.2);
@@ -163,9 +215,13 @@ const FirstLayout = () => {
   const handleScroll = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      section.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+      const offset = sectionId === 'parking' ? -150 : -150;
+      const elementPosition = section.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset + offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
       });
     }
   };
@@ -177,7 +233,7 @@ const FirstLayout = () => {
     },
     particles: {
       number: {
-        value: 100,
+        value: window.innerWidth < 768 ? 50 : 100,
         density: {
           enable: true,
           value_area: 1900
@@ -212,7 +268,7 @@ const FirstLayout = () => {
       },
       move: {
         enable: true,
-        speed: 2,
+        speed: window.innerWidth < 768 ? 1.5 : 2,
         direction: "none",
         random: false,
         straight: false,

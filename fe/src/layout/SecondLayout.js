@@ -77,6 +77,15 @@ const ContentWrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     color: white;
+
+    @media (max-width: 768px) {
+        padding: 0 1.5rem;
+        text-align: center;
+    }
+
+    @media (max-width: 480px) {
+        padding: 0 1rem;
+    }
 `;
 
 const Title = styled.h1`
@@ -86,6 +95,22 @@ const Title = styled.h1`
     opacity: 0;
     animation: ${props => props.isVisible ? css`${slideInRight} 1s forwards` : 'none'};
     line-height: 1.3;
+
+    @media (max-width: 1024px) {
+        font-size: 3rem;
+    }
+
+    @media (max-width: 768px) {
+        font-size: 2.5rem;
+        text-align: center;
+        br {
+            display: none;
+        }
+    }
+
+    @media (max-width: 480px) {
+        font-size: 2rem;
+    }
 `;
 
 const Description = styled.p`
@@ -94,6 +119,18 @@ const Description = styled.p`
     opacity: 0;
     animation: ${props => props.isVisible ? css`${fadeInUp} 1s forwards 0.3s` : 'none'};
     line-height: 1.6;
+
+    @media (max-width: 768px) {
+        font-size: 1.1rem;
+        text-align: center;
+        br {
+            display: none;
+        }
+    }
+
+    @media (max-width: 480px) {
+        font-size: 1rem;
+    }
 `;
 
 const FacilitiesGrid = styled.div`
@@ -102,8 +139,18 @@ const FacilitiesGrid = styled.div`
     gap: 1.5rem;
     margin: 2rem 0;
 
+    @media (max-width: 1024px) {
+        gap: 1.2rem;
+    }
+
     @media (max-width: 768px) {
         grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    @media (max-width: 480px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
     }
 `;
 
@@ -120,16 +167,37 @@ const FacilityIcon = styled.div`
     ` : 'none'};
     animation-delay: ${props => props.isVisible ? props.delay : '0s'};
     cursor: pointer;
+    transition: all 0.3s ease;
     
     i {
         font-size: 2.5rem;
         margin-bottom: 0.5rem;
     }
 
+    p {
+        margin: 0.5rem 0 0;
+        font-size: 1.1rem;
+
+        @media (max-width: 768px) {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 0.9rem;
+        }
+    }
+
     &:hover {
         transform: scale(1.05);
         background: rgba(255, 255, 255, 0.2);
-        transition: all 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+        padding: 1.2rem;
+    }
+
+    @media (max-width: 480px) {
+        padding: 1rem;
     }
 `;
 
@@ -141,6 +209,14 @@ const IconButton = styled.button`
     cursor: pointer;
     padding: 0;
     margin: 0;
+
+    @media (max-width: 768px) {
+        font-size: 1.8rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 1.5rem;
+    }
 `;
 
 const Button = styled.button`
@@ -161,6 +237,18 @@ const Button = styled.button`
         background: rgba(255, 255, 255, 0.2);
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    @media (max-width: 768px) {
+        padding: 0.9rem 1.8rem;
+        font-size: 0.9rem;
+        width: 200px;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 480px) {
+        padding: 0.8rem 1.6rem;
+        width: 180px;
     }
 `;
 

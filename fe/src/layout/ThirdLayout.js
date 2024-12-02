@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-// 소용돌이 효과 애니메이션
 const vortexEffect = keyframes`
   0% {
     background: conic-gradient(from 0deg at 50% 50%,
@@ -24,14 +23,9 @@ const vortexEffect = keyframes`
   }
 `;
 
-// 아이콘 회전 효과
 const iconRotate = keyframes`
-   0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+   0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
 `;
 
 const fadeInUp = keyframes`
@@ -92,6 +86,15 @@ const ContentWrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     color: white;
+
+    @media (max-width: 768px) {
+        padding: 0 1.5rem;
+        text-align: center;
+    }
+
+    @media (max-width: 480px) {
+        padding: 0 1rem;
+    }
 `;
 
 const Title = styled.h1`
@@ -101,6 +104,22 @@ const Title = styled.h1`
     opacity: 0;
     animation: ${props => props.isVisible ? css`${fadeInUp} 1s forwards` : 'none'};
     line-height: 1.3;
+
+    @media (max-width: 1024px) {
+        font-size: 3rem;
+    }
+
+    @media (max-width: 768px) {
+        font-size: 2.5rem;
+        text-align: center;
+        br {
+            display: none;
+        }
+    }
+
+    @media (max-width: 480px) {
+        font-size: 2rem;
+    }
 `;
 
 const Description = styled.p`
@@ -109,6 +128,18 @@ const Description = styled.p`
     opacity: 0;
     animation: ${props => props.isVisible ? css`${fadeInUp} 1s forwards 0.3s` : 'none'};
     line-height: 1.6;
+
+    @media (max-width: 768px) {
+        font-size: 1.1rem;
+        text-align: center;
+        br {
+            display: none;
+        }
+    }
+
+    @media (max-width: 480px) {
+        font-size: 1rem;
+    }
 `;
 
 const IconsContainer = styled.div`
@@ -118,71 +149,122 @@ const IconsContainer = styled.div`
     justify-content: center;
     opacity: 0;
     animation: ${props => props.isVisible ? css`${fadeInUp} 1s forwards 0.6s` : 'none'};
+
+    @media (max-width: 768px) {
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    @media (max-width: 480px) {
+        gap: 1rem;
+    }
 `;
 
 const IconWrapper = styled.div`
-  position: relative;
-  width: 80px;
-  height: 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 1rem;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+
+    @media (max-width: 768px) {
+        width: 70px;
+        height: 70px;
+        margin: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+        width: 60px;
+        height: 60px;
+        margin: 0.6rem;
+    }
 `;
 
 const IconEmoji = styled.span`
-  font-size: 1.5rem;
-  margin-bottom: 0.2rem;
-  position: relative;
-  z-index: 2;
-  animation: ${iconRotate} 4s linear infinite;
+    font-size: 1.5rem;
+    margin-bottom: 0.2rem;
+    position: relative;
+    z-index: 2;
+    animation: ${iconRotate} 4s linear infinite;
+
+    @media (max-width: 768px) {
+        font-size: 1.3rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 1.2rem;
+    }
 `;
 
 const IconInner = styled.div`
-  position: relative;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    animation: ${vortexEffect} 4s linear infinite;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 3px;
-    background: rgba(60, 0, 80, 0.7);
+    position: relative;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    z-index: 1;
-  }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.3s ease;
 
-  &:hover {
-    transform: scale(1.1);
-  }
+    &::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        animation: ${vortexEffect} 4s linear infinite;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 3px;
+        background: rgba(60, 0, 80, 0.7);
+        border-radius: 50%;
+        z-index: 1;
+    }
+
+    &:hover {
+        transform: scale(1.1);
+    }
+
+    @media (max-width: 768px) {
+        width: 50px;
+        height: 50px;
+    }
+
+    @media (max-width: 480px) {
+        width: 45px;
+        height: 45px;
+    }
 `;
 
 const IconText = styled.span`
-  font-size: 0.8rem;
-  color: white;
-  position: absolute;
-  bottom: -20px;
-  width: 100%;
-  text-align: center;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 0.8rem;
+    color: white;
+    position: absolute;
+    bottom: -20px;
+    width: 100%;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+    @media (max-width: 768px) {
+        font-size: 0.75rem;
+        bottom: -18px;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 0.7rem;
+        bottom: -16px;
+    }
 `;
 
 const Button = styled.button`
@@ -198,12 +280,24 @@ const Button = styled.button`
     animation: ${props => props.isVisible ? css`${fadeInUp} 1s forwards 0.9s` : 'none'};
     cursor: pointer;
     backdrop-filter: blur(10px);
-    margin-top: 3rem;
+    margin: 3rem auto 0;
 
     &:hover {
         background: rgba(255, 255, 255, 0.2);
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    @media (max-width: 768px) {
+        padding: 0.9rem 1.8rem;
+        font-size: 0.9rem;
+        width: 200px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 0.8rem 1.6rem;
+        font-size: 0.85rem;
+        width: 180px;
     }
 `;
 
@@ -269,7 +363,7 @@ const ThirdLayout = () => {
                     실시간 소통과 정보 공유로<br />
                     더 가까워지는 이웃과의 관계
                 </Description>
-                <IconsContainer isVisible={isVisible} className='p-5 space-x-24'>
+                <IconsContainer isVisible={isVisible}>
                     {communityIcons.map((item, index) => (
                         <IconWrapper key={index}>
                             <IconInner

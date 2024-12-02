@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CommunityChatRepository extends JpaRepository<Chat,Long> {
     List<Chat> findByMarket_Mno(Long mno); // 상품 ID로 메시지 조회
+    void deleteByMarketMno(Long mno);
 }

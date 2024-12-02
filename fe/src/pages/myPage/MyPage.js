@@ -11,10 +11,11 @@ const MyPage = () => {
     const handleClickRegularList = useCallback(() => { navigate({ pathname: 'myInfo' }) })
     const handleClickVisitList = useCallback(() => { navigate({ pathname: 'mileage' }) })
     const handleClickEEList = useCallback(() => { navigate({ pathname: 'facilities' }) })
-
+    const handleClickCommunities = useCallback(() => { navigate({ pathname: 'communities' }) })
     return (
         <BasicLayout>
-        <div className="myPageContainer">
+            <Outlet/>
+        {/* <div className="myPageContainer">
             <nav className="sidebarMenu">
                 <ul className="sidebarList">
                     <li>
@@ -50,15 +51,15 @@ const MyPage = () => {
                                 className="sidebarButton"
                                 activeClassName="active"
                             >
-                                내가 쓸 글
+                                내가 쓴 글
                             </NavLink>
                         </li>
                 </ul>
             </nav>
             <div className="contentArea">
-                <Outlet />
             </div>
-        </div>
+                <Outlet />
+        </div> */}
     </BasicLayout>
     )
 }
