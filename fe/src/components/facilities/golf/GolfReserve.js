@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { reserveGolf } from '../../api/facilities/golfApi';
 import { useNavigate } from 'react-router-dom';
-import './1.css';
+import '../common/css/facilityLayout.css';
 import GolfSeatMap from './GolfSeatMap';
 
 const GolfReserve = () => {

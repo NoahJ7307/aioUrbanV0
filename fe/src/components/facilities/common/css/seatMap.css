@@ -1,0 +1,23 @@
+
+.seat-box:hover {
+    cursor: pointer;
+    fill-opacity: 0.42;
+    transition: fill 0.3s ease, fill-opacity 0.3s ease;
+}
+
+
+
+.selected {
+    fill: rgb(0, 0, 0);
+    fill-opacity: 0.5;
+}
+
+.available {
+    fill-opacity: 0;
+}
+
+/* custom-select 클래스에 스타일을 적용 */
+.custom-select {
+    max-height: 180px; /* 최대 높이를 지정 (5개 항목이 보이도록 설정) */
+    overflow-y: auto;  /* 세로로 스크롤이 가능하도록 설정 */
+}

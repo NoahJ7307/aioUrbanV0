@@ -20,7 +20,6 @@ const StudyListPage = () => {
   return (
     <>
       <StudyList setCheckedReservationId={setCheckedReservationId} page={page} size={size} />
-
       <Outlet context={{ setCheckedReservationId }} />
     </>
 

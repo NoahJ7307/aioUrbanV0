@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import './3.css';  // CSS 파일 import
+import React from 'react';
+import '../common/css/seatMap.css';  // CSS 파일 import
 import golfImage from '../../../images/golf.svg'
-import { checkAvailability } from '../../api/facilities/golfApi';
 
 const GolfSeatMap = ({ selectedTeeBox, onTeeBoxClick }) => {
 
     return (
         <div className="seat-map" style={{ position: 'relative' }}>
-            <h2>좌석 배치도</h2>
+            <h2>좌석 선택</h2>
             <div
                 style={{
                     width: '100%',
@@ -34,7 +33,7 @@ const GolfSeatMap = ({ selectedTeeBox, onTeeBoxClick }) => {
                             </g>
                         </g>
 
-                        {/* 좌석 추가 */}
+                        {/* 1번~6번 */}
                         <rect
                             className={`seat-box ${selectedTeeBox === 1 ? 'selected' : 'available'}`}
                             x="1835"
@@ -84,6 +83,8 @@ const GolfSeatMap = ({ selectedTeeBox, onTeeBoxClick }) => {
                             height="850"
                             onClick={() => onTeeBoxClick(6)}
                         />
+
+                            {/* 7번~10번 */}
                         <rect
                             className={`seat-box ${selectedTeeBox === 7 ? 'selected' : 'available'}`}
                             x="1650"
@@ -111,7 +112,7 @@ const GolfSeatMap = ({ selectedTeeBox, onTeeBoxClick }) => {
                         <rect
                             className={`seat-box ${selectedTeeBox === 10 ? 'selected' : 'available'}`}
                             x="4050"
-                            y="2610"
+                            y="2615"
                             width="810"
                             height="450"
                             onClick={() => onTeeBoxClick(10)}

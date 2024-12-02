@@ -79,7 +79,8 @@ const FacilitySchedule = () => {
     };
 
     return (
-        <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+        <div style={{
+            padding: '20px', fontFamily: 'GmarketSansMedium'  }}>
             {role === 'ADMIN' && (
                 <div style={{ marginBottom: '20px', textAlign: 'center' }}>
                     <h1 style={{ marginBottom: '10px' }}>시설별 이용시간 공지 등록</h1>
@@ -153,25 +154,31 @@ const FacilitySchedule = () => {
                     style={{
                         display: 'flex',
                         flexWrap: 'wrap',
-                        gap: '20px',
+                        gap: '80px',
                         justifyContent: 'center',
+                    
                     }}
                 >
                     {scheduleList.map((item) => (
                         <div
                             key={item.id}
                             style={{
+                        
                                 border: '1px solid #ddd',
                                 borderRadius: '10px',
-                                padding: '15px',
-                                width: '250px',
+                                padding: '50px',
+                                width: '300px',
+                                height: '300px',
                                 textAlign: 'center',
                                 backgroundColor: '#f9f9f9',
                                 boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-                                // cursor: item.link ? 'pointer' : 'default', // 링크가 있으면 클릭 가능한 느낌
+                                transition: 'transform 0.3s ease', // Adding smooth scaling transition
                             }}
+                             // Hover effect to scale the card
+                             onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                             onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                         >
-                            <h3 style={{ marginBottom: '10px', color: '#333' }}>{item.facilityName}</h3>
+                            <h3 style={{ marginBottom: '10px', color: '#333', fontSize: '33px', fontWeight: 'bold' }}>{item.facilityName}</h3>
                             <p style={{ marginBottom: '5px', color: '#555' }}>
                                 <strong>시작:</strong> {item.startTime}
                             </p>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { listGolf } from '../../api/facilities/golfApi';
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
-import { useNavigate } from 'react-router-dom';
 import { handleCheckedCancel } from './GolfCancel';
 import GolfDetailModifyModal from './GolfDetailModifyModal';
 import DatePicker from 'react-datepicker';
@@ -23,9 +22,6 @@ const initState = {
 };
 
 const GolfList = ({ page, size }) => {
-    const [uno, setUno] = useState();
-    const [userName, setUserName] = useState();
-    const [phone, setPhone] = useState();
     const [checkedReservationId, setCheckedReservationId] = useState([]);
     const [serverData, setServerData] = useState(initState);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,20 +30,10 @@ const GolfList = ({ page, size }) => {
     const [selectedTeeBox, setSelectedTeeBox] = useState(''); // 선택된 구역 상태
     const [groupedDataDate, setGroupedDataDate] = useState({});
     const [selectedDate, setSelectedDate] = useState(new Date()); // 선택된 날짜
-    const navigate = useNavigate();
     const { moveToList } = useCustom();
 
     const role = localStorage.getItem("role");
 
-    useEffect(() => {
-        const getUno = localStorage.getItem('uno');
-        const getUserName = localStorage.getItem('userName');
-        const getPhone = localStorage.getItem('phone');
-
-        if (getUno) setUno(Number(getUno));
-        if (getUserName) setUserName(getUserName);
-        if (getPhone) setPhone(getPhone);
-    }, []);
 
     const handleCheckChange = (reservationId) => {
         setCheckedReservationId((prevChecked) => {

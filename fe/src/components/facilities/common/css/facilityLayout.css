@@ -8,6 +8,7 @@ body {
     width: 100%;
 }
 
+
 /* 1번: 상단 배너 */
 .banner {
     position: relative;
@@ -32,7 +33,7 @@ body {
 
 .banner-text {
     color: white;
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: bold;
 }
 
@@ -40,7 +41,6 @@ body {
 
 
 .facility-section {
-    background-color: rgba(0, 0, 0, 0.1); /* 배경 어두운 투명도 처리 */
     padding: 20px;
     display: flex;
     justify-content: center;
@@ -54,6 +54,7 @@ body {
 
 /* 이미지 컨테이너 (이미지의 크기와 위치를 제어) */
 .image-container {
+    top: 10%;
     position: relative; /* 절대 위치화 된 화살표의 기준이 됩니다 */
 }
 
@@ -69,7 +70,7 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    color: white;
+    color: rgb(189, 189, 189);
     font-size: 24px;
     padding: 10px;
     border: none;
@@ -77,13 +78,17 @@ body {
     cursor: pointer;
     z-index: 10; /* 이미지보다 앞에 배치 */
 }
-
-.left-arrow {
-    left: -40px; /* 이미지의 왼쪽에 배치 */
+.arrow-btn:active {
+    color: #a3a3a3;  /* 버튼 클릭 시 텍스트 색상 흰색으로 변경 */
 }
 
+.left-arrow {
+    left: -100px; /* 이미지의 왼쪽에 배치 */
+}
+
+
 .right-arrow {
-    right: -40px; /* 이미지의 오른쪽에 배치 */
+    right: -100px; /* 이미지의 오른쪽에 배치 */
 }
 
 /* 3번: 예약 폼과 좌석 배치도 */
@@ -91,16 +96,16 @@ body {
     
     display: flex;
     justify-content: space-between;
-    padding: 20px;
-    background-color: rgba(0, 0, 0, 0.1); /* 2번과 동일한 배경색 */
+    padding: 50px;
+    background-color: rgba(255, 255, 255, 0.1); /* 2번과 동일한 배경색 */
 
 }
 
 /* 예약 폼과 좌석 배치도 각각의 배경을 밝게 처리 */
 .reservation-form, .seat-map {
-    width: 48%; /* 각각의 너비를 설정하여 두 개가 나란히 배치될 수 있도록 */
-    background: #ffffff; /* 밝은 배경 */
-    padding: 20px;
+    width: 50%; /* 각각의 너비를 설정하여 두 개가 나란히 배치될 수 있도록 */
+    background: #e6e6e6; /* 밝은 배경 */
+    padding: 50px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
 }
@@ -121,6 +126,7 @@ body {
     border-radius: 5px;
 }
 
+
 .reservation-form button {
     background-color: #007bff;
     color: white;
@@ -138,8 +144,8 @@ body {
     position: relative; /* 자식 요소들을 절대 위치로 배치할 수 있게 해줌 */
     text-align: center; /* 이미지의 부모 요소에 텍스트 가운데 정렬 */
     width: 45%; /* 부모 요소 크기에 맞게 너비를 100%로 설정 */
-    max-width: 800px; /* 최대 너비를 지정할 수 있음 */
-    margin: 0 auto; /* 화면 중앙 정렬 */
+    max-width: 600px; /* 최대 너비를 지정할 수 있음 */
+    margin: 1 auto; /* 화면 중앙 정렬 */
 }
 
 .seat-map img {
