@@ -17,48 +17,11 @@ const MyFacilitiesComponent = () => {
   }, [navigate]);
 
 
-  // useEffect(() => {
-  //   const storedUno = localStorage.getItem('uno');
-  //   if (storedUno) setUno(Number(storedUno));
-  // }, []);
 
-  // const handleTabChange = (tabName) => {
-  //   setSelectedTab(tabName); // 선택된 탭 변경
-  //   setPage(1); // 탭이 변경될 때 페이지 초기화
-  // };
 
   return (
-    <div className="flex">
-      <div className='facilitySidebar'>
-        <h2>나의 예약</h2>
-        <ul>
-          <li>
-            <button
-              className="facilitySidebar-button"
-              onClick={handleClickGolf}
-            >
-              골프 예약 조회
-            </button>
-          </li>
-          <li>
-            <button
-              className="facilitySidebar-button"
-              onClick={handleClickStudy}
-            >
-              스터디룸 예약 조회
-            </button>
-          </li>
-          <li>
-            <button
-              className="facilitySidebar-button"
-              onClick={handleClickGym}
-            >
-              헬스장 신청&이용권 조회
-            </button>
-          </li>
-        </ul>
-      </div>
-      <div className="facilityMain-content">
+    <div className="p-6">
+      <div >
         <Outlet />
       </div>
     </div>

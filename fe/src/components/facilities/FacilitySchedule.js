@@ -71,16 +71,17 @@ const FacilitySchedule = () => {
     };
 
     // 카드 클릭 시 링크로 이동
-    const handleBookingClick  = (link) => {
+    const handleBookingClick = (link) => {
         if (link) {
             window.location.href = link;
-           
+
         }
     };
 
     return (
         <div style={{
-            padding: '20px', fontFamily: 'GmarketSansMedium'  }}>
+            padding: '20px', fontFamily: 'GmarketSansMedium'
+        }}>
             {role === 'ADMIN' && (
                 <div style={{ marginBottom: '20px', textAlign: 'center' }}>
                     <h1 style={{ marginBottom: '10px' }}>시설별 이용시간 공지 등록</h1>
@@ -96,7 +97,7 @@ const FacilitySchedule = () => {
                                 borderRadius: '5px',
                                 width: '200px',
                             }}
-                        /> 
+                        />
                         <input
                             type="time"
                             value={schedule.startTime}
@@ -107,7 +108,7 @@ const FacilitySchedule = () => {
                                 borderRadius: '5px',
                                 width: '150px',
                             }}
-                        /> 
+                        />
                         <input
                             type="time"
                             value={schedule.endTime}
@@ -121,7 +122,7 @@ const FacilitySchedule = () => {
                         />
                         <input
                             type="url"
-                            placeholder= "연결링크(전체 URL을 입력하세요)"
+                            placeholder="연결링크(전체 URL을 입력하세요)"
                             value={schedule.link}
                             onChange={(e) => setSchedule({ ...schedule, link: e.target.value })}
                             style={{
@@ -147,8 +148,10 @@ const FacilitySchedule = () => {
                     </div>
                 </div>
             )}
-
-            <h2 style={{ textAlign: 'center', marginBottom: '20px', fontSize: '30px' }}>시설별 이용시간 안내</h2>
+            <div className="mb-6 text-center">
+                <h2 className="text-3xl font-semibold">시설별 이용시간 안내</h2>
+            </div>
+            
             {scheduleList.length > 0 ? (
                 <div
                     style={{
@@ -156,14 +159,14 @@ const FacilitySchedule = () => {
                         flexWrap: 'wrap',
                         gap: '80px',
                         justifyContent: 'center',
-                    
+
                     }}
                 >
                     {scheduleList.map((item) => (
                         <div
                             key={item.id}
                             style={{
-                        
+
                                 border: '1px solid #ddd',
                                 borderRadius: '10px',
                                 padding: '50px',
@@ -174,9 +177,9 @@ const FacilitySchedule = () => {
                                 boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
                                 transition: 'transform 0.3s ease', // Adding smooth scaling transition
                             }}
-                             // Hover effect to scale the card
-                             onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                             onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                            // Hover effect to scale the card
+                            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                         >
                             <h3 style={{ marginBottom: '10px', color: '#333', fontSize: '33px', fontWeight: 'bold' }}>{item.facilityName}</h3>
                             <p style={{ marginBottom: '5px', color: '#555' }}>
@@ -216,9 +219,9 @@ const FacilitySchedule = () => {
                                     </button>
                                 </div>
                             )}
-                             {/* 예약하러 가기 버튼 */}
-                             {item.link && (
-                                <div style={{ marginTop: '10px' }}>
+                            {/* 예약하러 가기 버튼 */}
+                            {item.link && (
+                                <div style={{ marginTop: '40px' }}>
                                     <button
                                         onClick={() => handleBookingClick(item.link)}
                                         style={{
@@ -230,7 +233,7 @@ const FacilitySchedule = () => {
                                             cursor: 'pointer',
                                         }}
                                     >
-                                        { item.facilityName} 이용하기
+                                        {item.facilityName} 이용하기
                                     </button>
                                 </div>
                             )}
