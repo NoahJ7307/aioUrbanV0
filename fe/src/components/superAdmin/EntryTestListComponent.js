@@ -25,6 +25,7 @@ const EntryTestListComponent = ({ pageServerData, searchData, checkedEeno, setCh
     const { exceptionHandler } = useCustomLogin()
     const location = useLocation()
     const navigate = useNavigate()
+    const [allChecked, setAllChecked] = useState(false)
 
     const handleCheckChange = (eeno) => {
         setCheckedEeno(checkedItem => {
@@ -36,7 +37,22 @@ const EntryTestListComponent = ({ pageServerData, searchData, checkedEeno, setCh
         })
     }
 
+    const handleAllCheckChange = () => {
+        if (allChecked) {
+            // 전체 해제
+            setCheckedEeno([])
+        } else {
+            // 현재 페이지의 모든 uno를 checked에 추가
+            const allUno = serverData.dtoList.map(user => user.eeno)
+            setCheckedEeno(allUno)
+        }
+        setAllChecked(!allChecked)
+    }
+
     useEffect(() => {
+        setCheckedEeno([])
+        setAllChecked(false)
+
         if (!pageServerData.dtoList || pageServerData.dtoList.length === 0) { // 검색 결과 유무 분기
             entryGetList({ page, size }).then(data => {
                 if (data.error) {
@@ -77,7 +93,19 @@ const EntryTestListComponent = ({ pageServerData, searchData, checkedEeno, setCh
     return (
         <div className="tableRowContainer">
             <div className="entryListTable tableHeader">
-                <div>삭제할 항목</div>
+                <div>
+                    <label 
+                    htmlFor='checkbox-all' 
+                    className={`cursor-pointer ${allChecked ? 'selected' : ''}`}>
+                        삭제항목 전체선택
+                        <input
+                            type='checkbox'
+                            id='checkbox-all'
+                            checked={allChecked}
+                            onChange={handleAllCheckChange}
+                            style={{ display: 'none' }}
+                        /></label>
+                </div>
                 <div>차량번호</div>
                 <div>동</div>
                 <div>호</div>
@@ -100,8 +128,8 @@ const EntryTestListComponent = ({ pageServerData, searchData, checkedEeno, setCh
                         onChange={() => handleCheckChange(entry.eeno)}
                     />
                     <div>{entry.carNum}</div>
-                    <div>{entry.dong ? entry.dong : ''}</div>
-                    <div>{entry.ho ? entry.ho : ''}</div>
+                    <div>{entry.dong && entry.dong}</div>
+                    <div>{entry.ho && entry.ho}</div>
                     <div>{entry.entryDate}</div>
                     <div>{entry.exitDate}</div>
                     <div>{entry.exit ? '출차완료' : '미출차'}</div>

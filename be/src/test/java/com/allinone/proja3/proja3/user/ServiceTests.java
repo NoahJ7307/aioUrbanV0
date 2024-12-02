@@ -69,6 +69,19 @@ public class ServiceTests {
 
     @Test
     public void addRoleTest(){
-        userService.addRole(77L, UserRole.USER);
+        userService.addRole(78L, UserRole.USER);
+    }
+
+    @Test
+    public void findPwTest(){
+        Long user = userService.findPw("01011111111");
+        System.out.println(user);
+    }
+
+    @Test
+    public void duplicateTest(){
+        String phone = "01011112222";
+        boolean bool = userService.duplicate(phone);
+        System.out.println(bool);
     }
 }

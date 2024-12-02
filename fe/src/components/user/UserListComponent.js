@@ -20,14 +20,18 @@ const initState = {
 
 const UserListComponent = ({ pageServerData, searchData }) => {
     const [serverData, setServerData] = useState(initState)
-    const { page, size, moveToList } = useCustom()
+    const { page, size } = useCustom()
     const [checked, setChecked] = useState([])
     const { setCheckedUno } = useOutletContext() // 부모에게서 전달된 함수
     const { exceptionHandler, loadLoginData } = useCustomLogin()
     const location = useLocation()
     const navigate = useNavigate()
+    const [allChecked, setAllChecked] = useState(false)
 
     useEffect(() => {
+        setChecked([])
+        setAllChecked(false)
+
         if (!pageServerData.dtoList || pageServerData.dtoList.length === 0) {
             try {
                 if (loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT') {
@@ -80,6 +84,18 @@ const UserListComponent = ({ pageServerData, searchData }) => {
         })
     }
 
+    const handleAllCheckChange = () => {
+        if (allChecked) {
+            // 전체 해제
+            setChecked([])
+        } else {
+            // 현재 페이지의 모든 uno를 checked에 추가
+            const allUno = serverData.dtoList.map(user => user.uno)
+            setChecked(allUno)
+        }
+        setAllChecked(!allChecked)
+    }
+
     // 체크된 항목이 변경 시 부모에 [uno] 전달 / 부모(UserPage) 업데이트
     useEffect(() => {
         if (checked.length > 0) {
@@ -93,7 +109,19 @@ const UserListComponent = ({ pageServerData, searchData }) => {
     return (
         <div className="tableRowContainer">
             <div className="userTable tableHeader">
-                <div>No</div>
+                <div>
+                    <label
+                        htmlFor='checkbox-all'
+                        className={`cursor-pointer ${allChecked ? 'selected' : ''}`}>
+                        전체선택
+                        <input
+                            type='checkbox'
+                            id='checkbox-all'
+                            checked={allChecked}
+                            onChange={handleAllCheckChange}
+                            style={{ display: 'none' }}
+                        /></label>
+                </div>
                 <div>동</div>
                 <div>호</div>
                 <div>이름</div>
@@ -102,7 +130,8 @@ const UserListComponent = ({ pageServerData, searchData }) => {
             </div>
 
             {/* 유저 데이터를 map으로 렌더링 */}
-            {serverData.dtoList.map((user, index) => (
+            {serverData.dtoList.filter(data => !data.userRoleList.includes('ROOT') // ROOT 권한 표기 X
+            ).map((user, index) => (
                 <label
                     key={index}
                     className={`userTable tableRow ${checked.includes(user.uno) ? "checked" : ""}`}

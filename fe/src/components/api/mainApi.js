@@ -19,8 +19,62 @@ export const verifyPhoneSend = async (phone) => {
         headers: {
             "Content-Type": "application/json",
         },
+        params: {
+            phone: phone
+        },
     }
-    const res = await axios.post(`${host}/verify`, JSON.stringify(phone), config)
+    const res = await axios.post(`${host}/verify`, null, config)
     console.log(res.data)
     return res.data
+}
+
+export const duplicateCheckPhone = async (phone) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+        },
+        params: {
+            phone: phone
+        },
+    }
+    const res = await axios.post(`${host}/duplicate`, null, config)
+    console.log(res.data)
+    return res.data
+}
+
+export const findPw = async (phone) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+        },
+        params: {
+            phone: phone
+        }
+    }
+    try {
+        const res = await axios.post(`${host}/findPw`, null, config)
+        return res.data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const changePw = async (pw, uno) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }
+
+    const body = {
+        pw: pw,
+        uno: uno
+    }
+
+    try {
+        const res = await axios.post(`${host}/changePw`, body, config)
+        return res.data
+    } catch (error) {
+        throw error
+    }
 }

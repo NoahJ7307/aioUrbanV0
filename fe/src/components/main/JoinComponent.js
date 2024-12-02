@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import useCustomLogin from '../hook/useCustomLogin'
-import { register, verifyPhoneSend } from '../api/mainApi'
+import { duplicateCheckPhone, register, verifyPhoneSend } from '../api/mainApi'
 import '../../css/public/public.css'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 const initState = {
     dong: '',
@@ -15,6 +16,7 @@ const initState = {
 }
 
 const JoinComponent = () => {
+    const navigate = useNavigate()
     const { moveToPath } = useCustomLogin()
     const [userData, setUserData] = useState({ ...initState })
     const [errors, setErrors] = useState({})
@@ -47,7 +49,6 @@ const JoinComponent = () => {
 
     const handleClickVerifySend = () => {
         const verifyPhone = userData.phone
-        console.log(verifyPhone.length)
         if (verifyPhone.length === 11) {
             verifyPhoneSend(verifyPhone).then(data => {
                 setVerifyNum('' + data)
@@ -68,6 +69,23 @@ const JoinComponent = () => {
             setIsVerify(false)
         }
         console.log('인증번호 확인')
+    }
+
+    const handleClickPhoneCheck = () => {
+        const verifyPhone = userData.phone
+        if (verifyPhone.length === 11) {
+            duplicateCheckPhone(verifyPhone).then(data => {
+                if (data) {
+                    alert('가입된 전화번호가 존재합니다\n비밀번호 찾기 페이지로 이동합니다')
+                    navigate('/login/findPw')
+                } else {
+                    alert('가입된 전화번호가 없습니다\n가입이 가능합니다')
+                }
+            })
+        } else {
+            alert('전화번호는 11자리 입니다')
+            return
+        }
     }
 
     const handleClick = () => {
@@ -121,7 +139,7 @@ const JoinComponent = () => {
         <div className='formContainer'>
             <div className='formGroup'>
                 <label className='formLabel'>이름</label>
-                <input className={`inputBox ${errors.userName ? 'error' : ''}`}
+                <input className={`inputBox ${errors.userName && 'error'}`}
                     name='userName'
                     placeholder='이름 입력'
                     onChange={handleChange} />
@@ -129,30 +147,31 @@ const JoinComponent = () => {
             <div className='formGroup'>
                 <div className='flex justify-end mt-6'>
                     <button type='button' className='formButton add'
-                        onClick={handleClickVerifySend}>인증번호 전송</button>
+                        onClick={handleClickPhoneCheck}>전화번호 중복 확인</button>
                     <button type='button' className='formButton add'
+                        onClick={handleClickVerifySend}>인증번호 전송</button>
+                    <button type='button' className='formButton add green'
                         onClick={handleClickVerifyCheck}>인증 확인</button>
                 </div>
             </div>
             <div className='formGroup'>
                 <label className='formLabel'>전화번호</label>
-                <input className={`inputBox ${errors.phone ? 'error' : ''}`}
+                <input className={`inputBox ${errors.phone && 'error'}`}
                     name='phone'
                     value={userData.phone}
                     placeholder='전화번호 입력'
-                    // onChange={handleChange} />
                     onChange={handlePhoneChange} />
             </div>
             <div className='formGroup'>
                 <label className='formLabel'>인증번호</label>
-                <input className={`inputBox ${errors.verifyNumber ? 'error' : ''}`}
+                <input className={`inputBox ${errors.verifyNumber && 'error'}`}
                     name='verifyNumber'
                     placeholder='인증번호 입력'
                     onChange={handleChange} />
             </div>
             <div className='formGroup'>
                 <label className='formLabel'>비밀번호</label>
-                <input className={`inputBox ${errors.pw ? 'error' : ''}`}
+                <input className={`inputBox ${errors.pw && 'error'}`}
                     type='password'
                     name='pw'
                     placeholder='비밀번호 입력'
@@ -160,7 +179,7 @@ const JoinComponent = () => {
             </div>
             <div className='formGroup'>
                 <label className='formLabel'>비밀번호 확인</label>
-                <input className={`inputBox ${errors.verifyPw ? 'error' : ''}`}
+                <input className={`inputBox ${errors.verifyPw && 'error'}`}
                     type='password'
                     name='verifyPw'
                     placeholder='비밀번호 입력'
@@ -168,14 +187,14 @@ const JoinComponent = () => {
             </div>
             <div className='formGroup'>
                 <label className='formLabel'>동</label>
-                <input className={`inputBox ${errors.dong ? 'error' : ''}`}
+                <input className={`inputBox ${errors.dong && 'error'}`}
                     name='dong'
                     placeholder='동 입력'
                     onChange={handleChange} />
             </div>
             <div className='formGroup'>
                 <label className='formLabel'>호</label>
-                <input className={`inputBox ${errors.ho ? 'error' : ''}`}
+                <input className={`inputBox ${errors.ho && 'error'}`}
                     name='ho'
                     placeholder='호 입력'
                     onChange={handleChange} />

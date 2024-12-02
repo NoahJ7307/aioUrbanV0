@@ -14,7 +14,7 @@ const PageComponent = ({ serverData, movePage }) => {
             {serverData.pageNumList.map(pageNum =>
                 <div key={pageNum}
                     className={`paginationButton
-                            ${serverData.current === pageNum ? 'active' : ''}`}
+                            ${serverData.current === pageNum && 'active'}`}
                     onClick={() => movePage({ page: pageNum })}>
                     {pageNum}
                 </div>

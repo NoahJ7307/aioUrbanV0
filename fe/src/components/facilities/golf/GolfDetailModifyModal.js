@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import GolfList from './GolfList'
-import { listGolf, modifyGolf, getUserGolfById } from '../../api/facilities/golfApi'
-import useFormFields from '../../hook/facilities/useFormFields'
+import { modifyGolf, getUserGolfById } from '../../api/facilities/golfApi'
 import './GolfDetailModifyModal.css';
-import useCustom from '../../hook/useCustom';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { collapseToast } from 'react-toastify';
-import GolfCancel, { handleSingleCancel } from './GolfCancel';
+import {  useSearchParams } from 'react-router-dom';
+import { handleSingleCancel } from './GolfCancel';
 
 const GolfDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
 
@@ -137,7 +133,7 @@ const GolfDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
 
                     <div className="modal-buttons">
                         <button type="submit" className="btn-save">저장</button>
-                        <button type="button" onClick={handleDelete} className="btn-delete">삭제</button>
+                        <button type="button" onClick={handleDelete} className="btn-delete">예약취소</button>
                         <button type="button" onClick={closeModal} className="btn-cancel">취소</button>
                     </div>
                 </form>

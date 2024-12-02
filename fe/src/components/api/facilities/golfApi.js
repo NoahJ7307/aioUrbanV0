@@ -108,3 +108,13 @@ export const myPageGolfReservations = async (uno, page, size) => {
         throw error;
     }
 }
+export const checkAvailability = async (reservationData) => {
+    const config = getConfig();
+    try {
+        const response = await axios.post(`${host}/check-availability`, reservationData, config)
+        return response.data.isAvailable;
+    }catch (error) {
+        console.error("예약 가능 여부 확인 실패:", error);
+        return false;
+    }
+}

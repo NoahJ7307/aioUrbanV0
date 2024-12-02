@@ -60,7 +60,7 @@ const VisitAddComponent = () => {
       <div className="formGroup">
         <label className="formLabel">차량번호</label>
         <input
-          className={`inputBox ${errors.carNum ? 'error' : ''}`}
+          className={`inputBox ${errors.carNum && 'error'}`}
           name="carNum"
           placeholder="차량번호 입력"
           onChange={handleChange}
@@ -69,7 +69,7 @@ const VisitAddComponent = () => {
       <div className="formGroup">
         <label className="formLabel">이름</label>
         <input
-          className={`inputBox ${errors.name ? 'error' : ''}`}
+          className={`inputBox ${errors.name && 'error'}`}
           name="name"
           placeholder="이름 입력"
           onChange={handleChange}
@@ -82,7 +82,7 @@ const VisitAddComponent = () => {
           <div className="formGroup">
             <label className="formLabel">동</label>
             <input
-              className={`inputBox ${errors.dong ? 'error' : ''}`}
+              className={`inputBox ${errors.dong && 'error'}`}
               name='dong'
               value={loadLoginData().dong}
               placeholder="수정 불가"
@@ -92,7 +92,7 @@ const VisitAddComponent = () => {
           <div className="formGroup">
             <label className="formLabel">호</label>
             <input
-              className={`inputBox ${errors.ho ? 'error' : ''}`}
+              className={`inputBox ${errors.ho && 'error'}`}
               name='ho'
               value={loadLoginData().ho}
               placeholder="수정 불가"
@@ -105,7 +105,7 @@ const VisitAddComponent = () => {
           <div className="formGroup">
             <label className="formLabel">동</label>
             <input
-              className={`inputBox ${errors.dong ? 'error' : ''}`}
+              className={`inputBox ${errors.dong && 'error'}`}
               name='dong'
               placeholder="동 입력"
               onChange={handleChange} />
@@ -113,7 +113,7 @@ const VisitAddComponent = () => {
           <div className="formGroup">
             <label className="formLabel">호</label>
             <input
-              className={`inputBox ${errors.ho ? 'error' : ''}`}
+              className={`inputBox ${errors.ho && 'error'}`}
               name='ho'
               placeholder="호 입력"
               onChange={handleChange} />
@@ -123,7 +123,7 @@ const VisitAddComponent = () => {
       <div className="formGroup">
         <label className="formLabel">전화번호</label>
         <input
-          className={`inputBox ${errors.phone ? 'error' : ''}`}
+          className={`inputBox ${errors.phone && 'error'}`}
           name="phone"
           placeholder="전화번호 입력"
           onChange={handleChange}
@@ -133,7 +133,7 @@ const VisitAddComponent = () => {
       <div className="formGroup">
         <label className="formLabel">입차 예상 날짜</label>
         <input
-          className={`inputBox ${errors.expectedDate ? 'error' : ''}`}
+          className={`inputBox ${errors.expectedDate && 'error'}`}
           type='date'
           name='expectedDate'
           onChange={handleChange} />

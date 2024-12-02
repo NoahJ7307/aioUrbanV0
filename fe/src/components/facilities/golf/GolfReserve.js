@@ -1,49 +1,70 @@
-import React, { useEffect, useState } from 'react'
-import { listGolf, reserveGolf } from '../../api/facilities/golfApi';
-import loadLoginData from '../../hook/useCustomLogin'
+import React, { useEffect, useState } from 'react';
+import { reserveGolf } from '../../api/facilities/golfApi';
 import { useNavigate } from 'react-router-dom';
-import useFormFields from '../../hook/facilities/useFormFields';
+import './1.css';
+import GolfSeatMap from './GolfSeatMap';
 
 const GolfReserve = () => {
-    const [uno, setUno] = useState()
-    const navigate = useNavigate()
-    const [formData, handleFieldChange] = useFormFields({
+    const [uno, setUno] = useState();
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
         date: '',
         startTime: '',
         endTime: '',
         teeBox: '',
     });
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [selectedTeeBox, setSelectedTeeBox] = useState(null);
 
+    const images = [
+        '/images/g1.png',
+        '/images/g2.png',
+        '/images/g3.png',
+    ];
 
     useEffect(() => {
         const getUno = localStorage.getItem('uno');
         if (getUno) {
             setUno(Number(getUno));
-            console.log("불렸다 UNO : " + getUno)
-
+            console.log('불렸다 UNO : ' + getUno);
         } else {
-            console.log("로그인 정보가 없습니다.");
+            console.log('로그인 정보가 없습니다.');
         }
     }, []);
+
+    const handleFieldChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => {
+            const newFormData = {
+                ...prevData,
+                [name]: value,
+            };
+
+            if (name === 'teeBox') {
+                setSelectedTeeBox(Number(value)); // 셀렉트 박스가 변경되면 해당 티박스를 클릭한 것처럼 처리
+            }
+
+            return newFormData;
+        });
+    };
+
     const validateReservation = (data) => {
         const selectedDate = new Date(data.date);
         const today = new Date();
-        console.log("today:", today, "selectedDate", selectedDate)
-
         if (selectedDate < today.setHours(0, 0, 0, 0)) {
-            alert("선택하신 날짜는 오늘 이후여야 합니다.");
+            alert('선택하신 날짜는 오늘 이후여야 합니다.');
             return false;
         }
 
         const startTime = new Date(`${data.date}T${data.startTime}`);
         const endTime = new Date(`${data.date}T${data.endTime}`);
         if (startTime >= endTime) {
-            alert("시작 시간은 종료 시간보다 이전이어야 합니다.");
+            alert('시작 시간은 종료 시간보다 이전이어야 합니다.');
             return false;
         }
 
         if (selectedDate.toDateString() === today.toDateString() && startTime <= today) {
-            alert("예약 시작 시간은 현재 시간 이후여야 합니다.");
+            alert('예약 시작 시간은 현재 시간 이후여야 합니다.');
             return false;
         }
 
@@ -64,95 +85,129 @@ const GolfReserve = () => {
             delFlag: false,
             teeBox: parseInt(formData.teeBox),
         };
-        console.log(reservationData)
-
 
         if (!validateReservation(reservationData)) {
-            return;//유효하지 않으면 중단
+            return;
         }
 
         try {
             await reserveGolf(reservationData);
             alert('예약에 성공하셨습니다 😃');
-            navigate('/facilities/golf/list')
+            navigate('/facilities/golf/list');
         } catch (error) {
-            console.error("error발생 :", error);
-            alert('해당 시간대에 이미 예약된 좌석입니다. 다른 시간대를 선택해 주세요 😥 ')
-
+            console.error('error발생 :', error);
+            alert('해당 시간대에 이미 예약된 좌석입니다. 다른 시간대를 선택해 주세요 😥 ');
         }
     };
 
+    const handlePrevImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
+    };
+
+    const handleNextImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
+    };
+
+    const handleTeeBoxClick = (teeBoxNumber) => {
+        setSelectedTeeBox(teeBoxNumber);
+        setFormData({
+            ...formData,
+            teeBox: teeBoxNumber,
+        });
+    };
 
     return (
-        <div className="p-6 bg-white rounded-lg shadow-lg max-w-md mx-auto">
-            <h2 className="text-2xl font-bold text-center mb-6">Reserve Golf</h2>
-    
-            <div className="mb-4">
-                <label htmlFor="date" className="block text-sm font-medium text-gray-700">예약 날짜</label>
-                <input
-                    type="date"
-                    name="date"
-                    placeholder="예약날짜"
-                    value={formData.date}
-                    onChange={handleFieldChange}
-                    className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                />
-            </div>
-    
-            <div className="mb-4">
-                <label htmlFor="startTime" className="block text-sm font-medium text-gray-700">사용 시작 시간</label>
-                <input
-                    type="time"
-                    name="startTime"
-                    placeholder="사용시작시간"
-                    value={formData.startTime}
-                    onChange={handleFieldChange}
-                    className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                />
-            </div>
-    
-            <div className="mb-6">
-                <label htmlFor="endTime" className="block text-sm font-medium text-gray-700">사용 종료 시간</label>
-                <input
-                    type="time"
-                    name="endTime"
-                    placeholder="사용종료시간"
-                    value={formData.endTime}
-                    onChange={handleFieldChange}
-                    className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                />
-            </div>
-    
-            {/* 예약구역 선택 */}
-            <div className="mb-4">
-                <label htmlFor="teeBox" className="block text-sm font-medium text-gray-700">예약 구역</label>
-                <select
-                    id="teeBox"
-                    name="teeBox"
-                    value={formData.teeBox}
-                    onChange={handleFieldChange}
-                    className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                >
-                    <option value="">구역을 선택하세요</option>
-                    {Array.from({ length: 10 }, (_, index) => (
-                        <option key={index + 1} value={index + 1}>
-                            {index + 1}
-                        </option>
-                    ))}
-                </select>
-            </div>
-    
-            {/* 예약 버튼 */}
-            <div className="mt-6 flex justify-center">
-                <button
-                    onClick={handleReserve}
-                    className="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
-                >
-                    예약하기
-                </button>
+        <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+            <div className='layout'>
+                <div className="banner"
+                    style={{
+                        backgroundImage: `url('/images/g0.jpg')`, 
+                    }}>
+                    <div className="banner-overlay">
+                        <h1 className="banner-text">골프장 예약하기</h1>
+                    </div>
+                </div>
+
+                <div className="facility-section">
+                    <div className="mb-6 text-center">
+                        <div className="facility-pagination">
+                            <div className="flex justify-between items-center mb-10 relative">
+                                <button onClick={handlePrevImage} className="arrow-btn left-arrow">
+                                    ◀
+                                </button>
+                                <div className="image-container">
+                                    <img
+                                        src={images[currentImageIndex]}
+                                        alt={`골프장 이미지 ${currentImageIndex + 1}`}
+                                        className="facility-image"
+                                    />
+                                </div>
+                                <button onClick={handleNextImage} className="arrow-btn right-arrow">
+                                    ▶
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="reservation-section">
+                    <div className="reservation-form">
+                        <form>
+                            <label style={{ display: "block", textAlign: "center", marginBottom: "1rem" }}>
+                                예약 날짜 선택하기
+                            </label>
+                            <input
+                                type="date"
+                                name="date"
+                                value={formData.date}
+                                onChange={handleFieldChange}
+                                className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-600"
+                            />
+                            <h2 htmlFor="startTime">이용 시간</h2>
+                            <input
+                                type="time"
+                                name="startTime"
+                                value={formData.startTime}
+                                onChange={handleFieldChange}
+                                className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-600"
+                            />
+                            <h2 htmlFor="endTime">이용 종료 시간</h2>
+                            <input
+                                type="time"
+                                name="endTime"
+                                value={formData.endTime}
+                                onChange={handleFieldChange}
+                                className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-600"
+                            />
+                            <h htmlFor="teeBox">예약 구역</h>
+                            <select
+                                id="teeBox"
+                                name="teeBox"
+                                value={formData.teeBox}
+                                onChange={handleFieldChange}
+                                className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-600"
+                            >
+                                <option value="">구역을 선택하세요</option>
+                                {Array.from({ length: 10 }, (_, index) => (
+                                    <option key={index + 1} value={index + 1}>
+                                        {index + 1}
+                                    </option>
+                                ))}
+                            </select>
+                            <button
+                                type="button"
+                                onClick={handleReserve}
+                                className="w-full py-2 px-4 mt-6 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+                            >
+                                예약하기
+                            </button>
+                        </form>
+                    </div>
+
+                    <GolfSeatMap selectedTeeBox={selectedTeeBox} onTeeBoxClick={handleTeeBoxClick} />
+                </div>
             </div>
         </div>
     );
 };
-
-export default GolfReserve
+export default GolfReserve;
