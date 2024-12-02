@@ -87,6 +87,7 @@ const InfoMainComponents = () => {
         return new Promise((resolve) => {
             const kakao = window.kakao;
             const ps = new kakao.maps.services.Places();
+            
             ps.keywordSearch(companyName, (data, status) => {
                 if (status === kakao.maps.services.Status.OK && data[0]) {
                     const { y: latitude, x: longitude } = data[0];

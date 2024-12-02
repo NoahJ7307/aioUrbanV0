@@ -52,4 +52,5 @@ public class Market {
     public void preUpdate() {
         System.out.println("UpdatedAt: " + updatedAt);  // 엔티티가 수정될 때 로그 출력
     }
+
 }

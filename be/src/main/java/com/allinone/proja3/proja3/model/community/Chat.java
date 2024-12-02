@@ -44,4 +44,5 @@ public class Chat {
     public void prePersist() {
         this.timestamp = LocalDateTime.now(); // 메시지 전송 시 현재 시간 설정
     }
+
 }

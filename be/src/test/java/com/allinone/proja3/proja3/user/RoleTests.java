@@ -26,11 +26,11 @@ public class RoleTests {
     @Test
     public void insertRolesRoot() {
         User userRoot = User.builder()
-                .userName("유저재윤")
-                .phone("유저재윤")
+                .userName("유저유림")
+                .phone("유저유림")
                 .pw(passwordEncoder.encode("1111"))
                 .build();
-        userRoot.addRole(UserRole.USER);
+        userRoot.addRole(UserRole.ROOT);
         repository.save(userRoot);
     }
 

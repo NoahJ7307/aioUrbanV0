@@ -6,7 +6,11 @@ import com.allinone.proja3.proja3.dto.community.MarketDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.community.Market;
 import com.allinone.proja3.proja3.repository.UserRepository;
+import com.allinone.proja3.proja3.repository.community.CommunityChatRepository;
 import com.allinone.proja3.proja3.repository.community.CommunityMarketRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,10 +34,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MarketServiceImpl implements MarketService {
+    @PersistenceContext
+    private EntityManager entityManager;
     private final CommunityMarketRepository repository;
     private final UserRepository userRepository; // UserRepository 주입
     private final String uploadDir = "upload"; // 이미지가 저장될 디렉토리 경로 설정
+    private final CommunityChatRepository chatRepository;
 
     @Override
     public PageResponseDTO<MarketDTO> findAllmarket(PageRequestDTO pageRequestDTO) {
@@ -127,7 +135,6 @@ public class MarketServiceImpl implements MarketService {
     }
 
 
-
     @Override
     public void deletePost(Long mno, Long uno) {
         // 게시글 찾기
@@ -139,6 +146,9 @@ public class MarketServiceImpl implements MarketService {
             throw new SecurityException("본인만 게시글을 삭제할 수 있습니다.");
         }
 
+        // 외래 키 무시 설정
+        entityManager.createNativeQuery("SET FOREIGN_KEY_CHECKS = 0").executeUpdate();
+
         // 썸네일 삭제
         deleteFile(market.getThumbnailUrl());
 
@@ -147,13 +157,21 @@ public class MarketServiceImpl implements MarketService {
 
         // 게시글 삭제
         repository.delete(market);
+
+        // 외래 키 복원
+        entityManager.createNativeQuery("SET FOREIGN_KEY_CHECKS = 1").executeUpdate();
     }
+
+
 
     @Override
     public void deletePostByAdmin(Long mno) {
-        // 관리자 권한으로 삭제
+        // 게시글 찾기
         Market market = repository.findById(mno)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다: " + mno));
+
+        // 외래 키 무시 설정
+        entityManager.createNativeQuery("SET FOREIGN_KEY_CHECKS = 0").executeUpdate();
 
         // 썸네일 삭제
         deleteFile(market.getThumbnailUrl());
@@ -163,6 +181,9 @@ public class MarketServiceImpl implements MarketService {
 
         // 게시글 삭제
         repository.delete(market);
+
+        // 외래 키 복원
+        entityManager.createNativeQuery("SET FOREIGN_KEY_CHECKS = 1").executeUpdate();
     }
 
 

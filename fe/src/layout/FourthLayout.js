@@ -1,4 +1,3 @@
-// FourthLayout.js
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
@@ -29,9 +28,9 @@ const car1Animation = keyframes`
     0% { transform: translateX(-100px); }
     15% { transform: translateX(50px); }
     60% { transform: translateX(50px); }
-    75% { transform: translateX(100px); }
-    90% { transform: translateX(100px) translateY(60px); }
-    100% { transform: translateX(100px) translateY(70px); }
+    75% { transform: translateX(70px); }
+    90% { transform: translateX(80px) translateY(40px); }
+    100% { transform: translateX(90px) translateY(65px); }
 `;
 
 const car2Animation = keyframes`
@@ -39,9 +38,9 @@ const car2Animation = keyframes`
     15% { transform: translateX(135px); }
     30% { transform: translateX(135px) translateY(-25px); }
     45% { transform: translateX(0) translateY(-30px); }
-    60% { transform: translateX(-100px) translateY(-30px); }
-    75% { transform: translateX(-100px) translateY(-70px); }
-    100% { transform: translateX(-100px) translateY(-90px); }
+    60% { transform: translateX(-70px) translateY(-30px); }
+    75% { transform: translateX(-75px) translateY(-55px); }
+    100% { transform: translateX(-80px) translateY(-80px); }
 `;
 
 const Masthead = styled.header`
@@ -53,6 +52,10 @@ const Masthead = styled.header`
         rgba(20, 30, 48, 0.8) 0%,
         rgba(36, 59, 85, 0.8) 100%
     );
+
+    @media (max-width: 480px) {
+        min-height: calc(100vh - 60px);
+    }
 `;
 
 const BackgroundImage = styled.div`
@@ -91,6 +94,21 @@ const ContentWrapper = styled.div`
     flex-direction: column;
     justify-content: center;
     color: white;
+
+    @media (max-width: 1024px) {
+        padding: 0 1.5rem;
+        max-width: 900px;
+    }
+
+    @media (max-width: 768px) {
+        padding: 0 1rem;
+        height: calc(100vh - 40px);
+    }
+
+    @media (max-width: 480px) {
+        padding: 0 0.8rem;
+        height: calc(100vh - 60px);
+    }
 `;
 
 const Title = styled.h1`
@@ -100,6 +118,21 @@ const Title = styled.h1`
     opacity: 0;
     animation: ${props => props.isVisible ? css`${slideIn} 1s forwards` : 'none'};
     line-height: 1.3;
+
+    @media (max-width: 1024px) {
+        font-size: 3rem;
+    }
+
+    @media (max-width: 768px) {
+        font-size: 2.5rem;
+        margin-bottom: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 2rem;
+        margin-bottom: 0.6rem;
+        line-height: 1.2;
+    }
 `;
 
 const Description = styled.p`
@@ -108,6 +141,22 @@ const Description = styled.p`
     opacity: 0;
     animation: ${props => props.isVisible ? css`${fadeInUp} 1s forwards 0.3s` : 'none'};
     line-height: 1.6;
+
+    @media (max-width: 1024px) {
+        font-size: 1.1rem;
+        margin-bottom: 1.8rem;
+    }
+
+    @media (max-width: 768px) {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 0.9rem;
+        margin-bottom: 1.2rem;
+        line-height: 1.4;
+    }
 `;
 
 const ParkingLotContainer = styled.div`
@@ -121,6 +170,26 @@ const ParkingLotContainer = styled.div`
     backdrop-filter: blur(5px);
     opacity: 0;
     animation: ${props => props.isVisible ? css`${fadeInUp} 1s forwards 0.6s` : 'none'};
+
+    @media (max-width: 1024px) {
+        width: 350px;
+        height: 262.5px;
+        margin: 1.8rem auto;
+    }
+
+    @media (max-width: 768px) {
+        width: 300px;
+        height: 225px;
+        margin: 1.5rem auto;
+        padding: 15px;
+    }
+
+    @media (max-width: 480px) {
+        width: 280px;
+        height: 210px;
+        margin: 1.2rem auto;
+        padding: 12px;
+    }
 `;
 
 const ParkingSpace = styled.div`
@@ -131,6 +200,27 @@ const ParkingSpace = styled.div`
     ${props => props.position === 'top' ? 'top: 40px;' : 'bottom: 40px;'}
     ${props => props.position === 'top' ? 'left: 50px;' : 'left: 250px;'};
 
+    @media (max-width: 1024px) {
+        width: 87.5px;
+        height: 52.5px;
+        ${props => props.position === 'top' ? 'top: 35px;' : 'bottom: 35px;'}
+        ${props => props.position === 'top' ? 'left: 43.75px;' : 'left: 218.75px;'}
+    }
+
+    @media (max-width: 768px) {
+        width: 75px;
+        height: 45px;
+        ${props => props.position === 'top' ? 'top: 30px;' : 'bottom: 30px;'}
+        ${props => props.position === 'top' ? 'left: 37.5px;' : 'left: 187.5px;'}
+    }
+
+    @media (max-width: 480px) {
+        width: 70px;
+        height: 42px;
+        ${props => props.position === 'top' ? 'top: 28px;' : 'bottom: 28px;'}
+        ${props => props.position === 'top' ? 'left: 35px;' : 'left: 175px;'}
+    }
+
     &::after {
         content: 'P';
         position: absolute;
@@ -139,6 +229,14 @@ const ParkingSpace = styled.div`
         transform: translate(-50%, -50%);
         color: rgba(255, 255, 255, 0.5);
         font-size: 1.5rem;
+
+        @media (max-width: 768px) {
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 1rem;
+        }
     }
 `;
 
@@ -151,6 +249,18 @@ const Car = styled.div`
     transition: all 0.3s ease;
     z-index: ${props => props.isFirst ? 1 : 2};
     opacity: ${props => props.isVisible ? 1 : 0};
+
+    @media (max-width: 1024px) {
+        font-size: 1.75rem;
+    }
+
+    @media (max-width: 768px) {
+        font-size: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 1.25rem;
+    }
 `;
 
 const Road = styled.div`
@@ -161,6 +271,27 @@ const Road = styled.div`
     left: 50px;
     top: 120px;
     border-radius: 5px;
+
+    @media (max-width: 1024px) {
+        width: 262.5px;
+        height: 70px;
+        left: 43.75px;
+        top: 105px;
+    }
+
+    @media (max-width: 768px) {
+        width: 225px;
+        height: 60px;
+        left: 37.5px;
+        top: 90px;
+    }
+
+    @media (max-width: 480px) {
+        width: 210px;
+        height: 56px;
+        left: 35px;
+        top: 84px;
+    }
 `;
 
 const Button = styled.button`
@@ -176,6 +307,22 @@ const Button = styled.button`
     animation: ${props => props.isVisible ? css`${fadeInUp} 1s forwards 0.9s` : 'none'};
     cursor: pointer;
     backdrop-filter: blur(10px);
+    font-size: 1rem;
+
+    @media (max-width: 1024px) {
+        padding: 0.9rem 1.8rem;
+        font-size: 0.95rem;
+    }
+
+    @media (max-width: 768px) {
+        padding: 0.8rem 1.6rem;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 480px) {
+        padding: 0.7rem 1.4rem;
+        font-size: 0.85rem;
+    }
 
     &:hover {
         background: rgba(255, 255, 255, 0.2);
@@ -188,6 +335,14 @@ const ManageButton = styled(Button)`
     background: rgba(0, 150, 255, 0.3);
     margin-left: 1rem;
 
+    @media (max-width: 768px) {
+        margin-left: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+        margin-left: 0.6rem;
+    }
+
     &:hover {
         background: rgba(0, 150, 255, 0.5);
     }
@@ -198,7 +353,18 @@ const ButtonGroup = styled.div`
     justify-content: center;
     gap: 1rem;
     margin-top: 2rem;
+
+    @media (max-width: 768px) {
+        gap: 0.8rem;
+        margin-top: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+        gap: 0.6rem;
+        margin-top: 1.2rem;
+    }
 `;
+
 
 const FourthLayout = () => {
     const [isVisible, setIsVisible] = useState(false);
