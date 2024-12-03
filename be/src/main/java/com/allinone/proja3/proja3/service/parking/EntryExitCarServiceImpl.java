@@ -133,6 +133,9 @@ public class EntryExitCarServiceImpl implements EntryExitCarService{
             case "ho":
                 result = entryExitCarRepository.findByHoContaining(entryExitSearchDataDTO.getSearchValue(), pageable);
                 break;
+            case "name":
+                result = entryExitCarRepository.findByCarNumContaining(entryExitSearchDataDTO.getSearchValue(), pageable);
+                break;
             case "carNum":
                 result = entryExitCarRepository.findByCarNumContaining(entryExitSearchDataDTO.getSearchValue(), pageable);
                 break;

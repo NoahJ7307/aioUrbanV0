@@ -115,9 +115,18 @@ const EntryPage = () => {
     setSearchData(newSearchData)
 
     const pageParam = { page, size }
-
+    let household = {
+      dong: null,
+      ho: null,
+    }
+    if (loadLoginData().role === 'USER') {
+      household = {
+        dong: loadLoginData().dong,
+        ho: loadLoginData().ho,
+      }
+    }
     if (newSearchData.searchCategory) {
-      entryGetSearchList(pageParam, newSearchData).then(data => {
+      entryGetSearchList(pageParam, newSearchData, household).then(data => {
         setPageServerData(data)
         // 결과 예외 처리
         if (!data.dtoList || data.dtoList.length === 0) {

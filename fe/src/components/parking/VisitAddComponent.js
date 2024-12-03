@@ -18,10 +18,16 @@ const VisitAddComponent = () => {
   const [serverData, setServerData] = useState({ ...initState })
   const { loadLoginData } = useCustomLogin()
   const [errors, setErrors] = useState({})
+  const initDong = loadLoginData().dong
+  const initHo = loadLoginData().ho
 
   const handleChange = (e) => {
     serverData[e.target.name] = e.target.value
     setServerData({ ...serverData })
+    if (loadLoginData().role === 'USER') {
+      setServerData({ ...serverData, dong: initDong, ho: initHo })
+      console.log(serverData)
+    }
   }
   const handleClick = () => {
     // 입력 예외처리
@@ -84,7 +90,7 @@ const VisitAddComponent = () => {
             <input
               className={`inputBox ${errors.dong && 'error'}`}
               name='dong'
-              value={loadLoginData().dong}
+              value={initDong}
               placeholder="수정 불가"
               readOnly
               onChange={handleChange} />
@@ -94,7 +100,7 @@ const VisitAddComponent = () => {
             <input
               className={`inputBox ${errors.ho && 'error'}`}
               name='ho'
-              value={loadLoginData().ho}
+              value={initHo}
               placeholder="수정 불가"
               readOnly
               onChange={handleChange} />
