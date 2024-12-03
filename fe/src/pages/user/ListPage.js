@@ -150,7 +150,6 @@ const ListPage = () => {
                                 <option value='PENDING'>승인대기</option>
                                 <option value='USER'>입주민</option>
                                 <option value='ADMIN'>관리자</option>
-                                <option value='ROOT'>ROOT</option>
                             </select>
                         </div>
                         :
