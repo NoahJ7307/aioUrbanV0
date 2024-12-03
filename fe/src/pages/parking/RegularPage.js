@@ -141,17 +141,24 @@ const RegularPage = () => {
 
     const pageParam = { page, size }
 
-    if (newSearchData.searchCategory) {
-      regularGetSearchList(pageParam, newSearchData).then(data => {
-        setPageServerData(data)
-        // 결과 예외 처리
-        if (!data.dtoList || data.dtoList.length === 0) {
-          alert('검색 결과가 없습니다')
+    const fetch = async () => {
+      if (newSearchData.searchCategory) {
+        try {
+          await regularGetSearchList(pageParam, newSearchData).then(data => {
+            setPageServerData(data)
+            // 결과 예외 처리
+            if (!data.dtoList || data.dtoList.length === 0) {
+              alert('검색 결과가 없습니다')
+            }
+          })
+        } catch (error) {
+          alert('잘못된 입력입니다')
         }
-      })
-    } else {
-      setPageServerData(initStateServerData)
+      } else {
+        setPageServerData(initStateServerData)
+      }
     }
+    fetch()
   }, [location.search])
 
 
