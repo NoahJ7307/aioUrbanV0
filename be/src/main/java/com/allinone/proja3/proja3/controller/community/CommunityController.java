@@ -62,7 +62,7 @@ public class CommunityController {
     @GetMapping("/list")
     public ResponseEntity<PageResponseDTO<CommunityDTO>> getPosts(PageRequestDTO pageRequestDTO) {
         PageResponseDTO<CommunityDTO> response = service.findAllPosts(pageRequestDTO);
-
+        System.out.println("com");
         return ResponseEntity.ok(response);
     }
 
