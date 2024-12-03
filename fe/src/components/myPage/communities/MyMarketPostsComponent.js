@@ -11,7 +11,7 @@ const MyMarketPostsComponent = () => {
   const [currentPost, setCurrentPost] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
-
+  const [modalPosition, setModalPosition] = useState(0);
   useEffect(() => {
     const fetchPosts = async () => {
       try {

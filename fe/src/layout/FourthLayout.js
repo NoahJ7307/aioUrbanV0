@@ -112,7 +112,7 @@ const ContentWrapper = styled.div`
 `;
 
 const Title = styled.h1`
-    font-size: 3.5rem;
+    font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
     opacity: 0;
@@ -414,8 +414,8 @@ const FourthLayout = () => {
             <BackgroundImage />
             <ContentWrapper>
                 <Title isVisible={isVisible}>
-                    스마트 주차 관리<br />
-                    실시간 주차 현황
+                    실시간 주차 현황<br />
+                    스마트 주차 관리
                 </Title>
                 <Description isVisible={isVisible}>
                     AI 기반 주차 관제 시스템으로<br />

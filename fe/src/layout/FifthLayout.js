@@ -13,10 +13,28 @@ const rotateIn = keyframes`
     }
 `;
 
-const pulse = keyframes`
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
+const glowAnimation = keyframes`
+    0% {
+        box-shadow: 0 0 5px rgba(255,255,255,0.3);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255,255,255,0.5), inset 0 0 15px rgba(255,255,255,0.3);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(255,255,255,0.3);
+    }
+`;
+
+const rotateAnimation = keyframes`
+    0% {
+        transform: rotateX(0deg) rotateY(0deg);
+    }
+    50% {
+        transform: rotateX(10deg) rotateY(10deg);
+    }
+    100% {
+        transform: rotateX(0deg) rotateY(0deg);
+    }
 `;
 
 const fadeInUp = keyframes`
@@ -27,6 +45,15 @@ const fadeInUp = keyframes`
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+`;
+
+const shine = keyframes`
+    0% {
+        background-position: -100% 100%;
+    }
+    100% {
+        background-position: 100% -100%;
     }
 `;
 
@@ -70,6 +97,7 @@ const BackgroundImage = styled.div`
         );
     }
 `;
+
 const ContentWrapper = styled.div`
     position: relative;
     padding: 0 2rem;
@@ -147,99 +175,96 @@ const Description = styled.p`
         line-height: 1.4;
     }
 `;
+
 const PaymentCards = styled.div`
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
     margin: 2rem 0;
     perspective: 1000px;
 
     @media (max-width: 1024px) {
         gap: 1.5rem;
-        margin: 1.8rem 0;
     }
 
     @media (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
-        margin: 1.5rem 0;
-        flex-wrap: wrap;
-        justify-content: center;
     }
 
     @media (max-width: 480px) {
         gap: 0.8rem;
-        margin: 1.2rem 0;
     }
 `;
 
 const Card = styled.div`
-    width: 200px;
-    height: 120px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 15px;
+    padding: 2rem 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
     opacity: 0;
     animation: ${props => props.isVisible ? css`${rotateIn} 0.5s forwards ${props.delay}` : 'none'};
-    transition: transform 0.3s ease;
-    cursor: pointer;
+    overflow: hidden;  // 추가
 
-    @media (max-width: 1024px) {
-        width: 180px;
-        height: 108px;
-    }
-
-    @media (max-width: 768px) {
-        width: 160px;
-        height: 96px;
-        flex: 0 0 calc(50% - 0.5rem);
-    }
-
-    @media (max-width: 480px) {
-        width: 140px;
-        height: 84px;
-        border-radius: 12px;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            120deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+        );
+        transition: 0.5s;
     }
 
     &:hover {
-        transform: translateY(-10px) rotateY(10deg);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 
-        @media (max-width: 768px) {
-            transform: translateY(-5px) rotateY(5deg);
+        &::before {
+            left: 100%;
         }
     }
 
     span {
+        position: relative;
+        z-index: 1;
+
         &:first-child {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            animation: ${pulse} 2s infinite;
-
-            @media (max-width: 768px) {
-                font-size: 1.75rem;
-                margin-bottom: 0.4rem;
-            }
-
-            @media (max-width: 480px) {
-                font-size: 1.5rem;
-                margin-bottom: 0.3rem;
-            }
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
         }
 
         &:last-child {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: white;
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 1.5rem 1rem;
+
+        span:first-child {
+            font-size: 2rem;
+        }
+
+        span:last-child {
             font-size: 1rem;
-
-            @media (max-width: 768px) {
-                font-size: 0.9rem;
-            }
-
-            @media (max-width: 480px) {
-                font-size: 0.8rem;
-            }
         }
     }
 `;
@@ -247,7 +272,7 @@ const Button = styled.button`
     display: inline-block;
     padding: 1rem 2rem;
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: none;
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -256,30 +281,52 @@ const Button = styled.button`
     animation: ${props => props.isVisible ? css`${fadeInUp} 1s forwards 0.6s` : 'none'};
     cursor: pointer;
     backdrop-filter: blur(10px);
-    margin: 0 auto;
+    margin: 2rem auto 0;
+    width: 80%;
+    max-width: 400px;
+    position: relative;
+    overflow: hidden;
+    font-size: 1.1rem;
+    font-weight: 500;
 
-    @media (max-width: 1024px) {
-        padding: 0.9rem 1.8rem;
-        font-size: 0.95rem;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            120deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+        );
+        transition: 0.5s;
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+
+        &::before {
+            left: 100%;
+        }
     }
 
     @media (max-width: 768px) {
         padding: 0.8rem 1.6rem;
-        font-size: 0.9rem;
+        font-size: 1rem;
+        max-width: 300px;
     }
 
     @media (max-width: 480px) {
         padding: 0.7rem 1.4rem;
-        font-size: 0.85rem;
-    }
-
-    &:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        font-size: 0.9rem;
+        max-width: 250px;
     }
 `;
-
 const FifthLayout = () => {
     const [isVisible, setIsVisible] = useState(false);
     const sectionRef = useRef(null);
