@@ -10,7 +10,7 @@ const MyBoardPostsComponent = () => {
   const [showModal, setShowModal] = useState(false);
   const [currentPost, setCurrentPost] = useState(null);
   const navigate = useNavigate();
-
+  const [modalPosition, setModalPosition] = useState(0);
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -41,10 +41,11 @@ const MyBoardPostsComponent = () => {
   };
 
   const openModal = (post) => {
+    const scrollPosition = window.pageYOffset;
+    setModalPosition(scrollPosition + 200);
     setCurrentPost(post);
     setShowModal(true);
   };
-
   const closeModal = () => {
     setShowModal(false);
     setCurrentPost(null);
@@ -62,14 +63,10 @@ const MyBoardPostsComponent = () => {
             <div key={post.pno} className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
               <div className="flex justify-between items-start">
                 <div className="flex-1">
-                  <h3 className="text-3xl font-bold mb-3">
+                  <h3 className="text-xl mb-3">
+                    <span className="font-bold mr-2">제목:</span>
                     {post.title}
                   </h3>
-                  <div className="text-sm text-gray-500">
-                    <span>게시글 번호: {post.pno}</span>
-                    <span className="mx-2">•</span>
-                    <span>작성일: {new Date(post.createdAt).toLocaleDateString()}</span>
-                  </div>
                 </div>
                 <div className="flex gap-2">
                   <button
@@ -101,31 +98,59 @@ const MyBoardPostsComponent = () => {
         )}
       </div>
 
+
+
       {/* 상세보기 모달 */}
       {showModal && currentPost && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="w-full md:w-2/3 max-h-[90vh] overflow-auto bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-3xl font-bold mb-6">{currentPost.title}</h2>
+        <div className="fixed inset-0 flex items-start justify-center bg-black bg-opacity-50 z-50 overflow-y-auto">
+          <div
+            className="w-full md:w-2/3 bg-white p-6 rounded-lg shadow-lg mt-10"
+            style={{ marginTop: `${modalPosition}px` }}
+          >
+            {/* 모달 헤더 */}
+            <div className="border-b-2 border-gray-200 pb-4 mb-4">
+              <h2 className="text-3xl font-bold">게시글 상세보기</h2>
+            </div>
 
+            {/* 게시글 정보 */}
             <div className="bg-gray-50 p-4 rounded-lg mb-4">
-              <div className="flex justify-between text-sm text-gray-500 mb-4">
-                <span>게시글 번호: {currentPost.pno}</span>
-                <span>작성일: {new Date(currentPost.createdAt).toLocaleDateString()}</span>
+              {/* 제목 */}
+              <div className="mb-4">
+                <div className="text-xl font-bold text-gray-700 mb-2">제목</div>
+                <div className="bg-white p-3 rounded border border-gray-200">
+                  {currentPost.title}
+                </div>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <h3 className="font-semibold mb-3">내용</h3>
-                <div className="whitespace-pre-wrap text-gray-700">
+
+              {/* 게시글 메타 정보 */}
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <div className="bg-white p-3 rounded border border-gray-200">
+                  <span className="font-semibold">게시글 번호:</span> {currentPost.pno}
+                </div>
+                <div className="bg-white p-3 rounded border border-gray-200">
+                  <span className="font-semibold">작성일:</span> {new Date(currentPost.createdAt).toLocaleDateString()}
+                </div>
+                <div className="bg-white p-3 rounded border border-gray-200">
+                  <span className="font-semibold">수정일:</span> {new Date(currentPost.modifiedAt || currentPost.createdAt).toLocaleDateString()}
+                </div>
+              </div>
+
+              {/* 게시글 내용 */}
+              <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+                <div className="text-xl font-bold text-gray-700 mb-3">내용</div>
+                <div className="whitespace-pre-wrap text-gray-700 min-h-[200px]">
                   {currentPost.content}
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-end gap-2">
+            {/* 모달 푸터 - 버튼 그룹 */}
+            <div className="flex justify-end gap-2 pt-4 border-t-2 border-gray-200">
               <button
                 onClick={() => navigate(`/communities/board/modify/${currentPost.pno}`)}
                 className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors"
               >
-                수정
+                <i className="fa-solid fa-edit mr-2"></i>수정
               </button>
               <button
                 onClick={() => {
@@ -134,13 +159,13 @@ const MyBoardPostsComponent = () => {
                 }}
                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
               >
-                삭제
+                <i className="fa-solid fa-trash mr-2"></i>삭제
               </button>
               <button
                 onClick={closeModal}
                 className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
               >
-                닫기
+                <i className="fa-solid fa-times mr-2"></i>닫기
               </button>
             </div>
           </div>

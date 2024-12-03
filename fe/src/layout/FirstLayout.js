@@ -215,7 +215,10 @@ const FirstLayout = () => {
   const handleScroll = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      const offset = sectionId === 'parking' ? -150 : -150;
+      // 기본 오프셋 -150에 화면 높이의 2%를 추가
+      const additionalOffset = window.innerHeight * -0.1;
+      const offset = -150 - additionalOffset;
+
       const elementPosition = section.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset + offset;
 

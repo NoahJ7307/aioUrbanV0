@@ -2,32 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-const vortexEffect = keyframes`
-  0% {
-    background: conic-gradient(from 0deg at 50% 50%,
-      rgba(255,255,255,0.1) 0%,
-      rgba(255,255,255,0.2) 25%,
-      rgba(255,255,255,0.3) 50%,
-      rgba(255,255,255,0.2) 75%,
-      rgba(255,255,255,0.1) 100%
-    );
-  }
-  100% {
-    background: conic-gradient(from 360deg at 50% 50%,
-      rgba(255,255,255,0.1) 0%,
-      rgba(255,255,255,0.2) 25%,
-      rgba(255,255,255,0.3) 50%,
-      rgba(255,255,255,0.2) 75%,
-      rgba(255,255,255,0.1) 100%
-    );
-  }
-`;
-
-const iconRotate = keyframes`
-   0% { transform: rotate(0deg); }
-   100% { transform: rotate(360deg); }
-`;
-
 const fadeInUp = keyframes`
     from {
         opacity: 0;
@@ -36,6 +10,34 @@ const fadeInUp = keyframes`
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+`;
+
+const moveAlongPath = keyframes`
+    0% {
+        offset-distance: 0%;
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        offset-distance: 100%;
+        opacity: 0;
+    }
+`;
+const pulseBuilding = keyframes`
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
     }
 `;
 
@@ -56,7 +58,6 @@ const BackgroundImage = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('https://images.unsplash.com/photo-1577563908411-5077b6dc7624');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -84,227 +85,122 @@ const ContentWrapper = styled.div`
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
     color: white;
+    padding-top: 15vh;
+`;
 
-    @media (max-width: 768px) {
-        padding: 0 1.5rem;
-        text-align: center;
-    }
+const TextContainer = styled.div`
+    text-align: center;
+    margin-bottom: 2rem;
+`;
 
-    @media (max-width: 480px) {
-        padding: 0 1rem;
-    }
+const AnimationContainer = styled.div`
+    position: relative;
+    width: 100%;
+    height: 40vh;
+    margin-top: 1rem;
+`;
+
+const CenterBuilding = styled.div`
+    position: absolute;
+    left: 38%;
+    transform: translateX(-50%);
+    font-size: 10rem;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+    animation: ${pulseBuilding} 3s infinite ease-in-out;
+    z-index: 2;
+`;
+const MovingPerson = styled.div`
+    position: absolute;
+    font-size: 3rem;
+    offset-path: ${props => props.path};
+    animation: ${moveAlongPath} 4s infinite linear;
+    animation-delay: ${props => props.delay}s;
+    transform: rotate(0deg);  // 이 부분 추가
+    offset-rotate: 0deg;      // 이 부분 추가
 `;
 
 const Title = styled.h1`
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: 700;
     margin-bottom: 1rem;
     opacity: 0;
     animation: ${props => props.isVisible ? css`${fadeInUp} 1s forwards` : 'none'};
     line-height: 1.3;
-
-    @media (max-width: 1024px) {
-        font-size: 3rem;
-    }
+    text-align: center;
+    z-index: 3;
 
     @media (max-width: 768px) {
         font-size: 2.5rem;
-        text-align: center;
-        br {
-            display: none;
-        }
-    }
-
-    @media (max-width: 480px) {
-        font-size: 2rem;
     }
 `;
 
 const Description = styled.p`
     font-size: 1.2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     opacity: 0;
     animation: ${props => props.isVisible ? css`${fadeInUp} 1s forwards 0.3s` : 'none'};
     line-height: 1.6;
+    text-align: center;
+    z-index: 3;
 
     @media (max-width: 768px) {
         font-size: 1.1rem;
-        text-align: center;
-        br {
-            display: none;
-        }
-    }
-
-    @media (max-width: 480px) {
-        font-size: 1rem;
     }
 `;
 
-const IconsContainer = styled.div`
+const ButtonContainer = styled.div`
     display: flex;
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
     justify-content: center;
-    opacity: 0;
-    animation: ${props => props.isVisible ? css`${fadeInUp} 1s forwards 0.6s` : 'none'};
-
-    @media (max-width: 768px) {
-        gap: 1.5rem;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    @media (max-width: 480px) {
-        gap: 1rem;
-    }
-`;
-
-const IconWrapper = styled.div`
-    position: relative;
-    width: 80px;
-    height: 80px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 1rem;
-
-    @media (max-width: 768px) {
-        width: 70px;
-        height: 70px;
-        margin: 0.8rem;
-    }
-
-    @media (max-width: 480px) {
-        width: 60px;
-        height: 60px;
-        margin: 0.6rem;
-    }
-`;
-
-const IconEmoji = styled.span`
-    font-size: 1.5rem;
-    margin-bottom: 0.2rem;
-    position: relative;
-    z-index: 2;
-    animation: ${iconRotate} 4s linear infinite;
-
-    @media (max-width: 768px) {
-        font-size: 1.3rem;
-    }
-
-    @media (max-width: 480px) {
-        font-size: 1.2rem;
-    }
-`;
-
-const IconInner = styled.div`
-    position: relative;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-
-    &::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        animation: ${vortexEffect} 4s linear infinite;
-    }
-
-    &::after {
-        content: '';
-        position: absolute;
-        inset: 3px;
-        background: rgba(60, 0, 80, 0.7);
-        border-radius: 50%;
-        z-index: 1;
-    }
-
-    &:hover {
-        transform: scale(1.1);
-    }
-
-    @media (max-width: 768px) {
-        width: 50px;
-        height: 50px;
-    }
-
-    @media (max-width: 480px) {
-        width: 45px;
-        height: 45px;
-    }
-`;
-
-const IconText = styled.span`
-    font-size: 0.8rem;
-    color: white;
-    position: absolute;
-    bottom: -20px;
-    width: 100%;
-    text-align: center;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-
-    @media (max-width: 768px) {
-        font-size: 0.75rem;
-        bottom: -18px;
-    }
-
-    @media (max-width: 480px) {
-        font-size: 0.7rem;
-        bottom: -16px;
-    }
+    margin-top: ;
+    margin-bottom: 5vh;
+    z-index: 3;
 `;
 
 const Button = styled.button`
-    display: inline-block;
     padding: 1rem 2rem;
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
     text-decoration: none;
     border-radius: 5px;
-    transition: all 0.3s ease;
     opacity: 0;
     animation: ${props => props.isVisible ? css`${fadeInUp} 1s forwards 0.9s` : 'none'};
     cursor: pointer;
     backdrop-filter: blur(10px);
-    margin: 3rem auto 0;
+    transition: all 0.3s ease;
 
     &:hover {
         background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-
-    @media (max-width: 768px) {
-        padding: 0.9rem 1.8rem;
-        font-size: 0.9rem;
-        width: 200px;
-    }
-
-    @media (max-width: 480px) {
-        padding: 0.8rem 1.6rem;
-        font-size: 0.85rem;
-        width: 180px;
     }
 `;
 
 const ThirdLayout = () => {
     const [isVisible, setIsVisible] = useState(false);
+    const [windowSize, setWindowSize] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight
+    });
     const sectionRef = useRef(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -330,56 +226,100 @@ const ThirdLayout = () => {
         };
     }, []);
 
-    const handleScroll = () => {
-        const communitiesSection = document.getElementById('communities');
-        if (communitiesSection) {
-            communitiesSection.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
+    const getPeople = () => {
+        const centerX = windowSize.width / 3;
+        const centerY = 150;
+
+        return [
+            {
+                icon: '👨‍💻',  // 직장인/전문가
+                path: `path("M 0,${centerY - 100} Q ${centerX - 200},${centerY - 50} ${centerX},${centerY}")`,
+                delay: 0
+            },
+            {
+                icon: '👨‍👩‍👦',  // 젊은 가족
+                path: `path("M ${windowSize.width},${centerY - 100} Q ${centerX + 200},${centerY - 50} ${centerX},${centerY}")`,
+                delay: 0.8
+            },
+            {
+                icon: '👩‍🍳',  // 요리하는 주부
+                path: `path("M 0,0 Q ${centerX - 100},${centerY - 100} ${centerX},${centerY}")`,
+                delay: 1.6
+            },
+            {
+                icon: '👨‍👩‍👧‍👦',  // 4인 가족
+                path: `path("M ${windowSize.width},0 Q ${centerX + 100},${centerY - 100} ${centerX},${centerY}")`,
+                delay: 2.4
+            },
+            {
+                icon: '👨‍👨‍👧',  // 다양한 가족 형태
+                path: `path("M 0,${centerY + 100} Q ${centerX - 150},${centerY + 50} ${centerX},${centerY}")`,
+                delay: 3.2
+            },
+            {
+                icon: '👩‍👦‍👦',  // 한부모 가정
+                path: `path("M ${windowSize.width},${centerY + 100} Q ${centerX + 150},${centerY + 50} ${centerX},${centerY}")`,
+                delay: 4
+            }
+        ];
     };
 
-    const communityIcons = [
-        { icon: '💬', name: '게시판', url: '/communities/board' },
-        { icon: '📢', name: '공지사항', url: '/communities/announce' },
-        { icon: '🤝', name: '장터', url: '/communities/market' },
-        { icon: '📱', name: '생활정보', url: '/communities/info' }
-    ];
-
-    const handleIconClick = (url) => {
-        navigate(url);
+    const handleNavigate = (path) => {
+        navigate(path);
     };
 
     return (
         <Masthead id="communities" ref={sectionRef}>
             <BackgroundImage />
             <ContentWrapper>
-                <Title isVisible={isVisible}>
-                    소통하는 우리 아파트<br />
-                    함께 만드는 커뮤니티
-                </Title>
-                <Description isVisible={isVisible}>
-                    실시간 소통과 정보 공유로<br />
-                    더 가까워지는 이웃과의 관계
-                </Description>
-                <IconsContainer isVisible={isVisible}>
-                    {communityIcons.map((item, index) => (
-                        <IconWrapper key={index}>
-                            <IconInner
-                                isVisible={isVisible}
-                                onClick={() => handleIconClick(item.url)}
-                                style={{ animationDelay: `${index * 0.2}s` }}
-                            >
-                                <IconEmoji>{item.icon}</IconEmoji>
-                            </IconInner>
-                            <IconText>{item.name}</IconText>
-                        </IconWrapper>
+                <TextContainer>
+                    <Title isVisible={isVisible}>
+                        소통하는 우리 아파트<br />
+                        함께 만드는 커뮤니티
+                    </Title>
+                    <Description isVisible={isVisible}>
+                        실시간 소통과 정보 공유로<br />
+                        더 가까워지는 이웃과의 관계
+                    </Description>
+                </TextContainer>
+                <AnimationContainer>
+                    <CenterBuilding>🏢</CenterBuilding>
+                    {getPeople().map((person, index) => (
+                        <MovingPerson
+                            key={index}
+                            path={person.path}
+                            delay={person.delay}
+                        >
+                            {person.icon}
+                        </MovingPerson>
                     ))}
-                </IconsContainer>
-                <Button onClick={handleScroll} isVisible={isVisible}>
-                    자세히 보기
-                </Button>
+                </AnimationContainer>
+                <ButtonContainer>
+                    <Button
+                        isVisible={isVisible}
+                        onClick={() => handleNavigate('/communities/board')}
+                    >
+                        게시판
+                    </Button>
+                    <Button
+                        isVisible={isVisible}
+                        onClick={() => handleNavigate('/communities/announce')}
+                    >
+                        공지사항
+                    </Button>
+                    <Button
+                        isVisible={isVisible}
+                        onClick={() => handleNavigate('/communities/market')}
+                    >
+                        장터
+                    </Button>
+                    <Button
+                        isVisible={isVisible}
+                        onClick={() => handleNavigate('/communities/info')}
+                    >
+                        생활정보
+                    </Button>
+                </ButtonContainer>
             </ContentWrapper>
         </Masthead>
     );

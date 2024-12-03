@@ -10,7 +10,7 @@ const MenuComponent = () => {
     const [activeMenu, setActiveMenu] = useState(() => {
         return localStorage.getItem('activeMenu') || null;
     });
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
     const [isMyPageOpen, setIsMyPageOpen] = useState(false);
     const [openCategory, setOpenCategory] = useState(null);
 
@@ -77,9 +77,10 @@ const MenuComponent = () => {
             { name: '주민 등록', path: '/user/add', icon: 'fa-solid fa-user-plus' }
         ],
         '시설관리': [
-            { name: 'Gym', path: '/facilities/gym/list', icon: 'fa-solid fa-dumbbell' },
-            { name: 'Golf', path: '/facilities/golf/list', icon: 'fa-solid fa-golf-ball-tee' },
-            { name: 'Study', path: '/facilities/study/list', icon: 'fa-solid fa-book-open-reader' }
+            { name: '이용안내', path: '/facilities', icon: 'fa-solid fa-circle-question' },
+            { name: '헬스장', path: '/facilities/gym/list', icon: 'fa-solid fa-dumbbell' },
+            { name: '골프장', path: '/facilities/golf/list', icon: 'fa-solid fa-golf-ball-tee' },
+            { name: '독서실', path: '/facilities/study/list', icon: 'fa-solid fa-book-open-reader' }
         ],
         '소통관리': [
             { name: '게시판', path: '/communities/board/list', icon: 'fa-solid fa-clipboard' },
@@ -117,10 +118,8 @@ const MenuComponent = () => {
     const handleMenuClick = (menuName, e) => {
         e.stopPropagation();
         setActiveMenu(activeMenu === menuName ? null : menuName);
-        //1127 cyr추가 
-        if (menuName === '시설관리') {
-            navigate('/facilities');  // 기본 서브 페이지로 이동
-        }
+      
+     
     };
 
     const handleSubMenuClick = (path) => {

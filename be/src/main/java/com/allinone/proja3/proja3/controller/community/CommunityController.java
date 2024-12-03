@@ -48,9 +48,11 @@ public class CommunityController {
 
     // 게시물 생성
     @PostMapping("/add")
-    public ResponseEntity<CommunityDTO> createPost(@RequestBody Community community, @RequestParam Long uno) {
+    public ResponseEntity<CommunityDTO> createPost(@RequestBody Community community, Long uno) {
+        System.out.println("uno create111"+uno);
         User user = userRepository.findById(uno)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
         community.setUser(user); // 게시물에 사용자 정보를 설정
         Community newPost = service.createPost(community, user);
         CommunityDTO response = service.entityToDto(newPost);
