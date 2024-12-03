@@ -16,5 +16,5 @@ public interface VisitParkingService {
     void remove(Long vpno);
     VisitParkingDTO getOne(Long vpno);
     void putOne(VisitParkingDTO visitParkingDTO, Long vpno);
-    PageResponseDTO<VisitParkingDTO> getSearchList(PageRequestDTO pageRequestDTO, VisitSearchDataDTO visitSearchDataDTO);
+    PageResponseDTO<VisitParkingDTO> getSearchList(PageRequestDTO pageRequestDTO, VisitSearchDataDTO visitSearchDataDTO, HouseholdDTO householdDTO);
 }

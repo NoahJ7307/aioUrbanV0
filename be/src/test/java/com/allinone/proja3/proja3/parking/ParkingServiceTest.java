@@ -165,7 +165,11 @@ public class ParkingServiceTest {
                 .page(1)
                 .size(10)
                 .build();
-        PageResponseDTO<VisitParkingDTO> list = visitParkingService.getSearchList(pageRequestDTO, visitSearchDataDTO);
+        HouseholdDTO householdDTO = HouseholdDTO.builder()
+                .dong(null)
+                .ho(null)
+                .build();
+        PageResponseDTO<VisitParkingDTO> list = visitParkingService.getSearchList(pageRequestDTO, visitSearchDataDTO, householdDTO);
         list.getDtoList().forEach(System.out::println);
     }
 }

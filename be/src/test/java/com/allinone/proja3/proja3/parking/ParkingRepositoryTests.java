@@ -6,14 +6,20 @@ import com.allinone.proja3.proja3.repository.parking.HouseholdRepository;
 import com.allinone.proja3.proja3.repository.parking.RegularParkingRepository;
 import com.allinone.proja3.proja3.repository.parking.VisitParkingRepository;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 @SpringBootTest
 public class ParkingRepositoryTests {
+    private static final Logger log = LoggerFactory.getLogger(ParkingRepositoryTests.class);
     @Autowired
     private HouseholdRepository householdRepository;
 
@@ -75,5 +81,12 @@ public class ParkingRepositoryTests {
                 .isExit(true)
                 .build();
         entryExitCarRepository.save(entryExitCar);
+    }
+
+    @Test
+    public void queryMethodTest(){
+        Pageable pageable = PageRequest.of(0,10);
+        Page<VisitParking> list = visitParkingRepository.findByNameContainingAndHousehold_HouseholdPK_DongAndHousehold_HouseholdPK_Ho("t", "201", "101", pageable);
+        list.forEach(s-> System.out.println(s.getVpno()));
     }
 }

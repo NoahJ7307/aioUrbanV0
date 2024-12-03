@@ -12,5 +12,5 @@ public interface EntryExitCarService {
     void remove(Long eeno);
     PageResponseDTO<EntryExitCarDTO> getList(PageRequestDTO pageRequestDTO);
     PageResponseDTO<EntryExitCarDTO> getUserList(PageRequestDTO pageRequestDTO, HouseholdDTO householdDTO);
-    PageResponseDTO<EntryExitCarDTO> getSearchList(PageRequestDTO pageRequestDTO, EntryExitSearchDataDTO entryExitSearchDataDTO);
+    PageResponseDTO<EntryExitCarDTO> getSearchList(PageRequestDTO pageRequestDTO, EntryExitSearchDataDTO entryExitSearchDataDTO, HouseholdDTO householdDTO);
 }

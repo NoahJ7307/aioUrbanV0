@@ -40,7 +40,7 @@ public class EntryController {
         System.out.println("Regular getSearchList controller P : "+pageRequestDTO);
         System.out.println("Regular getSearchList controller E : "+entryExitSearchDataDTO);
         System.out.println("Regular getSearchList controller H : "+householdDTO);
-        return entryExitCarService.getSearchList(pageRequestDTO,entryExitSearchDataDTO);
+        return entryExitCarService.getSearchList(pageRequestDTO,entryExitSearchDataDTO, householdDTO);
     }
 
     @PostMapping("/entry")

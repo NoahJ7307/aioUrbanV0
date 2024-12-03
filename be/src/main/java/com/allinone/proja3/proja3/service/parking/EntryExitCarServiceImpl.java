@@ -6,7 +6,6 @@ import com.allinone.proja3.proja3.dto.parking.*;
 import com.allinone.proja3.proja3.model.parking.EntryExitCar;
 import com.allinone.proja3.proja3.model.parking.Household;
 import com.allinone.proja3.proja3.model.parking.HouseholdPK;
-import com.allinone.proja3.proja3.model.parking.VisitParking;
 import com.allinone.proja3.proja3.repository.parking.EntryExitCarRepository;
 import com.allinone.proja3.proja3.repository.parking.HouseholdRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,8 +108,10 @@ public class EntryExitCarServiceImpl implements EntryExitCarService{
     }
 
     @Override
-    public PageResponseDTO<EntryExitCarDTO> getSearchList(PageRequestDTO pageRequestDTO, EntryExitSearchDataDTO entryExitSearchDataDTO) {
+    public PageResponseDTO<EntryExitCarDTO> getSearchList(PageRequestDTO pageRequestDTO, EntryExitSearchDataDTO entryExitSearchDataDTO, HouseholdDTO householdDTO) {
         System.out.println("EntryExitCar getSearchList service");
+        // FE 에서 USER 인 경우에만 householdDTO 를 전달함
+        boolean isUser = householdDTO.getDong() != null;
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
@@ -133,26 +133,40 @@ public class EntryExitCarServiceImpl implements EntryExitCarService{
             case "ho":
                 result = entryExitCarRepository.findByHoContaining(entryExitSearchDataDTO.getSearchValue(), pageable);
                 break;
-            case "name":
-                result = entryExitCarRepository.findByCarNumContaining(entryExitSearchDataDTO.getSearchValue(), pageable);
-                break;
+            // User 권한으로 검색 시 해당 동-호 만 표출
             case "carNum":
-                result = entryExitCarRepository.findByCarNumContaining(entryExitSearchDataDTO.getSearchValue(), pageable);
+                result = isUser ?
+                        entryExitCarRepository.findByCarNumContainingAndDongAndHo(
+                                entryExitSearchDataDTO.getSearchValue(), householdDTO.getDong(), householdDTO.getHo(), pageable)
+                        :
+                        entryExitCarRepository.findByCarNumContaining(entryExitSearchDataDTO.getSearchValue(), pageable);
                 break;
             case "isExit":
                 boolean isExit = entryExitSearchDataDTO.getSearchValue().equals("exit");
-                result = entryExitCarRepository.findAllByIsExit(isExit, pageable);
+                result = isUser ?
+                        entryExitCarRepository.findAllByIsExitAndDongAndHo(
+                                isExit, householdDTO.getDong(), householdDTO.getHo(), pageable)
+                        :
+                        entryExitCarRepository.findAllByIsExit(isExit, pageable);
                 break;
             case "entryDate": {
                 LocalDate start = entryExitSearchDataDTO.getEntryExitDateStart();
                 LocalDate end = entryExitSearchDataDTO.getEntryExitDateEnd();
-                result = entryExitCarRepository.findByEntryDateBetween(start, end, pageable);
+                result = isUser ?
+                        entryExitCarRepository.findByEntryDateBetweenAndDongAndHo(
+                                start, end, householdDTO.getDong(), householdDTO.getHo(), pageable)
+                        :
+                        entryExitCarRepository.findByEntryDateBetween(start, end, pageable);
             }
             break;
             case "exitDate": {
                 LocalDate start = entryExitSearchDataDTO.getEntryExitDateStart();
                 LocalDate end = entryExitSearchDataDTO.getEntryExitDateEnd();
-                result = entryExitCarRepository.findByExitDateBetween(start, end, pageable);
+                result = isUser ?
+                        entryExitCarRepository.findByExitDateBetweenAndDongAndHo(
+                                start, end, householdDTO.getDong(), householdDTO.getHo(), pageable)
+                        :
+                        entryExitCarRepository.findByExitDateBetween(start, end, pageable);
             }
             break;
             default:
