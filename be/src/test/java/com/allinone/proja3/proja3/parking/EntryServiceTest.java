@@ -20,13 +20,13 @@ public class EntryServiceTest {
 
     @Test
     public void entryTest(){
-        for (int ii = 0; ii < 3; ii++) {
+        for (int ii = 0; ii < 5; ii++) {
             for (int i = 1; i < 10; i++) {
-                for (int j = 1; j < 4; j++) {
+                for (int j = 1; j < 10; j++) {
                     EntryExitCarDTO entryExitCarDTO = EntryExitCarDTO.builder()
                             .dong("10"+i)
                             .ho("10"+j)
-                            .carNum("service test.."+i+".."+j)
+                            .carNum((i*10)+"테"+(1000*j))
                             .isExit(false)
                             .build();
                     entryExitCarService.entry(entryExitCarDTO);
@@ -37,12 +37,17 @@ public class EntryServiceTest {
 
     @Test
     public void exitTest(){
-        EntryExitCarDTO entryExitCarDTO = EntryExitCarDTO.builder()
-//                .carNum("service test..9..3")
-                .carNum("service test")
-                .isExit(true)
-                .build();
-        entryExitCarService.exit(entryExitCarDTO);
+        for (int ii = 0; ii < 5; ii+=2) {
+            for (int i = 1; i < 10; i+=2) {
+                for (int j = 1; j < 10; j+=2) {
+                    EntryExitCarDTO entryExitCarDTO = EntryExitCarDTO.builder()
+                            .carNum((i*10)+"테"+(1000*j))
+                            .isExit(true)
+                            .build();
+                    entryExitCarService.exit(entryExitCarDTO);
+                }
+            }
+        }
     }
 
     @Test
