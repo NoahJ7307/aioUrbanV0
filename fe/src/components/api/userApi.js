@@ -134,7 +134,6 @@ export const addUserRole = async (uno) => {
             "Content-Type": "application/json",
         },
     }
-    const body = { uno }
-    const res = await axios.post(`${host}/approval`, body, config)
+    const res = await axios.put(`${host}/approval/${uno}`, null, config)
     return res.data
 }

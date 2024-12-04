@@ -80,7 +80,11 @@ public class EntryServiceTest {
                 .searchCategory("dong")
                 .searchValue("101")
                 .build();
-        PageResponseDTO<EntryExitCarDTO> dongList = entryExitCarService.getSearchList(pageRequestDTO, dongTest);
+        HouseholdDTO householdDTO = HouseholdDTO.builder()
+                .dong(null)
+                .ho(null)
+                .build();
+        PageResponseDTO<EntryExitCarDTO> dongList = entryExitCarService.getSearchList(pageRequestDTO, dongTest, householdDTO);
         System.out.println("-------<dong>-------");
         dongList.getDtoList().forEach(System.out::println);
 
@@ -90,7 +94,8 @@ public class EntryServiceTest {
                 .searchCategory("dong-ho")
                 .searchValue("101-101")
                 .build();
-        PageResponseDTO<EntryExitCarDTO> dongHoList = entryExitCarService.getSearchList(pageRequestDTO, dongHoTest);
+
+        PageResponseDTO<EntryExitCarDTO> dongHoList = entryExitCarService.getSearchList(pageRequestDTO, dongHoTest, householdDTO);
         System.out.println("-------<dong-ho>-------");
         dongHoList.getDtoList().forEach(System.out::println);
 
@@ -99,7 +104,7 @@ public class EntryServiceTest {
                 .searchCategory("isExit")
                 .searchValue("exit")
                 .build();
-        PageResponseDTO<EntryExitCarDTO> isExitList = entryExitCarService.getSearchList(pageRequestDTO, isExitTest);
+        PageResponseDTO<EntryExitCarDTO> isExitList = entryExitCarService.getSearchList(pageRequestDTO, isExitTest, householdDTO);
         System.out.println("-------<isExit>-------");
         isExitList.getDtoList().forEach(System.out::println);
 
@@ -109,7 +114,7 @@ public class EntryServiceTest {
                 .entryExitDateStart(LocalDate.parse("2024-01-01"))
                 .entryExitDateEnd(LocalDate.parse("2024-01-02"))
                 .build();
-        PageResponseDTO<EntryExitCarDTO> entryDateList = entryExitCarService.getSearchList(pageRequestDTO, entryDateTest);
+        PageResponseDTO<EntryExitCarDTO> entryDateList = entryExitCarService.getSearchList(pageRequestDTO, entryDateTest, householdDTO);
         System.out.println("-------<entryDate>-------");
         entryDateList.getDtoList().forEach(System.out::println);
 
@@ -119,7 +124,7 @@ public class EntryServiceTest {
                 .entryExitDateStart(LocalDate.parse("2024-01-01"))
                 .entryExitDateEnd(LocalDate.parse("2024-01-07"))
                 .build();
-        PageResponseDTO<EntryExitCarDTO> exitDateList = entryExitCarService.getSearchList(pageRequestDTO, exitDateTest);
+        PageResponseDTO<EntryExitCarDTO> exitDateList = entryExitCarService.getSearchList(pageRequestDTO, exitDateTest, householdDTO);
         System.out.println("-------<entryDate>-------");
         exitDateList.getDtoList().forEach(System.out::println);
 

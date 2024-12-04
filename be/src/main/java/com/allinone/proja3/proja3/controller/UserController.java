@@ -46,9 +46,8 @@ public class UserController {
         return userService.approvalStatus(uno);
     }
 
-    @PostMapping("/approval")
-    public void PostApproval(@RequestBody Map<String, Long> request){
-        Long uno = request.get("uno");
+    @PutMapping("/approval/{uno}")
+    public void PutApproval(@PathVariable(name = "uno") Long uno){
         System.out.println("User post approval controller : "+uno);
         userService.clearRole(uno);
         userService.addRole(uno, UserRole.USER);
