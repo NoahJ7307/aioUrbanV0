@@ -322,7 +322,7 @@ const GymProgramDetail = () => {
                 <div className="mt-8 space-y-6">
                     {/* 프로그램 세부정보 */}
                     <div className="bg-gray-50 p-8 rounded-lg shadow-md border border-gray-200">
-                        <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">프로그램 세부 내용</h2>
+                        <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">{gym.title}</h2>
                         <div className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="bg-white p-4 rounded-lg shadow-sm">
@@ -345,12 +345,14 @@ const GymProgramDetail = () => {
                                 </div>
                                 <div className="bg-white p-4 rounded-lg shadow-sm">
                                     <p className="flex items-center">
-                                        <span className="font-semibold w-24 text-gray-700">진행 시간:</span>
+                                        <span className="font-semibold w-24 text-gray-700">접수 기간:</span>
                                         <span className="text-gray-600">
-                                            {formatLocalTimeWithMeridiem(gym.programStartTime)} ~ {formatLocalTimeWithMeridiem(gym.programEndTime)}
+                                            {gym.applicationStartDate.split('T')[0]} {gym.applicationStartDate.split('T')[1].slice(0, 5)} ~
+                                            {gym.applicationEndDate.split('T')[0]} {gym.applicationEndDate.split('T')[1].slice(0, 5)}
                                         </span>
                                     </p>
                                 </div>
+
                             </div>
 
                             <div className="bg-white p-4 rounded-lg shadow-sm mt-4">
@@ -366,16 +368,16 @@ const GymProgramDetail = () => {
                                     <span className="text-gray-600">{gym.programStartDate} ~ {gym.programEndDate}</span>
                                 </p>
                             </div>
-
                             <div className="bg-white p-4 rounded-lg shadow-sm">
                                 <p className="flex items-center">
-                                    <span className="font-semibold w-24 text-gray-700">접수 기간:</span>
+                                    <span className="font-semibold w-24 text-gray-700">진행 시간:</span>
                                     <span className="text-gray-600">
-                                        {gym.applicationStartDate.split('T')[0]} {gym.applicationStartDate.split('T')[1].slice(0, 5)} ~
-                                        {gym.applicationEndDate.split('T')[0]} {gym.applicationEndDate.split('T')[1].slice(0, 5)}
+                                        {formatLocalTimeWithMeridiem(gym.programStartTime)} ~ {formatLocalTimeWithMeridiem(gym.programEndTime)}
                                     </span>
                                 </p>
                             </div>
+
+
                         </div>
 
 

@@ -3,14 +3,10 @@ import { modifyGolf, getUserGolfById } from '../../api/facilities/golfApi'
 import './GolfDetailModifyModal.css';
 import {  useSearchParams } from 'react-router-dom';
 import { handleSingleCancel } from './GolfCancel';
+import useReservationValidation from '../../hook/facilities/useReservationValidation';
 
 const GolfDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
-
-    // const [userName, setUserName] = useState(); // 로그인한 사용자 name
-    // useEffect(() => {
-    //     const getUserName = localStorage.getItem('userName');
-    //     if (getUserName) setUserName(getUserName);
-    // }, [])
+    const { validateReservation } = useReservationValidation();
     
     const [formData, setFormData] = useState({
         date: '',
@@ -60,8 +56,9 @@ const GolfDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('예약 id', reservationId)
-        console.log('수정 id', formData)
+        if (!validateReservation(formData)) {
+            return;
+        }
         try {
             //수정 api호출
             await modifyGolf(reservationId, formData);
@@ -78,7 +75,7 @@ const GolfDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <h2 className="modal-title">예약 수정</h2>
+                <h2 className="modal-title">예약 변경</h2>
                 
                 <form onSubmit={handleSubmit} className="form-container">
                     <div className="form-group">
@@ -89,6 +86,7 @@ const GolfDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
                             value={formData.date || ''}
                             onChange={handleModify}
                             required
+                            min={new Date().toISOString().split('T')[0]} // 오늘 날짜를 최소값으로 설정
                             className="form-input"
                         />
                     </div>
