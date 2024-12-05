@@ -134,9 +134,11 @@ body {
   border-radius: 0.3rem;
   font-size: 1rem;
   background-color: white;
- 
   color: #273a4e;
- 
+}
+
+.inputBox.error {
+  border: .15rem solid red;
 }
 
 .inputBox:focus {

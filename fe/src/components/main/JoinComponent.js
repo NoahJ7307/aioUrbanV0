@@ -22,6 +22,7 @@ const JoinComponent = () => {
     const [errors, setErrors] = useState({})
     const [verifyNum, setVerifyNum] = useState('')
     const [isVerify, setIsVerify] = useState(false)
+    const [isDuplicate, setDuplicate] = useState(false)
 
     const handleChange = (e) => {
         userData[e.target.name] = e.target.value
@@ -49,13 +50,18 @@ const JoinComponent = () => {
 
     const handleClickVerifySend = () => {
         const verifyPhone = userData.phone
-        if (verifyPhone.length === 11) {
-            verifyPhoneSend(verifyPhone).then(data => {
-                setVerifyNum('' + data)
-            })
-            alert('인증번호 입력 후 인증 확인을 눌러주세요')
+        if (isDuplicate) {
+            if (verifyPhone.length === 11) {
+                verifyPhoneSend(verifyPhone).then(data => {
+                    setVerifyNum('' + data)
+                })
+                alert('인증번호 입력 후 인증 확인을 눌러주세요')
+            } else {
+                alert('전화번호는 11자리 입니다')
+                return
+            }
         } else {
-            alert('전화번호는 11자리 입니다')
+            alert('전화번호 중복확인이 필요합니다')
             return
         }
     }
@@ -71,7 +77,7 @@ const JoinComponent = () => {
         console.log('인증번호 확인')
     }
 
-    const handleClickPhoneCheck = () => {
+    const handleClickDuplicate = () => {
         const verifyPhone = userData.phone
         if (verifyPhone.length === 11) {
             duplicateCheckPhone(verifyPhone).then(data => {
@@ -80,6 +86,7 @@ const JoinComponent = () => {
                     navigate('/login/findPw')
                 } else {
                     alert('가입된 전화번호가 없습니다\n가입이 가능합니다')
+                    setDuplicate(true)
                 }
             })
         } else {
@@ -159,7 +166,7 @@ const JoinComponent = () => {
 
                         <button
                             type='button' className='formButton add'
-                            onClick={handleClickPhoneCheck}
+                            onClick={handleClickDuplicate}
                             style={{
                                 width: '80px',
                                 height: '50px',
@@ -237,7 +244,7 @@ const JoinComponent = () => {
                     style={{ width: '50%' }}
                     onClick={handleClick}>가입</button>
                 <button type='button' className='topMenuBtn'
-                    style={{ width: '50%' ,backgroundColor: '#ef4444' }}
+                    style={{ width: '50%', backgroundColor: '#ef4444' }}
                     onClick={() => moveToPath('/')}>취소</button>
             </div>
         </div>
