@@ -119,10 +119,13 @@ const MenuComponent = () => {
     };
 
     const handleMenuClick = (menuName, e) => {
-        e.stopPropagation();
-        setActiveMenu(activeMenu === menuName ? null : menuName);
-
-
+        if (isLogin) {
+            e.stopPropagation();
+            setActiveMenu(activeMenu === menuName ? null : menuName);
+        } else {
+            alert('로그인이 필요한 서비스 입니다')
+            navigate('/login')
+        }
     };
 
     const handleSubMenuClick = (path) => {
@@ -227,23 +230,23 @@ const MenuComponent = () => {
                             {loadLoginData().role === 'PENDING' ? null : (
                                 <button className="menu-toggle" onClick={toggleSidebar}>
                                     <i className="fa-solid fa-user"></i>
-                                    <span className="nav-text" style={{fontFamily:'LINESeedKR-Md'}}>마이페이지</span>
+                                    <span className="nav-text" style={{ fontFamily: 'LINESeedKR-Md' }}>마이페이지</span>
                                 </button>
                             )}
                             <button onClick={handleClickLogout} className="nav-link">
                                 <i className="fa-solid fa-right-from-bracket"></i>
-                                <span className="nav-text" style={{fontFamily:'LINESeedKR-Md'}}>로그아웃</span>
+                                <span className="nav-text" style={{ fontFamily: 'LINESeedKR-Md' }}>로그아웃</span>
                             </button>
                         </>
                     ) : (
                         <>
                             <Link to="/join" className="nav-link">
                                 <i className="fa-solid fa-user-plus"></i>
-                                <span className="nav-text" style={{fontFamily:'LINESeedKR-Md'}}>회원가입</span>
+                                <span className="nav-text" style={{ fontFamily: 'LINESeedKR-Md' }}>회원가입</span>
                             </Link>
                             <Link to="/login" className="nav-link">
                                 <i className="fa-solid fa-right-to-bracket"></i>
-                                <span className="nav-text" style={{fontFamily:'LINESeedKR-Md'}}>로그인</span>
+                                <span className="nav-text" style={{ fontFamily: 'LINESeedKR-Md' }}>로그인</span>
                             </Link>
                         </>
                     )}
@@ -256,8 +259,8 @@ const MenuComponent = () => {
 
 
             <nav id="sidebar-wrapper" className={isMyPageOpen ? 'active' : ''}>
-                <ul className="sidebar-nav" style={{fontFamily:'LINESeedKR-Bd'}}>
-                    <li className="sidebar-brand" style={{ pointerEvents: 'none'}}>
+                <ul className="sidebar-nav" style={{ fontFamily: 'LINESeedKR-Bd' }}>
+                    <li className="sidebar-brand" style={{ pointerEvents: 'none' }}>
                         <p className='mt-10 mb-10'>마이페이지</p>
                     </li>
                     <li className="sidebar-brand">
@@ -298,7 +301,7 @@ const MenuComponent = () => {
                                     <li
                                         key={index}
                                         className="category-item"
-                                        style={{ fontFamily: 'LINESeedKR-Md',fontSize:'1rem' }}
+                                        style={{ fontFamily: 'LINESeedKR-Md', fontSize: '1rem' }}
 
                                         onClick={() => {
                                             navigate(item.path);
