@@ -142,18 +142,35 @@ const VisitPage = () => {
     setSearchData(newSearchData)
 
     const pageParam = { page, size }
-
-    if (newSearchData.searchCategory) {
-      visitGetSearchList(pageParam, newSearchData).then(data => {
-        setPageServerData(data)
-        // 결과 예외 처리
-        if (!data.dtoList || data.dtoList.length === 0) {
-          alert('검색 결과가 없습니다')
-        }
-      })
-    } else {
-      setPageServerData(initStateServerData)
+    let household = {
+      dong: null,
+      ho: null,
     }
+    if (loadLoginData().role === 'USER') {
+      household = {
+        dong: loadLoginData().dong,
+        ho: loadLoginData().ho,
+      }
+    }
+
+    const fetch = async () => {
+      if (newSearchData.searchCategory) {
+        try {
+          await visitGetSearchList(pageParam, newSearchData, household).then(data => {
+            setPageServerData(data)
+            // 결과 예외 처리
+            if (!data.dtoList || data.dtoList.length === 0) {
+              alert('검색 결과가 없습니다')
+            }
+          })
+        } catch (error) {
+          alert('잘못된 입력입니다')
+        }
+      } else {
+        setPageServerData(initStateServerData)
+      }
+    }
+    fetch()
   }, [location.search])
 
 

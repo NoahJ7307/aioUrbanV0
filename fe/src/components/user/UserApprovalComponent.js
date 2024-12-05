@@ -23,16 +23,14 @@ const UserApprovalComponent = () => {
     const [serverData, setServerData] = useState(initState)
     const { page, size, moveToList } = useCustomApproval()
 
-    const handleClickAccess = (e) => {
-        const uno = e.target.value
+    const handleClickAccess = (uno) => {
         addUserRole(uno)
         alert('승인 완료')
         getList()
     }
 
-    const handleClickDenial = (e) => {
-        const uno = [e.target.value]
-        deleteChecked(uno)
+    const handleClickDenial = (uno) => {
+        deleteChecked([uno])
         alert('거부 완료')
         getList()
     }
@@ -68,12 +66,10 @@ const UserApprovalComponent = () => {
                     <div>{user.phone}</div>
                     <div className="buttonGroup">
                         <button className='formButton add green h-4 '
-                            value={user.uno}
-                            onClick={handleClickAccess}
+                            onClick={() => handleClickAccess(user.uno)}
                         ><CheckCircleIcon /></button>
                         <button className='formButton cancel h-4'
-                            value={user.uno}
-                            onClick={handleClickDenial}
+                            onClick={() => handleClickDenial(user.uno)}
                         ><DoNotTouchIcon /></button>
                     </div>
                 </div>

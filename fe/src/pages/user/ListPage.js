@@ -93,20 +93,27 @@ const ListPage = () => {
 
         const pageParam = { page, size }
 
-        if (newSearchData.searchCategory) {
-            getSearchList(pageParam, newSearchData).then(data => {
-                setPageServerData(data)
-                // 결과 예외 처리
-                if (!data.dtoList || data.dtoList.length === 0) {
-                    alert('검색 결과가 없습니다')
+        const fetch = async () => {
+            if (newSearchData.searchCategory) {
+                try {
+                    await getSearchList(pageParam, newSearchData).then(data => {
+                        setPageServerData(data)
+                        // 결과 예외 처리
+                        if (!data.dtoList || data.dtoList.length === 0) {
+                            alert('검색 결과가 없습니다')
+                        }
+                    })
+                } catch (error) {
+                    alert('잘못된 입력입니다')
                 }
-            })
-        } else {
-            // 기본 데이터 로드
-            getList(pageParam).then(data => {
-                setPageServerData(data)
-            })
+            } else {
+                // 기본 데이터 로드
+                getList(pageParam).then(data => {
+                    setPageServerData(data)
+                })
+            }
         }
+        fetch()
     }, [location.search])
 
     const handleClickClear = () => {
@@ -163,7 +170,6 @@ const ListPage = () => {
                                 <option value='PENDING'>승인대기</option>
                                 <option value='USER'>입주민</option>
                                 <option value='ADMIN'>관리자</option>
-                                <option value='ROOT'>ROOT</option>
                             </select>
                         </div>
                         :

@@ -90,8 +90,11 @@ public class VisitParkingServiceImpl implements VisitParkingService {
     }
 
     @Override
-    public PageResponseDTO<VisitParkingDTO> getSearchList(PageRequestDTO pageRequestDTO, VisitSearchDataDTO visitSearchDataDTO) {
+    public PageResponseDTO<VisitParkingDTO> getSearchList(PageRequestDTO pageRequestDTO, VisitSearchDataDTO visitSearchDataDTO, HouseholdDTO householdDTO) {
         System.out.println("getSearchList service");
+        // FE 에서 USER 인 경우에만 householdDTO 를 전달함
+        boolean isUser = householdDTO.getDong() != null;
+        System.out.println("isUser : "+isUser);
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
@@ -113,16 +116,36 @@ public class VisitParkingServiceImpl implements VisitParkingService {
             case "ho":
                 result = visitParkingRepository.findByHo(visitSearchDataDTO.getSearchValue(), pageable);
                 break;
+            // User 권한으로 검색 시 해당 동-호 만 표출
             case "name":
-                result = visitParkingRepository.findByName(visitSearchDataDTO.getSearchValue(), pageable);
+                result = isUser ?
+                                visitParkingRepository.findByNameContainingAndHousehold_HouseholdPK_DongAndHousehold_HouseholdPK_Ho(
+                                        visitSearchDataDTO.getSearchValue(), householdDTO.getDong(), householdDTO.getHo(), pageable)
+                                :
+                                visitParkingRepository.findByName(visitSearchDataDTO.getSearchValue(), pageable);
+                break;
+            case "carNum":
+                result = isUser ?
+                        visitParkingRepository.findByCarNumContainingAndHousehold_HouseholdPK_DongAndHousehold_HouseholdPK_Ho(
+                                visitSearchDataDTO.getSearchValue(), householdDTO.getDong(), householdDTO.getHo(), pageable)
+                        :
+                        visitParkingRepository.findByCarNum(visitSearchDataDTO.getSearchValue(), pageable);
                 break;
             case "phone":
-                result = visitParkingRepository.findByPhone(visitSearchDataDTO.getSearchValue(), pageable);
+                result = isUser ?
+                        visitParkingRepository.findByPhoneContainingAndHousehold_HouseholdPK_DongAndHousehold_HouseholdPK_Ho(
+                                visitSearchDataDTO.getSearchValue(), householdDTO.getDong(), householdDTO.getHo(), pageable)
+                        :
+                        visitParkingRepository.findByPhone(visitSearchDataDTO.getSearchValue(), pageable);
                 break;
             case "expectedDate": {
                 LocalDate start = visitSearchDataDTO.getExpectedDateStart();
                 LocalDate end = visitSearchDataDTO.getExpectedDateEnd();
-                result = visitParkingRepository.findByExpectedDate(start, end, pageable);
+                result = isUser ?
+                        visitParkingRepository.findByExpectedDateBetweenAndHousehold_HouseholdPK_DongAndHousehold_HouseholdPK_Ho(
+                                start, end, householdDTO.getDong(), householdDTO.getHo(), pageable)
+                        :
+                        visitParkingRepository.findByExpectedDate(start, end, pageable);
             }
             break;
             default:

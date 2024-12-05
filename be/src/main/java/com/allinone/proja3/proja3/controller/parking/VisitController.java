@@ -36,9 +36,11 @@ public class VisitController {
     public PageResponseDTO<VisitParkingDTO> getSearchList(@RequestBody VisitReqDTO visitReqDTO){
         PageRequestDTO pageRequestDTO = visitReqDTO.getPageRequestDTO();
         VisitSearchDataDTO visitSearchDataDTO = visitReqDTO.getVisitSearchDataDTO();
+        HouseholdDTO householdDTO = visitReqDTO.getHouseholdDTO();
         System.out.println("Visit getSearchList controller pageRequestDTO : "+pageRequestDTO);
         System.out.println("Visit getSearchList controller visitSearchDataDTO : "+ visitSearchDataDTO);
-        return visitParkingService.getSearchList(pageRequestDTO, visitSearchDataDTO);
+        System.out.println("Visit getSearchList controller visitSearchDataDTO : "+ householdDTO);
+        return visitParkingService.getSearchList(pageRequestDTO, visitSearchDataDTO, householdDTO);
     }
 
     @PostMapping("/delete")

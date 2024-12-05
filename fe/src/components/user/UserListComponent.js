@@ -18,6 +18,12 @@ const initState = {
     current: 0
 }
 
+const roleListName = {
+    PENDING: '승인대기',
+    USER: '입주민',
+    ADMIN: '관리자',
+}
+
 const UserListComponent = ({ pageServerData, searchData }) => {
     const [serverData, setServerData] = useState(initState)
     const { page, size } = useCustom()
@@ -148,7 +154,7 @@ const UserListComponent = ({ pageServerData, searchData }) => {
                     <div>{user.ho}</div>
                     <div>{user.userName}</div>
                     <div>{user.phone}</div>
-                    <div>{user.userRoleList}</div>
+                    <div>{user.userRoleList.map(role => roleListName[role])}</div>
                 </label>
             ))}
             <PageComponent serverData={serverData} movePage={movePage} />
