@@ -28,7 +28,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -43,6 +42,8 @@ public class MarketServiceImpl implements MarketService {
     private final String uploadDir = "upload"; // 이미지가 저장될 디렉토리 경로 설정
     private final CommunityChatRepository chatRepository;
 
+
+// 게시물 조회를 위한 마켓 데이터 조회후, 페이지 반환 .
     @Override
     public PageResponseDTO<MarketDTO> findAllmarket(PageRequestDTO pageRequestDTO) {
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), Sort.by("mno").descending());
@@ -58,7 +59,7 @@ public class MarketServiceImpl implements MarketService {
                 .totalCount(result.getTotalElements())
                 .build();
     }
-
+//게시물 생성 . 게시물 생성을 위해  savefile을 이용하여 이미지와 섬네일 저장후 유저데이터 저장.
     @Override
     public Market createPost(User user, Market market, MultipartFile thumbnail, List<MultipartFile> images) throws IOException {
         if (thumbnail != null && !thumbnail.isEmpty()) {
@@ -66,7 +67,6 @@ public class MarketServiceImpl implements MarketService {
             String thumbnailUrl = "/upload/" + savedThumbnailName; // HTTP URL 생성
             market.setThumbnailUrl(thumbnailUrl);
         }
-
         // 이미지 리스트 처리
         if (images != null && !images.isEmpty()) {
             List<String> imageUrls = images.stream()
@@ -81,10 +81,8 @@ public class MarketServiceImpl implements MarketService {
                     })
                     .filter(url -> url != null) // null 값 필터링
                     .collect(Collectors.toList());
-
             market.setImageUrls(imageUrls); // 이미지 URL 리스트 설정
         }
-
         market.setUser(user);
         return repository.save(market); // DB에 Market 엔티티 저장
     }
@@ -101,10 +99,9 @@ public class MarketServiceImpl implements MarketService {
         return fileName; // 파일 이름만 반환
     }
 
-
+// 엔터티에 있는 내용을 dto로 반환
     @Override
     public MarketDTO entityDto(Market market) {
-        System.out.println("Entity DTO: " + market); // 디버깅을 위한 로그 추가
         return MarketDTO.builder()
                 .mno(market.getMno())
                 .title(market.getTitle())
@@ -118,14 +115,6 @@ public class MarketServiceImpl implements MarketService {
                 .userName(market.getUser().getUserName())
                 .build();
     }
-
-    @Override
-    public MarketDTO getMno(Long mno, User user) {
-        Market market = repository.findById(mno).orElseThrow(() -> new IllegalArgumentException("읽었다" + mno));
-        return new MarketDTO(market.getMno(), market.getTitle(), market.getContent(), market.getImageUrls(), market.getThumbnailUrl(), market.getPrice());
-    }
-
-
 
     @Override
     public MarketDTO findByMno(Long mno) {
@@ -145,19 +134,14 @@ public class MarketServiceImpl implements MarketService {
         if (!market.getUser().getUno().equals(uno)) {
             throw new SecurityException("본인만 게시글을 삭제할 수 있습니다.");
         }
-
         // 외래 키 무시 설정
         entityManager.createNativeQuery("SET FOREIGN_KEY_CHECKS = 0").executeUpdate();
-
         // 썸네일 삭제
         deleteFile(market.getThumbnailUrl());
-
         // 모든 이미지 파일 삭제
         market.getImageUrls().forEach(this::deleteFile);
-
         // 게시글 삭제
         repository.delete(market);
-
         // 외래 키 복원
         entityManager.createNativeQuery("SET FOREIGN_KEY_CHECKS = 1").executeUpdate();
     }
@@ -190,13 +174,17 @@ public class MarketServiceImpl implements MarketService {
     // 파일 삭제 메서드
     private void deleteFile(String filePath) {
         if (filePath != null && !filePath.isEmpty()) {
-            File file = new File(filePath);
+            // 상대 경로를 절대 경로로 변환
+            String fullFilePath = System.getProperty("user.dir")  + filePath;  // 예: "/upload/파일명" -> 프로젝트 디렉토리 절대 경로
+            File file = new File(fullFilePath);
             if (file.exists()) {
                 if (!file.delete()) {
-                    System.err.println("파일 삭제 실패: " + filePath);
+                    System.err.println("파일 삭제 실패:1not" + fullFilePath);
+                } else {
+                    System.out.println("파일 삭제 성공: 2ok" + fullFilePath);
                 }
             } else {
-                System.err.println("파일이 존재하지 않음: " + filePath);
+                System.err.println("파일이 존재하지 않음: 3null" + fullFilePath);
             }
         }
     }
@@ -264,13 +252,13 @@ public class MarketServiceImpl implements MarketService {
     @Override
     public Market findMarketById(Long mno) {
         return repository.findById(mno)
-                .orElseThrow(() -> new IllegalArgumentException("Market not found for mno: " + mno));
+                .orElseThrow(() -> new IllegalArgumentException("Market not found for mno12: " + mno));
     }
 
     @Override
     public List<MarketDTO> findDataByUno(Long uno) {
         User user = userRepository.findById(uno)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found123"));
         List<Market> marketList = repository.findByUser(user);
         return marketList.stream()
                 .map(this::entityDto)
@@ -280,6 +268,6 @@ public class MarketServiceImpl implements MarketService {
     @Override
     public User findByUno(Long uno) {
         return userRepository.findById(uno)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + uno));
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID:1234 " + uno));
     }
 }

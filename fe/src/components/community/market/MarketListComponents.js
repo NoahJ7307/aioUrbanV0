@@ -170,7 +170,7 @@ const MarketListComponents = () => {
 
                 {/* 오른쪽 글쓰기 버튼 */}
                 <button
-                    onClick={() =>navigate('/communities/market/add')}
+                    onClick={() => navigate('/communities/market/add')}
                     className="bg-blue-500 text-white py-1 px-4 rounded-lg"
                 >
                     상품등록
@@ -208,32 +208,32 @@ const MarketListComponents = () => {
                                     >
                                         상세보기
                                     </button>
-                                   
-                                        <button
-                                            onClick={() => { navigate(`/communities/market/modify/${item.mno}`); }}
-                                            disabled={!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)}
-                                            className={`py-1 px-3 rounded-lg ${!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)
-                                                ? 'bg-gray-300 cursor-not-allowed'
-                                                : 'bg-blue-500 text-white'
-                                                }`}
-                                        >
-                                            {!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId) ? '권한없음' : '수정'}
-                                        </button>
-                                    
+
+                                    <button
+                                        onClick={() => { navigate(`/communities/market/modify/${item.mno}`); }}
+                                        disabled={!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)}
+                                        className={`py-1 px-3 rounded-lg ${!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)
+                                            ? 'bg-gray-300 cursor-not-allowed'
+                                            : 'bg-blue-500 text-white'
+                                            }`}
+                                    >
+                                        {!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId) ? '권한없음' : '수정'}
+                                    </button>
+
 
                                     {/* 삭제 버튼 */}
-                             
-                                        <button
-                                            onClick={() => { handleDelete(item.mno); }}
-                                            disabled={!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)}
-                                            className={`py-1 px-3 rounded-lg ${!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)
-                                                ? 'bg-gray-300 cursor-not-allowed'
-                                                : 'bg-red-500 text-white'
-                                                }`}
-                                        >
-                                            {!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId) ? '권한없음' : '삭제'}
-                                        </button>
-                               
+
+                                    <button
+                                        onClick={() => { handleDelete(item.mno); }}
+                                        disabled={!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)}
+                                        className={`py-1 px-3 rounded-lg ${!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)
+                                            ? 'bg-gray-300 cursor-not-allowed'
+                                            : 'bg-red-500 text-white'
+                                            }`}
+                                    >
+                                        {!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId) ? '권한없음' : '삭제'}
+                                    </button>
+
                                     {/* <button
                                         onClick={() => { navigate(`/communities/market/chat/${item.mno}`); }}
                                         className="bg-green-500 text-white py-1 px-3 rounded-lg hover:bg-green-600 transition duration-200"
@@ -248,14 +248,14 @@ const MarketListComponents = () => {
             </div>
 
             <div>
-         
+
 
                 <PageComponent serverData={serverData} movePage={moveToList} />
             </div>
 
             {showModal && currentPost && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="w-full md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-auto bg-gray-200 p-6 rounded-lg shadow-lg">
+                    <div className="mt-16 max-h-[70vh] overflow-auto bg-gray-200 p-6 rounded-lg shadow-lg">
                         <h2 className="text-2xl font-semibold mb-4">게시물 상세</h2>
                         <table className="min-w-full text-sm text-gray-600 bg-white shadow-md rounded-lg mb-4">
                             <tbody>
@@ -283,7 +283,7 @@ const MarketListComponents = () => {
                             <h3 className="font-semibold">내용</h3>
                             <p>{currentPost.content}</p>
                         </div>
-                        <div className="mt-4">
+                        <div className="mt-1" >
                             <h3 className="font-semibold">상품 이미지</h3>
                             <div className="flex cursor-pointer relative">
                                 <div
@@ -293,15 +293,7 @@ const MarketListComponents = () => {
                                 <img
                                     src={`http://localhost:8080${currentPost.imageUrls[currentImageIndex]}`}
                                     alt="게시물 이미지"
-                                    className="w-auto h-auto rounded-lg"
-                                />
-                                <div
-                                    className="absolute right-0 top-0 bottom-0 w-1/3"
-                                    onClick={() => handleNextImage()}                                ></div>
-                                <img
-                                    src={`http://localhost:8080${currentPost.imageUrls[currentImageIndex]}`}
-                                    alt="게시물 이미지"
-                                    className="w-auto h-auto rounded-lg"
+                                    className="w-[800px] h-[400px] object-cover rounded-lg"
                                 />
                                 <div
                                     className="absolute right-0 top-0 bottom-0 w-1/3"
@@ -309,7 +301,7 @@ const MarketListComponents = () => {
                                 ></div>
                             </div>
                         </div>
-                        <div className="mt-4 flex overflow-x-auto">
+                        <div className="mt-4 flex overflow-x-auto max-w-[800px]">
                             {currentPost.imageUrls.map((url, index) => (
                                 <img
                                     key={index}
@@ -340,8 +332,9 @@ const MarketListComponents = () => {
                         </div>
                     </div>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 };
 
