@@ -3,7 +3,7 @@ import { getJobs } from '../../api/community/JobAPi';
 
 const InfoMainComponents = () => {
     const mapContainer = useRef(null);
-    const [keyword, setKeyword] = useState('java');
+    const [keyword, setKeyword] = useState('');
     const [places, setPlaces] = useState([]);
     const [pagination, setPagination] = useState(null);
     const [map, setMap] = useState(null);
@@ -172,7 +172,7 @@ const InfoMainComponents = () => {
         <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
             <div>
             <header className="text-center mb-8">
-                    <h1 className="text-3xl font-bold">내 주변 일자리 정보</h1>
+                    <h1 className="text-3xl font-bold">Avan 일자리 검색</h1>
 
                 </header>
         <div className="flex flex-wrap">
@@ -187,21 +187,21 @@ const InfoMainComponents = () => {
                             }}
                             className="flex items-center space-x-4"
                         >
-                            <label className="text-lg font-semibold text-gray-700">
-                                Keyword:
+                                    <label htmlFor="keyword" className="text-lg font-semibold text-gray-700">
+                                        사람인 채용 검색:
                                 <input
                                     type="text"
                                     value={keyword}
                                     onChange={handleKeywordChange}
                                     className="ml-2 p-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400"
-                                    placeholder="Search keyword"
+                                    placeholder="찾으시는 일자리가 있나요?"
                                 />
                             </label>
                             <button
                                 type="submit"
                                 className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all"
                             >
-                                Search
+                                검색
                             </button>
                         </form>
                     </div>

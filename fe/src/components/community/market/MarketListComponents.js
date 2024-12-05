@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import PageComponent from '../../common/PageComponent';
 import CommunityCustom from '../../hook/CommunityCustom';
 
+
 const initState = {
     dtoList: [],
     pageNumList: [],
@@ -109,32 +110,43 @@ const MarketListComponents = () => {
     };
 
     const handleSearch = async () => {
-        setLoading(true);
+        if (keyword === '' || keyword === null) {
+            window.location.reload(); // 페이지 새로 고침
+            return; // 이후 로직 실행 방지
+        }
+        setLoading(true); // 로딩 상태 설정
         try {
             const data = await search({
                 type,
                 keyword,
                 page,
                 size,
-                category: "market",
+                category: 'market', // 검색 카테고리
             });
+
+            if (data.dtoList.length === 0) {
+                alert("검색 결과가 없습니다."); // 검색 결과가 없을 경우 경고창
+                window.location.reload(); // 페이지 새로 고침
+            }
+
             console.log("검색 요청 데이터:", { type, keyword, page, size, category: "market" });
+            setServerData(data); // 검색 결과 설정
             console.log("검색 결과:", data);
-            setServerData(data);
             setError(null);
         } catch (err) {
             console.error("검색 실패:", err);
             setError("검색 중 문제가 발생했습니다.");
         } finally {
-            setLoading(false);
+            setLoading(false); // 로딩 상태 해제
         }
     };
+
 
     return (
         <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
             <div >
                 <header className="text-center mb-8">
-                    <h1 className="text-3xl font-bold">마켓 리스트</h1>
+                    <h1 className="text-3xl font-bold">장터</h1>
 
                 </header>
                 {/* 왼쪽 검색 필터 */}
@@ -153,20 +165,28 @@ const MarketListComponents = () => {
                             <option value="titleAndContent">제목+내용</option>
                         </select>
 
-                        <input
-                            type="text"
-                            value={keyword}
-                            onChange={handleSearchInputChange}
-                            placeholder="검색어를 입력해 주세요"
-                            className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-
-                        <button
-                            onClick={handleSearch}
-                            className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault(); // 기본 폼 제출 동작 방지
+                                handleSearch(); // 검색 함수 호출
+                            }}
+                            className="flex items-center space-x-4"
                         >
-                            검색
-                        </button>
+                            <input
+                                type="text"
+                                value={keyword}
+                                onChange={handleSearchInputChange} // 상태 업데이트
+                                placeholder="검색어를 입력해 주세요"
+                                className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                            <button
+                                type="submit" // 버튼 타입을 submit으로 설정
+                                className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                            >
+                                검색
+                            </button>
+                        </form>
+
                     </div>
 
                     {/* 오른쪽 글쓰기 버튼 */}
@@ -184,7 +204,7 @@ const MarketListComponents = () => {
                         <div className="col-span-3 text-center py-4">로딩 중...</div>
                     ) : error ? (
                         <div className="col-span-3 text-center text-red-600 py-4">{error}</div>
-                    ) : (
+                        ) : (serverData.dtoList &&
                         serverData.dtoList.map((item, index) => (
                             <div key={index} className="bg-white border-2 border-gray-100 rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                                 {item.thumbnailUrl ? (
@@ -255,9 +275,16 @@ const MarketListComponents = () => {
                 </div>
 
                 {showModal && currentPost && (
-                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                        <div className="w-full md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-auto bg-gray-200 p-6 rounded-lg shadow-lg">
-                            <h2 className="text-2xl font-semibold mb-4">게시물 상세</h2>
+                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+                        style={{
+                            top: "100px"
+                            
+                        }}
+                        
+                    >
+                        <div className="w-full md:w-3/4 lg:w-2/3 max-h-[75vh] overflow-auto bg-gray-200 p-6 rounded-lg shadow-lg"
+                            style={{ width: "600px", height: "600px" }}>
+                            <h2 className="text-2xl font-semibold mb-4 text-center">상세내용</h2>
                             <table className="min-w-full text-sm text-gray-600 bg-white shadow-md rounded-lg mb-4">
                                 <tbody>
                                     <tr>
@@ -289,28 +316,30 @@ const MarketListComponents = () => {
                                 <div className="flex cursor-pointer relative">
                                     <div
                                         className="absolute left-0 top-0 bottom-0 w-1/3"
+                                        
                                         onClick={() => handlePrevImage()}
                                     ></div>
                                     <img
                                         src={`http://localhost:8080${currentPost.imageUrls[currentImageIndex]}`}
                                         alt="게시물 이미지"
                                         className="w-auto h-auto rounded-lg"
+                                        style={{width:"500px", height:"500px"}}
                                     />
                                     <div
                                         className="absolute right-0 top-0 bottom-0 w-1/3"
                                         onClick={() => handleNextImage()}                                ></div>
-                                    <img
+                                    {/* <img
                                         src={`http://localhost:8080${currentPost.imageUrls[currentImageIndex]}`}
                                         alt="게시물 이미지"
                                         className="w-auto h-auto rounded-lg"
-                                    />
+                                    /> */}
                                     <div
                                         className="absolute right-0 top-0 bottom-0 w-1/3"
                                         onClick={() => handleNextImage()}
                                     ></div>
                                 </div>
                             </div>
-                            <div className="mt-4 flex overflow-x-auto">
+                            <div className="mt-4 flex overflow-x-auto  space-x-2">
                                 {currentPost.imageUrls.map((url, index) => (
                                     <img
                                         key={index}
@@ -318,16 +347,18 @@ const MarketListComponents = () => {
                                         alt={`썸네일 ${index + 1}`}
                                         className={`w-24 h-24 object-cover rounded-lg cursor-pointer m-1 ${currentImageIndex === index ? 'border-2 border-blue-500' : ''}`}
                                         onClick={() => setCurrentImageIndex(index)}
+                                        
                                     />
                                 ))}
                             </div>
-                            <div className="text-right mt-4">
+                            <div className="text-right mt-4 " >
                                 <button
                                     onClick={() => {
                                         // 현재 선택된 게시물의 mno를 사용하여 채팅 페이지로 이동
                                         navigate(`/communities/market/chat/${currentPost.mno}`);
                                     }}
-                                    className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 ml-2"
+                                    className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 ml-2 mr-6"
+                                
                                 >
                                     1:1 대화
                                 </button>

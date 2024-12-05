@@ -58,7 +58,7 @@ const MyAnnouncePostsComponent = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6 text-center">
-        <h2 className="text-3xl font-semibold">내가 쓴 공지사항</h2>
+        <h2 className="text-3xl font-semibold">공지사항</h2>
       </div>
       <div className="grid grid-cols-1 gap-4">
         {posts.length > 0 ? (

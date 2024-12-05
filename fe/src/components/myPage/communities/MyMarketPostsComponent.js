@@ -74,7 +74,7 @@ const MyMarketPostsComponent = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6 text-center">
-        <h2 className="text-3xl font-semibold">내가 쓴 마켓 게시물</h2>
+        <h2 className="text-3xl font-semibold">장터</h2>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {posts.length > 0 ? (

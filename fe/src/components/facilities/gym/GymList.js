@@ -89,6 +89,7 @@ const GymList = () => {
     const resultCount = await fetchGymListSearch();
     if (resultCount === 0) {
       alert("검색 결과가 없습니다 😓")
+      window.location.reload(); // 페이지유림
     } else {
       const params = new URLSearchParams({ type, keyword, page: 1, size }).toString();
       navigate(`/facilities/gym/list?${params}`);
@@ -127,20 +128,27 @@ const GymList = () => {
             <option value="titleAndContent">제목+내용</option>
           </select>
 
-          <input
-            type="text"
-            value={keyword}
-            onChange={handleSearchInputChange}
-            placeholder="검색어를 입력해 주세요"
-            className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-
-          <button
-            onClick={handleSearch}
-            className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+          <form
+            onSubmit={(e) => {
+              e.preventDefault(); // 기본 폼 제출 동작 방지
+              handleSearch(); // 검색 함수 호출
+            }}
+            className="flex items-center space-x-4"
           >
-            검색
-          </button>
+            <input
+              type="text"
+              value={keyword}
+              onChange={handleSearchInputChange} // 상태 업데이트
+              placeholder="검색어를 입력해 주세요"
+              className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+              type="submit" // 버튼 타입을 submit으로 설정
+              className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+            >
+              검색
+            </button>
+          </form>
         </div>
       </div>
 

@@ -64,6 +64,7 @@ const AnnounceListComponent = () => {
                 console.error("Axios 에러", err);
                 setError("데이터를 가져오는 데 실패했습니다."); // 에러 상태 설정
                 setLoading(false); // 로딩 상태 업데이트
+
             });
     }, [page, size]);
 
@@ -97,12 +98,10 @@ const AnnounceListComponent = () => {
     };
 
     const handleSearch = async () => {
-        // 검색어가 비어있으면 경고창 표시
-        if (!keyword.trim()) {
-            alert("검색어를 입력해 주세요."); // 경고창
-            return; // 검색 실행 중단
+        if (keyword === '' || keyword === null) {
+            window.location.reload(); // 페이지 새로 고침
+            return; // 이후 로직 실행 방지
         }
-
         setLoading(true); // 로딩 상태 설정
         try {
             const data = await search({
@@ -115,11 +114,12 @@ const AnnounceListComponent = () => {
 
             if (data.dtoList.length === 0) {
                 alert("검색 결과가 없습니다."); // 검색 결과가 없을 경우 경고창
+                window.location.reload(); // 페이지 새로 고침
             }
 
             console.log("검색 요청 데이터:", { type, keyword, page, size, category: "announce" });
-            console.log("검색 결과:", data);
             setServerData(data); // 검색 결과 설정
+            console.log("검색 결과:", data);
             setError(null);
         } catch (err) {
             console.error("검색 실패:", err);
@@ -128,6 +128,7 @@ const AnnounceListComponent = () => {
             setLoading(false); // 로딩 상태 해제
         }
     };
+
 
     return (
         <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
@@ -152,20 +153,27 @@ const AnnounceListComponent = () => {
                             <option value="titleAndContent">제목+내용</option>
                         </select>
 
-                        <input
-                            type="text"
-                            value={keyword}
-                            onChange={(e) => setKeyword(e.target.value)}
-                            placeholder="검색어를 입력해 주세요"
-                            className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-
-                        <button
-                            onClick={handleSearch}
-                            className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault(); // 기본 동작 방지
+                                handleSearch(); // 검색 함수 호출
+                            }}
+                            className="flex items-center space-x-4"
                         >
-                            검색
-                        </button>
+                            <input
+                                type="text"
+                                value={keyword}
+                                onChange={(e) => setKeyword(e.target.value)} // 상태 업데이트
+                                placeholder="검색어를 입력해 주세요"
+                                className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                            <button
+                                type="submit" // 버튼 타입을 submit으로 설정
+                                className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                            >
+                                검색
+                            </button>
+                        </form>
                     </div>
 
                     {/* 오른쪽 글쓰기 버튼 */}
@@ -200,7 +208,7 @@ const AnnounceListComponent = () => {
                             <tr>
                                 <td colSpan="6" className="text-center text-red-600 py-4">{error}</td>
                             </tr>
-                        ) : (
+                        ) : (serverData.dtoList &&
                             serverData.dtoList.map((item, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
                                     <td className="py-3 px-4 border text-center">{item.pno}</td>

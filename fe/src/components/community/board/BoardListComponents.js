@@ -33,11 +33,11 @@ const BoardListComponents = () => {
 
     useEffect(() => {
         const getUno = localStorage.getItem('uno');
-     
+
         if (getUno) {
             setUno(Number(getUno));
 
-            
+
         } else {
             console.log("로그인 정보가 없습니다.");
         }
@@ -61,14 +61,14 @@ const BoardListComponents = () => {
             })
             .catch(err => {
                 console.error("Axios 에러", err);
-                setError("데이터를 가져오는 데 실패했습니다."); // 에러 상태 설정
+                // setError("가져 올 데이터가 없습니다.."); // 에러 상태 설정
                 setLoading(false); // 로딩 상태 업데이트
             });
     }, [page, size]);
 
     const handleDelete = async (pno) => {
         try {
-            const result = await deleteChecked(pno, uno,userRole);
+            const result = await deleteChecked(pno, uno, userRole);
             if (result) {
                 const updatedList = serverData.dtoList.filter(item => item.pno !== pno);
                 setServerData(prevData => ({
@@ -97,11 +97,10 @@ const BoardListComponents = () => {
     };
     const handleSearch = async () => {
         // 검색어가 비어있으면 경고창 표시
-        if (!keyword.trim()) {
-            alert("검색어를 입력해 주세요."); // 경고창
-            return; // 검색 실행 중단
+        if (keyword === '' || keyword === null) {
+            window.location.reload(); // 페이지 새로 고침
+            return; // 이후 로직 실행 방지
         }
-
         setLoading(true); // 로딩 상태 설정
         try {
             const data = await search({
@@ -133,7 +132,7 @@ const BoardListComponents = () => {
         <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
             <div >
                 <header className="text-center mb-8">
-                    <h1 className="text-3xl font-bold">자유게시판</h1>
+                    <h1 className="text-3xl font-bold">게시판</h1>
 
                 </header>
                 <div className="flex justify-between items-center mb-6">
@@ -150,20 +149,27 @@ const BoardListComponents = () => {
                             <option value="titleAndContent">제목+내용</option>
                         </select>
 
-                        <input
-                            type="text"
-                            value={keyword}
-                            onChange={handleSearchInputChange}
-                            placeholder="검색어를 입력해 주세요"
-                            className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-
-                        <button
-                            onClick={handleSearch}
-                            className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault(); // 폼 제출 기본 동작 방지
+                                handleSearch(); // 검색 핸들러 호출
+                            }}
+                            className="flex items-center space-x-4"
                         >
-                            검색
-                        </button>
+                            <input
+                                type="text"
+                                value={keyword}
+                                onChange={handleSearchInputChange}
+                                placeholder="검색어를 입력해 주세요"
+                                className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                            <button
+                                type="submit" // 버튼 타입을 submit으로 설정
+                                className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                            >
+                                검색
+                            </button>
+                        </form>
                     </div>
                     <button
                         onClick={() => { navigate('/communities/board/add'); }}
@@ -194,7 +200,7 @@ const BoardListComponents = () => {
                             <tr>
                                 <td colSpan="6" className="text-center text-red-600 py-4">{error}</td>
                             </tr>
-                        ) : (
+                        ) : (serverData.dtoList &&
                             serverData.dtoList.map((item, index) => (
                                 <tr key={index} className="hover:bg-gray-100">
                                     <td className="py-3 px-4 border text-center">{item.pno}</td>

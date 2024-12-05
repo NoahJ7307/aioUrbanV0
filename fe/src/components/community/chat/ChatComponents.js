@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { sendMessage, getMessages, getProductByMno } from '../../api/community/ChatApi';
 
@@ -13,6 +13,16 @@ const ChatComponent = () => {
     const [senderName, setSenderName] = useState('');
     const [receiverName, setReceiverName] = useState('');
     const [socket, setSocket] = useState(null);
+
+    const chatContainerRef = useRef(null);  // 채팅창 컨테이너를 참조하는 ref
+
+    // 채팅 창이 업데이트될 때마다 스크롤을 맨 아래로 이동
+    useEffect(() => {
+        if (chatContainerRef.current) {
+            // 스크롤을 맨 아래로 이동
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+    }, [chat]); // chat 배열이 변경될 때마다 실행
 
     useEffect(() => {
         const loggedInUserId = localStorage.getItem('uno');
@@ -87,7 +97,8 @@ const ChatComponent = () => {
     const isSeller = senderId == postDetails?.userId;
 
     return (
-        <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+        <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative"
+            style={{ width: "500px"}}>
             <div className="w-full">
                 <h2 className="text-2xl font-bold text-center mb-4">
                     {isSeller ? '판매자 채팅 화면' : '구매자 채팅 화면'}
@@ -99,7 +110,8 @@ const ChatComponent = () => {
                         <p className="text-gray-500">설명: {postDetails.content}</p>
                     </div>
                 )}
-                <div className="w-full h-96 border border-gray-300 rounded-lg p-4 bg-gray-50 overflow-y-scroll">
+                <div className="w-full h-96 border border-gray-300 rounded-lg p-4 bg-gray-50 overflow-y-scroll"
+                ref={chatContainerRef}>
                     {chat.map((msg, index) => {
                         console.log(msg)
                         const isMessageFromSeller = msg.senderId === postDetails?.userId;
@@ -152,6 +164,12 @@ const ChatComponent = () => {
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="메세지를 입력하세요"
                     className="flex-1 p-2 border border-gray-300 rounded-lg mr-2 focus:outline-none"
+                    onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleSendMessage();
+                        }
+                    }}
                 />
                 <button
                     onClick={handleSendMessage}

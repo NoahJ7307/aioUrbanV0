@@ -52,31 +52,56 @@ const LoginComponent = () => {
     return (
         <div>
             <div className='formContainer'>
-                <div className='formGroup'>
-                    <label className='formLabel'>전화번호</label>
-                    <input className='inputBox'
-                        name='phone'
-                        placeholder='전화번호 입력'
-                        type='text'
-                        value={loginParam.phone}
-                        onChange={handleChange}
-                    />
+                <div className='formGroup'
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            if (!loginParam.phone) {
+                                // 전화번호가 비어있을 경우 전화번호 입력 필드로 포커스
+                                document.getElementsByName("phone")[0].focus();
+                            } else if (!loginParam.pw) {
+                                // 비밀번호가 비어있을 경우 비밀번호 입력 필드로 포커스
+                                document.getElementsByName("pw")[0].focus();
+                            } else {
+                                // 전화번호와 비밀번호가 모두 입력된 경우 로그인
+                                handleClick();
+                            }
+                        }
+                    }}
+                >
+                    <div className="formGroup">
+                        <label className="formLabel">전화번호</label>
+                        <input
+                            className="inputBox"
+                            name="phone"
+                            placeholder="전화번호 입력"
+                            type="text"
+                            value={loginParam.phone}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="formGroup">
+                        <label className="formLabel">비밀번호</label>
+                        <input
+                            className="inputBox"
+                            name="pw"
+                            type="password"
+                            placeholder="비밀번호 입력"
+                            value={loginParam.pw}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="buttonGroup">
+                        <button
+                            type="button"
+                            className="formButton add"
+                            style={{ marginRight: "15px", flex: "1" }}
+                            onClick={handleClick}
+                        >
+                            로그인
+                        </button>
+                    </div>
                 </div>
-                <div className='formGroup'>
-                    <label className='formLabel'>비밀번호</label>
-                    <input className='inputBox'
-                        name='pw'
-                        type='password'
-                        placeholder='비밀번호 입력'
-                        value={loginParam.pw}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div className='buttonGroup'>
-                    <button type='button' className='formButton add'
-                        style={{ marginRight: '15px',  flex: '1' }}
-                        onClick={handleClick}>로그인</button>
-                </div>
+
                 <div style={{ display: 'flex', justifyContent: 'center' ,marginLeft: '115px'}}>  
                 <button 
                         style={{ marginTop: '1px', fontSize: '14px'}}
