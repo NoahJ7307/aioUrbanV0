@@ -1,11 +1,11 @@
+import Loading from '../../components/common/Loading';
 import GolfPage from '../../pages/facilities/golf/GolfPage';
-import GolfReservePage from '../../pages/facilities/golf/GolfReservePage';
 // import GolfModifyPage from '../../pages/facilities/golf/GolfModifyPage';
 import { Suspense, lazy } from 'react';
 
-const Loading = <div>....</div>
 const GolfList = lazy(() => import("../../pages/facilities/golf/GolfListPage"))
 const GolfModify = lazy(() => import("../../pages/facilities/golf/GolfModifyPage"))
+const GolfReserve = lazy(() => import("../../pages/facilities/golf/GolfReservePage"))
 
 const golfRouter = [
     {
@@ -14,15 +14,15 @@ const golfRouter = [
         children: [
             {
                 path: "list",
-                element: <Suspense fallback={Loading}><GolfList /></Suspense>
+                element: <Suspense fallback={<Loading />}><GolfList /></Suspense>
             },
             {
                 path: "reserve",
-                element: <GolfReservePage />
+                element: <Suspense fallback={<Loading />}><GolfReserve /></Suspense>
             },
             {
                 path: "detail/:uno",
-                element: <Suspense fallback={Loading}><GolfModify /></Suspense>
+                element: <Suspense fallback={<Loading />}><GolfModify /></Suspense>
             },
 
         ]

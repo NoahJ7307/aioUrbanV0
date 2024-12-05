@@ -96,7 +96,10 @@ const EntryTestListComponent = ({ pageServerData, searchData, checkedEeno, setCh
                 <div>
                     <label 
                     htmlFor='checkbox-all' 
-                    className={`cursor-pointer ${allChecked ? 'selected' : ''}`}>
+                        className={`cursor-pointer ${allChecked ? 'selected' : ''}`}
+                        style={{ textDecoration: 'underline', cursor: 'pointer' }}
+>
+                     
                         삭제항목 전체선택
                         <input
                             type='checkbox'

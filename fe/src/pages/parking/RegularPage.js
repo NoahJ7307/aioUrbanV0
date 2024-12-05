@@ -4,6 +4,7 @@ import useCustomLogin from '../../components/hook/useCustomLogin'
 import RegularListComponent from '../../components/parking/RegularListComponent'
 import { regularGetSearchList, regularParkingDeleteChecked } from '../../components/api/parking/regularApi'
 import '../../css/public/public.css'
+import '../../components/facilities/common/css/facilityLayout.css'
 
 const initStateSearchData = {
   searchCategory: '',
@@ -168,7 +169,16 @@ const RegularPage = () => {
   }
   // --------------------
   return (
-    <div>
+    <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+      {/* 배너 섹션 */}
+      <div className="banner mb-8"
+        style={{
+          backgroundImage: `url('/images/parkinglot.jpg')`,
+        }}>
+        <div className="banner-overlay">
+          <h1 className="banner-text">정기권 차량</h1>
+        </div>
+      </div>
       {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
         <></> :
         <ul className='topMenu'>

@@ -145,7 +145,7 @@ const GolfList = ({ page, size }) => {
 
                 </div>
                 {/* 구역 선택 셀렉트 박스 추가 */}
-                {role === 'ADMIN' && (
+                {((role === 'ADMIN' || role === 'ROOT') || role === 'ROOT') && (
 
                     <button
                         onClick={handleDelete}
@@ -177,31 +177,31 @@ const GolfList = ({ page, size }) => {
 
 
 
-            <div className={`grid ${role === 'ADMIN' ? 'grid-cols-9' : 'grid-cols-6'} gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg`}>
+            <div className={`grid ${(role === 'ADMIN' || role === 'ROOT') ? 'grid-cols-9' : 'grid-cols-6'} gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg`}>
                 <div>예약번호</div>
                 <div>날짜</div>
                 <div>사용시작</div>
                 <div>사용종료</div>
                 <div>예약구역</div>
                 <div>예약자</div>
-                {role === 'ADMIN' && <div>연락처</div>}
-                {role === 'ADMIN' && <div>예약 변경</div>}
-                {role === 'ADMIN' && <div>선택</div>}
+                {(role === 'ADMIN' || role === 'ROOT') && <div>연락처</div>}
+                {(role === 'ADMIN' || role === 'ROOT') && <div>예약 변경</div>}
+                {(role === 'ADMIN' || role === 'ROOT') && <div>선택</div>}
             </div>
             {/* 
 
             {filteredData.length > 0 && filteredData.map((golf) => ( */}
             {filteredData.length > 0 ? (
                 filteredData.map((golf) => (
-                    <div key={golf.reservationId} className={`grid ${role === 'ADMIN' ? 'grid-cols-9' : 'grid-cols-6'} gap-4 items-center border-t py-4`}>
+                    <div key={golf.reservationId} className={`grid ${(role === 'ADMIN' || role === 'ROOT') ? 'grid-cols-9' : 'grid-cols-6'} gap-4 items-center border-t py-4`}>
                         <div className="text-sm">{golf.reservationId}</div>
                         <div className="text-sm">{golf.date}</div>
                         <div className="text-sm">{golf.startTime}</div>
                         <div className="text-sm">{golf.endTime}</div>
                         <div className="text-sm">{golf.teeBox}</div>
-                        <div className="text-sm">{role === 'ADMIN' ? golf.userName : privacyUserName(golf.userName)}</div>
-                        {role === 'ADMIN' && <div className="text-sm">{golf.phone}</div>}
-                        {role === 'ADMIN' && (
+                        <div className="text-sm">{(role === 'ADMIN' || role === 'ROOT') ? golf.userName : privacyUserName(golf.userName)}</div>
+                        {(role === 'ADMIN' || role === 'ROOT') && <div className="text-sm">{golf.phone}</div>}
+                        {(role === 'ADMIN' || role === 'ROOT') && (
                             <div>
                                 <button
                                     onClick={() => handleModify(golf.reservationId)}
@@ -211,7 +211,7 @@ const GolfList = ({ page, size }) => {
                                 </button>
                             </div>
                         )}
-                        {role === 'ADMIN' && (
+                        {(role === 'ADMIN' || role === 'ROOT') && (
                             <div>
                                 <input
                                     type="checkbox"

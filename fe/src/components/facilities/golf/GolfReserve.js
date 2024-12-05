@@ -121,7 +121,8 @@ const GolfReserve = () => {
             <div className='layout'>
                 <div className="banner"
                     style={{
-                        backgroundImage: `url('/images/g0.jpg')`, 
+                        backgroundImage: `url('/images/g0.jpg')`,
+                    
                     }}>
                     <div className="banner-overlay">
                         <h1 className="banner-text">골프장 예약하기</h1>

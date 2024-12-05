@@ -75,23 +75,33 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
     padding: 1rem 0;
+   
 }
 
+
 .mileageDescriptionContainer h2 {
-    font-size: 1.5rem;
-    margin: 1.5rem 0;
-    color: #333;
+    position: relative;
     text-align: center;
+    font-size: 1.875rem;  /* 3xl = 1.875rem */
+    font-weight: 600;     /* font-semibold = 600 */
+    margin-bottom: 1.5rem; /* mb-6 = margin-bottom 1.5rem */
 }
+
 
 .mileageDescription {
     font-family: 'Gyeonggi_Batang_Regular';
     text-align: center;
     background-color: #f0f4f8;
-    padding: 1rem;
+    padding: 2rem;
     border-radius: 8px;
     max-width: 700px;
+    background-color: white; /* Add white background */
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 8px; /* Optional: Add border radius for rounded corners */
+    max-width: 800px; /* Increase the max-width to make the text area wider */
+    line-height: 1.8; /* 줄 간격 추가 */
 
 }
 .balace{
@@ -100,8 +110,12 @@
     margin: auto;
 }
 
+.textpoint {
+    color: #ffa500;
+    font-weight: 700;
+}
 .redpoint {
-    color: red;
+    color: #ff0000;
     font-weight: 700;
 }
 
@@ -115,7 +129,6 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 1rem;
-    border: 1px solid #e0e0e082;
     border-radius: 8px;
     background-color: #f0f4f8;
     margin-bottom: 3rem;
@@ -206,7 +219,6 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 1rem;
-    border: 1px solid #e0e0e082;
     border-radius: 8px;
     background-color: #f0f4f8;
     margin-bottom: 3rem;

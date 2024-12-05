@@ -144,30 +144,63 @@ const JoinComponent = () => {
                     placeholder='이름 입력'
                     onChange={handleChange} />
             </div>
-            <div className='formGroup'>
-                <div className='flex justify-end mt-6'>
-                    <button type='button' className='formButton add'
-                        onClick={handleClickPhoneCheck}>전화번호 중복 확인</button>
-                    <button type='button' className='formButton add'
-                        onClick={handleClickVerifySend}>인증번호 전송</button>
-                    <button type='button' className='formButton add green'
-                        onClick={handleClickVerifyCheck}>인증 확인</button>
-                </div>
-            </div>
+
             <div className='formGroup'>
                 <label className='formLabel'>전화번호</label>
-                <input className={`inputBox ${errors.phone && 'error'}`}
-                    name='phone'
-                    value={userData.phone}
-                    placeholder='전화번호 입력'
-                    onChange={handlePhoneChange} />
+                <div className='flex items-center gap-5'>
+
+                    <input className={`inputBox ${errors.phone && 'error'}`}
+                        name='phone'
+                        value={userData.phone}
+                        placeholder='전화번호 입력'
+                        onChange={handlePhoneChange}
+                        style={{ width: '480px' }} />
+                    <div className='flex gap-.5'>  {/* 버튼들을 감싸는 div 추가 */}
+
+                        <button
+                            type='button' className='formButton add'
+                            onClick={handleClickPhoneCheck}
+                            style={{
+                                width: '80px',
+                                height: '50px',
+                                padding: '4px',
+                                fontSize: '15px',
+                            }}                    >
+                            중복확인
+                        </button>
+                        <button
+                            type='button' className='formButton add'
+                            onClick={handleClickVerifySend}
+                            style={{
+                                width: '80px',
+                                height: '50px',
+                                padding: '4px',
+                                fontSize: '15px',
+                            }}
+                        >
+                            인증 전송
+                        </button>
+                    </div>
+                </div>
             </div>
+
+
             <div className='formGroup'>
                 <label className='formLabel'>인증번호</label>
-                <input className={`inputBox ${errors.verifyNumber && 'error'}`}
-                    name='verifyNumber'
-                    placeholder='인증번호 입력'
-                    onChange={handleChange} />
+                <div className='flex items-center gap-5'>
+
+                    <input className={`inputBox ${errors.verifyNumber && 'error'}`}
+                        name='verifyNumber'
+                        placeholder='인증번호 입력'
+                        onChange={handleChange}
+                        style={{ width: '480px' }} />
+                    <button type='button' className='formButton add green'
+                        onClick={handleClickVerifyCheck}
+                        style={{ width: '175px', height: '50px', padding: '8px' }}
+                    >
+                        인증 확인
+                    </button>
+                </div>
             </div>
             <div className='formGroup'>
                 <label className='formLabel'>비밀번호</label>
@@ -199,10 +232,12 @@ const JoinComponent = () => {
                     placeholder='호 입력'
                     onChange={handleChange} />
             </div>
-            <div className='buttonGroup'>
-                <button type='button' className='formButton add'
-                    onClick={handleClick}>회원가입</button>
-                <button type='button' className='formButton cancel'
+            <div className='buttonGroup gap-4'>
+                <button type='button' className='topMenuBtn'
+                    style={{ width: '50%' }}
+                    onClick={handleClick}>가입</button>
+                <button type='button' className='topMenuBtn'
+                    style={{ width: '50%' ,backgroundColor: '#ef4444' }}
                     onClick={() => moveToPath('/')}>취소</button>
             </div>
         </div>

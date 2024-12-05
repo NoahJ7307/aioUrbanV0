@@ -1,4 +1,5 @@
 import React from 'react'
+import Loading from '../../common/Loading'
 
 const FetchingModal = () => {
     return (
@@ -9,7 +10,7 @@ const FetchingModal = () => {
                 className=" bg-white rounded-3xl opacity-100 min-w-min h-1/4 min-w
    [600px] flex justify-center items-center ">
                 <div className="text-4xl font-extrabold text-orange-400 m-20">
-                    Loading.....
+                    <Loading />
                 </div>
             </div>
         </div>

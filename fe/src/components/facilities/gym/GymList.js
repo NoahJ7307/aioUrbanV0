@@ -8,7 +8,7 @@ const GymList = () => {
   const navigate = useNavigate();
   const [serverData, setServerData] = useState({ dtoList: [], totalPage: 0 });
 
-  const [searchParams] = useSearchParams(); 
+  const [searchParams] = useSearchParams();
 
   const initialType = searchParams.get('type') || 'title';
   const initialKeyword = searchParams.get('keyword') || '';
@@ -25,8 +25,8 @@ const GymList = () => {
 
   // const { moveToList } = useCustom();
   // const urlWithKeyword =`type=${type}&keyword=${searchParams.keyword}`
-  
-  
+
+
   const fetchGymProgramList = async () => {
     try {
       const data = await listGym({ page, size });
@@ -84,7 +84,7 @@ const GymList = () => {
   const handleSearchInputChange = (e) => {
     setKeyword(e.target.value);
   }
-  const handleSearch = async() => {
+  const handleSearch = async () => {
     console.log("검색 버튼이 클릭되었습니다.");
     const resultCount = await fetchGymListSearch();
     if (resultCount === 0) {
@@ -103,7 +103,7 @@ const GymList = () => {
     setPage(newPage);
   }
 
-  
+
 
 
   return (
@@ -112,7 +112,7 @@ const GymList = () => {
       <div className="mb-6 text-center">
         <h2 className="text-3xl font-semibold">프로그램 신청 목록</h2>
       </div>
-  
+
       {/* 검색 필터 */}
       <div className="flex justify-between items-center mb-6">
         <div className="flex space-x-4">
@@ -126,7 +126,7 @@ const GymList = () => {
             <option value="target">대상</option>
             <option value="titleAndContent">제목+내용</option>
           </select>
-  
+
           <input
             type="text"
             value={keyword}
@@ -134,7 +134,7 @@ const GymList = () => {
             placeholder="검색어를 입력해 주세요"
             className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-  
+
           <button
             onClick={handleSearch}
             className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
@@ -143,7 +143,7 @@ const GymList = () => {
           </button>
         </div>
       </div>
-  
+
       {/* 프로그램 목록 테이블 */}
       <div className="overflow-x-auto bg-white shadow-md rounded-lg">
         <table className="min-w-full border-collapse table-auto">
@@ -173,9 +173,9 @@ const GymList = () => {
           </tbody>
         </table>
       </div>
-  
+
       {/* 관리자만 프로그램 등록 버튼 */}
-      {role === 'ADMIN' && (
+      {(role === 'ADMIN' || role === 'ROOT') && (
         <div className="mt-6 flex justify-center">
           <button
             onClick={() => navigate('/facilities/gym/add')}
@@ -185,7 +185,7 @@ const GymList = () => {
           </button>
         </div>
       )}
-  
+
       {/* 페이지네이션 */}
       {serverData.dtoList.length > 0 && (
         <div className="mt-6 flex justify-center">

@@ -31,7 +31,7 @@ const ParkingPage = () => {
                     </button>
                 </li>
             </ul> */}
-            <div className='parkingBackground'>
+            <div >
                 <Outlet context={{ checkedRpno, setCheckedRpno, checkedVpno, setCheckedVpno }} />
             </div>
         </BasicLayout>

@@ -3,6 +3,7 @@ import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.mileage.CardInfoDTO;
 import com.allinone.proja3.proja3.dto.mileage.ManualRequestDTO;
 import com.allinone.proja3.proja3.dto.mileage.MileageHistoryDTO;
+import com.allinone.proja3.proja3.dto.user.UserDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.UserRole;
 import com.allinone.proja3.proja3.model.facilities.Gym;
@@ -53,22 +54,37 @@ public class ServiceTestsyurim {
     @Autowired
     private  MileageService mileageService;
 
-//    @Test
-//    public void insertTest() {
-//        for (int i = 0; i < 130; i++) {
-//            int randIdx = (int) (Math.random() * 100) + 1;
-//            int randho = (int) (Math.random() * 10) + 1;
-//            UserDTO userDTO = UserDTO.builder()
-//                    .dong(101 + randIdx)
-//                    .ho(101 + randho)
-//                    .userName("User" + randIdx)
-//                    .phone("0101234" + (1000 + randIdx))
-//                    .pw("1111")
-//                    .delFlag(false)
-//                    .build();
-//            userService.register(userDTO);
-//        }
-//    }
+    @Test
+    public void insertTest() {
+        for (int i = 0; i < 10; i++) {
+            int randIdx = (int) (Math.random() * 100) + 1;
+
+            UserDTO userDTO = UserDTO.builder()
+                    .dong("105")
+                    .ho("205")
+                    .userName("User" + randIdx)
+                    .phone("0101234" + (1000 + randIdx))
+                    .pw("1")
+                    .delFlag(false)
+                    .build();
+            userService.register(userDTO);
+        }
+    }
+@Test
+    public void insertPending() {
+    int randIdx = (int) (Math.random() * 100) + 1;
+        for (int i = 0; i < 10; i++) {
+                User userAdmin = User.builder()
+                        .userName(i+"ADMIN" + i)
+                        .phone("0101234" + (1000 + randIdx))
+                        .pw(passwordEncoder.encode("1"))
+                        .dong("113")
+                        .ho("400")
+                        .build();
+                userAdmin.addRole(UserRole.ADMIN);
+                repository.save(userAdmin);
+        }
+    }
 
     @Test
     public  void insertGymTest() {
@@ -167,13 +183,13 @@ public class ServiceTestsyurim {
     @Test
     public void insertRolesAdmin() {
         User userAdmin = User.builder()
-                .userName("짜이")
-                .phone("55")
+                .userName("민")
+                .phone("01055555555")
                 .pw(passwordEncoder.encode("1"))
                 .dong("103")
-                .ho("400")
+                .ho("250")
                 .build();
-        userAdmin.addRole(UserRole.USER);
+        userAdmin.addRole(UserRole.ROOT);
         repository.save(userAdmin);
     }
 

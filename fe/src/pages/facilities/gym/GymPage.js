@@ -52,7 +52,7 @@ const GymPage = () => {
                             나의신청내역
                         </button>
                     </li>
-                    {role === "ADMIN" &&
+                    {(role === 'ADMIN' || role === 'ROOT') &&
                         <li>
                             <button
                                 className="facilitySidebar-button"

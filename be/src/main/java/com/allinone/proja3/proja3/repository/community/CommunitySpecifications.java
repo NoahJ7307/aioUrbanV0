@@ -3,7 +3,7 @@ package com.allinone.proja3.proja3.repository.community;
 import org.springframework.data.jpa.domain.Specification;
 
 public class CommunitySpecifications {
-
+//검색 조건을 정의하는 역할을 담당하는 클래스
     public static <T> Specification<T> searchByType(String type, String keyword, String category) {
         return (root, query, criteriaBuilder) -> {
             String likeKeyword = "%" + keyword.toLowerCase() + "%";

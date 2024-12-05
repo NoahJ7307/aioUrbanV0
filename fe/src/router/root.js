@@ -7,10 +7,11 @@ import communities from './communities/communityRouter'
 import mileageRouter from './mileage/mileageRouter';
 import superAdminRouter from './superAdmin/superAdminRouter';
 import myPageRouter from './myPage/myPageRouter'
+import Loading from '../components/common/Loading'
+
 
 const { createBrowserRouter } = require("react-router-dom")
 
-const Loading = <div>....</div>
 const Main = lazy(() => import("../pages/MainPage"))
 const User = lazy(() => import("../pages/user/UserPage"))
 const Login = lazy(() => import("../pages/login/LoginPage"))
@@ -25,40 +26,40 @@ const MyPage = lazy(() => import("../pages/myPage/MyPage"))
 const root = createBrowserRouter([
     {
         path: "",
-        element: <Suspense fallback={Loading}><Main /></Suspense>
+        element: <Suspense fallback={<Loading />}><Main /></Suspense>
     },
     {
         path: "join",
-        element: <Suspense fallback={Loading}><Join /></Suspense>,
+        element: <Suspense fallback={<Loading />}><Join /></Suspense>,
     },
     {
         path: "user",
-        element: <Suspense fallback={Loading}><User /></Suspense>,
+        element: <Suspense fallback={<Loading />}><User /></Suspense>,
         children: userRouter()
     },
     {
         path: "myPage",
-        element: <Suspense fallback={Loading}><MyPage /></Suspense>,
+        element: <Suspense fallback={<Loading />}><MyPage /></Suspense>,
         children: myPageRouter()
     },
     {
         path: "login",
-        element: <Suspense fallback={Loading}><Login /></Suspense>,
+        element: <Suspense fallback={<Loading />}><Login /></Suspense>,
         children: loginRouter()
     },
     {
         path: "parking",
-        element: <Suspense fallback={Loading}><Parking /></Suspense>,
+        element: <Suspense fallback={<Loading />}><Parking /></Suspense>,
         children: parkingRouter()
     },
     {
         path: "mileage",
-        element: <Suspense fallback={Loading}><MileagePage /></Suspense>,
+        element: <Suspense fallback={<Loading />}><MileagePage /></Suspense>,
         children: mileageRouter()
     },
     {
         path: "superAdmin",
-        element: <Suspense fallback={Loading}><SuperAdmin /></Suspense>,
+        element: <Suspense fallback={<Loading />}><SuperAdmin /></Suspense>,
         children: superAdminRouter()
     },
     ...facilities,

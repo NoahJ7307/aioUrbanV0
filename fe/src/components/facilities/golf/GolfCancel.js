@@ -19,6 +19,8 @@ export const handleCheckedCancel = async (checkedReservationId) => {
     } else {
         alert("선택된 항목이 없습니다.")
     }
+    window.location.reload();
+
 
 };
 //항목 단일 삭제 로직
@@ -35,5 +37,6 @@ export const handleSingleCancel = async (reservationId, fetchGolfReservations) =
     } else {
         alert("예약 ID를 입력하세요.");
     }
+    window.location.reload();
 };
 

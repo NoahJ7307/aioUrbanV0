@@ -52,7 +52,7 @@ const StudyMyList = ({ uno, page, size }) => {
             <div className="mb-6 text-center">
                 <h2 className="text-3xl font-semibold">독서실 이용 내역 조회</h2>
             </div>
-            <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+            <div className="container mx-auto p-6 border-2 border-gray-120 rounded-lg">
                 <h2 className="text-2xl font-semibold mb-6">나의 예약 현황</h2>
                 <div className="flex justify-between mb-4">
 
