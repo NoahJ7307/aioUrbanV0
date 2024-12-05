@@ -87,7 +87,7 @@ const ChatComponent = () => {
     const isSeller = senderId == postDetails?.userId;
 
     return (
-        <div className="flex flex-col items-center max-w-lg mx-auto p-6">
+        <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
             <div className="w-full">
                 <h2 className="text-2xl font-bold text-center mb-4">
                     {isSeller ? '판매자 채팅 화면' : '구매자 채팅 화면'}

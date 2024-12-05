@@ -3,14 +3,14 @@ import { Navigate } from "react-router-dom"
 import MileagePage from "../../pages/mileage/MileagePage"
 import ManualPayment from "../../components/mileage/ManualPayment"
 import AutomaticPayment from "../../components/mileage/AutomaticPayment"
+import Loading from "../../components/common/Loading"
 
 const mileageRouter = () => {
-    const Loading = <div>....</div>;
 
     return [
         {
             path: "mileage/*", // 상위 경로에 `*` 추가
-            element: <Suspense fallback={Loading}><MileagePage /></Suspense>,
+            element: <Suspense fallback={<Loading/>}><MileagePage /></Suspense>,
             children: [
                 {
                     path: "manual",

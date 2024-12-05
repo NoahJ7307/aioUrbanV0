@@ -4,6 +4,8 @@ import useCustomLogin from '../../components/hook/useCustomLogin'
 import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import { deleteChecked, getList, getSearchList } from '../../components/api/userApi'
 import useCustom from '../../components/hook/useCustom'
+import '../../components/facilities/common/css/facilityLayout.css'
+
 
 const initStateSearchData = {
     searchCategory: '',
@@ -91,20 +93,27 @@ const ListPage = () => {
 
         const pageParam = { page, size }
 
-        if (newSearchData.searchCategory) {
-            getSearchList(pageParam, newSearchData).then(data => {
-                setPageServerData(data)
-                // 결과 예외 처리
-                if (!data.dtoList || data.dtoList.length === 0) {
-                    alert('검색 결과가 없습니다')
+        const fetch = async () => {
+            if (newSearchData.searchCategory) {
+                try {
+                    await getSearchList(pageParam, newSearchData).then(data => {
+                        setPageServerData(data)
+                        // 결과 예외 처리
+                        if (!data.dtoList || data.dtoList.length === 0) {
+                            alert('검색 결과가 없습니다')
+                        }
+                    })
+                } catch (error) {
+                    alert('잘못된 입력입니다')
                 }
-            })
-        } else {
-            // 기본 데이터 로드
-            getList(pageParam).then(data => {
-                setPageServerData(data)
-            })
+            } else {
+                // 기본 데이터 로드
+                getList(pageParam).then(data => {
+                    setPageServerData(data)
+                })
+            }
         }
+        fetch()
     }, [location.search])
 
     const handleClickClear = () => {
@@ -115,6 +124,17 @@ const ListPage = () => {
 
     return (
         <div>
+            {/* 배너 섹션 */}
+            <div className="banner mb-8"
+                style={{
+                    backgroundImage: `url('/images/apt.jpg')`,
+                }}>
+                <div className="banner-overlay">
+                    <h1 className="banner-text">주민 목록</h1>
+                </div>
+            </div>
+            
+
             <ul className='topMenu'>
                 <li>
                     <button className='topMenuBtn' onClick={handleClickModify}>
@@ -150,7 +170,6 @@ const ListPage = () => {
                                 <option value='PENDING'>승인대기</option>
                                 <option value='USER'>입주민</option>
                                 <option value='ADMIN'>관리자</option>
-                                <option value='ROOT'>ROOT</option>
                             </select>
                         </div>
                         :
@@ -174,7 +193,6 @@ const ListPage = () => {
                 {/* // -------------------- */}
             </ul>
             <UserListComponent pageServerData={pageServerData} searchData={searchData} />
-
             {/* 자식요소로 uno 설정 함수 전달 */}
             <Outlet context={{ checkedUno, setCheckedUno }} />
         </div>

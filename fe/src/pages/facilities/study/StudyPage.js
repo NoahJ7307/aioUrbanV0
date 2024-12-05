@@ -1,9 +1,8 @@
 // import StudyList from '../../components/facilities/study/StudyList'
 
 import { useCallback } from "react";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import {  Outlet, useNavigate } from "react-router-dom";
 import '../../../css/facility/facilitySidebar.css'; // CSS 파일 import
-import FacilitySchedule from "../../../components/facilities/FacilitySchedule";
 
 const StudyPage = () => {
 
@@ -54,7 +53,6 @@ const StudyPage = () => {
                 </ul>
             </div>
             <div className="facilityMain-content">
-            {/* {location.pathname === '/facilities/study' && <FacilitySchedule/>} */}
 
                 <Outlet />
             </div>

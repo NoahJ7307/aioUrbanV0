@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { applyForProgram, applyForWaitlist, cancelParticipant, cancelWaitlist, deletePost, fetchRegisteredUsers, fetchWaitlistUsers, getGymListByProgramId, getRegisteredUsersByProgramId } from '../../api/facilities/gymApi';
-import useCustom from '../../hook/useCustom';
-import PageComponent from '../../common/PageComponent';
-import axios from 'axios';
-import { createReducer } from '@reduxjs/toolkit';
+import '../common/css/facilityLayout.css'
+
 
 const GymProgramDetail = () => {
     const [participants, setParticipants] = useState([]);
@@ -91,6 +89,7 @@ const GymProgramDetail = () => {
     const handleModify = () => {
         console.log("수정버튼 눌림")
         navigate(`/facilities/gym/detail/modify/${gym.programId}?page=${page}&size=${size}`, { state: { gym } });
+        window.location.reload();
     }
 
     const handleDelete = async () => {
@@ -106,6 +105,7 @@ const GymProgramDetail = () => {
                 console.log("삭제 요청 중 오류 발생 : ", error)
             }
         }
+        window.location.reload();
     };
     const determineButtonState = (gym) => {
         console.log("프로그램 상태 :", gym)
@@ -195,6 +195,7 @@ const GymProgramDetail = () => {
                 alert("이미 대기자로 등록된 회원입니다.");
             } else if (waitlistResponse === "B002") {
                 alert('대기자로 등록되었습니다.');
+                window.location.reload();
             } else {
                 alert('대기자 등록에 실패했습니다.');
             }
@@ -284,7 +285,7 @@ const GymProgramDetail = () => {
     }
 
 
-      return (
+    return (
         <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg relative">
             <div className='layout'>
                 {/* 배너 섹션 */}
@@ -298,7 +299,7 @@ const GymProgramDetail = () => {
                 </div>
 
                 {/* 관리자 버튼 */}
-                {role === 'ADMIN' && (
+                {(role === 'ADMIN' || role === 'ROOT') && (
                     <div className="absolute top-[370px] right-12 flex space-x-2">
                         <button
                             type="button"
@@ -370,16 +371,16 @@ const GymProgramDetail = () => {
                                 <p className="flex items-center">
                                     <span className="font-semibold w-24 text-gray-700">접수 기간:</span>
                                     <span className="text-gray-600">
-                                        {gym.applicationStartDate.split('T')[0]} {gym.applicationStartDate.split('T')[1].slice(0, 5)} ~ 
+                                        {gym.applicationStartDate.split('T')[0]} {gym.applicationStartDate.split('T')[1].slice(0, 5)} ~
                                         {gym.applicationEndDate.split('T')[0]} {gym.applicationEndDate.split('T')[1].slice(0, 5)}
                                     </span>
                                 </p>
                             </div>
                         </div>
-                  
 
-                    {/* 참가자 및 대기자 명단 */}
-                    
+
+                        {/* 참가자 및 대기자 명단 */}
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
                             {/* 참가자 명단 */}
                             <div>
@@ -391,7 +392,7 @@ const GymProgramDetail = () => {
                                                 <li key={`participant-${user.uno}-${index}`}
                                                     className="p-2 hover:bg-gray-50 rounded flex items-center">
                                                     <span className="text-gray-600">
-                                                        {role === 'ADMIN' ? `${user.userName}-${user.phone}`
+                                                        {(role === 'ADMIN' || role === 'ROOT') ? `${user.userName}-${user.phone}`
                                                             : `${privacyUserName(user.userName)}`}
                                                     </span>
                                                 </li>
@@ -413,7 +414,7 @@ const GymProgramDetail = () => {
                                                 <li key={`waitlist-${user.uno}-${index}`}
                                                     className="p-2 hover:bg-gray-50 rounded flex items-center">
                                                     <span className="text-gray-600">
-                                                        {role === 'ADMIN' ? `${user.userName}-${user.phone}`
+                                                        {(role === 'ADMIN' || role === 'ROOT') ? `${user.userName}-${user.phone}`
                                                             : `${privacyUserName(user.userName)}`}
                                                     </span>
                                                 </li>
@@ -425,9 +426,9 @@ const GymProgramDetail = () => {
                                 </div>
                             </div>
                         </div>
-                   
-                    {/* 버튼 영역 */}
-                    
+
+                        {/* 버튼 영역 */}
+
                         <div className="flex justify-center space-x-4 mt-5">
                             {/* 메인 버튼 */}
                             <button

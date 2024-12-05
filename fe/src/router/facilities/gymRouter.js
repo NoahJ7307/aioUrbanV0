@@ -1,15 +1,13 @@
-import GymProgramAdd from '../../components/facilities/gym/GymProgramAdd';
-import GymModify from '../../components/facilities/gym/GymModify';
 import GymPage from '../../pages/facilities/gym/GymPage';
 import { Suspense, lazy } from 'react';
-import MembershipPurchasePage from '../../pages/facilities/gym/membership/MembershipPurchasePage';
-import AdminCreateMembershipPage from '../../pages/facilities/gym/membership/AdminCreateMembershipPage';
+import Loading from '../../components/common/Loading';
 
-const Loading = <div>....</div>
 const GymList = lazy(() => import("../../pages/facilities/gym/GymListPage"))
 const GymProgramDetail = lazy(() => import("../../pages/facilities/gym/GymProgramDetailPage"))
-
-
+const GymProgramAdd = lazy(() => import("../../pages/facilities/gym/GymProgramAddPage"))
+const GymModify = lazy(() => import("../../pages/facilities/gym/GymModifyPage"))
+const MembershipPurchasePage = lazy(() => import("../../pages/facilities/gym/membership/MembershipPurchasePage"))
+const AdminCreateMembershipPage = lazy(() => import("../../pages/facilities/gym/membership/AdminCreateMembershipPage"))
 
 const gymRouter = [
     {
@@ -18,54 +16,30 @@ const gymRouter = [
         children: [
             {
                 path: "list",
-                element: <Suspense fallback={Loading}><GymList /></Suspense>
+                element: <Suspense fallback={<Loading />}><GymList /></Suspense>
             },
             {
                 path: "add",
-                element: <GymProgramAdd />
+                element: <Suspense fallback={<Loading />}><GymProgramAdd /></Suspense>
             },
             {
                 path: "detail/:programId",
-                element: <Suspense fallback={Loading}><GymProgramDetail /></Suspense>
+                element: <Suspense fallback={<Loading />}><GymProgramDetail /></Suspense>
             },
             {
                 path: "detail/modify/:programId",
-                element: <Suspense fallback={Loading}><GymModify /></Suspense>
+                element: <Suspense fallback={<Loading />}><GymModify /></Suspense>
             },
             {
                 path: "membership",
-                element: <MembershipPurchasePage/>
+                element: <Suspense fallback={<Loading />}><MembershipPurchasePage /></Suspense>
             },
-            // {
-            //     path: "membership/holding",
-            //     element: <GymMembershipStat/>
-            // },
+          
             {
                 path: "membership/create",
-                element: <AdminCreateMembershipPage/>
+                element: <Suspense fallback={<Loading />}><AdminCreateMembershipPage /></Suspense>
             }
-            // {
-            //     path: "signup",
-            //     element: <GymSignUpPage />,
-            //     children: [
-            //         {
-            //             path: "day-pass",
-            //             element: <DayPassPurchasePage />
-            //         },
-            //         {
-            //             path: "membership",
-            //             element: <MembershipPurchasePage />
-            //         },
-            //         {
-            //             path: "create",
-            //             element: <AdminCreateMembershipPage />
-            //         },
-            //     ]
-            // },
-            // {
-            //     path: "membership/state",
-            //     element: <GymMembershipState />
-            // },
+         
         ]
     },
 ];

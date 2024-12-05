@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import StudyList from './StudyList'
-import { listStudy, modifyStudy, getUserStudyById } from '../../api/facilities/studyApi'
-import useFormFields from '../../hook/facilities/useFormFields'
-import useCustom from '../../hook/useCustom';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { collapseToast } from 'react-toastify';
-import StudyCancel, { handleSingleCancel } from './StudyCancel';
+import { modifyStudy, getUserStudyById } from '../../api/facilities/studyApi'
+import { useSearchParams } from 'react-router-dom';
+import { handleSingleCancel } from './StudyCancel';
 import '../golf/GolfDetailModifyModal.css'
 const StudyDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
 
-    // const [userName, setUserName] = useState(); // 로그인한 사용자 name
-    // useEffect(() => {
-    //     const getUserName = localStorage.getItem('userName');
-    //     if (getUserName) setUserName(getUserName);
-    // }, [])
     
     const [formData, setFormData] = useState({
         date: '',

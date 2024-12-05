@@ -93,9 +93,11 @@ const MarketModifyComponents = () => {
   };
 
   return (
-    <div className="flex justify-center items-center bg-gray-100">
-      <div className="w-full md:w-1/2 lg:w-1/3 bg-gray-200 p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-semibold mb-4 text-center">상품 수정</h2>
+
+    <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+      <h2 className="text-2xl font-semibold mb-4 text-center">상품 수정</h2>
+      <div className='bg-gray-100 p-3 justify-center rounded-lg'>
+
         <form className="space-y-4" onSubmit={handleUpdate}>
           <input
             type="text"
@@ -128,7 +130,7 @@ const MarketModifyComponents = () => {
               type="file"
               accept="image/*"
               onChange={handleThumbnailChange}
-              className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-4 border bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {thumbnailPreview && (
               <img src={thumbnailPreview} alt="Thumbnail Preview" className="rounded-lg w-full h-24 object-cover mt-2" />
@@ -143,7 +145,7 @@ const MarketModifyComponents = () => {
               accept="image/*"
               multiple
               onChange={handleImagesChange}
-              className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-4 border  bg-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <div className="flex flex-wrap mt-4">
               {previewImages.map((imgSrc, index) => (
@@ -162,15 +164,17 @@ const MarketModifyComponents = () => {
             </div>
           </div>
 
-          <button
+        </form>
+      </div>
+      <button
+        onClick={handleUpdate}
             type="submit"
-            className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
+            className="w-full py-2 mt-5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
           >
             수정하기
           </button>
-        </form>
-      </div>
     </div>
+   
   );
 };
 

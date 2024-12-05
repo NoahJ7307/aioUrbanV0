@@ -5,6 +5,7 @@ import { entryDeleteChecked, entryGetSearchList } from '../../components/api/par
 import EntryTestAddComponent from '../../components/superAdmin/EntryTestAddComponent'
 import EntryTestListComponent from '../../components/superAdmin/EntryTestListComponent'
 import '../../css/public/public.css'
+import '../../components/facilities/common/css/facilityLayout.css'
 
 const initStateSearchData = {
     searchCategory: '',
@@ -126,17 +127,25 @@ const EntryTestPage = () => {
 
         const pageParam = { page, size }
 
-        if (newSearchData.searchCategory) {
-            entryGetSearchList(pageParam, newSearchData).then(data => {
-                setPageServerData(data)
-                // 결과 예외 처리
-                if (!data.dtoList || data.dtoList.length === 0) {
-                    alert('검색 결과가 없습니다')
+        const fetch = async () => {
+            let household = { dong: null, ho: null }
+            if (newSearchData.searchCategory) {
+                try {
+                    await entryGetSearchList(pageParam, newSearchData, household).then(data => {
+                        setPageServerData(data)
+                        // 결과 예외 처리
+                        if (!data.dtoList || data.dtoList.length === 0) {
+                            alert('검색 결과가 없습니다')
+                        }
+                    })
+                } catch (error) {
+                    alert('잘못된 입력입니다')
                 }
-            })
-        } else {
-            setPageServerData(initStateServerData)
+            } else {
+                setPageServerData(initStateServerData)
+            }
         }
+        fetch()
     }, [location.search])
 
 
@@ -147,6 +156,15 @@ const EntryTestPage = () => {
     // --------------------
     return (
         <div>
+            {/* 배너 섹션 */}
+            <div className="banner mb-8"
+                style={{
+                    backgroundImage: `url('/images/superAdmin.jpg')`,
+                }}>
+                <div className="banner-overlay">
+                    <h1 className="banner-text">입출차 테스트</h1>
+                </div>
+            </div>
             <ul className='topMenu'>
                 <li>
                     <button className='topMenuBtn' onClick={handleClickDelete}>

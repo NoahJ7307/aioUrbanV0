@@ -3,6 +3,7 @@ import UserManageComponent from '../../components/superAdmin/UserManageComponent
 import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import { superAdminGetAllList, superAdminGetSearchList, superAdminHardDelete, superAdminRecovery } from '../../components/api/superAdmin/superAdminApi'
 import '../../css/public/public.css'
+import '../../components/facilities/common/css/facilityLayout.css'
 
 const initStateSearchData = {
     searchCategory: '',
@@ -91,20 +92,27 @@ const UserManagePage = () => {
 
         const pageParam = { page, size }
 
-        if (newSearchData.searchCategory) {
-            superAdminGetSearchList(pageParam, newSearchData).then(data => {
-                setPageServerData(data)
-                // 결과 예외 처리
-                if (!data.dtoList || data.dtoList.length === 0) {
-                    alert('검색 결과가 없습니다')
+        const fetch = async () => {
+            if (newSearchData.searchCategory) {
+                try {
+                    await superAdminGetSearchList(pageParam, newSearchData).then(data => {
+                        setPageServerData(data)
+                        // 결과 예외 처리
+                        if (!data.dtoList || data.dtoList.length === 0) {
+                            alert('검색 결과가 없습니다')
+                        }
+                    })
+                } catch (error) {
+                    alert('잘못된 입력입니다')
                 }
-            })
-        } else {
-            // 기본 데이터 로드
-            superAdminGetAllList(pageParam).then(data => {
-                setPageServerData(data)
-            })
+            } else {
+                // 기본 데이터 로드
+                superAdminGetAllList(pageParam).then(data => {
+                    setPageServerData(data)
+                })
+            }
         }
+        fetch()
     }, [location.search])
 
     const handleClickClear = () => {
@@ -116,6 +124,15 @@ const UserManagePage = () => {
 
     return (
         <div>
+            {/* 배너 섹션 */}
+            <div className="banner mb-8"
+                style={{
+                    backgroundImage: `url('/images/superAdmin.jpg')`,
+                }}>
+                <div className="banner-overlay">
+                    <h1 className="banner-text">유저 관리</h1>
+                </div>
+            </div>
             <ul className='topMenu'>
                 <li>
                     <button className='topMenuBtn' onClick={handleClickAddRole}>

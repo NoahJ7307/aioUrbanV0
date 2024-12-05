@@ -37,7 +37,7 @@ export const visitGetUserList = async (pageParam, loginUser) => {
     return res.data
 }
 
-export const visitGetSearchList = async (pageParam, searchData) => {
+export const visitGetSearchList = async (pageParam, searchData, household) => {
     const token = localStorage.getItem('token')
     const config = {
         headers: {
@@ -48,6 +48,7 @@ export const visitGetSearchList = async (pageParam, searchData) => {
     const body = {
         pageRequestDTO: pageParam,
         visitSearchDataDTO: searchData,
+        householdDTO: household,
     }
     console.log(body)
     const res = await axios.post(`${host}/search`, body, config)

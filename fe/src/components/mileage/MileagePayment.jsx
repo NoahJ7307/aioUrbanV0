@@ -57,13 +57,13 @@ const MileagePayment = () => {
     return (
         <div className="mileageContainer">
             <div className='mileageDescriptionContainer'>
-                <h2>마일리지</h2>
-                <p className='mileageDescription' >마일리지는 <span className='redpoint'>가족 단위</span>로 함께 사용할 수 있으며,<br />
-                    다양한 서비스에 활용이 가능합니다.<br />
-                    시설 이용이나 마켓 구매, 주차권 결제 등 다양한 곳에서 사용하실 수 있어 생활 속 편리함을 제공합니다.<br /><br />
+                <h2>마일리지 충전하기</h2>
+                <p className='mileageDescription' style={{fontFamily:'LINESeedKR-Md'}}  >마일리지는 <span className='textpoint'>가족 단위</span>로 함께 사용할 수 있으며,<br />
+                    다양한 서비스에 활용이 가능합니다.<br /><br />
+                    시설 이용이나 마켓 구매, 주차권 결제 등 <br />다양한 곳에서 사용하실 수 있어 생활 속 편리함을 제공합니다.<br /><br />
 
-                    결제 방식은 사용자가 직접 결제하는 <span className='thickpoint'>수동 결제</span>와 일정 조건에 따라 자동으로 결제되는 <span className='thickpoint'>자동 결제</span> 시스템이 있습니다.<br />
-                    <span className='redpoint'>자동 결제</span>를 설정하시면 더욱 편리하게 마일리지를 이용하실 수 있습니다.<br /><br />
+                    결제 방식은 사용자가 직접 결제하는 <span className='thickpoint'>수동 결제</span>와<br /> 일정 조건에 따라 자동으로 결제되는 <span className='thickpoint'>자동 결제</span> 시스템이 있습니다.<br />
+                    <span className='textpoint'>자동 결제</span>를 설정하시면 더욱 편리하게 마일리지를 이용하실 수 있습니다.<br /><br />
 
                     각자의 사용 방식에 맞는 결제 옵션을 선택하여 마일리지를 효율적으로 활용해 보세요!</p>
 

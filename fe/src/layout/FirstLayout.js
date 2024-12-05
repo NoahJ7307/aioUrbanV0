@@ -14,6 +14,11 @@ const fadeInUp = keyframes`
         transform: translateY(0);
     }
 `;
+const ColoredSpan = styled.span`
+    background: linear-gradient(120deg, #08AEEA, #2AF598);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+`;
 
 const fadeIn = keyframes`
     to {
@@ -317,6 +322,8 @@ const FirstLayout = () => {
       zIndex: 0
     }
   };
+  
+
 
   return (
     <Masthead>
@@ -331,7 +338,7 @@ const FirstLayout = () => {
       <ContentWrapper>
         <h1>
           아파트 통합 관리 시스템<br />
-          UrbanSystem입니다.
+          <ColoredSpan>URBAN</ColoredSpan>입니다.
         </h1>
         <p>
           아파트 활성화를 위한 맞춤형 시스템 <br />

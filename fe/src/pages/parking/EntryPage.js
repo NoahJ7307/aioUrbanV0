@@ -4,6 +4,7 @@ import useCustomLogin from '../../components/hook/useCustomLogin'
 import EntryListComponent from '../../components/parking/EntryListComponent'
 import { entryGetSearchList } from '../../components/api/parking/entryApi'
 import '../../css/public/public.css'
+import '../../components/facilities/common/css/facilityLayout.css'
 
 const initStateSearchData = {
   searchCategory: '',
@@ -115,18 +116,35 @@ const EntryPage = () => {
     setSearchData(newSearchData)
 
     const pageParam = { page, size }
-
-    if (newSearchData.searchCategory) {
-      entryGetSearchList(pageParam, newSearchData).then(data => {
-        setPageServerData(data)
-        // 결과 예외 처리
-        if (!data.dtoList || data.dtoList.length === 0) {
-          alert('검색 결과가 없습니다')
-        }
-      })
-    } else {
-      setPageServerData(initStateServerData)
+    let household = {
+      dong: null,
+      ho: null,
     }
+    if (loadLoginData().role === 'USER') {
+      household = {
+        dong: loadLoginData().dong,
+        ho: loadLoginData().ho,
+      }
+    }
+
+    const fetch = async () => {
+      if (newSearchData.searchCategory) {
+        try {
+          await entryGetSearchList(pageParam, newSearchData, household).then(data => {
+            setPageServerData(data)
+            // 결과 예외 처리
+            if (!data.dtoList || data.dtoList.length === 0) {
+              alert('검색 결과가 없습니다')
+            }
+          })
+        } catch (error) {
+          alert('잘못된 입력입니다')
+        }
+      } else {
+        setPageServerData(initStateServerData)
+      }
+    }
+    fetch()
   }, [location.search])
 
 
@@ -136,7 +154,16 @@ const EntryPage = () => {
   }
   // --------------------
   return (
-    <div>
+    <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+      {/* 배너 섹션 */}
+      <div className="banner mb-8"
+        style={{
+          backgroundImage: `url('/images/parkinglot.jpg')`,
+        }}>
+        <div className="banner-overlay">
+          <h1 className="banner-text">입출차 기록</h1>
+        </div>
+      </div>
       <ul className='topMenu'>
         {/* // ------- 검색 ------- */}
         <li>

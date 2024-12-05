@@ -82,7 +82,7 @@ const FacilitySchedule = () => {
         <div style={{
             padding: '20px', fontFamily: 'GmarketSansMedium'
         }}>
-            {role === 'ADMIN' && (
+            {(role === 'ADMIN' || role === 'ROOT') && (
                 <div style={{ marginBottom: '20px', textAlign: 'center' }}>
                     <h1 style={{ marginBottom: '10px' }}>시설별 이용시간 공지 등록</h1>
                     <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
@@ -129,7 +129,7 @@ const FacilitySchedule = () => {
                                 padding: '10px',
                                 border: '1px solid #ddd',
                                 borderRadius: '5px',
-                                width: '250px',
+                                width: '300px',
                             }}
                         />
                         <button
@@ -151,7 +151,7 @@ const FacilitySchedule = () => {
             <div className="mb-6 text-center">
                 <h2 className="text-3xl font-semibold">시설별 이용시간 안내</h2>
             </div>
-            
+
             {scheduleList.length > 0 ? (
                 <div
                     style={{
@@ -188,7 +188,7 @@ const FacilitySchedule = () => {
                             <p style={{ marginBottom: '10px', color: '#555' }}>
                                 <strong>종료:</strong> {item.endTime}
                             </p>
-                            {role === 'ADMIN' && (
+                            {(role === 'ADMIN' || role === 'ROOT') && (
                                 <div style={{ marginTop: '10px' }}>
                                     <button
                                         onClick={() => handleEdit(item)}

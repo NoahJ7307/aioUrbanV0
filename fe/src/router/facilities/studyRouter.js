@@ -1,28 +1,29 @@
-import StudyPage from '../../pages/facilities/study/StudyPage';
-import StudyReservePage from '../../pages/facilities/study/StudyReservePage';
-// import StudyModifyPage from '../../pages/facilities/study/StudyModifyPage';
 import { Suspense, lazy } from 'react';
+import Loading from '../../components/common/Loading';
 
-const Loading = <div>....</div>
+const StudyPage = lazy(() => import("../../pages/facilities/study/StudyPage"))
 const StudyList = lazy(() => import("../../pages/facilities/study/StudyListPage"))
 const StudyModify = lazy(() => import("../../pages/facilities/study/StudyModifyPage"))
+const StudyReserve = lazy(() => import("../../pages/facilities/study/StudyReservePage"))
+
 
 const studyRouter = [
     {
         path: "study",
-        element: <StudyPage />,
+        element: <Suspense fallback={<Loading />}><StudyPage /></Suspense>,
         children: [
             {
                 path: "list",
-                element: <Suspense fallback={Loading}><StudyList /></Suspense>
+                element: <Suspense fallback={<Loading />}><StudyList /></Suspense>
             },
             {
                 path: "reserve",
-                element: <StudyReservePage />
+                element: <Suspense fallback={<Loading />}><StudyReserve /></Suspense>
+
             },
             {
                 path: "detail/:uno",
-                element: <Suspense fallback={Loading}><StudyModify /></Suspense>
+                element: <Suspense fallback={<Loading />}><StudyModify /></Suspense>
             },
 
         ]

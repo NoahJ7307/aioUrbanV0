@@ -50,31 +50,32 @@ const AnnounceAddComponents = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center  bg-gray-100"> {/* Centering */}
-      <div className="w-full md:w-1/2 lg:w-1/3 bg-gray-200 p-8 rounded-lg shadow-lg"> {/* Increased size */}
-        <h2 className="text-2xl font-semibold mb-4 text-center">공지사항 작성</h2> {/* Centered title */}
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="제목"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <textarea
-            placeholder="게시물 내용을 작성하세요..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-            className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[250px]" // Increased height
-          />
-          <button
-            type="submit"
-            className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
-          >
-            등록하기
-          </button>
+    <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+      <h2 className="text-2xl font-semibold mb-2 text-center">공지사항 작성</h2> {/* 제목 중앙 정렬 */}
+      <div className='bg-gray-100 p-3 justify-center rounded-lg'>
+
+      <form className="space-y-4" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="제목"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+          className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <textarea
+          placeholder="게시물 내용을 작성하세요..."
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          required
+          className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[250px]" // Increased height
+        />
+        <button
+          type="submit"
+          className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
+        >
+          등록하기
+        </button>
         </form>
       </div>
     </div>

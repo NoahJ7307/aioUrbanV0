@@ -7,7 +7,14 @@ const LoginPage = () => {
     return (
         <BasicLayout>
             <div className='loginBackground'>
-                <Outlet />
+                <div className="flex justify-center items-center h-screen">
+                    <div className="w-[500px] p-4 -mt-40">
+                        <div className="mb-2 text-center">
+                            <h2 className="text-5xl font-semibold">URBAN</h2>
+                            </div>
+                        <Outlet />
+                    </div>
+                </div>
             </div>
         </BasicLayout>
     )

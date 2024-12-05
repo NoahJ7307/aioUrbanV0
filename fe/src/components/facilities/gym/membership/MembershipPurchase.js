@@ -143,7 +143,7 @@ const MembershipPurchase = () => {
                 <div className="flex justify-between items-center">
                   <p className="font-medium text-lg">{plan.membershipType}</p>
                   {/* {isAdmin && ( */}
-                  {role === 'ADMIN' && (
+                  {(role === 'ADMIN' || role === 'ROOT') && (
                     <button
                       className="text-red-500 hover:text-red-700"
                       onClick={(e) => {

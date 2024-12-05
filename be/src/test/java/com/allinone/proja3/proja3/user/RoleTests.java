@@ -12,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 public class RoleTests {
@@ -66,23 +65,27 @@ public class RoleTests {
 
     @Test
     public void insertRolesUser() {
-        User userAdmin = User.builder()
-                .userName("user")
-                .phone("user")
-                .pw(passwordEncoder.encode("1"))
-                .dong("201")
-                .ho("101")
-                .build();
-        userAdmin.addRole(UserRole.USER);
-        repository.save(userAdmin);
-    }
+        for (int i = 0; i < 20; i++) {
+            User user = User.builder()
+                    .userName("유저" + (i + 1))
+                    .phone("010111100" + (i + 11))
+                    .dong("101")
+                    .ho("1" + (i + 11))
+                    .pw(passwordEncoder.encode("1"))
+                    .build();
+            user.addRole(UserRole.USER);
+            repository.save(user);
+            }
+        }
 
     @Test
     public void insertRolesPending() {
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 99; i++) {
             User userPending = User.builder()
-                    .userName("pending"+(i+10))
-                    .phone("pending"+(i+10))
+                    .userName("승인대기"+(i+1))
+                    .phone("010000000"+(i+11))
+                    .dong("102")
+                    .ho("1"+(i+11))
                     .pw(passwordEncoder.encode("1"))
                     .build();
             userPending.addRole(UserRole.PENDING);
@@ -97,5 +100,40 @@ public class RoleTests {
         list.add("admin");
         list.add("pending");
         list.forEach(s -> System.out.println(repository.findByPhone(s)));
+    }
+
+    @Test
+    public void insertID() {
+        User root = User.builder()
+                .userName("루트")
+                .phone("root")
+                .dong("9999")
+                .ho("9999")
+                .pw(passwordEncoder.encode("1"))
+                .build();
+        root.addRole(UserRole.ROOT);
+        repository.save(root);
+
+        User admin = User.builder()
+                .userName("관리자")
+                .phone("admin")
+                .dong("8888")
+                .ho("8888")
+                .dong("8888")
+                .ho("8888")
+                .pw(passwordEncoder.encode("1"))
+                .build();
+        admin.addRole(UserRole.ADMIN);
+        repository.save(admin);
+
+        User user = User.builder()
+                .userName("일반유저")
+                .phone("user")
+                .dong("101")
+                .ho("103")
+                .pw(passwordEncoder.encode("1"))
+                .build();
+        user.addRole(UserRole.USER);
+        repository.save(user);
     }
 }

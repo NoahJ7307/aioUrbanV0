@@ -4,6 +4,7 @@ import useCustomLogin from '../../components/hook/useCustomLogin'
 import RegularListComponent from '../../components/parking/RegularListComponent'
 import { regularGetSearchList, regularParkingDeleteChecked } from '../../components/api/parking/regularApi'
 import '../../css/public/public.css'
+import '../../components/facilities/common/css/facilityLayout.css'
 
 const initStateSearchData = {
   searchCategory: '',
@@ -141,17 +142,24 @@ const RegularPage = () => {
 
     const pageParam = { page, size }
 
-    if (newSearchData.searchCategory) {
-      regularGetSearchList(pageParam, newSearchData).then(data => {
-        setPageServerData(data)
-        // 결과 예외 처리
-        if (!data.dtoList || data.dtoList.length === 0) {
-          alert('검색 결과가 없습니다')
+    const fetch = async () => {
+      if (newSearchData.searchCategory) {
+        try {
+          await regularGetSearchList(pageParam, newSearchData).then(data => {
+            setPageServerData(data)
+            // 결과 예외 처리
+            if (!data.dtoList || data.dtoList.length === 0) {
+              alert('검색 결과가 없습니다')
+            }
+          })
+        } catch (error) {
+          alert('잘못된 입력입니다')
         }
-      })
-    } else {
-      setPageServerData(initStateServerData)
+      } else {
+        setPageServerData(initStateServerData)
+      }
     }
+    fetch()
   }, [location.search])
 
 
@@ -161,7 +169,16 @@ const RegularPage = () => {
   }
   // --------------------
   return (
-    <div>
+    <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+      {/* 배너 섹션 */}
+      <div className="banner mb-8"
+        style={{
+          backgroundImage: `url('/images/parkinglot.jpg')`,
+        }}>
+        <div className="banner-overlay">
+          <h1 className="banner-text">정기권 차량</h1>
+        </div>
+      </div>
       {loadLoginData().role !== 'ADMIN' && loadLoginData().role !== 'ROOT' ?
         <></> :
         <ul className='topMenu'>

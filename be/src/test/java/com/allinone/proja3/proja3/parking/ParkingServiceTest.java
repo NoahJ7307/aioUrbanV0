@@ -37,18 +37,18 @@ public class ParkingServiceTest {
 
     @Test
     public void insertRP(){
-        for (int i = 1; i < 3; i++) {
-            for (int j = 1; j < 3; j++) {
+        for (int i = 1; i < 10; i++) {
+            for (int j = 1; j < 10; j++) {
                 HouseholdDTO householdDTO = HouseholdDTO.builder()
-                        .dong(""+(200+i))
+                        .dong(""+(100+i))
                         .ho(""+(100+j))
                         .build();
 
                 RegularParkingDTO regularParkingDTO = RegularParkingDTO.builder()
                         .householdDTO(householdDTO)
-                        .carNum((i*10)+"가"+(1000*j))
-                        .name("Test"+i+".."+j)
-                        .phone("Test"+i+".."+j) // 등록 날짜 test 는 serviceImpl 에서 변경
+                        .carNum((i*10)+"테"+(1000*j))
+                        .name("테스트"+i+"0"+j)
+                        .phone("010"+i+"0000"+j) // 등록 날짜 test 는 serviceImpl 에서 변경
                         .build();
 
                 regularParkingDTO.setHousehold(Household.builder()
@@ -65,8 +65,8 @@ public class ParkingServiceTest {
 
     @Test
     public void insertVP(){
-        for (int i = 1; i < 5; i++) {
-            for (int j = 1; j < 5; j++) {
+        for (int i = 1; i < 10; i++) {
+            for (int j = 1; j < 10; j++) {
                 HouseholdDTO householdDTO = HouseholdDTO.builder()
                         .dong(""+(200+i))
                         .ho(""+(100+j))
@@ -74,9 +74,9 @@ public class ParkingServiceTest {
 
                 VisitParkingDTO visitParkingDTO = VisitParkingDTO.builder()
                         .householdDTO(householdDTO)
-                        .carNum((i*10)+"가"+(1000*j))
-                        .name("Test2"+i+".."+j)
-                        .phone("Test2"+i+".."+j)
+                        .carNum((i*10)+"테"+(1000*j))
+                        .name("테스트"+i+"0"+j)
+                        .phone("010"+i+"0000"+j)
                         .expectedDate(LocalDate.parse("2024-0"+i+"-0"+j))
                         .build();
 
@@ -165,7 +165,11 @@ public class ParkingServiceTest {
                 .page(1)
                 .size(10)
                 .build();
-        PageResponseDTO<VisitParkingDTO> list = visitParkingService.getSearchList(pageRequestDTO, visitSearchDataDTO);
+        HouseholdDTO householdDTO = HouseholdDTO.builder()
+                .dong(null)
+                .ho(null)
+                .build();
+        PageResponseDTO<VisitParkingDTO> list = visitParkingService.getSearchList(pageRequestDTO, visitSearchDataDTO, householdDTO);
         list.getDtoList().forEach(System.out::println);
     }
 }

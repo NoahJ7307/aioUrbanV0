@@ -18,7 +18,7 @@ const MyCommunitiesComponent = () => {
  
   return (
     <div className="p-6">
-      <ul className='flex justify-center space-x-8'>
+      {/* <ul className='flex justify-center space-x-8'>
         <li>
           <button className="button" onClick={handleClickBoard}>게시판 작성 조회 </button>
         </li>
@@ -28,7 +28,7 @@ const MyCommunitiesComponent = () => {
         <li>
           <button className="button" onClick={handleClickMarket}>마켓 작성 조회</button>
         </li>
-      </ul>
+      </ul> */}
 
     
       <Outlet />
