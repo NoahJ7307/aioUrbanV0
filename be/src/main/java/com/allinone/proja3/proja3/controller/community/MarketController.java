@@ -1,29 +1,18 @@
 package com.allinone.proja3.proja3.controller.community;
-
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
-import com.allinone.proja3.proja3.dto.community.AnnounceDTO;
 import com.allinone.proja3.proja3.dto.community.MarketDTO;
 import com.allinone.proja3.proja3.model.User;
-import com.allinone.proja3.proja3.model.community.Announce;
 import com.allinone.proja3.proja3.model.community.Market;
 import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.service.UserService;
-import com.allinone.proja3.proja3.service.community.AnnounceService;
 import com.allinone.proja3.proja3.service.community.MarketService;
-import com.allinone.proja3.proja3.util.CustomFileUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -96,15 +85,16 @@ public class MarketController {
         if ("root".equalsIgnoreCase(role) || "admin".equalsIgnoreCase(role)) {
             // 관리자 권한으로 바로 삭제
             service.deletePostByAdmin(pno);
-            return new ResponseEntity<>("관리자 권한으로 게시글이 삭제되었습니다.", HttpStatus.OK);
+            return new ResponseEntity<>("관리자 권한으로 게시글이 삭제되었습니다.1111", HttpStatus.OK);
         }
 
         // 일반 사용자 검증 후 삭제
         if (uno == null) {
-            throw new IllegalArgumentException("일반 사용자의 경우 uno 값이 필요합니다.");
+            throw new IllegalArgumentException("일반 사용자의 경우 uno 값이 필요합니다.11111");
         }
         service.deletePost(pno, uno);
-        return new ResponseEntity<>("게시글이 삭제되었습니다.", HttpStatus.OK);
+        System.out.println("pno와uno의1234"+pno+uno);
+        return new ResponseEntity<>("게시글이 삭제되었습니다.11111", HttpStatus.OK);
     }
 
     @PutMapping("/modify/{mno}")

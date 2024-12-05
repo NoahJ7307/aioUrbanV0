@@ -21,8 +21,6 @@ export const sendMessage = async (chatMessage) => {
         throw error; // 에러를 호출한 곳으로 전달
     }
 };
-
-// 특정 상품에 대한 메시지 조회
 // 특정 상품에 대한 메시지 조회
 export const getMessages = async (productId) => {
     const token = localStorage.getItem("token");

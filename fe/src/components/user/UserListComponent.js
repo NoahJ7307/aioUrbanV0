@@ -137,26 +137,29 @@ const UserListComponent = ({ pageServerData, searchData }) => {
             </div>
 
             {/* 유저 데이터를 map으로 렌더링 */}
-            {serverData.dtoList.filter(data => !data.userRoleList.includes('ROOT') // ROOT 권한 표기 X
-            ).map((user, index) => (
-                <label
-                    key={index}
-                    className={`userTable tableRow ${checked.includes(user.uno) ? "checked" : ""}`}
-                    htmlFor={`checkbox-${user.uno}`}
-                >
-                    <input
-                        type="checkbox"
-                        id={`checkbox-${user.uno}`}
-                        checked={checked.includes(user.uno)}
-                        onChange={() => handleCheckChange(user.uno)}
-                    />
-                    <div>{user.dong}</div>
-                    <div>{user.ho}</div>
-                    <div>{user.userName}</div>
-                    <div>{user.phone}</div>
-                    <div>{user.userRoleList.map(role => roleListName[role])}</div>
-                </label>
-            ))}
+            {serverData.dtoList.length < 1 ?
+                <div className='tableRow empty'>데이터가 없습니다</div>
+                :
+                serverData.dtoList.filter(data => !data.userRoleList.includes('ROOT') // ROOT 권한 표기 X
+                ).map((user, index) => (
+                    <label
+                        key={index}
+                        className={`userTable tableRow ${checked.includes(user.uno) ? "checked" : ""}`}
+                        htmlFor={`checkbox-${user.uno}`}
+                    >
+                        <input
+                            type="checkbox"
+                            id={`checkbox-${user.uno}`}
+                            checked={checked.includes(user.uno)}
+                            onChange={() => handleCheckChange(user.uno)}
+                        />
+                        <div>{user.dong}</div>
+                        <div>{user.ho}</div>
+                        <div>{user.userName}</div>
+                        <div>{user.phone}</div>
+                        <div>{user.userRoleList.map(role => roleListName[role])}</div>
+                    </label>
+                ))}
             <PageComponent serverData={serverData} movePage={movePage} />
         </div>
     );

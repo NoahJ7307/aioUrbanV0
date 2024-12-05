@@ -297,25 +297,25 @@ const ThirdLayout = () => {
                 <ButtonContainer>
                     <Button
                         isVisible={isVisible}
-                        onClick={() => handleNavigate('/communities/board')}
+                        onClick={() => handleNavigate('/communities/board/list')}
                     >
                         게시판
                     </Button>
                     <Button
                         isVisible={isVisible}
-                        onClick={() => handleNavigate('/communities/announce')}
+                        onClick={() => handleNavigate('/communities/announce/list')}
                     >
                         공지사항
                     </Button>
                     <Button
                         isVisible={isVisible}
-                        onClick={() => handleNavigate('/communities/market')}
+                        onClick={() => handleNavigate('/communities/market/list')}
                     >
                         장터
                     </Button>
                     <Button
                         isVisible={isVisible}
-                        onClick={() => handleNavigate('/communities/info')}
+                        onClick={() => handleNavigate('/communities/info/jobs')}
                     >
                         생활정보
                     </Button>

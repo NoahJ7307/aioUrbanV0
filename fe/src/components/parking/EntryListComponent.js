@@ -92,22 +92,25 @@ const EntryListComponent = ({ pageServerData, searchData }) => {
       </div>
 
       {/* Data Rendering */}
-      {serverData.dtoList.map((entry, index) => (
-        <div key={index} className='parkingEntryTable tableRow'>
-          <div>
-            <input
-              type='checkbox'
-              disabled
-            />
+      {serverData.dtoList.length < 1 ?
+        <div className='tableRow empty'>데이터가 없습니다</div>
+        :
+        serverData.dtoList.map((entry, index) => (
+          <div key={index} className='parkingEntryTable tableRow'>
+            <div>
+              <input
+                type='checkbox'
+                disabled
+              />
+            </div>
+            <div>{entry.carNum}</div>
+            <div>{entry.dong && entry.dong}</div>
+            <div>{entry.ho && entry.ho}</div>
+            <div>{entry.entryDate}</div>
+            <div>{entry.exitDate}</div>
+            <div>{entry.exit ? '출차완료' : '미출차'}</div>
           </div>
-          <div>{entry.carNum}</div>
-          <div>{entry.dong && entry.dong}</div>
-          <div>{entry.ho && entry.ho}</div>
-          <div>{entry.entryDate}</div>
-          <div>{entry.exitDate}</div>
-          <div>{entry.exit ? '출차완료' : '미출차'}</div>
-        </div>
-      ))}
+        ))}
       <PageComponent serverData={serverData} movePage={movePage} />
     </div>
   )

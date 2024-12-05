@@ -126,7 +126,7 @@ const RegularListComponent = ({ pageServerData, searchData }) => {
                         htmlFor='checkbox-all'
                         className={`cursor-pointer ${allChecked ? 'selected' : ''}`}
                         style={{ textDecoration: 'underline', cursor: 'pointer' }}
->
+                    >
                         전체선택
                         <input
                             type='checkbox'
@@ -145,26 +145,29 @@ const RegularListComponent = ({ pageServerData, searchData }) => {
             </div>
 
             {/* Data Rendering */}
-            {serverData.dtoList.map((regular, index) => (
-                <label
-                    key={index}
-                    className={`parkingRVTable tableRow ${checked.includes(regular.rpno) ? "checked" : ""}`}
-                    htmlFor={`checkbox-${regular.rpno}`}
-                >
-                    <input
-                        type="checkbox"
-                        id={`checkbox-${regular.rpno}`}
-                        checked={checked.includes(regular.rpno)}
-                        onChange={() => handleCheckChange(regular.rpno)}
-                    />
-                    <div>{regular.carNum}</div>
-                    <div>{regular.name}</div>
-                    <div>{regular.household && regular.household.householdPK.dong}</div>
-                    <div>{regular.household && regular.household.householdPK.ho}</div>
-                    <div>{regular.phone}</div>
-                    <div>{regular.regDate}</div>
-                </label>
-            ))}
+            {serverData.dtoList.length < 1 ?
+                <div className='tableRow empty'>데이터가 없습니다</div>
+                :
+                serverData.dtoList.map((regular, index) => (
+                    <label
+                        key={index}
+                        className={`parkingRVTable tableRow ${checked.includes(regular.rpno) ? "checked" : ""}`}
+                        htmlFor={`checkbox-${regular.rpno}`}
+                    >
+                        <input
+                            type="checkbox"
+                            id={`checkbox-${regular.rpno}`}
+                            checked={checked.includes(regular.rpno)}
+                            onChange={() => handleCheckChange(regular.rpno)}
+                        />
+                        <div>{regular.carNum}</div>
+                        <div>{regular.name}</div>
+                        <div>{regular.household && regular.household.householdPK.dong}</div>
+                        <div>{regular.household && regular.household.householdPK.ho}</div>
+                        <div>{regular.phone}</div>
+                        <div>{regular.regDate}</div>
+                    </label>
+                ))}
             <PageComponent serverData={serverData} movePage={movePage} />
         </div>
     );

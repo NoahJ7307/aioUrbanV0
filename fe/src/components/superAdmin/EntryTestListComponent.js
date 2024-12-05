@@ -94,12 +94,11 @@ const EntryTestListComponent = ({ pageServerData, searchData, checkedEeno, setCh
         <div className="tableRowContainer">
             <div className="entryListTable tableHeader">
                 <div>
-                    <label 
-                    htmlFor='checkbox-all' 
+                    <label
+                        htmlFor='checkbox-all'
                         className={`cursor-pointer ${allChecked ? 'selected' : ''}`}
                         style={{ textDecoration: 'underline', cursor: 'pointer' }}
->
-                     
+                    >
                         삭제항목 전체선택
                         <input
                             type='checkbox'
@@ -118,26 +117,29 @@ const EntryTestListComponent = ({ pageServerData, searchData, checkedEeno, setCh
             </div>
 
             {/* Data Rendering */}
-            {serverData.dtoList.map((entry, index) => (
-                <label
-                    key={index}
-                    className={`entryListTable tableRow ${checkedEeno.includes(entry.eeno) ? "checked" : ""}`}
-                    htmlFor={`checkbox-${entry.eeno}`}
-                >
-                    <input
-                        type="checkbox"
-                        id={`checkbox-${entry.eeno}`}
-                        checked={checkedEeno.includes(entry.eeno)}
-                        onChange={() => handleCheckChange(entry.eeno)}
-                    />
-                    <div>{entry.carNum}</div>
-                    <div>{entry.dong && entry.dong}</div>
-                    <div>{entry.ho && entry.ho}</div>
-                    <div>{entry.entryDate}</div>
-                    <div>{entry.exitDate}</div>
-                    <div>{entry.exit ? '출차완료' : '미출차'}</div>
-                </label>
-            ))
+            {serverData.dtoList.length < 1 ?
+                <div className='tableRow empty'>데이터가 없습니다</div>
+                :
+                serverData.dtoList.map((entry, index) => (
+                    <label
+                        key={index}
+                        className={`entryListTable tableRow ${checkedEeno.includes(entry.eeno) ? "checked" : ""}`}
+                        htmlFor={`checkbox-${entry.eeno}`}
+                    >
+                        <input
+                            type="checkbox"
+                            id={`checkbox-${entry.eeno}`}
+                            checked={checkedEeno.includes(entry.eeno)}
+                            onChange={() => handleCheckChange(entry.eeno)}
+                        />
+                        <div>{entry.carNum}</div>
+                        <div>{entry.dong && entry.dong}</div>
+                        <div>{entry.ho && entry.ho}</div>
+                        <div>{entry.entryDate}</div>
+                        <div>{entry.exitDate}</div>
+                        <div>{entry.exit ? '출차완료' : '미출차'}</div>
+                    </label>
+                ))
             }
             <PageComponent serverData={serverData} movePage={movePage} />
         </div >

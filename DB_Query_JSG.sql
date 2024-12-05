@@ -7,6 +7,7 @@ grant all privileges on projadb.* to `projauser`@`%`;
 
 -- -------------------------------------------------------------
 show tables;
+drop database projadb;
 drop table tbl_user;
 drop table tbl_regular_parking;
 drop table tbl_visit_parking;
@@ -24,7 +25,7 @@ select * from tbl_gym;
 select * from mileage;
 select * from mileage_history;
 select * from payment_history;
-select * from card_info;
+select * from tbl_gym_membership;
 -- 0=P,1=U,2=A 권한 별 유저 조회
 SELECT u.user_uno, u.user_role_list, t.user_name FROM user_user_role_list u JOIN tbl_user t ON u.user_uno = t.uno 
 WHERE u.user_role_list = 0 ORDER BY u.user_uno DESC;

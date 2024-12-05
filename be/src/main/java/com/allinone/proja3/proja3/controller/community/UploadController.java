@@ -1,5 +1,6 @@
 package com.allinone.proja3.proja3.controller.community;
 
+import com.allinone.proja3.proja3.service.community.MarketServiceImpl;
 import com.allinone.proja3.proja3.util.CustomFileUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

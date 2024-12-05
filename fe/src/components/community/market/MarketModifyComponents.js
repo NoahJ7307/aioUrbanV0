@@ -166,7 +166,8 @@ const MarketModifyComponents = () => {
 
         </form>
       </div>
-          <button
+      <button
+        onClick={handleUpdate}
             type="submit"
             className="w-full py-2 mt-5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
           >
