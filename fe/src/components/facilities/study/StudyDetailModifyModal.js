@@ -3,7 +3,9 @@ import { modifyStudy, getUserStudyById } from '../../api/facilities/studyApi'
 import { useSearchParams } from 'react-router-dom';
 import { handleSingleCancel } from './StudyCancel';
 import '../golf/GolfDetailModifyModal.css'
+import useReservationValidation from '../../hook/facilities/useReservationValidation';
 const StudyDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
+    const { validateReservation } = useReservationValidation(); 
 
     
     const [formData, setFormData] = useState({
@@ -54,8 +56,9 @@ const StudyDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('예약 id', reservationId)
-        console.log('수정 id', formData)
+        if (!validateReservation(formData)) {
+            return;
+        }
         try {
             //수정 api호출
             await modifyStudy(reservationId, formData);
@@ -72,7 +75,7 @@ const StudyDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <h2 className="modal-title">예약 수정</h2>
+                <h2 className="modal-title">예약 변경</h2>
                 
                 <form onSubmit={handleSubmit} className="form-container">
                     <div className="form-group">
@@ -84,6 +87,7 @@ const StudyDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
                             onChange={handleModify}
                             required
                             className="form-input"
+                            min={new Date().toISOString().split('T')[0]} // 오늘 날짜를 최소값으로 설정
                         />
                     </div>
 
@@ -121,7 +125,7 @@ const StudyDetailModifyModal = ({ reservationId, closeModal, refreshList }) => {
                             required
                             className="form-input"
                             min="1"        // 최소값 1
-                            max="10"       // 최대값 10
+                            max="37"       // 최대값 10
                         />
                     </div>
 

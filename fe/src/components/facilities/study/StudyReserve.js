@@ -3,9 +3,11 @@ import { reserveStudy } from '../../api/facilities/studyApi';
 import { useNavigate } from 'react-router-dom';
 import StudySeatMap from './StudySeatMap';
 import '../common/css/facilityLayout.css';
+import useReservationValidation from '../../hook/facilities/useReservationValidation';
 
 
 const StudyReserve = () => {
+    const { validateReservation } = useReservationValidation();
     const [uno, setUno] = useState()
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
@@ -51,31 +53,7 @@ const StudyReserve = () => {
             return newFormData;
         });
     };
-    const validateReservation = (data) => {
-        const selectedDate = new Date(data.date);
-        const today = new Date();
-        console.log("today:", today, "selectedDate", selectedDate)
-
-        if (selectedDate < today.setHours(0, 0, 0, 0)) {
-            alert("선택하신 날짜는 오늘 이후여야 합니다.");
-            return false;
-        }
-
-        const startTime = new Date(`${data.date}T${data.startTime}`);
-        const endTime = new Date(`${data.date}T${data.endTime}`);
-        if (startTime >= endTime) {
-            alert("시작 시간은 종료 시간보다 이전이어야 합니다.");
-            return false;
-        }
-
-        if (selectedDate.toDateString() === today.toDateString() && startTime <= today) {
-            alert("예약 시작 시간은 현재 시간 이후여야 합니다.");
-            return false;
-        }
-
-        return true;
-    };
-
+   
     
 
     const handleReserve = async () => {
@@ -175,8 +153,8 @@ const StudyReserve = () => {
                                 name="date"
                                 value={formData.date}
                                 onChange={handleFieldChange}
+                                min={today}
                                 className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-600"
-                                min={today} 
                             />
                             <h2 htmlFor="startTime">이용 시간</h2>
                             <input

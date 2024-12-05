@@ -177,29 +177,29 @@ const StudyList = ({ page, size }) => {
 
 
             <div className={`grid ${(role === 'ADMIN' || role === 'ROOT') ? 'grid-cols-9' : 'grid-cols-6'} gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg`}>
-                <div>예약번호</div>
-                <div>날짜</div>
-                <div>사용시작</div>
-                <div>사용종료</div>
-                <div>예약좌석</div>
-                <div>예약자</div>
-                {(role === 'ADMIN' || role === 'ROOT') && <div>연락처</div>}
-                {(role === 'ADMIN' || role === 'ROOT') && <div>예약 변경</div>}
-                {(role === 'ADMIN' || role === 'ROOT') && <div>선택</div>}
+                <div className="text-center">예약번호</div>
+                <div className="text-center">날짜</div>
+                <div className="text-center">사용시작</div>
+                <div className="text-center">사용종료</div>
+                <div className="text-center">예약좌석</div>
+                <div className="text-center">예약자</div>
+                {(role === 'ADMIN' || role === 'ROOT') && <div className="text-center">연락처</div>}
+                {(role === 'ADMIN' || role === 'ROOT') && <div className="text-center">예약 변경</div>}
+                {(role === 'ADMIN' || role === 'ROOT') && <div className="text-center">선택</div>}
             </div>
 
             {filteredData.length > 0 ? (
                 filteredData.map((study) => (
                     <div key={study.reservationId} className={`grid ${(role === 'ADMIN' || role === 'ROOT') ? 'grid-cols-9' : 'grid-cols-6'} gap-4 items-center border-t py-4`}>
-                        <div className="text-sm">{study.reservationId}</div>
-                        <div className="text-sm">{study.date}</div>
+                        <div className="text-sm text-center">{study.reservationId}</div>
+                        <div className="text-sm text-center">{study.date}</div>
                         <div className="text-sm">{study.startTime}</div>
-                        <div className="text-sm">{study.endTime}</div>
-                        <div className="text-sm">{study.seatNum}</div>
-                        <div className="text-sm">{(role === 'ADMIN' || role === 'ROOT') ? study.userName : privacyUserName(study.userName)}</div>
-                        {(role === 'ADMIN' || role === 'ROOT') && <div className="text-sm">{study.phone}</div>}
+                        <div className="text-sm text-center">{study.endTime}</div>
+                        <div className="text-sm text-center">{study.seatNum}</div>
+                        <div className="text-sm text-center">{(role === 'ADMIN' || role === 'ROOT') ? study.userName : privacyUserName(study.userName)}</div>
+                        {(role === 'ADMIN' || role === 'ROOT') && <div className="text-sm text-center">{study.phone}</div>}
                         {(role === 'ADMIN' || role === 'ROOT') && (
-                            <div>
+                            <div className="text-center">
                                 <button
                                     onClick={() => handleModify(study.reservationId)}
                                     className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
@@ -209,7 +209,7 @@ const StudyList = ({ page, size }) => {
                             </div>
                         )}
                         {(role === 'ADMIN' || role === 'ROOT') && (
-                            <div>
+                            <div className="text-center">
                                 <input
                                     type="checkbox"
                                     checked={checkedReservationId.includes(study.reservationId)}
@@ -240,6 +240,7 @@ const StudyList = ({ page, size }) => {
                     <StudyDetailModifyModal
                         reservationId={selectedReservationId}
                         closeModal={() => setIsModalOpen(false)}
+                        refreshList={fetchStudyReservations}
                     />
                 )
             }

@@ -368,11 +368,12 @@ body {
 }
 
 .paginationButton:hover {
-  background-color: orange;
-  color: #749fcd;
+  background-color: #4d82a8;
+  color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
+
 
 /* -------------------------------------------- */
 

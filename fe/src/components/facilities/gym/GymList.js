@@ -152,7 +152,7 @@ const GymList = () => {
               <th className="border px-4 py-2 text-left">no</th>
               <th className="border px-4 py-2 text-left">프로그램</th>
               <th className="border px-4 py-2 text-left">모집현황</th>
-              <th className="border px-4 py-2 text-left">접수 버튼</th>
+              <th className="border px-4 py-2 text-left">프로그램 상태</th>
             </tr>
           </thead>
           <tbody>

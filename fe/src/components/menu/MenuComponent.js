@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useCustomLogin from '../hook/useCustomLogin';
 import '../../css/_modules/menucomponent.css';
+import styled from 'styled-components';
 
 const MenuComponent = () => {
     const navigate = useNavigate();
@@ -129,6 +130,11 @@ const MenuComponent = () => {
         setIsMyPageOpen(false);
         setOpenCategory(null);
     };
+    const ColoredSpan = styled.span`
+    background: linear-gradient(120deg, #08AEEA, #2AF598);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+`;
 
     return (
         <div>
@@ -260,7 +266,7 @@ const MenuComponent = () => {
                             setIsMyPageOpen(false);
                         }}>
                             <i className="fa-solid fa-city"></i>
-                            <span>URBAN</span>
+                            <span><ColoredSpan>URBAN</ColoredSpan></span>
                         </div>
                     </li>
 

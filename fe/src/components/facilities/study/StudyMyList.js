@@ -59,26 +59,26 @@ const StudyMyList = ({ uno, page, size }) => {
                 </div>
 
                 <div className="grid grid-cols-7 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
-                    <div>NO</div>
-                    <div>날짜</div>
-                    <div>사용시작</div>
-                    <div>사용종료</div>
-                    <div>예약구역</div>
-                    <div>예약자</div>
-                    <div>예약 변경</div>
+                <div className="text-center">NO</div>
+                    <div className="text-center">날짜</div>
+                    <div className="text-center">사용시작</div>
+                    <div className="text-center">사용종료</div>
+                    <div className="text-center">예약구역</div>
+                    <div className="text-center">예약자</div>
+                    <div className="text-center">예약 변경</div>
 
                 </div>
                 <div className="overflow-y-auto max-h-96">
                     {studyReservations.dtoList.length > 0 ? (
                         studyReservations.dtoList.map((study) => (
                             <div key={study.reservationId} className="grid grid-cols-7 gap-4 items-center border-t py-4">
-                                <div className="text-sm">{study.reservationId}</div>
-                                <div className="text-sm">{study.date}</div>
-                                <div className="text-sm">{study.startTime}</div>
-                                <div className="text-sm">{study.endTime}</div>
-                                <div className="text-sm">{study.seatNum}</div>
-                                <div className="text-sm">{study.userName}</div>
-                                <div>
+                                <div className="text-sm text-center">{study.reservationId}</div>
+                                <div className="text-sm text-center">{study.date}</div>
+                                <div className="text-sm text-center">{study.startTime}</div>
+                                <div className="text-sm text-center">{study.endTime}</div>
+                                <div className="text-sm text-center">{study.seatNum}</div>
+                                <div className="text-sm text-center">{study.userName}</div>
+                                <div className="text-center">
                                     <button
                                         onClick={() => handleModify(study.reservationId)}
                                         className={`px-4 py-2 rounded-md transition ${isPastReservation(study.date, study.startTime)
