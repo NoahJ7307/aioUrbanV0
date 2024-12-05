@@ -37,11 +37,16 @@ const EntryTestPage = () => {
     const location = useLocation()
 
     const handleClickDelete = () => {
-        entryDeleteChecked(checkedEeno).then(() => {
-            alert('삭제가 완료되었습니다.')
-            setCheckedEeno([])
-            window.location.reload()
-        })
+        if (checkedEeno.length < 1) {
+            alert('삭제할 항목을 체크해주세요')
+            return
+        } else {
+            entryDeleteChecked(checkedEeno).then(() => {
+                alert('삭제가 완료되었습니다.')
+                setCheckedEeno([])
+                window.location.reload()
+            })
+        }
     }
 
     // ------- 검색 -------

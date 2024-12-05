@@ -126,7 +126,7 @@ const VisitListComponent = ({ pageServerData, searchData }) => {
             htmlFor='checkbox-all'
             className={`cursor-pointer ${allChecked ? 'selected' : ''}`}
             style={{ textDecoration: 'underline', cursor: 'pointer' }}>
-            
+
 
             전체선택
             <input
@@ -146,26 +146,29 @@ const VisitListComponent = ({ pageServerData, searchData }) => {
       </div>
 
       {/* Data Rendering */}
-      {serverData.dtoList.map((visit, index) => (
-        <label
-          key={index}
-          className={`parkingRVTable tableRow ${checked.includes(visit.vpno) ? "checked" : ""}`}
-          htmlFor={`checkbox-${visit.vpno}`}
-        >
-          <input
-            type='checkbox'
-            id={`checkbox-${visit.vpno}`}
-            checked={checked.includes(visit.vpno)} // 페이지 이동 시 체크항목 유지
-            onChange={() => handleCheckChange(visit.vpno)}
-          />
-          <div>{visit.carNum}</div>
-          <div>{visit.name}</div>
-          <div>{visit.household && visit.household.householdPK.dong}</div>
-          <div>{visit.household && visit.household.householdPK.ho}</div>
-          <div>{visit.phone}</div>
-          <div>{visit.expectedDate}</div>
-        </label>
-      ))
+      {serverData.dtoList.length < 1 ?
+        <div className='tableRow empty'>데이터가 없습니다</div>
+        :
+        serverData.dtoList.map((visit, index) => (
+          <label
+            key={index}
+            className={`parkingRVTable tableRow ${checked.includes(visit.vpno) ? "checked" : ""}`}
+            htmlFor={`checkbox-${visit.vpno}`}
+          >
+            <input
+              type='checkbox'
+              id={`checkbox-${visit.vpno}`}
+              checked={checked.includes(visit.vpno)} // 페이지 이동 시 체크항목 유지
+              onChange={() => handleCheckChange(visit.vpno)}
+            />
+            <div>{visit.carNum}</div>
+            <div>{visit.name}</div>
+            <div>{visit.household && visit.household.householdPK.dong}</div>
+            <div>{visit.household && visit.household.householdPK.ho}</div>
+            <div>{visit.phone}</div>
+            <div>{visit.expectedDate}</div>
+          </label>
+        ))
       }
       <PageComponent serverData={serverData} movePage={movePage} />
     </div >

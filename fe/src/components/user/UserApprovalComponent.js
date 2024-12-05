@@ -58,22 +58,25 @@ const UserApprovalComponent = () => {
             </div>
 
             {/* 유저 데이터를 map으로 렌더링 */}
-            {serverData.dtoList.map((user, index) => (
-                <div key={index} className="approvalTable tableRow">
-                    <div>{user.dong}</div>
-                    <div>{user.ho}</div>
-                    <div>{user.userName}</div>
-                    <div>{user.phone}</div>
-                    <div className="buttonGroup">
-                        <button className='formButton add green h-4 '
-                            onClick={() => handleClickAccess(user.uno)}
-                        ><CheckCircleIcon /></button>
-                        <button className='formButton cancel h-4'
-                            onClick={() => handleClickDenial(user.uno)}
-                        ><DoNotTouchIcon /></button>
+            {serverData.dtoList.length < 1 ?
+                <div className='tableRow empty'>데이터가 없습니다</div>
+                :
+                serverData.dtoList.map((user, index) => (
+                    <div key={index} className="approvalTable tableRow">
+                        <div>{user.dong}</div>
+                        <div>{user.ho}</div>
+                        <div>{user.userName}</div>
+                        <div>{user.phone}</div>
+                        <div className="buttonGroup">
+                            <button className='formButton add green h-4 '
+                                onClick={() => handleClickAccess(user.uno)}
+                            ><CheckCircleIcon /></button>
+                            <button className='formButton cancel h-4'
+                                onClick={() => handleClickDenial(user.uno)}
+                            ><DoNotTouchIcon /></button>
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
             <PageComponent serverData={serverData} movePage={moveToList} />
         </div>
     );

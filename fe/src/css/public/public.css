@@ -202,6 +202,11 @@ body {
   transition: background-color 0.3s ease;
 }
 
+.tableRow.empty{
+  grid-template-columns: 1fr;
+  color:red;
+}
+
 
 .tableRow:hover {
   background-color: rgba(255, 166, 0, 0.40);
