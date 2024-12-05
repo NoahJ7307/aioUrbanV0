@@ -57,11 +57,13 @@ const MyAnnouncePostsComponent = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">내가 쓴 공지사항</h1>
+      <div className="mb-6 text-center">
+        <h2 className="text-3xl font-semibold">내가 쓴 공지사항</h2>
+      </div>
       <div className="grid grid-cols-1 gap-4">
         {posts.length > 0 ? (
           posts.map((post) => (
-            <div key={post.pno} className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+            <div key={post.pno} className="container mx-auto p-6 border-2 border-gray-120 rounded-lg">
               <div className="flex justify-between items-start">
                 <div className="flex-1">
                   <h3 className="text-xl mb-3">

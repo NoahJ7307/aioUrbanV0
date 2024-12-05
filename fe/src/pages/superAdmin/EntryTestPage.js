@@ -5,6 +5,7 @@ import { entryDeleteChecked, entryGetSearchList } from '../../components/api/par
 import EntryTestAddComponent from '../../components/superAdmin/EntryTestAddComponent'
 import EntryTestListComponent from '../../components/superAdmin/EntryTestListComponent'
 import '../../css/public/public.css'
+import '../../components/facilities/common/css/facilityLayout.css'
 
 const initStateSearchData = {
     searchCategory: '',
@@ -147,6 +148,15 @@ const EntryTestPage = () => {
     // --------------------
     return (
         <div>
+            {/* 배너 섹션 */}
+            <div className="banner mb-8"
+                style={{
+                    backgroundImage: `url('/images/superAdmin.jpg')`,
+                }}>
+                <div className="banner-overlay">
+                    <h1 className="banner-text">입출차 테스트</h1>
+                </div>
+            </div>
             <ul className='topMenu'>
                 <li>
                     <button className='topMenuBtn' onClick={handleClickDelete}>

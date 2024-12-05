@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import useCustomLogin from '../hook/useCustomLogin'
 import '../../css/public/public.css'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
@@ -44,6 +44,10 @@ const LoginComponent = () => {
     const handleClickFindPw = () => {
         navigate('findPw')
     }
+    const handleClickSignUp = () => {
+        navigate('/join')
+    }
+
 
     return (
         <div>
@@ -70,9 +74,16 @@ const LoginComponent = () => {
                 </div>
                 <div className='buttonGroup'>
                     <button type='button' className='formButton add'
-                        onClick={handleClickFindPw}>비밀번호 찾기</button>
-                    <button type='button' className='formButton add'
+                        style={{ marginRight: '15px',  flex: '1' }}
                         onClick={handleClick}>로그인</button>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center' ,marginLeft: '115px'}}>  
+                <button 
+                        style={{ marginTop: '1px', fontSize: '14px'}}
+                        onClick={handleClickFindPw}>비밀번호 찾기 &nbsp; ❙</button>
+                    <button 
+                        style={{ marginTop: '1px', fontSize: '14px'}}
+                        onClick={handleClickSignUp}> &nbsp; 회원가입 </button>
                 </div>
             </div>
 

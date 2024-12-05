@@ -169,10 +169,16 @@ const InfoMainComponents = () => {
     const handleKeywordChange = (e) => setKeyword(e.target.value);
 
     return (
+        <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+            <div>
+            <header className="text-center mb-8">
+                    <h1 className="text-3xl font-bold">내 주변 일자리 정보</h1>
+
+                </header>
         <div className="flex flex-wrap">
             <div className="map_wrap w-full md:w-1/2 p-2 mt-6">
                 <div ref={mapContainer} style={{ width: '100%', height: '500px', position: 'relative', overflow: 'hidden' }}></div>
-                <div id="menu_wrap" className="bg_white mt-4 p-4 rounded-lg shadow-lg">
+                <div id="menu_wrap" className="bg_g mt-4 p-4 ">
                     <div className="option">
                         <form
                             onSubmit={(e) => {
@@ -207,7 +213,7 @@ const InfoMainComponents = () => {
                     <h3 className="text-2xl font-semibold">{selectedData.title}</h3>
                 </div>
 
-                <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                <div className=" p-6 rounded-lg transition-all duration-300">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="bg-green-100 p-4 rounded-lg shadow-md">
                             <p className="text-lg text-green-600 font-bold">회사명</p>
@@ -237,7 +243,9 @@ const InfoMainComponents = () => {
                     <a href={selectedData.url} className="mt-6 inline-block bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-all" target="_blank" rel="noopener noreferrer">상세 정보 보러가기</a>
                 </div>
             </div>
-        </div>
+            </div>
+            </div>
+            </div>
     );
 };
 

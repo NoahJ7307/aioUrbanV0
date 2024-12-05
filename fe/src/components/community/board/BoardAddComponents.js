@@ -29,13 +29,13 @@ const BoardAddComponents = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const postData = { title, content }; 
-      await post(postData, uno); 
+      const postData = { title, content };
+      await post(postData, uno);
       setTitle('');
       setContent('');
-    
+
       window.alert('성공!');
-      navigate('/communities/board/list'); 
+      navigate('/communities/board/list');
     } catch (err) {
       console.error('게시물 등록 실패:', err);
     }
@@ -51,9 +51,10 @@ const BoardAddComponents = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center  bg-gray-100"> {/* Centering */}
-      <div className="w-full md:w-1/2 lg:w-1/3 bg-gray-200 p-8 rounded-lg shadow-lg"> {/* Increased size */}
-        <h2 className="text-2xl font-semibold mb-4 text-center">게시글 작성</h2> {/* Centered title */}
+    <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+      <h2 className="text-2xl font-semibold mb-2 text-center">게시글 작성</h2> {/* 제목 중앙 정렬 */}
+      <div className='bg-gray-100 p-3 justify-center rounded-lg'>
+
         <form className="space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"

@@ -68,9 +68,9 @@ const BoardModifyComponents = () => { // pno는 수정할 게시글의 ID
   }, [pno]);
 
   return (
-    <div className="flex items-center justify-center  bg-gray-100"> {/* 배경색 및 중앙 정렬 */}
-      <div className="w-full md:w-1/2 bg-gray-200 p-6 rounded-lg shadow-md"> {/* 그림자 추가 */}
-        <h2 className="text-2xl font-semibold mb-2 text-center">게시글 수정</h2> {/* 제목 중앙 정렬 */}
+    <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+      <h2 className="text-2xl font-semibold mb-2 text-center">게시글 수정</h2> {/* 제목 중앙 정렬 */}
+      <div className='bg-gray-100 p-3 justify-center rounded-lg'>
         {error && <p className="text-red-600">{error}</p>}
         <form className="space-y-7" onSubmit={handleUpdate}>
           <input
@@ -88,14 +88,14 @@ const BoardModifyComponents = () => { // pno는 수정할 게시글의 ID
             required
             className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[400px]"
           />
-          <button
-            type="submit"
-            className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
-          >
-            수정하기
-          </button>
         </form>
       </div>
+        <button
+          type="submit"
+          className="w-full py-2 mt-5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
+        >
+          수정하기
+        </button>
     </div>
   );
 };

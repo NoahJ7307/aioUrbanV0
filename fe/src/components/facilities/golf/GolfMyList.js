@@ -52,7 +52,7 @@ const GolfMyList = ({ uno, page, size }) => {
                     <h2 className="text-3xl font-semibold">골프장 이용 내역 조회</h2>
                 </div>
 
-            <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+                <div className="container mx-auto p-6 border-2 border-gray-120 rounded-lg">
                 <h2 className="text-2xl font-semibold mb-6">나의 예약 현황</h2>
 
                 <div className="grid grid-cols-7 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">

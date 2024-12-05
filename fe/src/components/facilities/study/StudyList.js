@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {  listStudy } from '../../api/facilities/studyApi';
+import { listStudy } from '../../api/facilities/studyApi';
 import useCustom from '../../hook/useCustom';
 import PageComponent from '../../common/PageComponent';
 import { handleCheckedCancel } from './StudyCancel';
@@ -144,7 +144,7 @@ const StudyList = ({ page, size }) => {
                         ))}
                     </select>
                 </div>
-                {role === 'ADMIN' && (
+                {(role === 'ADMIN' || role === 'ROOT') && (
 
                     <button
                         onClick={handleDelete}
@@ -176,29 +176,29 @@ const StudyList = ({ page, size }) => {
             </div>
 
 
-            <div className={`grid ${role === 'ADMIN' ? 'grid-cols-9' : 'grid-cols-6'} gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg`}>
+            <div className={`grid ${(role === 'ADMIN' || role === 'ROOT') ? 'grid-cols-9' : 'grid-cols-6'} gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg`}>
                 <div>예약번호</div>
                 <div>날짜</div>
                 <div>사용시작</div>
                 <div>사용종료</div>
                 <div>예약좌석</div>
                 <div>예약자</div>
-                {role === 'ADMIN' && <div>연락처</div>}
-                {role === 'ADMIN' && <div>예약 변경</div>}
-                {role === 'ADMIN' && <div>선택</div>}
+                {(role === 'ADMIN' || role === 'ROOT') && <div>연락처</div>}
+                {(role === 'ADMIN' || role === 'ROOT') && <div>예약 변경</div>}
+                {(role === 'ADMIN' || role === 'ROOT') && <div>선택</div>}
             </div>
 
             {filteredData.length > 0 ? (
                 filteredData.map((study) => (
-                    <div key={study.reservationId} className={`grid ${role === 'ADMIN' ? 'grid-cols-9' : 'grid-cols-6'} gap-4 items-center border-t py-4`}>
+                    <div key={study.reservationId} className={`grid ${(role === 'ADMIN' || role === 'ROOT') ? 'grid-cols-9' : 'grid-cols-6'} gap-4 items-center border-t py-4`}>
                         <div className="text-sm">{study.reservationId}</div>
                         <div className="text-sm">{study.date}</div>
                         <div className="text-sm">{study.startTime}</div>
                         <div className="text-sm">{study.endTime}</div>
                         <div className="text-sm">{study.seatNum}</div>
-                        <div className="text-sm">{role === 'ADMIN' ? study.userName : privacyUserName(study.userName)}</div>
-                        {role === 'ADMIN' && <div className="text-sm">{study.phone}</div>}
-                        {role === 'ADMIN' && (
+                        <div className="text-sm">{(role === 'ADMIN' || role === 'ROOT') ? study.userName : privacyUserName(study.userName)}</div>
+                        {(role === 'ADMIN' || role === 'ROOT') && <div className="text-sm">{study.phone}</div>}
+                        {(role === 'ADMIN' || role === 'ROOT') && (
                             <div>
                                 <button
                                     onClick={() => handleModify(study.reservationId)}
@@ -208,7 +208,7 @@ const StudyList = ({ page, size }) => {
                                 </button>
                             </div>
                         )}
-                        {role === 'ADMIN' && (
+                        {(role === 'ADMIN' || role === 'ROOT') && (
                             <div>
                                 <input
                                     type="checkbox"

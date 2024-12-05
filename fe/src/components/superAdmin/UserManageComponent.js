@@ -112,7 +112,8 @@ const UserManageComponent = ({ pageServerData, searchData }) => {
         <div>
           <label
             htmlFor='checkbox-all'
-            className={`cursor-pointer ${allChecked ? 'selected' : ''}`}>
+            className={`cursor-pointer ${allChecked ? 'selected' : ''}`}
+            style={{ textDecoration: 'underline', cursor: 'pointer' }}>
             전체선택
             <input
               type='checkbox'

@@ -73,11 +73,13 @@ const MyMarketPostsComponent = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">내가 쓴 마켓 게시글</h1>
+      <div className="mb-6 text-center">
+        <h2 className="text-3xl font-semibold">내가 쓴 마켓 게시물</h2>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {posts.length > 0 ? (
           posts.map((item) => (
-            <div key={item.mno} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <div key={item.mno} className="container mx-auto p-6 border-2 border-gray-120 rounded-lg">
               <div className="aspect-w-16 aspect-h-9">
                 {item.thumbnailUrl ? (
                   <img

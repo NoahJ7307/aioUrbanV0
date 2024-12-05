@@ -4,6 +4,8 @@ import useCustomLogin from '../../components/hook/useCustomLogin'
 import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 import { deleteChecked, getList, getSearchList } from '../../components/api/userApi'
 import useCustom from '../../components/hook/useCustom'
+import '../../components/facilities/common/css/facilityLayout.css'
+
 
 const initStateSearchData = {
     searchCategory: '',
@@ -115,6 +117,17 @@ const ListPage = () => {
 
     return (
         <div>
+            {/* 배너 섹션 */}
+            <div className="banner mb-8"
+                style={{
+                    backgroundImage: `url('/images/apt.jpg')`,
+                }}>
+                <div className="banner-overlay">
+                    <h1 className="banner-text">주민 목록</h1>
+                </div>
+            </div>
+            
+
             <ul className='topMenu'>
                 <li>
                     <button className='topMenuBtn' onClick={handleClickModify}>
@@ -174,7 +187,6 @@ const ListPage = () => {
                 {/* // -------------------- */}
             </ul>
             <UserListComponent pageServerData={pageServerData} searchData={searchData} />
-
             {/* 자식요소로 uno 설정 함수 전달 */}
             <Outlet context={{ checkedUno, setCheckedUno }} />
         </div>

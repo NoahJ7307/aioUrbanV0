@@ -11,9 +11,11 @@ const SuperAdminPage = () => {
     const handleClickEntryTest = useCallback(() => { navigate({ pathname: 'entryTest' }) })
 
     return (
-        <BasicLayout>
-            <div className='superAdminBackground'>
-                <ul className='topMenu'>
+
+            <BasicLayout>
+
+            <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+            {/* <ul className='topMenu'>
                     <li>
                         <button className='topMenuBtn' onClick={handleClickUserManage}>
                             유저 관리
@@ -24,10 +26,11 @@ const SuperAdminPage = () => {
                             입출차 테스트
                         </button>
                     </li>
-                </ul>
-                <Outlet context={{ checkedUno, setCheckedUno }} />
-            </div>
-        </BasicLayout>
+                </ul> */}
+                    <Outlet context={{ checkedUno, setCheckedUno }} />
+                </div>
+            </BasicLayout>
+     
     )
 }
 

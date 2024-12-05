@@ -1,10 +1,9 @@
 import { lazy, Suspense } from "react"
 import { Navigate } from "react-router-dom"
 import MyCommunitiesComponent from "../../components/myPage/communities/MyCommunitiesComponent"
-
+import Loading from "../../components/common/Loading"
 const myPageRouter = () => {
 
-    const Loading = <div>....</div>
     const MyInfo = lazy(() => import("../../pages/myPage/MyInfoPage"))
     const Mileage = lazy(() => import("../../pages/myPage/MyMileagePage"))
     const Facilities = lazy(() => import("../../pages/myPage/MyFacilitiesPage"))
@@ -25,7 +24,7 @@ const myPageRouter = () => {
         },
         {
             path: "myInfo",
-            element: <Suspense fallback={Loading}><MyInfo /></Suspense>,
+            element: <Suspense fallback={<Loading />}><MyInfo /></Suspense>,
         },
         {
             path: "mileage",
@@ -33,48 +32,48 @@ const myPageRouter = () => {
             children: [
                 {
                     path: "purchase",
-                    element: <Suspense fallback={Loading}><MyMileagePurchasePage /></Suspense>,
+                    element: <Suspense fallback={<Loading />}><MyMileagePurchasePage /></Suspense>,
                 },
                 {
                     path: "usage",
-                    element: <Suspense fallback={Loading}><MyMileageUsagePage /></Suspense>,
+                    element: <Suspense fallback={<Loading />}><MyMileageUsagePage /></Suspense>,
                 }
             ]
         },
 
         {
             path: "facilities",
-            element: <Suspense fallback={Loading}><Facilities /></Suspense>,
+            element: <Suspense fallback={<Loading />}><Facilities /></Suspense>,
             children: [
                 {
                     path: "golf",
-                    element: <Suspense fallback={Loading} ><GolfMyList /> </Suspense>
+                    element: <Suspense fallback={<Loading />} ><GolfMyList /> </Suspense>
                 },
                 {
                     path: "study",
-                    element: <Suspense fallback={Loading} ><StudyMyList /> </Suspense>
+                    element: <Suspense fallback={<Loading />} ><StudyMyList /> </Suspense>
                 },
                 {
                     path: "gym",
-                    element: <Suspense fallback={Loading} ><GymMyList /> </Suspense>
+                    element: <Suspense fallback={<Loading />} ><GymMyList /> </Suspense>
                 },
             ]
         },
         {
             path: "communities",
-            element: <Suspense fallback={Loading}><MyCommunities /></Suspense>,
+            element: <Suspense fallback={<Loading />}><MyCommunities /></Suspense>,
             children: [
                 {
                     path: "board",
-                    element: <Suspense fallback={Loading} ><MyBoardPostsComponentPage /> </Suspense>
+                    element: <Suspense fallback={<Loading />} ><MyBoardPostsComponentPage /> </Suspense>
                 },
                 {
                     path: "announce",
-                    element: <Suspense fallback={Loading} ><MyAnnouncePostsComponentPage /> </Suspense>
+                    element: <Suspense fallback={<Loading />} ><MyAnnouncePostsComponentPage /> </Suspense>
                 },
                 {
                     path: "market",
-                    element: <Suspense fallback={Loading} ><MyMarketPostsComponentPage /> </Suspense>
+                    element: <Suspense fallback={<Loading />} ><MyMarketPostsComponentPage /> </Suspense>
                 },
             ]
         },

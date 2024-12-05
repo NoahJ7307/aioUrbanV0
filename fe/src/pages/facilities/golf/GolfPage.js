@@ -1,10 +1,8 @@
 import { useCallback } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import '../../../css/facility/facilitySidebar.css'; // CSS 파일 import
-import FacilitySchedule from "../../../components/facilities/FacilitySchedule";
 
 const GolfPage = () => {
-    const location = useLocation();
 
     const navigate = useNavigate();
 
@@ -20,19 +18,6 @@ const GolfPage = () => {
         navigate(`/myPage/facilities/golf`);
     }, [navigate]); // 나중에 마이페이지 구현 후 링크 연동
 
-    // 경로에 따른 배너 이미지 설정
-    // const getBannerImage = () => {
-    //     switch (location.pathname) {
-    //         case '/facilities/golf/list':
-    //             return '/images/golf-list-banner.jpg';
-    //         case '/facilities/golf/reserve':
-    //             return '/images/golf-reserve-banner.jpg';
-    //         case '/myPage/facilities/golf':
-    //             return '/images/my-golf-reservations-banner.jpg';
-    //         default:
-    //             return '/images/default-golf-banner.jpg';
-    //     }
-    // };
 
     return (
         <div className="flex">

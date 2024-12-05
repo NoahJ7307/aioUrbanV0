@@ -84,9 +84,9 @@ const UserModifyComponent = () => {
     }
 
     return (
-        <div className='formContainer'>
-            <div className='formGroup'>
-                <label className='formLabel'>이름</label>
+            <div className='formContainer' >
+                <div className='formGroup'>
+                    <label className='formLabel'>이름</label>
                 <input className={`inputBox ${errors.userName && 'error'}`}
                     name='userName'
                     placeholder='이름 입력'
@@ -140,8 +140,8 @@ const UserModifyComponent = () => {
                     onClick={handleClick}>수정</button>
                 <button type='button' className='formButton cancel'
                     onClick={moveToList}>취소</button>
+                </div>
             </div>
-        </div>
     )
 }
 

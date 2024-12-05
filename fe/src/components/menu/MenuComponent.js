@@ -39,6 +39,8 @@ const MenuComponent = () => {
     const toggleSidebar = () => {
         setIsMyPageOpen(!isMyPageOpen);
         setOpenCategory(null);
+        document.body.style.overflow = !isMyPageOpen ? 'hidden' : 'auto';
+
     };
 
     const toggleCategory = (category) => {
@@ -118,8 +120,8 @@ const MenuComponent = () => {
     const handleMenuClick = (menuName, e) => {
         e.stopPropagation();
         setActiveMenu(activeMenu === menuName ? null : menuName);
-      
-     
+
+
     };
 
     const handleSubMenuClick = (path) => {
@@ -133,7 +135,7 @@ const MenuComponent = () => {
             <nav className="navbar">
                 <div className="navbar-logo" onClick={handleLogoClick}>
                     <i className="fa-solid fa-city"></i>
-                    <span className="logo-text">Urban</span>
+                    <span className="logo-text">URBAN</span>
                 </div>
                 <div className="navbar-left">
                     <ul className="main-menu">
@@ -219,38 +221,46 @@ const MenuComponent = () => {
                             {loadLoginData().role === 'PENDING' ? null : (
                                 <button className="menu-toggle" onClick={toggleSidebar}>
                                     <i className="fa-solid fa-user"></i>
-                                    <span className="nav-text">마이페이지</span>
+                                    <span className="nav-text" style={{fontFamily:'LINESeedKR-Md'}}>마이페이지</span>
                                 </button>
                             )}
                             <button onClick={handleClickLogout} className="nav-link">
                                 <i className="fa-solid fa-right-from-bracket"></i>
-                                <span className="nav-text">로그아웃</span>
+                                <span className="nav-text" style={{fontFamily:'LINESeedKR-Md'}}>로그아웃</span>
                             </button>
                         </>
                     ) : (
                         <>
-                            <Link to="/login" className="nav-link">
-                                <i className="fa-solid fa-right-to-bracket"></i>
-                                <span className="nav-text">로그인</span>
-                            </Link>
                             <Link to="/join" className="nav-link">
                                 <i className="fa-solid fa-user-plus"></i>
-                                <span className="nav-text">회원가입</span>
+                                <span className="nav-text" style={{fontFamily:'LINESeedKR-Md'}}>회원가입</span>
+                            </Link>
+                            <Link to="/login" className="nav-link">
+                                <i className="fa-solid fa-right-to-bracket"></i>
+                                <span className="nav-text" style={{fontFamily:'LINESeedKR-Md'}}>로그인</span>
                             </Link>
                         </>
                     )}
                 </div>
             </nav>
+            <div
+                className={`sidebar-overlay ${isMyPageOpen ? 'active' : ''}`}
+                onClick={toggleSidebar}
+            ></div>
+
 
             <nav id="sidebar-wrapper" className={isMyPageOpen ? 'active' : ''}>
-                <ul className="sidebar-nav">
+                <ul className="sidebar-nav" style={{fontFamily:'LINESeedKR-Bd'}}>
+                    <li className="sidebar-brand" style={{ pointerEvents: 'none'}}>
+                        <p className='mt-10 mb-10'>마이페이지</p>
+                    </li>
                     <li className="sidebar-brand">
                         <div onClick={() => {
                             navigate('/');
                             setIsMyPageOpen(false);
                         }}>
                             <i className="fa-solid fa-city"></i>
-                            <span>Urban</span>
+                            <span>URBAN</span>
                         </div>
                     </li>
 
@@ -265,14 +275,14 @@ const MenuComponent = () => {
                     </li>
 
                     {['마일리지', '예약현황', '내가쓴글'].map((category) => (
-                        <li key={category} className="sidebar-category">
+                        <li key={category} className="sidebar-category" >
                             <div
                                 className={`category-title ${openCategory === category ? 'active' : ''}`}
                                 onClick={() => toggleCategory(category)}
                             >
                                 <i className={`fa-solid ${category === '마일리지' ? 'fa-coins' :
-                                        category === '예약현황' ? 'fa-calendar-check' :
-                                            'fa-pen-to-square'
+                                    category === '예약현황' ? 'fa-calendar-check' :
+                                        'fa-pen-to-square'
                                     }`}></i>
                                 <span>{category}</span>
                                 <i className={`fa-solid fa-chevron-${openCategory === category ? 'up' : 'down'}`}></i>
@@ -282,6 +292,8 @@ const MenuComponent = () => {
                                     <li
                                         key={index}
                                         className="category-item"
+                                        style={{ fontFamily: 'LINESeedKR-Md',fontSize:'1rem' }}
+
                                         onClick={() => {
                                             navigate(item.path);
                                             setIsMyPageOpen(false);

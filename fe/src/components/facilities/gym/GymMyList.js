@@ -42,6 +42,7 @@ const GymMyList = ({ uno, page, size }) => {
             try {
                 //참가프로그램 조회
                 const gymData = await myPageGymReservations(uno, page, size);
+                console.log("1212", gymData)
                 setGymReservations(gymData);
                 //대기프로그램 조회
                 const gymWaitData = await myPageGymWaitlist(uno, page, size);
@@ -83,6 +84,8 @@ const GymMyList = ({ uno, page, size }) => {
             console.error("참가 취소 중 오류 발생: ", error);
             alert("참가 취소 중 오류가 발생했습니다.");
         }
+        window.location.reload();
+
 
     };
 
@@ -111,6 +114,8 @@ const GymMyList = ({ uno, page, size }) => {
             console.error("대기 취소 중 오류 발생: ", error);
             alert("대기 취소 중 오류가 발생했습니다.");
         }
+        window.location.reload();
+
 
     };
 
@@ -120,7 +125,7 @@ const GymMyList = ({ uno, page, size }) => {
             <div className="mb-6 text-center">
                 <h2 className="text-3xl font-semibold">헬스장 이용 내역 조회</h2>
             </div>
-            <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg mb-5 overflow-y-auto max-h-96">
+            <div className="container mx-auto p-6 border-2 border-gray-120 rounded-lg">
                 <h2 className="text-2xl font-semibold mb-6">나의 이용권 </h2>
                 <div className="grid grid-cols-5 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
                     <div>NO</div>
