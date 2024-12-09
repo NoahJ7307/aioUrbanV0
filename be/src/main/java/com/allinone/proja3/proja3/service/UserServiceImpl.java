@@ -281,7 +281,7 @@ public class UserServiceImpl implements UserService {
 
         // 전화번호 국가코드 변환
         String newPhone = "+82"+phone.substring(1);
-//        smsService.sendConfirmationMessage(newPhone, sendStr);
+        smsService.sendConfirmationMessage(newPhone, sendStr);
         log.info(newPhone);
         return verifyNum;
     }

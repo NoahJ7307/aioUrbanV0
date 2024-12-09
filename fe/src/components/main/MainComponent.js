@@ -6,6 +6,7 @@ import SecondLayout from '../../layout/SecondLayout';
 import ThirdLayout from '../../layout/ThirdLayout';
 import FourthLayout from '../../layout/FourthLayout';
 import FifthLayout from '../../layout/FifthLayout';
+import useCustomLogin from '../hook/useCustomLogin';
 
 const fadeIn = keyframes`
   from { opacity: 0; }
@@ -107,8 +108,13 @@ const ArrowIcon = styled.div`
 
 const MainComponent = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
-
+  const { loadLoginData, doLogout } = useCustomLogin()
   useEffect(() => {
+    if (loadLoginData().role === 'PENDING') {
+      alert('승인 대기 중이므로 로그아웃 됩니다')
+      doLogout()
+    }
+
     const handleScroll = () => {
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = Math.min(Math.max(window.scrollY / totalHeight, 0), 1);

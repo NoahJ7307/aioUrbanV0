@@ -56,6 +56,10 @@ const FindPwComponent = () => {
     }
 
     const handleClickVerifyCheck = async () => {
+        if (verifyNum === '') {
+            alert('인증번호를 입력해주세요')
+            return
+        }
         if (userData.verifyNumber === verifyNum) {
             alert('인증 확인')
             setIsVerify(true)
@@ -73,6 +77,7 @@ const FindPwComponent = () => {
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 alert(error.response.data.message)
+                setIsVerify(false)
             } else {
                 alert('네트워크 에러')
             }
@@ -131,53 +136,54 @@ const FindPwComponent = () => {
                     onChange={handleChange} />
             </div>
             {isVerify ?
-                <div className='formGroup'>
-                    <label className='formLabel'>비밀번호</label>
-                    <input className={`inputBox ${errors.pw && 'error'}`}
-                        type='password'
-                        name='pw'
-                        placeholder='비밀번호 입력'
-                        onChange={handleChange} />
-                </div>
+                <></>
                 :
-                <></>}
-            <div className='formGroup'>
-                <div className='flex justify-end mt-6'>
-                    <button type='button' className='formButton add'
-                        onClick={handleClickVerifySend}>인증번호 전송</button>
-                    <button type='button' className='formButton add green'
-                        onClick={handleClickVerifyCheck}>인증 확인</button>
-                    {isVerify ?
-                        <></>
-                        :
-                        <button type='button' className='formButton cancel'
-                            onClick={() => moveToPath('/login')}>취소</button>
-                    }
-                </div>
-            </div>
-            {isVerify ?
                 <div className='formGroup'>
-                    <label className='formLabel'>비밀번호 확인</label>
-                    <input className={`inputBox ${errors.verifyPw && 'error'}`}
-                        type='password'
-                        name='verifyPw'
-                        placeholder='비밀번호 입력'
-                        onChange={handleChange} />
-                </div>
-                :
-                <></>}
-            {isVerify ?
-                <div className='formGroup'>
-                    <div className='buttonGroup'>
+                    <div className='flex justify-end mt-6'>
+                        <button type='button' className='formButton add'
+                            onClick={handleClickVerifySend}>인증번호 전송</button>
                         <button type='button' className='formButton add green'
-                            onClick={handleClick}>비밀번호 수정</button>
+                            onClick={handleClickVerifyCheck}>인증 확인</button>
                         <button type='button' className='formButton cancel'
                             onClick={() => moveToPath('/login')}>취소</button>
                     </div>
                 </div>
+            }
+            {isVerify ?
+                <div className='formGroup'>
+                    <div className='formGroup'>
+                        <label className='formLabel'>비밀번호</label>
+                        <input className={`inputBox ${errors.pw && 'error'}`}
+                            type='password'
+                            name='pw'
+                            placeholder='비밀번호 입력'
+                            onChange={handleChange} />
+                    </div>
+                    <div className='formGroup'>
+                        <label className='formLabel'>비밀번호 확인</label>
+                        <input className={`inputBox ${errors.verifyPw && 'error'}`}
+                            type='password'
+                            name='verifyPw'
+                            placeholder='비밀번호 입력'
+                            onChange={handleChange} />
+                    </div>
+                </div>
                 :
                 <></>}
-        </div>
+            {
+                isVerify ?
+                    <div className='formGroup'>
+                        <div className='buttonGroup'>
+                            <button type='button' className='formButton add green'
+                                onClick={handleClick}>비밀번호 수정</button>
+                            <button type='button' className='formButton cancel'
+                                onClick={() => moveToPath('/login')}>취소</button>
+                        </div>
+                    </div>
+                    :
+                    <></>
+            }
+        </div >
     )
 }
 

@@ -1,18 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import useCustomLogin from '../hook/useCustomLogin'
 import '../../css/public/public.css'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const initState = {
-    phone: '010',
+    phone: '',
     pw: '',
 }
 const LoginComponent = () => {
     const navigate = useNavigate()
-    const location = useLocation()
     const [loginParam, setLoginParam] = useState(initState)
     const { doLogin } = useCustomLogin()
-    const isFindPw = location.pathname.endsWith('findPw')
 
     const handleChange = (e) => {
         loginParam[e.target.name] = e.target.value
@@ -102,12 +100,12 @@ const LoginComponent = () => {
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'center' ,marginLeft: '115px'}}>  
-                <button 
-                        style={{ marginTop: '1px', fontSize: '14px'}}
+                <div style={{ display: 'flex', justifyContent: 'center', marginLeft: '115px' }}>
+                    <button
+                        style={{ marginTop: '1px', fontSize: '14px' }}
                         onClick={handleClickFindPw}>비밀번호 찾기 &nbsp; ❙</button>
-                    <button 
-                        style={{ marginTop: '1px', fontSize: '14px'}}
+                    <button
+                        style={{ marginTop: '1px', fontSize: '14px' }}
                         onClick={handleClickSignUp}> &nbsp; 회원가입 </button>
                 </div>
             </div>
