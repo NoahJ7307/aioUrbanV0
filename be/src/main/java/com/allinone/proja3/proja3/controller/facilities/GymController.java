@@ -1,22 +1,16 @@
 package com.allinone.proja3.proja3.controller.facilities;
-
-import com.allinone.proja3.proja3.dto.PageRequestDTO;
-import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.SearchPageRequestDTO;
 import com.allinone.proja3.proja3.dto.SearchPageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.user.UserDTO;
 import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.Gym;
-import com.allinone.proja3.proja3.repository.UserRepository;
 import com.allinone.proja3.proja3.service.facilities.GymService;
-import com.allinone.proja3.proja3.service.mileage.PaymentService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,43 +20,9 @@ import java.util.Map;
 @RequestMapping("/api/facilities/gym")
 //@CrossOrigin(origins = "http://localhost:3000")
 public class GymController {
-
     @Autowired
     private GymService service;
-    @Autowired
-    private UserRepository userRepository;
 
-    @Autowired
-    private PaymentService paymentService;
-
-    // 마이페이지에서 사용자가 신청한 프로그램 목록 조회
-//    @GetMapping("/user/programs")
-//    public ResponseEntity<List<GymDTO>> getProgramsByUser(@AuthenticationPrincipal User user) {
-//        // 로그인한 사용자가 신청한 프로그램 목록을 조회
-//        List<GymDTO> programs = service.getProgramsByUser(user);
-//        return ResponseEntity.ok(programs);
-//    }
-
-//    @GetMapping("/myPage/{uno}")
-//    public ResponseEntity<PageResponseDTO<GymDTO>> getProgramsByUser(
-//            @PathVariable Long uno,
-//            @RequestParam(defaultValue = "1") int page,  // 기본값 1
-//            @RequestParam(defaultValue = "10") int size) {  // 기본값 10
-//        PageRequestDTO pageRequestDTO = new PageRequestDTO(page, size);
-//        PageResponseDTO<GymDTO> result = service.getProgramsByUser(uno, pageRequestDTO);
-//        System.out.println("1212: "+result);
-//        return ResponseEntity.ok(result);
-//    }
-
-//    @GetMapping("/myPage/{uno}")
-//    public ResponseEntity<PageResponseDTO<GymDTO>> getProgramsByUser(
-//            @PathVariable Long uno,
-//            @ModelAttribute PageRequestDTO pageRequestDTO) {
-//        // 사용자 uno로 등록된 프로그램 목록 조회
-//        PageResponseDTO<GymDTO> result = service.getProgramsByUser(uno, pageRequestDTO);
-//
-//        return ResponseEntity.ok(result);
-//    }
     //등록
     @PostMapping("/add")
     public ResponseEntity<GymDTO> newProgramPost (@RequestBody Gym gym) {
@@ -191,19 +151,7 @@ public class GymController {
             return new ResponseEntity<>("C004", HttpStatus.INTERNAL_SERVER_ERROR); // 서버 오류
         }
     }
-//    @DeleteMapping("/detail/register/cancel/{programId}")
-//    public ResponseEntity<String> cancelParticipant(@PathVariable Long programId, @RequestBody User user) {
-//        String response = service.cancelParticipant(programId, user);
-//        if(response.equals("Not Registered")) {
-//            return new ResponseEntity<>("C001", HttpStatus.OK); // 등록되지 않은 사용자
-//        } else if(response.equals("Canceled")) {
-//            return new ResponseEntity<>("C002", HttpStatus.OK);
-//        }else if (response.equals("Canceled and updated")) {
-//            return new ResponseEntity<>("C003", HttpStatus.OK); // 성공적으로 취소 및 대기자 참가자 등록
-//        } else {
-//            return new ResponseEntity<>("C004", HttpStatus.INTERNAL_SERVER_ERROR); // 서버 오류
-//        }
-//    }
+
     //대기자 취소
     @DeleteMapping("/detail/waitlist/cancel/{programId}")
     public ResponseEntity<String> cancelWaitlist(@PathVariable Long programId, @RequestBody User user){

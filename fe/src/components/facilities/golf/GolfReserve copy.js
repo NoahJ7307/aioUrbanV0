@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import '../common/css/facilityLayout.css';
 import GolfSeatMap from './GolfSeatMap';
 import useReservationValidation from '../../hook/facilities/useReservationValidation';
-import '../../../css/public/public.css';
 
 const GolfReserve = () => {
-    const { facilitySchedule, validateReservation } = useReservationValidation(['골프', 'Golf', 'golf', 'GOLF']);
+    
+    const { validateReservation } = useReservationValidation();
     const [uno, setUno] = useState();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -26,7 +26,6 @@ const GolfReserve = () => {
     ];
 
     useEffect(() => {
-        //uno 가져오기
         const getUno = localStorage.getItem('uno');
         if (getUno) {
             setUno(Number(getUno));
@@ -34,14 +33,10 @@ const GolfReserve = () => {
         } else {
             console.log('로그인 정보가 없습니다.');
         }
-
     }, []);
-
-
 
     const handleFieldChange = (e) => {
         const { name, value } = e.target;
-
         setFormData((prevData) => {
             const newFormData = {
                 ...prevData,
@@ -57,16 +52,9 @@ const GolfReserve = () => {
     };
 
 
-
     const handleReserve = async () => {
         if (!formData.date || !formData.startTime || !formData.endTime || !formData.teeBox) {
             alert('모든 필드를 채워 주세요.');
-            return;
-        }
-
-        // facilitySchedule 체크 추가
-        if (!facilitySchedule) {
-            alert('시설 이용시간을 불러오는 중 오류가 발생했습니다. 관리자에게 문의해주세요.');
             return;
         }
 
@@ -78,9 +66,9 @@ const GolfReserve = () => {
             delFlag: false,
             teeBox: parseInt(formData.teeBox),
         };
-        //시간 유효성 체크  (hook호출)
+
         if (!validateReservation(reservationData)) {
-            return;//유효하지 않으면 중단
+            return;
         }
 
         try {
@@ -115,7 +103,7 @@ const GolfReserve = () => {
                 <div className="banner"
                     style={{
                         backgroundImage: `url('/images/g0.jpg')`,
-
+                    
                     }}>
                     <div className="banner-overlay">
                         <h1 className="banner-text">골프장 예약하기</h1>
@@ -193,7 +181,7 @@ const GolfReserve = () => {
                             <button
                                 type="button"
                                 onClick={handleReserve}
-                                className="topMenuBtn"
+                                className="w-full py-2 px-4 mt-6 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
                             >
                                 예약하기
                             </button>

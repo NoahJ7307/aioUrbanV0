@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { deleteChecked, getMyMarketPosts } from '../../api/community/marketApi';
+import Loading from '../../common/Loading';
 
 
 const MyMarketPostsComponent = () => {
@@ -68,7 +69,7 @@ const MyMarketPostsComponent = () => {
     }
   };
 
-  if (loading) return <div className="text-center py-8">로딩 중...</div>;
+  if (loading) return  <Loading />;
   if (error) return <div className="text-red-600 text-center py-8">{error}</div>;
 
   return (

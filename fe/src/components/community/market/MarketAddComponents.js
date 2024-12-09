@@ -91,9 +91,10 @@ const MarketAddComponents = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center bg-gray-100">
-      <div className="w-full md:w-1/2 lg:w-1/3 bg-gray-200 p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-semibold mb-4 text-center">상품 등록</h2>
+    <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
+    <h2 className="text-2xl font-semibold mb-2 text-center">상품 등록</h2> {/* 제목 중앙 정렬 */}
+    <div className='bg-gray-100 p-3 justify-center rounded-lg'>
+
         <form className="space-y-4" onSubmit={handleSubmit}>
           <input
             type="text"

@@ -8,26 +8,26 @@ const GymProgramState = ({ reservations, isParticipant,listTitle, handleCancel }
             <h2 className="text-2xl font-semibold mb-6">{listTitle}</h2>
 
             <div className="grid grid-cols-7 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
-                <div>NO</div>
-                <div>시작일</div>
-                <div>종료일</div>
-                <div>프로그램명</div>
-                <div>프로그램상태</div>
-                <div>신청자</div>
-                <div>신청취소</div>
+                <div className="text-sm text-center" >NO</div>
+                <div className="text-sm text-center">시작일</div>
+                <div className="text-sm text-center">종료일</div>
+                <div className="text-sm text-center">프로그램명</div>
+                <div className="text-sm text-center">프로그램상태</div>
+                <div className="text-sm text-center">신청자</div>
+                <div className="text-sm text-center">신청/대기취소</div>
             </div>
 
             <div className="overflow-y-auto max-h-96">
                 {reservations && reservations.length > 0 ? (
                     reservations.map((gym) => (
                         <div key={gym.programId} className="grid grid-cols-7 gap-4 items-center border-t py-4">
-                            <div className="text-sm">{gym.programId}</div>
-                            <div className="text-sm">{gym.programStartDate}</div>
-                            <div className="text-sm">{gym.programEndDate}</div>
-                            <div className="text-sm">{gym.title}</div>
-                            <div className="text-sm">{gym.programState}</div>
+                            <div className="text-sm text-center">{gym.programId}</div>
+                            <div className="text-sm text-center">{gym.programStartDate}</div>
+                            <div className="text-sm text-center">{gym.programEndDate}</div>
+                            <div className="text-sm text-center">{gym.title}</div>
+                            <div className="text-sm text-center">{gym.programState}</div>
 
-                            <div className="text-sm">
+                            <div className="text-sm text-center">
                                 {gym.participants && gym.participants.length > 0 ? (
                                     gym.participants.map((participant) => (
                                         <div key={participant.uno} className="flex flex-col">

@@ -80,15 +80,14 @@ public class GymMembershipServiceImpl implements GymMembershipService {
                 .startDate(membership.getStartDate())
                 .endDate(membership.getEndDate())
                 .membershipType(membership.getMembershipPlan().getMembershipType())
-//                .price(membership.getMembershipPlan().getPrice())
-//                .durationMonths(membership.getMembershipPlan().getDurationMonths())
                 .build();
     }
 
     //사용자 이용권 결제
     @Override
     public GymMembership purchaseMembership(GymMembershipDTO gymMembershipDTO) {
-        GymMembership existingMembership = gymMembershipRepository.findByUserUnoAndEndDateAfter(gymMembershipDTO.getUno(), LocalDate.now());
+        GymMembership existingMembership = gymMembershipRepository.findByUserUnoAndEndDateAfter(
+            gymMembershipDTO.getUno(), LocalDate.now());
         // 이미 유효한 이용권이 있으면 예외를 발생
         if (existingMembership != null) {
             throw new IllegalStateException("이미 유효한 이용권이 존재합니다. 이용권이 만료된 후에 다시 시도해 주세요.");
@@ -105,12 +104,12 @@ public class GymMembershipServiceImpl implements GymMembershipService {
        int accessCode = (int) (Math.random() * 90000) + 10000;
         System.out.println(accessCode);
 
-//        헬스장 이용권 정보와 입장코드를 생성하여  메시지 전송
-//            String messageText ="안녕하세요! " + gymMembership.getUser().getUserName()+"님, 헬스장(" +membershipType+") 이용권이 구매 완료되었습니다."
-//                    +gymMembership.getStartDate()+" 부터 " +gymMembership.getEndDate()+"까지 이용가능하며, 귀하의 입장 코드는 "+accessCode+" 입니다. 이용해주셔서 감사합니다.";
-//
-//            System.out.println("1212"+messageText);
-//            smsService.sendConfirmationMessage(gymMembership.getUser().getPhone(), messageText);
+        //헬스장 이용권 정보와 입장코드를 생성하여  메시지 전송
+           String messageText ="안녕하세요! " + gymMembership.getUser().getUserName()+"님, 헬스장(" +membershipType+") 이용권이 구매 완료되었습니다."
+                   +" 오늘부터 " +gymMembership.getEndDate()+"까지 이용가능하며, 입장 코드는 "+accessCode+" 입니다. 이용해주셔서 감사합니다.";
+
+           System.out.println("1212"+messageText);
+           smsService.sendConfirmationMessage(gymMembership.getUser().getPhone(), messageText);
 
 
         paymentService.processUseMileage(dong, ho, uno, amount, description);
@@ -119,33 +118,7 @@ public class GymMembershipServiceImpl implements GymMembershipService {
         return gymMembershipRepository.save(gymMembership);
     }
 
-    //사용자 이용권 결제
-//    @Override
-//    public GymMembership purchaseMembership(GymMembershipDTO gymMembershipDTO) {
-//        GymMembership gymMembership = toEntity(gymMembershipDTO);
-//        String membershipType =gymMembership.getMembershipPlan().getMembershipType();
-//        int amount = gymMembership.getMembershipPlan().getPrice();
-//        String description = "헬스장 이용권 결제 (" +membershipType+") : "+ amount+"원";
-//        Long uno = gymMembership.getUser().getUno();
-//        String dong = gymMembership.getUser().getDong();
-//        String ho = gymMembership.getUser().getHo();
-//
-//        int accessCode = (int) (Math.random() * 90000) + 10000;
-//        System.out.println(accessCode);
-//
-////        헬스장 이용권 정보와 입장코드를 생성하여  메시지 전송
-////            String messageText ="안녕하세요! " + gymMembership.getUser().getUserName()+"님, 헬스장(" +membershipType+") 이용권이 구매 완료되었습니다."
-////                    +gymMembership.getStartDate()+" 부터 " +gymMembership.getEndDate()+"까지 이용가능하며, 귀하의 입장 코드는 "+accessCode+" 입니다. 이용해주셔서 감사합니다.";
-////
-////            System.out.println("1212"+messageText);
-////            smsService.sendConfirmationMessage(gymMembership.getUser().getPhone(), messageText);
-//
-//
-//        paymentService.processUseMileage(dong, ho, uno, amount, description);
-//
-//        log.info("Regular Payment / dong:{}, ho:{}, amount:{}", dong, ho, amount);
-//        return gymMembershipRepository.save(gymMembership);
-//    }
+
 
 
 

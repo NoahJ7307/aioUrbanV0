@@ -3,6 +3,7 @@ import { deleteChecked, get, search } from '../../api/community/marketApi';
 import { useNavigate } from 'react-router-dom';
 import PageComponent from '../../common/PageComponent';
 import CommunityCustom from '../../hook/CommunityCustom';
+import Loading from '../../common/Loading';
 
 
 const initState = {
@@ -201,70 +202,72 @@ const MarketListComponents = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {loading ? (
-                        <div className="col-span-3 text-center py-4">로딩 중...</div>
+                        <div className="col-span-3">
+                            <Loading />
+                        </div>
                     ) : error ? (
-                        <div className="col-span-3 text-center text-red-600 py-4">{error}</div>
+                            <div className="col-span-3 text-center text-red-600 py-4">{error}</div>
                         ) : (serverData.dtoList &&
-                        serverData.dtoList.map((item, index) => (
-                            <div key={index} className="bg-white border-2 border-gray-100 rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                                {item.thumbnailUrl ? (
-                                    <img
-                                        src={`http://localhost:8080${item.thumbnailUrl}`} // /uploads/ 경로로 접근
-                                        alt={item.title}
-                                        className="w-full h-48 object-cover"
-                                    />
-                                ) : (
-                                    <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                                        <p className="text-gray-500">이미지 없음</p>
-                                    </div>
-                                )}
-                                <div className="p-4">
-                                    <h2 className="text-xl font-semibold mb-2">상품명: {item.title}</h2>
-                                    <p className="text-gray-600">가격: {item.price} 원</p>
-                                    <p className="text-gray-500">판매자: {item.user?.userName || item.userName || '알 수 없음'}</p>
-                                    <div className="flex justify-between mt-5">
-                                        <button
-                                            onClick={() => openModal(item)}
-                                            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
-                                        >
-                                            상세보기
-                                        </button>
+                            serverData.dtoList.map((item, index) => (
+                                <div key={index} className="bg-white border-2 border-gray-100 rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                                    {item.thumbnailUrl ? (
+                                        <img
+                                            src={`http://localhost:8080${item.thumbnailUrl}`} // /uploads/ 경로로 접근
+                                            alt={item.title}
+                                            className="w-full h-48 object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                            <p className="text-gray-500">이미지 없음</p>
+                                        </div>
+                                    )}
+                                    <div className="p-4">
+                                        <h2 className="text-xl font-semibold mb-2">상품명: {item.title}</h2>
+                                        <p className="text-gray-600">가격: {item.price} 원</p>
+                                        <p className="text-gray-500">판매자: {item.user?.userName || item.userName || '알 수 없음'}</p>
+                                        <div className="flex justify-between mt-5">
+                                            <button
+                                                onClick={() => openModal(item)}
+                                                className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
+                                            >
+                                                상세보기
+                                            </button>
 
-                                        <button
-                                            onClick={() => { navigate(`/communities/market/modify/${item.mno}`); }}
-                                            disabled={!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)}
-                                            className={`py-1 px-5 rounded-lg ${!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)
-                                                ? 'bg-gray-300 cursor-not-allowed'
-                                                : 'bg-blue-500 text-white'
-                                                }`}
-                                        >
-                                            {!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId) ? '권한없음' : '수정'}
-                                        </button>
+                                            <button
+                                                onClick={() => { navigate(`/communities/market/modify/${item.mno}`); }}
+                                                disabled={!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)}
+                                                className={`py-1 px-5 rounded-lg ${!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)
+                                                    ? 'bg-gray-300 cursor-not-allowed'
+                                                    : 'bg-blue-500 text-white'
+                                                    }`}
+                                            >
+                                                {!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId) ? '권한없음' : '수정'}
+                                            </button>
 
 
-                                        {/* 삭제 버튼 */}
+                                            {/* 삭제 버튼 */}
 
-                                        <button
-                                            onClick={() => { handleDelete(item.mno); }}
-                                            disabled={!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)}
-                                            className={`py-1 px-5 rounded-lg ${!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)
-                                                ? 'bg-gray-300 cursor-not-allowed'
-                                                : 'bg-red-500 text-white'
-                                                }`}
-                                        >
-                                            {!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId) ? '권한없음' : '삭제'}
-                                        </button>
+                                            <button
+                                                onClick={() => { handleDelete(item.mno); }}
+                                                disabled={!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)}
+                                                className={`py-1 px-5 rounded-lg ${!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId)
+                                                    ? 'bg-gray-300 cursor-not-allowed'
+                                                    : 'bg-red-500 text-white'
+                                                    }`}
+                                            >
+                                                {!(userRole === 'ADMIN' || userRole === 'ROOT' || uno === item.userId) ? '권한없음' : '삭제'}
+                                            </button>
 
-                                        {/* <button
+                                            {/* <button
                                         onClick={() => { navigate(`/communities/market/chat/${item.mno}`); }}
                                         className="bg-green-500 text-white py-1 px-3 rounded-lg hover:bg-green-600 transition duration-200"
                                     >
                                         1:1 대화
                                     </button> */}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))
+                            ))
                     )}
                 </div>
 
@@ -278,9 +281,9 @@ const MarketListComponents = () => {
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
                         style={{
                             top: "100px"
-                            
+
                         }}
-                        
+
                     >
                         <div className="w-full md:w-3/4 lg:w-2/3 max-h-[75vh] overflow-auto bg-gray-200 p-6 rounded-lg shadow-lg"
                             style={{ width: "600px", height: "600px" }}>
@@ -316,14 +319,14 @@ const MarketListComponents = () => {
                                 <div className="flex cursor-pointer relative">
                                     <div
                                         className="absolute left-0 top-0 bottom-0 w-1/3"
-                                        
+
                                         onClick={() => handlePrevImage()}
                                     ></div>
                                     <img
                                         src={`http://localhost:8080${currentPost.imageUrls[currentImageIndex]}`}
                                         alt="게시물 이미지"
                                         className="w-auto h-auto rounded-lg"
-                                        style={{width:"500px", height:"500px"}}
+                                        style={{ width: "500px", height: "500px" }}
                                     />
                                     <div
                                         className="absolute right-0 top-0 bottom-0 w-1/3"
@@ -347,7 +350,7 @@ const MarketListComponents = () => {
                                         alt={`썸네일 ${index + 1}`}
                                         className={`w-24 h-24 object-cover rounded-lg cursor-pointer m-1 ${currentImageIndex === index ? 'border-2 border-blue-500' : ''}`}
                                         onClick={() => setCurrentImageIndex(index)}
-                                        
+
                                     />
                                 ))}
                             </div>
@@ -358,7 +361,7 @@ const MarketListComponents = () => {
                                         navigate(`/communities/market/chat/${currentPost.mno}`);
                                     }}
                                     className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 ml-2 mr-6"
-                                
+
                                 >
                                     1:1 대화
                                 </button>

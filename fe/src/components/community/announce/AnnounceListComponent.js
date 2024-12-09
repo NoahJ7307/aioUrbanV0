@@ -5,6 +5,7 @@ import CommunityCustom from '../../hook/CommunityCustom';
 
 import { deleteChecked, get, search } from '../../api/community/announceApi';
 import PageComponent from '../../common/PageComponent';
+import Loading from '../../common/Loading';
 
 
 // 초기 상태 설정
@@ -202,7 +203,9 @@ const AnnounceListComponent = () => {
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan="6" className="text-center py-4">로딩 중...</td>
+                                <td colSpan="6" className="text-center py-4">
+                                    <Loading />
+                                </td>
                             </tr>
                         ) : error ? (
                             <tr>

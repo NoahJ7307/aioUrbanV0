@@ -14,7 +14,8 @@ public class SmsService {
     public SmsService(
             @Value("${coolsms.apiKey}") String apiKey,
             @Value("${coolsms.apiSecret}") String apiSecret) {
-        this.messageService = NurigoApp.INSTANCE.initialize(apiKey,apiSecret, "https://api.coolsms.co.kr");        System.out.println("message service:  000) " + this.messageService);
+        this.messageService = NurigoApp.INSTANCE.initialize(apiKey,apiSecret, "https://api.coolsms.co.kr");
+        System.out.println("message service:  000) " + this.messageService);
         System.out.println("message service: " + this.messageService);
 //        System.out.println("apiKey:"+apiKey +",apiSecret:"+apiSecret);
     }

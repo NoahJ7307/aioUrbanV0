@@ -127,9 +127,7 @@ const FindPwComponent = () => {
                     value={userData.phone}
                     placeholder='전화번호 입력'
                     onChange={handlePhoneChange} />
-            </div>
-            <div className='formGroup'>
-                <label className='formLabel'>인증번호</label>
+                <label className='formLabel mt-4'>인증번호</label>
                 <input className={`inputBox ${errors.verifyNumber && 'error'}`}
                     name='verifyNumber'
                     placeholder='인증번호 입력'
@@ -151,22 +149,18 @@ const FindPwComponent = () => {
             }
             {isVerify ?
                 <div className='formGroup'>
-                    <div className='formGroup'>
-                        <label className='formLabel'>비밀번호</label>
-                        <input className={`inputBox ${errors.pw && 'error'}`}
-                            type='password'
-                            name='pw'
-                            placeholder='비밀번호 입력'
-                            onChange={handleChange} />
-                    </div>
-                    <div className='formGroup'>
-                        <label className='formLabel'>비밀번호 확인</label>
-                        <input className={`inputBox ${errors.verifyPw && 'error'}`}
-                            type='password'
-                            name='verifyPw'
-                            placeholder='비밀번호 입력'
-                            onChange={handleChange} />
-                    </div>
+                    <label className='formLabel'>비밀번호</label>
+                    <input className={`inputBox ${errors.pw && 'error'}`}
+                        type='password'
+                        name='pw'
+                        placeholder='비밀번호 입력'
+                        onChange={handleChange} />
+                    <label className='formLabel mt-6'>비밀번호 확인</label>
+                    <input className={`inputBox ${errors.verifyPw && 'error'}`}
+                        type='password'
+                        name='verifyPw'
+                        placeholder='비밀번호 입력'
+                        onChange={handleChange} />
                 </div>
                 :
                 <></>}

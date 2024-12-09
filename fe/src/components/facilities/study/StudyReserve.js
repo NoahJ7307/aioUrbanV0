@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import StudySeatMap from './StudySeatMap';
 import '../common/css/facilityLayout.css';
 import useReservationValidation from '../../hook/facilities/useReservationValidation';
+import { listSchedule } from '../../api/facilities/facilityApi';
 
 
 const StudyReserve = () => {
-    const { validateReservation } = useReservationValidation();
+    const { facilitySchedule, validateReservation } = useReservationValidation(['독서', 'Study', 'study', 'STUDY']);
+
     const [uno, setUno] = useState()
     const navigate = useNavigate()
     const [formData, setFormData] = useState({
@@ -19,7 +21,7 @@ const StudyReserve = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [selectedSeatNum, setSelectedSeatNum] = useState(null);
 
-   
+
 
     const images = [
         '/images/s1.png',
@@ -28,6 +30,7 @@ const StudyReserve = () => {
     ];
 
     useEffect(() => {
+        //uno 가져오기
         const getUno = localStorage.getItem('uno');
         if (getUno) {
             setUno(Number(getUno));
@@ -36,6 +39,7 @@ const StudyReserve = () => {
         } else {
             console.log("로그인 정보가 없습니다.");
         }
+
     }, []);
 
     const handleFieldChange = (e) => {
@@ -45,7 +49,7 @@ const StudyReserve = () => {
                 ...prevData,
                 [name]: value,
             };
-          
+
             if (name === 'seatNum') {
                 setSelectedSeatNum(Number(value)); // 셀렉트 박스가 변경되면 해당 티박스를 클릭한 것처럼 처리
             }
@@ -53,12 +57,17 @@ const StudyReserve = () => {
             return newFormData;
         });
     };
-   
-    
+
+
 
     const handleReserve = async () => {
         if (!formData.date || !formData.startTime || !formData.endTime || !formData.seatNum) {
             alert('모든 필드를 채워 주세요.');
+            return;
+        }
+        // facilitySchedule 체크 추가
+        if (!facilitySchedule) {
+            alert('시설 이용시간을 불러오는 중 오류가 발생했습니다. 관리자에게 문의해주세요.');
             return;
         }
 
@@ -70,9 +79,8 @@ const StudyReserve = () => {
             delFlag: false,
             seatNum: parseInt(formData.seatNum),
         };
-        console.log(reservationData)
-
-
+        
+        //시간 유효성 체크  (hook호출)
         if (!validateReservation(reservationData)) {
             return;//유효하지 않으면 중단
         }
@@ -102,9 +110,8 @@ const StudyReserve = () => {
             seatNum: seatNumber,
         });
     };
-    const today = new Date().toISOString().split('T')[0];
 
- 
+
 
 
 
@@ -153,7 +160,7 @@ const StudyReserve = () => {
                                 name="date"
                                 value={formData.date}
                                 onChange={handleFieldChange}
-                                min={today}
+                                min={new Date().toISOString().split('T')[0]} // 오늘 날짜를 최소값으로 설정
                                 className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-600"
                             />
                             <h2 htmlFor="startTime">이용 시간</h2>
