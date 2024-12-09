@@ -292,9 +292,9 @@ const SecondLayout = () => {
     };
 
     const facilities = [
-        { icon: '🏌️', name: '골프장', url: '/facilities/golf' },
-        { icon: '🏋️‍♀️', name: '헬스장', url: '/facilities/gym' },
-        { icon: '📖', name: '독서실', url: '/facilities/study' },
+        { icon: '🏌️', name: '골프장', url: '/facilities/golf/list' },
+        { icon: '🏋️‍♀️', name: '헬스장', url: '/facilities/gym/list' },
+        { icon: '📖', name: '독서실', url: '/facilities/study/list' },
         { icon: '🏃‍♂️', name: '예약하러가기', url: '/facilities' }
     ];
 

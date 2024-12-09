@@ -3,17 +3,13 @@ package com.allinone.proja3.proja3.controller.facilities;
 import com.allinone.proja3.proja3.dto.PageRequestDTO;
 import com.allinone.proja3.proja3.dto.PageResponseDTO;
 import com.allinone.proja3.proja3.dto.facilities.StudyDTO;
-import com.allinone.proja3.proja3.dto.facilities.StudyDTO;
-import com.allinone.proja3.proja3.model.User;
-import com.allinone.proja3.proja3.model.facilities.Study;
-import com.allinone.proja3.proja3.repository.UserRepository;
-import com.allinone.proja3.proja3.repository.facilities.StudyRepository;
+
 import com.allinone.proja3.proja3.service.facilities.StudyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -21,7 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+
 
 @Log4j2
 @RestController
@@ -30,8 +26,6 @@ import java.util.Objects;
 @RequestMapping("/api/facilities/study")
 public class StudyController {
     private final StudyService service;
-    private final StudyRepository repository;
-    private final UserRepository userRepository;
 
 
 
@@ -122,11 +116,5 @@ public class StudyController {
         System.out.println("데이터 조회: " + uno);
         return service.findDataByUno(uno);
     }
-//    @GetMapping({"/detail/{uno}"})
-//    public List<StudyDTO> readUno(@PathVariable(name = "uno") Long uno) {
-//        User user = userRepository.findById(uno)
-//                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-//        System.out.println("Retrieved study for uno: " + user);
-//        return service.findDataByUno(uno);
-//    }
+
 }

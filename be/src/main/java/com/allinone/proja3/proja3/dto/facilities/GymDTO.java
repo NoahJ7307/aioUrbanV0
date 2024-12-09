@@ -39,11 +39,6 @@ public class GymDTO {
         this.target=target;
         this.content=content;
     }
-//    private int point;
 
-    //user에서 가져올데이터
-//    private Long uno; // 사용자 ID
-//    private String userName; // 사용자 이름 추가
-//    private String phone;
 
 }

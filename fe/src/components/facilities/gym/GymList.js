@@ -89,7 +89,7 @@ const GymList = () => {
     const resultCount = await fetchGymListSearch();
     if (resultCount === 0) {
       alert("검색 결과가 없습니다 😓")
-      window.location.reload(); // 페이지유림
+      window.location.reload(); 
     } else {
       const params = new URLSearchParams({ type, keyword, page: 1, size }).toString();
       navigate(`/facilities/gym/list?${params}`);

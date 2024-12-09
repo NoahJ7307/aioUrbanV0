@@ -1,27 +1,14 @@
 package com.allinone.proja3.proja3.controller.facilities;
-
-import com.allinone.proja3.proja3.dto.facilities.GymDTO;
 import com.allinone.proja3.proja3.dto.facilities.GymMembershipDTO;
 import com.allinone.proja3.proja3.dto.facilities.MembershipPlanDTO;
-import com.allinone.proja3.proja3.dto.user.UserDTO;
-import com.allinone.proja3.proja3.model.User;
 import com.allinone.proja3.proja3.model.facilities.GymMembership;
 import com.allinone.proja3.proja3.model.facilities.MembershipPlan;
-import com.allinone.proja3.proja3.model.mileage.Mileage;
-import com.allinone.proja3.proja3.repository.UserRepository;
-import com.allinone.proja3.proja3.repository.mileage.MileageRepository;
-import com.allinone.proja3.proja3.service.UserService;
 import com.allinone.proja3.proja3.service.facilities.GymMembershipService;
-import com.allinone.proja3.proja3.service.mileage.PaymentService;
-import com.allinone.proja3.proja3.service.mileage.PaymentService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -29,38 +16,27 @@ import java.util.List;
 @RequestMapping("/api/facilities/gym")
 @Log4j2
 public class GymMembershipController {
-
-    @Autowired
-    private PaymentService paymentService;
     @Autowired
     private  GymMembershipService gymMembershipService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private MileageRepository mileageRepository;
-
 
     //관리자가 이용권 등록하는 로직
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/membership/create/admin")
     public ResponseEntity<MembershipPlan> createGymMembership (
-            @RequestBody MembershipPlanDTO membershipPlanDTO) {  // RequestBody 사용
+            @RequestBody MembershipPlanDTO membershipPlanDTO) { // RequestBody 사용
         try {
             MembershipPlan newPlan = gymMembershipService.createGymMembershipPlan(
                     membershipPlanDTO.getMembershipType(),
                     membershipPlanDTO.getDurationMonths(),
-                    membershipPlanDTO.getPrice()
-            );
+                    membershipPlanDTO.getPrice());
             System.out.println("101010:" + newPlan);
             return ResponseEntity.ok(newPlan);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(null);
         }
     }
+    
+    
     //관리자가 등록한 이용권 삭제
-//    @PostMapping("/membership/delete/{membershipPlanId}")
     @DeleteMapping("/membership/delete/{membershipPlanId}")
     public ResponseEntity<String> deleteMembership(@PathVariable Long membershipPlanId) {
         try {
@@ -72,19 +48,7 @@ public class GymMembershipController {
         }
     }
 
-//     사용자가 이용권을 구매하는 API
-//    @PostMapping("/membership/purchase")
-//    public ResponseEntity<GymMembership> purchaseGymMembership(
-//            @RequestBody GymMembershipDTO gymMembershipDTO){
-//        try {
-//            System.out.println("sss"+gymMembershipDTO);
-//            GymMembership gymMembership = gymMembershipService.purchaseMembership(gymMembershipDTO);
-//            return ResponseEntity.ok(gymMembership);
-//        }catch (Exception e) {
-//            System.out.println("sss"+gymMembershipDTO);
-//            return ResponseEntity.status(500).body(null);
-//        }
-//    }
+
     @PostMapping("/membership/purchase")
     public ResponseEntity<String> purchaseGymMembership(
             @RequestBody GymMembershipDTO gymMembershipDTO){
@@ -100,7 +64,7 @@ public class GymMembershipController {
 
         }
     }
-    //등록한 이용권 반환하기(조회)
+    //멤버십 플랜 조회
     @GetMapping("/membership/plans")
     public ResponseEntity<List<MembershipPlan>> getAllMembershipPlans() {
         List<MembershipPlan> plans = gymMembershipService.getAllMembershipPlans(); // 모든 이용권 가져오기

@@ -130,6 +130,7 @@ public class GymServiceImpl implements GymService {
             return "Already";
         }
 
+
         //모집인원 확인 및 참가자 등록처리
         if (gym.getCurrentParticipants() < gym.getParticipantLimit()) {
             gym.setCurrentParticipants(gym.getCurrentParticipants() + 1);
@@ -143,19 +144,20 @@ public class GymServiceImpl implements GymService {
             gym.updateProgramState();  // 상태 업데이트
             gymRepository.save(gym);
 
-            if(participant.isWaitlisted()) {
-                //프로그램 이름과 상세 정보를 포함한 메시지 생성
-                String messageText = user.getUserName() + "님, 프로그램: [" + gym.getTitle() + "] 신청이 완료되었습니다.";
-                System.out.println(messageText);
-                // 참가 신청 완료 후 알림 메시지 전송
-//                boolean isSent = smsService.sendConfirmationMessage(user.getPhone(), messageText);
-//                System.out.println("1212" + user + " " + isSent);
-//                if (isSent) {
-//                    System.out.println("메시지가 성공적으로 전송되었습니다.");
-//                } else {
-//                    System.out.println("메시지 전송에 실패했습니다.");
-//                }
-            }
+            // 메시지 전송
+//            String messageText = user.getUserName() + "님, 프로그램: [" + gym.getTitle() + "] 신청이 완료되었습니다.";
+//            System.out.println(messageText);
+//
+//            // 참가 신청 완료 후 알림 메시지 전송
+//            boolean isSent = smsService.sendConfirmationMessage(user.getPhone(), messageText);
+//            System.out.println("1212" + user + " " + isSent);
+//
+//            // 전송 결과에 따른 로그
+//            if (isSent) {
+//                System.out.println("메시지가 성공적으로 전송되었습니다.");
+//            } else {
+//                System.out.println("메시지 전송에 실패했습니다.");
+//            }
 
             return "Done";
         } else {
@@ -221,9 +223,9 @@ public class GymServiceImpl implements GymService {
 
 
             //프로그램 이름과 상세 정보를 포함한 메시지 생성
-//            String messageText ="안녕하세요! " + waitlistParticipant.getUser().getUserName()+"님, 귀하께서 대기 중이던 프로그램: ["+gym.getTitle() +"]에 참가자로 등록되어 상태가 변경되었음을 알려드립니다. 감사합니다! ";
-//            System.out.println("1212"+messageText);
-//            smsService.sendConfirmationMessage(waitlistParticipant.getUser().getPhone(), messageText);
+            String messageText ="안녕하세요! " + waitlistParticipant.getUser().getUserName()+"님, 귀하께서 대기 중이던 프로그램: ["+gym.getTitle() +"]에 참가자로 등록되어 상태가 변경되었음을 알려드립니다. 감사합니다! ";
+            System.out.println("121211"+messageText);
+            smsService.sendConfirmationMessage(waitlistParticipant.getUser().getPhone(), messageText);
 
 
         }else {

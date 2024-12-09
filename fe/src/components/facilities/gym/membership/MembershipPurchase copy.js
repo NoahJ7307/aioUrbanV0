@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { deleteGymMembership, fetchAllMembershipPlans, purchaseMembership } from '../../../api/facilities/gymApi';
+import { deleteGymMembership, fetchAllMembershipPlans, myPageGymMembership, purchaseMembership } from '../../../api/facilities/gymApi';
 // import { apiCall, formatNumber } from '../../../api/utils';
 import useMileage from '../../../hook/useCustomMileage';
 
 const MembershipPurchase = () => {
   const [membershipPlans, setMembershipPlans] = useState([]);
+  const [currentMembership, setCurrentMembership] = useState(null);
+
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [message, setMessage] = useState('');
   // const [money, setMoney] = useState();
@@ -33,9 +35,28 @@ const MembershipPurchase = () => {
     };
     fetchMembershipPlansList(); // 목록을 가져오기
 
-  }, []);
+    const checkExistingMembership = async () => {
+      try {
+        const membership = await myPageGymMembership(); // fetchAllMembershipPlans 호출
+        console.log("현재 이용권 목록:", membership);
+        setCurrentMembership(membership);// 가져온 데이터를 상태에 설정
+      } catch (error) {
+        console.error("이용권 목록 가져오기 오류: ", error);
+      }
+    };
+    if (uno) {
+      checkExistingMembership();
+    }
+  }, [uno]);
 
   const handlePurchase = async () => {
+
+    // 현재 이용권이 있는 경우 구매 방지
+    if (currentMembership && new Date(currentMembership.endDate) > new Date()) {
+      setMessage('이미 유효한 이용권이 존재합니다. 이용권이 만료된 후에 다시 시도해 주세요.');
+      return;
+    }
+
     console.log("1212", selectedPlan)
 
     const membershipData = {
@@ -124,6 +145,7 @@ const MembershipPurchase = () => {
 
   return (
     <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+      
       <div className="mb-6 text-center">
         <h2 className="text-3xl font-semibold"> 이용권 구매</h2>
       </div>
