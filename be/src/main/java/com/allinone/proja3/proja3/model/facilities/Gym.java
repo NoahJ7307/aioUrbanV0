@@ -40,7 +40,7 @@ public class Gym {
     @PrePersist
     @PreUpdate
     public void updateProgramState() {
-        LocalDateTime now = LocalDateTime.now();///현재 시간으로 기준으로 사용하려는 로직으로 변경하고 이 함수 호출
+        LocalDateTime now = LocalDateTime.now();
         if(now.isBefore(applicationStartDate)) {
             this.programState = ProgramState.NOT_STARTED;
         } else if (now.isAfter(applicationEndDate)) {

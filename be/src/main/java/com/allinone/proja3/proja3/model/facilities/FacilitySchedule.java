@@ -21,7 +21,6 @@ public class FacilitySchedule {
     private String facilityName;
     private LocalTime startTime;
     private LocalTime endTime;
-
     private String link;
 
 }
