@@ -1,8 +1,6 @@
 package com.allinone.proja3.proja3.repository.community;
 
 import com.allinone.proja3.proja3.model.User;
-import com.allinone.proja3.proja3.model.community.Announce;
-import com.allinone.proja3.proja3.model.community.Community;
 import com.allinone.proja3.proja3.model.community.Market;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

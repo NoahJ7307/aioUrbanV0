@@ -61,7 +61,7 @@ const BoardListComponents = () => {
             })
             .catch(err => {
                 console.error("Axios 에러", err);
-                // setError("가져 올 데이터가 없습니다.."); // 에러 상태 설정
+                setError("가져 올 데이터가 없습니다.."); // 에러 상태 설정
                 setLoading(false); // 로딩 상태 업데이트
             });
     }, [page, size]);

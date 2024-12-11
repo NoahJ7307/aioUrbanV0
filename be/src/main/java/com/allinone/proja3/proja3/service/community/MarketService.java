@@ -11,14 +11,28 @@ import java.io.IOException;
 import java.util.List;
 
 public interface MarketService {
+    // ================= 조회 관련 메서드 =================//
     List<MarketDTO> findDataByUno(Long uno);
+
     PageResponseDTO<MarketDTO> findAllmarket(PageRequestDTO pageRequestDTO);
-    Market createPost(User user, Market market, MultipartFile thumbnail, List<MultipartFile> images) throws IOException;
-    MarketDTO entityDto(Market market);
-    void deletePost(Long mno, Long uno);//일반삭제
-    void deletePostByAdmin(Long mno);//관리자삭제
-    User findByUno(Long uno);
-    Market findMarketById(Long mno); // 추가된 메서드
-    boolean modify(MarketDTO marketDTO, MultipartFile thumbnail, List<MultipartFile> images);
+
     MarketDTO findByMno(Long mno);
+
+    Market findMarketById(Long mno);
+
+    User findByUno(Long uno);
+
+    // ================= 등록 관련 메서드 =================//
+    Market createPost(User user, Market market, MultipartFile thumbnail, List<MultipartFile> images) throws IOException;
+
+    // ================= 수정 관련 메서드 =================//
+    boolean modify(MarketDTO marketDTO, MultipartFile thumbnail, List<MultipartFile> images);
+
+    // ================= 삭제 관련 메서드 =================//
+    void deletePost(Long mno, Long uno); // 일반삭제
+
+    void deletePostByAdmin(Long mno); // 관리자삭제
+
+    // ================= 유틸리티 메서드 =================//
+    MarketDTO entityDto(Market market);
 }

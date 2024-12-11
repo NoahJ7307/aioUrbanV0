@@ -183,8 +183,8 @@ public class ServiceTestsyurim {
     @Test
     public void insertRolesAdmin() {
         User userAdmin = User.builder()
-                .userName("민")
-                .phone("01055555555")
+                .userName("전재윤")
+                .phone("01076342034")
                 .pw(passwordEncoder.encode("1"))
                 .dong("103")
                 .ho("250")

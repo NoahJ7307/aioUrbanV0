@@ -49,20 +49,20 @@ public class CommunityServiceImpl implements CommunityService {
 // 컨트롤러의 겟맵핑(/list)와 연결 리스트 리드 코드
     public PageResponseDTO<CommunityDTO> findAllPosts(PageRequestDTO pageRequestDTO) {
 
-        //웨이터에게 그릇의 음식을 주문하고
+        //페이지정의
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
                 Sort.by("pno").descending());
-// 그릇에 음식을 담고
+// 페이지에 담을거 요청
         Page<Community> result = communityRepository.findAll(pageable);  // CommunityRepository 사용
-// 담은 음식을 먹기좋게 가공
+// 요청 데이터 가공
         List<CommunityDTO> dtoList = result.get()
                 .map(this::entityToDto)  // entityToDto 메서드 사용
                 .collect(Collectors.toList());
 
         long totalCount = result.getTotalElements();
-// 손님에게 전달
+//  전달
         return PageResponseDTO.<CommunityDTO>withAll()
                 .dtoList(dtoList)
                 .pageRequestDTO(pageRequestDTO)

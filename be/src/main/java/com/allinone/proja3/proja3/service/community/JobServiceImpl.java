@@ -34,7 +34,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<JobDTO> fetchJobsFromSaraminAndSave(String keyword) {
-       // keyword="java";
+
         ResponseEntity<String> response = null;
         try {
             String apiUrl = "https://oapi.saramin.co.kr/job-search?access-key=" + saraminApiKey + "&keywords=" +keyword;

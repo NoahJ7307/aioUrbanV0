@@ -27,6 +27,7 @@ public class Community {
     private LocalDateTime updatedAt; // 수정일
     @ManyToOne //
     @JoinColumn(name = "uno", referencedColumnName = "uno", nullable = false) // Community 테이블의 uno 외래 키 설정
+    
     private User user; // 작성자 (User 엔티티의 uno)
     @PrePersist
     public void prePersist() {

@@ -123,7 +123,6 @@ const InfoMainComponents = () => {
 
                 kakao.maps.event.addListener(marker, 'mouseover', () => displayInfowindow(marker, place.title));
                 kakao.maps.event.addListener(marker, 'mouseout', () => infowindow.close());
-
                 kakao.maps.event.addListener(marker, 'click', () => setSelectedData(place));
 
                 return marker;
@@ -172,7 +171,7 @@ const InfoMainComponents = () => {
         <div className="container mt-8 mb-8 mx-auto p-6 bg-white shadow-lg rounded-lg relative">
             <div>
             <header className="text-center mb-8">
-                    <h1 className="text-3xl font-bold">Avan 일자리 검색</h1>
+                    <h1 className="text-3xl font-bold">URBAN 일자리 검색</h1>
 
                 </header>
         <div className="flex flex-wrap">

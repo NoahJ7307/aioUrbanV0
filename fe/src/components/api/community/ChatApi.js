@@ -54,7 +54,7 @@ export const getProductByMno = async (mno) => {
         const response = await axios.get(`${host}/post/${mno}`, config); // /post/{mno}로 수정
         return response.data;
     } catch (error) {
-        console.error("상품 정보 조회 실패", error);
+        console.error(" 조회 실패", error);
         throw new Error("데이터를 가져오는 데 실패했습니다.");
     }
 };

@@ -45,14 +45,14 @@ public class RoleTests {
                 .phone("정승균")
                 .pw(passwordEncoder.encode("1111"))
                 .build();
-        yr.addRole(UserRole.ADMIN);
+        yr.addRole(UserRole.ROOT);
         repository.save(yr);
         User sg = User.builder()
                 .userName("최유림")
                 .phone("최유림")
                 .pw(passwordEncoder.encode("1111"))
                 .build();
-        sg.addRole(UserRole.ADMIN);
+        sg.addRole(UserRole.USER);
         repository.save(sg);
         User jy = User.builder()
                 .userName("전재윤")

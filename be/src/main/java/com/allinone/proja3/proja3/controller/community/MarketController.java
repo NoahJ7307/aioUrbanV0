@@ -27,46 +27,20 @@ public class MarketController {
     @Autowired
     private UserRepository repository;
 
-    @GetMapping("/modify/{mno}")
-    public ResponseEntity<MarketDTO> getModify(@PathVariable Long mno) {
-        MarketDTO marketDTO = service.findByMno(mno); // 서비스에서 Mno로 데이터 조회
-        return ResponseEntity.ok(marketDTO);
-    }
+    // ================= 조회 관련 API =================//
+
     @GetMapping("/list")
     public ResponseEntity<PageResponseDTO<MarketDTO>> getMarket(PageRequestDTO pageRequestDTO) {
         PageResponseDTO<MarketDTO> response = service.findAllmarket(pageRequestDTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @PostMapping("/add")
-    public ResponseEntity<MarketDTO> addMarket(
-            @RequestParam("uno") Long userId,
-            @RequestParam("title") String title,
-            @RequestParam("content") String content,
-            @RequestParam("price") int price,
-            @RequestParam("thumbnail") MultipartFile thumbnail,
-            @RequestParam("images") List<MultipartFile> images) throws IOException {
 
-        // UserService를 사용하여 사용자 정보 조회
-        User user = service.findByUno(userId);
-
-        // Market 객체 생성
-        Market market = Market.builder()
-                .title(title)
-                .content(content)
-                .price(price)
-                .build();
-
-        // Service에서 Market을 저장하고 이미지 URL을 설정
-        Market savedMarket = service.createPost(user, market, thumbnail, images);
-
-        // 저장된 Market의 DTO 생성
-        MarketDTO savedMarketDTO = service.entityDto(savedMarket);
-
-        // 저장된 Market의 imageUrls를 로그로 출력하여 확인
-        System.out.println("Saved Market Image URLs: " + savedMarketDTO.getImageUrls());
-
-        return ResponseEntity.ok(savedMarketDTO);
+    @GetMapping("/modify/{mno}")
+    public ResponseEntity<MarketDTO> getModify(@PathVariable Long mno) {
+        MarketDTO marketDTO = service.findByMno(mno); // 서비스에서 Mno로 데이터 조회
+        return ResponseEntity.ok(marketDTO);
     }
+
     @GetMapping("/{uno}")
     public List<MarketDTO> read(@PathVariable(name = "uno") Long uno) {
         User user = repository.findById(uno)
@@ -75,27 +49,28 @@ public class MarketController {
         return service.findDataByUno(uno);
     }
 
+    // ================= 등록 관련 API =================//
 
-    @DeleteMapping("/{pno}")
-    public ResponseEntity<String> deletePost(
-            @PathVariable("pno") Long pno,
-            @RequestParam(value = "uno", required = false) Long uno, // 관리자는 uno 필요 없음
-            @RequestParam("role") String role) {
-
-        if ("root".equalsIgnoreCase(role) || "admin".equalsIgnoreCase(role)) {
-            // 관리자 권한으로 바로 삭제
-            service.deletePostByAdmin(pno);
-            return new ResponseEntity<>("관리자 권한으로 게시글이 삭제되었습니다.1111", HttpStatus.OK);
-        }
-
-        // 일반 사용자 검증 후 삭제
-        if (uno == null) {
-            throw new IllegalArgumentException("일반 사용자의 경우 uno 값이 필요합니다.11111");
-        }
-        service.deletePost(pno, uno);
-        System.out.println("pno와uno의1234"+pno+uno);
-        return new ResponseEntity<>("게시글이 삭제되었습니다.11111", HttpStatus.OK);
+    @PostMapping("/add")
+    public ResponseEntity<MarketDTO> addMarket(
+            @RequestParam("uno") Long userId,
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("price") int price,
+            @RequestParam("thumbnail") MultipartFile thumbnail,
+            @RequestParam("images") List<MultipartFile> images) throws IOException {
+        User user = service.findByUno(userId);
+        Market market = Market.builder()
+                .title(title)
+                .content(content)
+                .price(price)
+                .build();
+        Market savedMarket = service.createPost(user, market, thumbnail, images);
+        MarketDTO savedMarketDTO = service.entityDto(savedMarket);
+        return ResponseEntity.ok(savedMarketDTO);
     }
+
+    // ================= 수정 관련 API =================//
 
     @PutMapping("/modify/{mno}")
     public ResponseEntity<String> modify(
@@ -115,7 +90,7 @@ public class MarketController {
         marketDTO.setPrice(price);
 
         try {
-            boolean isModified = service.modify(marketDTO, thumbnail, images); // 서비스 호출 시 이미지 전달
+            boolean isModified = service.modify(marketDTO, thumbnail, images);
 
             if (isModified) {
                 return ResponseEntity.ok("업데이트 성공!");
@@ -128,7 +103,24 @@ public class MarketController {
         }
     }
 
+    // ================= 삭제 관련 API =================//
 
+    @DeleteMapping("/{pno}")
+    public ResponseEntity<String> deletePost(
+            @PathVariable("pno") Long pno,
+            @RequestParam(value = "uno", required = false) Long uno,
+            @RequestParam("role") String role) {
 
+        if ("root".equalsIgnoreCase(role) || "admin".equalsIgnoreCase(role)) {
+            service.deletePostByAdmin(pno);
+            return new ResponseEntity<>("관리자 권한으로 게시글이 삭제되었습니다.1111", HttpStatus.OK);
+        }
 
+        if (uno == null) {
+            throw new IllegalArgumentException("일반 사용자의 경우 uno 값이 필요합니다.11111");
+        }
+        service.deletePost(pno, uno);
+        System.out.println("pno와uno의1234" + pno + uno);
+        return new ResponseEntity<>("게시글이 삭제되었습니다.11111", HttpStatus.OK);
+    }
 }

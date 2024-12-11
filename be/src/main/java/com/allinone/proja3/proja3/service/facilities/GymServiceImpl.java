@@ -148,13 +148,13 @@ public class GymServiceImpl implements GymService {
                 String messageText = user.getUserName() + "님, 프로그램: [" + gym.getTitle() + "] 신청이 완료되었습니다.";
                 System.out.println(messageText);
                 // 참가 신청 완료 후 알림 메시지 전송
-//                boolean isSent = smsService.sendConfirmationMessage(user.getPhone(), messageText);
-//                System.out.println("1212" + user + " " + isSent);
-//                if (isSent) {
-//                    System.out.println("메시지가 성공적으로 전송되었습니다.");
-//                } else {
-//                    System.out.println("메시지 전송에 실패했습니다.");
-//                }
+                boolean isSent = smsService.sendConfirmationMessage(user.getPhone(), messageText);
+                System.out.println("1212" + user + " " + isSent);
+                if (isSent) {
+                    System.out.println("메시지가 성공적으로 전송되었습니다.");
+                } else {
+                    System.out.println("메시지 전송에 실패했습니다.");
+                }
             }
 
             return "Done";
