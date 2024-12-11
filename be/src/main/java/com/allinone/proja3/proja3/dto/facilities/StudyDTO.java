@@ -18,7 +18,7 @@ public class StudyDTO {
     private LocalTime startTime;
     private LocalTime endTime;
     private boolean delFlag;
-    private int seatNum; // 독서실 시설 특성
+    private int seatNum; // 독서실 좌석
 
     //user에서 가져올데이터
     private Long uno; // 사용자 ID

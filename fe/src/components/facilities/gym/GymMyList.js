@@ -128,22 +128,22 @@ const GymMyList = ({ uno, page, size }) => {
             <div className="container mx-auto p-6 border-2 border-gray-120 rounded-lg">
                 <h2 className="text-2xl font-semibold mb-6">나의 이용권 </h2>
                 <div className="grid grid-cols-5 gap-4 font-semibold text-sm text-gray-700 bg-gray-100 p-2 rounded-lg">
-                    <div>NO</div>
-                    <div>이용권 종류</div>
-                    <div>시작일</div>
-                    <div>종료일</div>
-                    <div>이용권 상태</div>
+                    <div className="text-center">NO</div>
+                    <div className="text-center">이용권 종류</div>
+                    <div className="text-center">시작일</div>
+                    <div className="text-center">종료일</div>
+                    <div className="text-center">이용권 상태</div>
 
                 </div>
                 <div className="overflow-y-auto max-h-13">
                     {gymMembership.data && gymMembership.data.length > 0 ? (
                         gymMembership.data.map((membership) => (
                             <div key={membership.membershipId} className="grid grid-cols-5 gap-4 items-center border-t py-4">
-                                <div className="text-sm">{membership.membershipId}</div>
-                                <div className="text-sm">{membership.membershipType}</div>
-                                <div className="text-sm">{membership.startDate}</div>
-                                <div className="text-sm">{membership.endDate}</div>
-                                <div> {membershipState(membership.endDate)}</div>
+                                <div className="text-sm text-center">{membership.membershipId}</div>
+                                <div className="text-sm text-center">{membership.membershipType}</div>
+                                <div className="text-sm text-center">{membership.startDate}</div>
+                                <div className="text-sm text-center">{membership.endDate}</div>
+                                <div className="text-sm text-center"> {membershipState(membership.endDate)}</div>
                             </div>
                         ))
                     ) : (

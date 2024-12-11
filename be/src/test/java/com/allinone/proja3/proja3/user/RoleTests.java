@@ -105,8 +105,8 @@ public class RoleTests {
     @Test
     public void insertID() {
         User root = User.builder()
-                .userName("루트")
-                .phone("root")
+                .userName("루트1")
+                .phone("01000000000")
                 .dong("9999")
                 .ho("9999")
                 .pw(passwordEncoder.encode("1"))
@@ -115,8 +115,8 @@ public class RoleTests {
         repository.save(root);
 
         User admin = User.builder()
-                .userName("관리자")
-                .phone("admin")
+                .userName("관리자1")
+                .phone("01099999999")
                 .dong("8888")
                 .ho("8888")
                 .dong("8888")
@@ -127,7 +127,7 @@ public class RoleTests {
         repository.save(admin);
 
         User user = User.builder()
-                .userName("일반유저")
+                .userName("일반유저123214")
                 .phone("user")
                 .dong("101")
                 .ho("103")
@@ -135,5 +135,15 @@ public class RoleTests {
                 .build();
         user.addRole(UserRole.USER);
         repository.save(user);
+
+        User pending = User.builder()
+                .userName("승인대기1232")
+                .phone("01088888888")
+                .dong("102")
+                .ho("101")
+                .pw(passwordEncoder.encode("1"))
+                .build();
+        pending.addRole(UserRole.PENDING);
+        repository.save(pending);
     }
 }

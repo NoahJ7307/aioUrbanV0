@@ -40,7 +40,6 @@ const useCustomLogin = () => {
             alert('전화번호 혹은 비밀번호를 확인해 주십시오.')
             moveToPath('/login')
         }
-
         return action.payload
     }
     const doLogout = async () => {

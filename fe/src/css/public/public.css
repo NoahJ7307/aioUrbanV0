@@ -94,7 +94,7 @@ body {
 }
 
 .topMenuBtn:hover {
-  background-color: #2563eb;;
+  background-color: #2563eb;
   color: white;
 
 }
@@ -102,6 +102,7 @@ body {
 /* -------------------------------------------- */
 
 /* --------------------버튼-------------------- */
+ 
 .button {
   display: inline-flex;
   justify-content: center;
@@ -120,7 +121,7 @@ body {
 
 .button:hover {
   background-color: white;
-  color: #749fcd;
+  color: #426183;
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
@@ -308,7 +309,7 @@ body {
 }
 
 .formButton.add {
-  background-color: #749fcd;
+  background-color: #203d52;
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -375,7 +376,7 @@ body {
 }
 
 .paginationButton:hover {
-  background-color: #4d82a8;
+  background-color: #426183;
   color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
