@@ -42,21 +42,27 @@ public class RoleTests {
     public void insertRolesAdmin() {
         User yr = User.builder()
                 .userName("정승균")
-                .phone("정승균")
+                .phone("01056787987")
+                .dong("101")
+                .ho("103")
                 .pw(passwordEncoder.encode("1111"))
                 .build();
         yr.addRole(UserRole.ROOT);
         repository.save(yr);
         User sg = User.builder()
                 .userName("최유림")
-                .phone("최유림")
+                .phone("01090591673")
+                .dong("101")
+                .ho("104")
                 .pw(passwordEncoder.encode("1111"))
                 .build();
         sg.addRole(UserRole.USER);
         repository.save(sg);
         User jy = User.builder()
                 .userName("전재윤")
-                .phone("전재윤")
+                .phone("01076342034")
+                .dong("101")
+                .ho("102")
                 .pw(passwordEncoder.encode("1111"))
                 .build();
         jy.addRole(UserRole.ADMIN);

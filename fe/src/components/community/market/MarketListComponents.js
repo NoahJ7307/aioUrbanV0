@@ -363,7 +363,7 @@ const MarketListComponents = () => {
                                     className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 ml-2 mr-6"
 
                                 >
-                                    1:1 대화
+                                    대화창 열기
                                 </button>
 
                                 <button

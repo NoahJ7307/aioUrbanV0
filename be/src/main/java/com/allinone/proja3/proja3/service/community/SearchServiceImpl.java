@@ -30,7 +30,12 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     @Transactional  // 추가
-    public Map<String, Object> search(String type, String keyword, int page, int size, String category) {
+    public Map<String, Object> search(
+            String type,
+            String keyword,
+            int page, int size,
+            String category) {
+
         if (keyword == null || keyword.isEmpty()) {
             throw new IllegalArgumentException("Keyword must not be null or empty");
         }
