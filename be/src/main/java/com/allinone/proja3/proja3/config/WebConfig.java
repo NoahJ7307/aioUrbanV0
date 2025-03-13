@@ -16,7 +16,6 @@ public class WebConfig implements WebMvcConfigurer { // 이미지업로드를 �
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
                 .allowedOrigins("http://localhost:3000") // 프론트엔드 URL
-                .allowedOrigins("https://frontapp-five.vercel.app") /250313 배포문제로 추가
                 .allowedHeaders("Authorization", "Content-Type")  // 허용할 헤더 추가
                 .allowCredentials(true);  // 인증 정보 허용
     }
